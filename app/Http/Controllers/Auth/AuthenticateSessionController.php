@@ -17,7 +17,7 @@ class AuthenticateSessionController extends Controller
     public function index()
     {
         if (Auth::id()>0) {
-            return redirect()->view('frontend.user.layouts.master');
+            return redirect()->route('dashboard.index');
         }
         return view('backend.auth.login');
     }

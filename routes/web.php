@@ -38,6 +38,7 @@ Route::resource('product', ProductController::class);
 // caterogies
 Route::resource('categories', CategoriesController::class);
 
+
 Route::get('frontend/index',function(){
     return view('frontend.user.layouts.master');
 });

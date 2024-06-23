@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Categories;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -21,44 +22,45 @@ class CategoriesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function ($query) {
-                $editBtn = "<a href='" . route('categories.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='" . route('categories.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-                return $editBtn . $deleteBtn;
-            })
-            ->rawColumns(['action'])
-            ->setRowId('id');
+        ->addColumn('action', function ($query) {
+            $editBtn = "<a href='" . route('categories.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
+            $deleteBtn = "<a href='" . route('categories.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
+            return $editBtn . $deleteBtn;
+        })
+        ->rawColumns(['action'])
+        ->setRowId('id');
+
     }
-    
+
     /**
-     *
      * Get the query source of dataTable.
      */
     public function query(Categories $model): QueryBuilder
     {
-
+        Log::info('Querying categories data');
         return $model->newQuery();
     }
+
     /**
      * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('categories-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            //->dom('Bfrtip')
-            ->orderBy(1)
-            ->selectStyleSingle()
-            ->buttons([
-                Button::make('excel'),
-                Button::make('csv'),
-                Button::make('pdf'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            ]);
+                    ->setTableId('categories-table')
+                    ->columns($this->getColumns())
+                    ->minifiedAjax()
+                    //->dom('Bfrtip')
+                    ->orderBy(1)
+                    ->selectStyleSingle()
+                    ->buttons([
+                        Button::make('excel'),
+                        Button::make('csv'),
+                        Button::make('pdf'),
+                        Button::make('print'),
+                        Button::make('reset'),
+                        Button::make('reload')
+                    ]);
     }
 
     /**
@@ -75,6 +77,7 @@ class CategoriesDataTable extends DataTable
                 ->width(200)
                 ->addClass('text-center'),
         ];
+
     }
 
     /**

@@ -20,8 +20,6 @@ return new class extends Migration
             $table->text('short_description')->nullable();
             $table->text('long_description')->nullable();
             $table->float('price');
-            $table->boolean('status');
-            $table->string('product_type')->nullable();
             $table->float('offer_price')->nullable();
             $table->dateTime('offer_start_date')->nullable();
             $table->dateTime('offer_end_date')->nullable();
