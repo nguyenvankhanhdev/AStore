@@ -14,6 +14,6 @@ class DashboardController extends Controller
     public function index()
     {
         $ab= 'hello world';
-        return view('backend.admin.layouts.master',compact('ab'));
+        return view('frontend.user.layouts.master',compact('ab'));
     }
 }
