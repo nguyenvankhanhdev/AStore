@@ -25,6 +25,8 @@ return new class extends Migration
             $table->float('offer_price')->nullable();
             $table->dateTime('offer_start_date')->nullable();
             $table->dateTime('offer_end_date')->nullable();
+            $table->boolean('status');
+            $table->string('product_type')->nullable();
             $table->integer('sub_cate_id');
             $table->integer('cate_id');
             $table->timestamps();
@@ -36,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product');
+        Schema::dropIfExists('products');
     }
 };
