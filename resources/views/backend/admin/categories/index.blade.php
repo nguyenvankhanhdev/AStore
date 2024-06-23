@@ -12,15 +12,14 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>All Categories</h4>
+                    <h3>All Categories</h3>
                     <div class="card-header-action">
                         <a href="{{route('categories.create')}}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
                     </div>
                   </div>
                   <div class="card-body">
-
+                    {{ $dataTable->table()}}
                   </div>
-
                 </div>
               </div>
             </div>
@@ -29,3 +28,8 @@
         </section>
 
 @endsection
+
+@push('scripts')
+    {{$dataTable->scripts()}}
+
+@endpush

@@ -25,12 +25,13 @@ Route::get('/logout', [AuthenticateSessionController::class, 'logout'])
 
 Route::post('/login', [AuthenticateSessionController::class, 'login'])
 ->name('auth.login');
+
+// Adminnnnn
 // Product
 Route::get('product/index', [ProductController::class, 'index'])->name('product.index');
 // caterogies
-Route::get('categories/index', [CategoriesController::class, 'index'])->name('categories.index');
-Route::get('categories/create', [CategoriesController::class, 'create'])->name('categories.create');
 
+Route::resource('categories', CategoriesController::class);
 
 
 
