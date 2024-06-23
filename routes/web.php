@@ -33,5 +33,8 @@ Route::get('product/index', [ProductController::class, 'index'])->name('product.
 
 Route::resource('categories', CategoriesController::class);
 
+Route::get('frontend/index',function(){
+    return view('frontend.user.layouts.master');
+});
 
 

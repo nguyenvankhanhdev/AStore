@@ -17,7 +17,7 @@ class AuthenticateSessionController extends Controller
     public function index()
     {
         if (Auth::id()>0) {
-            return redirect()->route('dashboard.index');
+            return redirect()->view('frontend.user.layouts.master');
         }
         return view('backend.auth.login');
     }
@@ -28,7 +28,7 @@ class AuthenticateSessionController extends Controller
             'password' => 'required',
         ]);
         $credentials = $request->only('email', 'password');
-        
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('product.index')->with('success', 'Đăng nhập thành công');
