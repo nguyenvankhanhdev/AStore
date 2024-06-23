@@ -42,4 +42,5 @@ Route::resource('categories', CategoriesController::class);
 // Sub_categories
 Route::resource('sub-categories', SubCategoriesController::class);
 
+Route::resource('users', UserController::class);
 

@@ -1,8 +1,6 @@
 @extends('backend.admin.layouts.master')
 
-
 @section('content')
-      <!-- Main Content -->
         <section class="section">
           <div class="section-body">
             <div class="row">
@@ -26,5 +24,4 @@
 
 @push('scripts')
     {{$dataTable->scripts()}}
-
 @endpush
