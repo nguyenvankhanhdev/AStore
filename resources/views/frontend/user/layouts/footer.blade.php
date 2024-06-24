@@ -1,5 +1,5 @@
 <div class="footer">
-    <section class="section__module section__gallery">
+    {{-- <section class="section__module section__gallery">
       <div class="section__module-inner">
         <div class="section__module-title">
           <p class="text-center">Hình ảnh hệ thống F.Studio</p>
@@ -21,29 +21,29 @@
           <div class="swiper-button-prev sw-btn-prev"><i class="ic-angle-left sw-icon"></i></div>
         </div>
       </div>
-    </section>
+    </section> --}}
     <div class="footer-top">
       <div class="container">
         <ul class="key-selling-point">
-          <li><img src="assets/img/like.png" alt="like-icon">
+          <li><img src="frontend/asset/img/like.png" alt="like-icon">
             <div class="group-text">
               <div class="title">Thương hiệu đảm bảo</div>
               <div class="desc">Sản phẩm chính hãng Apple </div>
             </div>
           </li>
-          <li><img src="assets/img/shield.png" alt="shield-icon">
+          <li><img src="frontend/asset/img/shield.png" alt="shield-icon">
             <div class="group-text">
               <div class="title">Bảo hành chính hãng</div>
               <div class="desc">Bảo hành theo chính sách Apple</div>
             </div>
           </li>
-          <li><img src="assets/img/deli.png" alt="deli-icon">
+          <li><img src="asset/img/deli.png" alt="deli-icon">
             <div class="group-text">
               <div class="title">Giao hàng tận nơi</div>
               <div class="desc">Tại 63 tỉnh thành</div>
             </div>
           </li>
-          <li><img src="assets/img/crown.png" alt="crown-icon">
+          <li><img src="asset/img/crown.png" alt="crown-icon">
             <div class="group-text">
               <div class="title">Trải nghiệm Premium</div>
               <div class="desc">Không gian trải nghiệm cao cấp</div>

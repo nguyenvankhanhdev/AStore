@@ -6118,7 +6118,9 @@ hr {
 
 .section__cate {
     background: #212529;
-    margin-top: -32px
+    margin-top: -32px;
+    padding-top:45px;
+    padding-bottom: 45px;
 }
 
 .section__cate.section-module {

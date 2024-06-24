@@ -3,7 +3,7 @@
       Sự kiện không thể bỏ lỡ.<a class="link-desc m-l-4">Xem chi tiết ></a></div>
     <div class="header-body">
       <div class="container flex-center">
-        <div class="header-logo"><a href=""><img src="assets/img/logo-fstu-aar.png" alt="logo"></a></div>
+        <div class="header-logo"><a href=""><img src="frontend/asset/img/logo-fstu-aar.png" alt="logo"></a></div>
         <div class="header-search">
           <form>
             <div class="form-group">
