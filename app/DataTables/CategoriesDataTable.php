@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Models\Categories;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;

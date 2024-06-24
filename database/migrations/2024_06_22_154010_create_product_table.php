@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('product', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->text('short_description')->nullable();
             $table->text('long_description')->nullable();
-            $table->float('price');
+            $table->decimal('price');
             $table->float('offer_price')->nullable();
             $table->dateTime('offer_start_date')->nullable();
             $table->dateTime('offer_end_date')->nullable();
