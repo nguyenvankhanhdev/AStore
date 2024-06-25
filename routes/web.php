@@ -16,8 +16,7 @@ Route::get('/', function () {
     return view('frontend.user.layouts.section_cate');
 })->name('dashboard');
 
-Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index')
-    ->middleware(RoleMiddleware::class . ':admin');
+Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::get('admin', [AuthenticateSessionController::class, 'index'])
     ->name('auth.admin');
@@ -32,8 +31,7 @@ Route::post('register', [RegisterUserController::class, 'store'])->name('auth.re
 
 Route::get('frontend/index', function () {
     return view('frontend.user.layouts.section_cate');
-})->name('frontend.index')
-  ->middleware(RoleMiddleware::class . ':user');
+})->name('frontend.index');
 
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
      ->name('auth.logout');
@@ -53,10 +51,6 @@ Route::resource('products-image-gallery', ProductImagesController::class);
 // caterogies
 Route::resource('categories', CategoriesController::class);
 
-
-Route::get('frontend/index',function(){
-    return view('frontend.user.layouts.section_cate');
-});
 // Sub_categories
 Route::resource('sub-categories', SubCategoriesController::class);
 

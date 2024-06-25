@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
+
 class RegisterUserController extends Controller
 {
 
@@ -26,20 +26,22 @@ class RegisterUserController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
+        'username' => 'required|string|max:255',
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
     ]);
 
     $user = User::create([
-        'name' => $request->name,
+        'username' => $request->username,
         'email' => $request->email,
         'password' => Hash::make($request->password),
     ]);
 
+    event(new Registered($user));
+
     Auth::login($user);
 
-    return redirect()->route('frontend.index')->with('success', 'Đăng ký và đăng nhập thành công');
+    return redirect()->route('auth.admin')->with('success', 'Đăng kí thành công!');
 }
 
 }
