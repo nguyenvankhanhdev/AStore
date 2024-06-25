@@ -20,7 +20,7 @@ class Products extends Model
 
     public function productImages()
     {
-        return $this->hasMany(ProductImageGallery::class,'pro_id');
+        return $this->hasMany(ProductImages::class,'pro_id');
     }
 
 

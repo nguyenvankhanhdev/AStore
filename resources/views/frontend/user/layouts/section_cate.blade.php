@@ -1,6 +1,6 @@
 @extends('frontend.user.layouts.master')
 
-@section('front_content')
+@section('content')
     <section class="section-wrap home-page">
         <section class="section-module section__cate">
             <div class="container">

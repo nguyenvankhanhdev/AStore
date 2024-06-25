@@ -8,8 +8,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class ProductDataTable extends DataTable
@@ -30,14 +28,18 @@ class ProductDataTable extends DataTable
                 <i class="fas fa-cog"></i>
                 </button>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-                   <a class="dropdown-item has-icon" href=""><i class="far fa-heart"></i> Image Gallery</a>
+                   <a class="dropdown-item has-icon" href="'.route('products-image-gallery.index', ['product' => $query->id]).'"><i class="far fa-heart"></i> Image Gallery</a>
                    <a class="dropdown-item has-icon" href=""><i class="far fa-file"></i> Variants</a>
                 </div>
               </div>';
                 return $editBtn . $deleteBtn . $moreBtn;
             })
             ->addColumn('image', function ($query) {
+<<<<<<< HEAD
+                return "<img width='70px' src='" . $query->image. "' ></img>";
+=======
                 return "<img width='70px' src='" . $query->image . "' ></img>";
+>>>>>>> 6e446139b8bc8aa8ab11f7116dce6d4c8cb6bdf4
             })
             ->addColumn('type', function ($query) {
                 switch ($query->product_type) {
@@ -108,9 +110,6 @@ class ProductDataTable extends DataTable
             ]);
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
         return [

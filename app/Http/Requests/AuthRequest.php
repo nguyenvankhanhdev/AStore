@@ -24,14 +24,16 @@ class AuthRequest extends FormRequest
         return [
             'email' => 'required|email',
             'password' => 'required',
+            'username'=>'required',
         ];
     }
     public function messages(): array
     {
         return [
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Email chưa đúng định dạng. Ví dụ abc@gmail.com',
-            'password.required' => 'Vui lòng nhập mật khẩu',
+            'email.required' => 'Vui lòng nhập email!',
+            'email.email' => 'Email chưa đúng định dạng. Ví dụ abc@gmail.com!',
+            'password.required' => 'Vui lòng nhập mật khẩu!',
+            'username.required'=>'Vui lòng nhập username!'
         ];
     }
 
