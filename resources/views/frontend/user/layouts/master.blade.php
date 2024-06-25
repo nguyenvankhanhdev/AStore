@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="frontend/asset/css/lightgallery-bundle.css">
     <link rel="stylesheet" href="frontend/asset/css/header-footer.css">
     <link rel="stylesheet" href="frontend/asset/css/home.css">
+    <link rel="stylesheet" href="frontend/asset/css/category.css">
 </head>
 
 <body>

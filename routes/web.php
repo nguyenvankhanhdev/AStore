@@ -40,7 +40,7 @@ Route::resource('categories', CategoriesController::class);
 
 
 Route::get('frontend/index',function(){
-    return view('frontend.user.layouts.master');
+    return view('frontend.user.layouts.section_cate');
 });
 
 // Sub_categories

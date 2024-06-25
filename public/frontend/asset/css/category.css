@@ -7393,7 +7393,7 @@ hr {
 
 .product-list {
     display: flex;
-    background: #fff;
+    background: #212529;
     flex-wrap: wrap;
     position: relative
 }
@@ -7991,7 +7991,7 @@ main {
 }
 
 .category {
-    background: #f8f9fa;
+    background: #212529;
     padding-bottom: 48px
 }
 
@@ -8017,7 +8017,8 @@ main {
     font-size: 36px;
     line-height: 36px;
     font-weight: 500;
-    margin-bottom: 32px
+    margin-bottom: 32px;
+    color: white;
 }
 
 .category .actions {
@@ -8075,13 +8076,16 @@ main {
 }
 
 .category .product {
-    height: 534px;
+    margin-bottom: 20px;
+    height: 444px;
     background: #fff;
-    border-radius: 0;
+    border-radius: 60px;
     padding: 24px 12px 32px;
     display: flex;
     flex-direction: column;
-    flex-basis: calc(100% / 3);
+    /* flex-basis: calc(100% / 3); */
+    margin-right: 15px;
+    margin-left: 28px;
     border: solid 1px #edeeef;
     border-top: none;
     border-left: none
@@ -8198,7 +8202,15 @@ main {
 }
 
 .category .product__detail .btn {
-    width: 176px
+    width: 176px;
+    border: solid 2px;
+    border-radius: 22px
+
+}
+
+.category .product__detail .btn:hover {
+    background-color: #3e3b3b;
+    color: white;
 }
 
 .category-menu {
