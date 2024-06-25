@@ -44,6 +44,11 @@ Route::get('frontend/index',function(){
     return view('frontend.user.layouts.section_cate');
 });
 
+Route::get('frontend/category',function(){
+
+    return view('frontend.user.categories.index');
+});
+
 // Sub_categories
 Route::resource('sub-categories', SubCategoriesController::class);
 

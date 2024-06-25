@@ -1255,7 +1255,7 @@ p {
 .text {
     font-size: 14px;
     line-height: 20px;
-    color: #444b52;
+    color: white;
     font-weight: 400
 }
 
@@ -8022,7 +8022,9 @@ main {
 }
 
 .category .actions {
-    padding: 24px 24px 8px
+    padding: 24px 24px 8px;
+    background-color: #212529;
+    padding-bottom: 20px;
 }
 
 .category .actions .tab {
