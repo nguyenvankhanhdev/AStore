@@ -32,8 +32,8 @@ Route::post('register', [RegisterUserController::class, 'store'])->name('auth.re
 
 Route::get('frontend/index', function () {
     return view('frontend.user.layouts.section_cate');
-})->name('frontend.index')
-  ->middleware(RoleMiddleware::class . ':user');
+})->name('frontend.index');
+
 
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
      ->name('auth.logout');
@@ -54,9 +54,7 @@ Route::resource('products-image-gallery', ProductImagesController::class);
 Route::resource('categories', CategoriesController::class);
 
 
-Route::get('frontend/index',function(){
-    return view('frontend.user.layouts.section_cate');
-});
+
 
 
 Route::get('frontend/category',function(){
