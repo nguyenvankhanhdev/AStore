@@ -30,16 +30,16 @@ class ProductDataTable extends DataTable
                 <i class="fas fa-cog"></i>
                 </button>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-                //   <a class="dropdown-item has-icon" href="'.route('product-image-gallery.index', ['product' => $query->id]).'"><i class="far fa-heart"></i> Image Gallery</a>
-                //   <a class="dropdown-item has-icon" href="'.route('product-variant.index', ['product' => $query->id]).'"><i class="far fa-file"></i> Variants</a>
+                   <a class="dropdown-item has-icon" href=""><i class="far fa-heart"></i> Image Gallery</a>
+                   <a class="dropdown-item has-icon" href=""><i class="far fa-file"></i> Variants</a>
                 </div>
               </div>';
-                return $editBtn.$deleteBtn.$moreBtn;
+                return $editBtn . $deleteBtn . $moreBtn;
             })
-            ->addColumn('image', function($query){
-                return "<img width='70px' src='".asset($query->image)."' ></img>";
+            ->addColumn('image', function ($query) {
+                return "<img width='70px' src='" . asset($query->image) . "' ></img>";
             })
-            ->addColumn('type', function($query){
+            ->addColumn('type', function ($query) {
                 switch ($query->product_type) {
                     case 'new_arrival':
                         return '<i class="badge badge-success">New Arrival</i>';
@@ -60,15 +60,15 @@ class ProductDataTable extends DataTable
                         break;
                 }
             })
-            ->addColumn('status', function($query){
-                if($query->status == 1){
+            ->addColumn('status', function ($query) {
+                if ($query->status == 1) {
                     $button = '<label class="custom-switch mt-2">
-                        <input type="checkbox" checked name="custom-switch-checkbox" data-id="'.$query->id.'" class="custom-switch-input change-status" >
+                        <input type="checkbox" checked name="custom-switch-checkbox" data-id="' . $query->id . '" class="custom-switch-input change-status" >
                         <span class="custom-switch-indicator"></span>
                     </label>';
-                }else {
+                } else {
                     $button = '<label class="custom-switch mt-2">
-                        <input type="checkbox" name="custom-switch-checkbox" data-id="'.$query->id.'" class="custom-switch-input change-status">
+                        <input type="checkbox" name="custom-switch-checkbox" data-id="' . $query->id . '" class="custom-switch-input change-status">
                         <span class="custom-switch-indicator"></span>
                     </label>';
                 }
@@ -121,10 +121,10 @@ class ProductDataTable extends DataTable
             Column::make('type')->width(150),
             Column::make('status'),
             Column::computed('action')
-            ->exportable(false)
-            ->printable(false)
-            ->width(200)
-            ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(200)
+                ->addClass('text-center'),
         ];
     }
 

@@ -6109,9 +6109,13 @@ hr {
 }
 
 .section__cate {
+<<<<<<< HEAD
+    background: #212529
+=======
     background: #212529;
     padding-top: 45px;
     padding-bottom: 45px;
+>>>>>>> 0938ed7e68553f70037ec82a515fad39fb7640fa
 }
 
 .home__cate {

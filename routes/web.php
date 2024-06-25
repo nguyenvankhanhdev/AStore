@@ -7,7 +7,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Middleware\AuthenticateMiddleware;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SubCategoriesController;
-use App\Models\User;
+use App\Http\Controllers\Backend\ProductImageGalleryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -33,6 +33,7 @@ Route::get('product/get-subcategories', [ProductController::class, 'getSubCatego
 Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
 Route::resource('product', ProductController::class);
 
+Route::resource('products-image-gallery', ProductImageGalleryController::class);
 
 
 // caterogies
