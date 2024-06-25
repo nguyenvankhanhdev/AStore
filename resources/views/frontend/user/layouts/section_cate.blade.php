@@ -50,4 +50,6 @@
             </div>
         </section>
     </section>
+
+    @include('frontend.user.layouts.index')
 @endsection

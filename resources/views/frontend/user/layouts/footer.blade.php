@@ -86,7 +86,7 @@
                 <li>Cần Thơ: 52 - 54 - 56 Đường 30/4, P. An Phú, Q. Ninh Kiều, Cần Thơ</li>
               </ul>
             </div>
-            <div class="img"><img src="assets/img/item.png" alt="item-footer"></div>
+            <div class="img"><img src="frontend/asset/img/item.png" alt="item-footer"></div>
           </div>
           <div class="footer-category">
             <div class="category-item">

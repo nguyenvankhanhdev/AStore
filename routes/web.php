@@ -54,8 +54,9 @@ Route::resource('products-image-gallery', ProductImagesController::class);
 Route::resource('categories', CategoriesController::class);
 
 
-
-
+Route::get('frontend/index',function(){
+    return view('frontend.user.layouts.section_cate');
+});
 // Sub_categories
 Route::resource('sub-categories', SubCategoriesController::class);
 
