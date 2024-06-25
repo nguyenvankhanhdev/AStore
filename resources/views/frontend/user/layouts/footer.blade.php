@@ -37,13 +37,13 @@
               <div class="desc">Bảo hành theo chính sách Apple</div>
             </div>
           </li>
-          <li><img src="asset/img/deli.png" alt="deli-icon">
+          <li><img src="frontend/asset/img/deli.png" alt="deli-icon">
             <div class="group-text">
               <div class="title">Giao hàng tận nơi</div>
               <div class="desc">Tại 63 tỉnh thành</div>
             </div>
           </li>
-          <li><img src="asset/img/crown.png" alt="crown-icon">
+          <li><img src="frontend/asset/img/crown.png" alt="crown-icon">
             <div class="group-text">
               <div class="title">Trải nghiệm Premium</div>
               <div class="desc">Không gian trải nghiệm cao cấp</div>
@@ -86,7 +86,7 @@
                 <li>Cần Thơ: 52 - 54 - 56 Đường 30/4, P. An Phú, Q. Ninh Kiều, Cần Thơ</li>
               </ul>
             </div>
-            <div class="img"><img src="assets/img/item.png" alt="item-footer"></div>
+            <div class="img"><img src="frontend/asset/img/item.png" alt="item-footer"></div>
           </div>
           <div class="footer-category">
             <div class="category-item">
