@@ -62,7 +62,6 @@ class ProductImagesController extends Controller
         $productImage = ProductImages::findOrFail($id);
         $this->deleteImage($productImage->image);
         $productImage->delete();
-
         return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
     }
 }
