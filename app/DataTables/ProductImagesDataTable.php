@@ -2,17 +2,15 @@
 
 namespace App\DataTables;
 
-use App\Models\ProductImageGallery;
+use App\Models\ProductImages;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ProductImageGalleryDataTable extends DataTable
+class ProductImagesDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -28,7 +26,7 @@ class ProductImageGalleryDataTable extends DataTable
             return $deleteBtn;
         })
         ->addColumn('image', function($query){
-            return "<img width='200px' src='".asset($query->image)."' ></img>";
+            return "<img width='200px' src='".$query->image."' ></img>";
         })
         ->rawColumns(['image', 'action'])
         ->setRowId('id');
@@ -37,7 +35,7 @@ class ProductImageGalleryDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(ProductImageGallery $model): QueryBuilder
+    public function query(ProductImages $model): QueryBuilder
     {
         return $model->where('pro_id', request()->product)->newQuery();
     }
@@ -70,15 +68,14 @@ class ProductImageGalleryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+
+            Column::make('id')->width(100),
+            Column::make('image')->width(200),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(60)
+                  ->width(400)
                   ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
         ];
     }
 
@@ -87,6 +84,6 @@ class ProductImageGalleryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'ProductImageGallery_' . date('YmdHis');
+        return 'ProductImages_' . date('YmdHis');
     }
 }

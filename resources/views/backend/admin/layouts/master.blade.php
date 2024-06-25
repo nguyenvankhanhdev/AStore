@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
+    <base href="{{ env('APP_URL') }}">
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('backend/asset/img/image.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="backend/asset/img/image.png">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>ADMIN</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
-    <link href="{{ asset('backend/asset/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ asset('backend/asset/bootstrap-daterangepicker/daterangepicker.css') }}" />
+    <link href="backend/asset/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="backend/asset/bootstrap-daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-    <link href="{{ asset('backend/asset/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="backend/asset/css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        .toast {
+            color: black !important; /* Màu chữ */
+            background-color: white !important; /* Màu nền */
+            border: 1px solid #ccc; /* Viền */
+        }
+        .toast-success {
+            background-color: #349734 !important; /* Màu nền khi thành công */
+            color: white !important; /* Màu chữ khi thành công */
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -84,21 +95,22 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('backend/asset/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('backend/asset/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('backend/asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-    <script src="{{ asset('backend/asset/js/sb-admin-2.min.js') }}"></script>
-    <script src="{{ asset('backend/asset/vendor/chart.js/Chart.min.js') }}"></script>
-    <script src="{{ asset('backend/asset/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('backend/asset/js/demo/chart-pie-demo.js') }}"></script>
+    <script src="backend/asset/vendor/jquery/jquery.min.js"></script>
+    <script src="backend/asset/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="backend/asset/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="backend/asset/js/sb-admin-2.min.js"></script>
+    <script src="backend/asset/vendor/chart.js/Chart.min.js"></script>
+    <script src="backend/asset/js/demo/chart-area-demo.js'"></script>
+    <script src="backend/asset/js/demo/chart-pie-demo.js'"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <script src="{{ asset('backend/asset/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script src="backend/asset/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 
 
     <script>
@@ -160,8 +172,9 @@
             })
 
         })
-    </script>
 
+
+    </script>
 
     @stack('scripts')
 

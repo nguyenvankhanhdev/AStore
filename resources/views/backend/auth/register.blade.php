@@ -30,29 +30,33 @@
             color: white !important;
             background-color: #3b5998;
         }
-
-        .checkbox-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .checkbox-container>div {
-            display: flex;
-            align-items: center;
-        }
     </style>
-</head>
+
+    </head>
 
 <body>
     <div class="container">
+        <div style="margin-top: 20px">
+            <a href="{{ route('frontend.index') }}" style="color: #fff; text-decoration:none;"> <- Back</a>
+        </div>
         <div class="row">
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card border-0 shadow rounded-3 my-5">
                     <div class="card-body p-4 p-sm-5">
-                        <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
-                        <form method="POST" action="{{ route('auth.login') }}">
+                        <h5 class="card-title text-center mb-5 fw-light fs-5">Create Account</h5>
+
+                        <form method="POST" action="{{ route('auth.register.store') }}">
                             @csrf
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="username" placeholder="Username"
+                                    value="{{ old('username') }}">
+                                @if ($errors->has('username'))
+                                    <span class="text-danger">{{ $errors->first('username') }}</span>
+                                @endif
+                                <label for="floatingInput">User Name</label>
+                            </div>
+
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="email" placeholder="name@example.com"
                                     value="{{ old('email') }}">
@@ -62,49 +66,31 @@
                                 <label for="floatingInput">Email address</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" name="password" class="form-control" id="floatingPassword"
-                                    placeholder="Password">
-
+                                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
                                 @if ($errors->has('password'))
                                     <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
-
                                 <label for="floatingPassword">Password</label>
                             </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" name="password_confirmation" class="form-control" id="floatingPasswordConfirmation" placeholder="Confirm Password">
+                                @if ($errors->has('password_confirmation'))
+                                    <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                                @endif
+                                <label for="floatingPasswordConfirmation">Confirm Password</label>
+                            </div>
+
                             <div class="form-check mb-3">
-                                <div class="checkbox-container">
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="rememberPasswordCheck">
-                                        <label class="form-check-label" for="rememberPasswordCheck">
-                                            Remember password
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label class="form-check-label" for="register">
-                                            <a href="{{ route('auth.register') }}">Register</a>
-                                        </label>
-                                    </div>
-                                </div>
+                                <label class="form-check-label" for="register">
+                                    <a href="{{ route('auth.admin') }}">Login</a>
+                                </label>
+
                             </div>
                             <div class="d-grid">
-                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
-                                    in</button>
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Create</button>
                             </div>
                             <hr class="my-4">
-                            <div class="d-grid mb-2">
-                                <button class="btn btn-google btn-login text-uppercase fw-bold" type="submit">
-                                    <i class="fab fa-google me-2"></i> Sign in with Google
-                                </button>
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
-                                    <i class="fab fa-facebook-f me-2"></i> Sign in with Facebook
-                                </button>
-                            </div>
                         </form>
-
-
                     </div>
                 </div>
             </div>

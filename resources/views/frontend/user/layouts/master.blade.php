@@ -13,17 +13,16 @@
     <link rel="stylesheet" href="frontend/asset/css/lightgallery-bundle.css">
     <link rel="stylesheet" href="frontend/asset/css/header-footer.css">
     <link rel="stylesheet" href="frontend/asset/css/home.css">
+
 </head>
 
 <body>
-
-
     @include('frontend.user.layouts.header')
 
     <div class="over-suggestion"></div>
 
     <main class="main">
-        @yield('front_content')
+        @yield('content')
     </main>
 
     @include('frontend.user.layouts.footer')
@@ -31,6 +30,7 @@
     <script src="frontend/asset/js/header-footer.js"></script>
     <script src="frontend/asset/js/swiper-bundle.min.js"></script>
     <script src="frontend/asset/js/home.1.js"></script>
+
 </body>
 
 </html>

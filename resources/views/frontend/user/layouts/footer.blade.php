@@ -37,13 +37,13 @@
               <div class="desc">Bảo hành theo chính sách Apple</div>
             </div>
           </li>
-          <li><img src="asset/img/deli.png" alt="deli-icon">
+          <li><img src="frontend/asset/img/deli.png" alt="deli-icon">
             <div class="group-text">
               <div class="title">Giao hàng tận nơi</div>
               <div class="desc">Tại 63 tỉnh thành</div>
             </div>
           </li>
-          <li><img src="asset/img/crown.png" alt="crown-icon">
+          <li><img src="frontend/asset/img/crown.png" alt="crown-icon">
             <div class="group-text">
               <div class="title">Trải nghiệm Premium</div>
               <div class="desc">Không gian trải nghiệm cao cấp</div>
