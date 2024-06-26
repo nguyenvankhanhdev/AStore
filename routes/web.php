@@ -35,8 +35,10 @@ Route::post('register', [RegisterUserController::class, 'store'])->name('auth.re
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
      ->name('auth.logout');
 
-
 //frontend
+
+Route::get('products', [FrontendProductController::class, 'productsIndex'])->name('products.index');;
+
 Route::get('frontend/category', function(){
     return view('frontend.user.categories.index');
 
@@ -44,4 +46,6 @@ Route::get('frontend/category', function(){
 Route::get('/', [FrontendProductController::class, 'productsIndex'])->name('products.index');
 Route::get('frontend/index', [FrontendProductController::class, 'productsIndex'])->name('products.index');
 Route::get('frontend/category', [FrontendProductController::class, 'productCategories'])->name('products.category');
+
 Route::get('frontend/subcategory', [FrontendProductController::class, 'productSubCategories'])->name('products.subcategory');
+

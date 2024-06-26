@@ -1255,7 +1255,6 @@ p {
 .text {
     font-size: 14px;
     line-height: 20px;
-    color: white;
     font-weight: 400
 }
 
@@ -7806,7 +7805,7 @@ hr {
 }
 
 main {
-    background: #f8f9fa
+    background: #f8f9fa;
 }
 
 .container-mb {
@@ -8081,7 +8080,7 @@ main {
     margin-bottom: 20px;
     height: 444px;
     background: #fff;
-    border-radius: 60px;
+    border-radius: 12px;
     padding: 24px 12px 32px;
     display: flex;
     flex-direction: column;
@@ -8145,7 +8144,7 @@ main {
 }
 
 .category .product__name .badge {
-    transform: translateY(-4px);
+    transform: translateY(1px);
     margin-left: 8px
 }
 
@@ -8206,7 +8205,7 @@ main {
 .category .product__detail .btn {
     width: 176px;
     border: solid 2px;
-    border-radius: 22px
+    border-radius: 6px
 
 }
 

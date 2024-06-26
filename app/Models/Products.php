@@ -23,9 +23,9 @@ class Products extends Model
         return $this->hasMany(ProductImages::class,'pro_id');
     }
 
-    public function rating()
+    public function ratings()
     {
-        return $this->hasMany(Rating::class,'pro_id');
+        return $this->hasMany(Ratings::class,'pro_id');
     }
     public function variant()
     {
