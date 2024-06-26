@@ -1,9 +1,11 @@
 
 <div class="category">
     <div class="container">
+
         <h1 class="h1">Mac</h1>
         <div class="card card-md category__container">
             <div class="card-body">
+
                 <div class="tab-pane active" id="block-1">
                     <div class="product-list">
                         @foreach ($products as $product)

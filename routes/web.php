@@ -47,7 +47,12 @@ Route::get('/', [FrontendProductController::class, 'productsIndex'])->name('prod
 Route::get('index', [FrontendProductController::class, 'productsIndex'])->name('products.index');
 Route::get('category', [FrontendProductController::class, 'productCategories'])->name('products.category');
 
+<<<<<<< HEAD
 //details
 Route::get('product/{slug}', [FrontendProductController::class, 'showProduct'])->name('product.details');
 
 Route::get('category/subcategory', [FrontendProductController::class, 'productSubCategories'])->name('category.subcategory');
+=======
+Route::get('frontend/subcategory', [FrontendProductController::class, 'productSubCategories'])->name('products.subcategory');
+
+>>>>>>> 64610890fb50535b9c9e66f3fdc3e80ab774b234

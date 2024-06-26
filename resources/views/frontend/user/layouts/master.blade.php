@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="frontend/asset/css/category.css">
     <link rel="stylesheet" href="frontend/css/bootstrap.min.css">
     <link rel="stylesheet" href="frontend/asset/css/detail.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 
 </head>
 
@@ -31,7 +35,6 @@
             @yield('content')
         </main>
         @include('frontend.user.layouts.footer')
-
 
 
 
@@ -51,4 +54,16 @@
 
     </body>
 
+     <!--jquery library js-->
+    <script src="frontend/asset/js/jquery-3.6.0.min.js"></script>
+     <!--bootstrap js-->
+    <script src="frontend/asset/js/bootstrap.bundle.min.js"></script>
+    <script src="frontend/asset/js/header-footer.js"></script>
+    <script src="frontend/asset/js/swiper-bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    @stack('scripts')
+</body>
 </html>

@@ -6079,7 +6079,7 @@ hr {
 }
 
 .breadcrumb-item {
-    color: #444b52
+    color: white;
 }
 
 .breadcrumb-item+.breadcrumb-item:before {
