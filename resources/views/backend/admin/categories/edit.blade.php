@@ -11,7 +11,7 @@
                     <h4>Edit Category</h4>
                   </div>
                   <div class="card-body">
-                    <form action="{{route('categories.update', $categories->id)}}" method="POST">
+                    <form action="{{route('admin.categories.update', $categories->id)}}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="form-group">

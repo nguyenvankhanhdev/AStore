@@ -20,7 +20,6 @@
     @include('frontend.user.layouts.header')
 
     <div class="over-suggestion"></div>
-
     <main class="main">
         @yield('content')
     </main>

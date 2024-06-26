@@ -23,6 +23,14 @@ class Products extends Model
         return $this->hasMany(ProductImages::class,'pro_id');
     }
 
+    public function rating()
+    {
+        return $this->hasMany(Rating::class,'pro_id');
+    }
+    public function variant()
+    {
+        return $this->hasMany(ProductVariants::class,'pro_id');
+    }
 
 
 
