@@ -15,9 +15,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if(!auth()->check()) {
-            return redirect()->route('frontend.index');
-        }
+    
         if ($request->user()->role !== $role) {
             if ($request->user()->role == 'admin') {
                 return redirect()->route('dashboard.index');

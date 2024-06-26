@@ -14,38 +14,25 @@ class FrontendProductController extends Controller
     {
         if ($request->has('categories')) {
             $categories = Categories::where('slug', $request->categories)->firstOrFail();
-            $products = Products::withAvg('rating', 'point')->withCount('rating')
+            $products = Products::withCount('ratings')
                 ->with(['product_variant', 'categories', 'productImages'])
                 ->where([
                     'cate_id' => $categories->id,
                     'status' => 1,
                 ])
-                ->when($request->has('range'), function ($query) use ($request) {
-                    $price = explode(';', $request->range);
-                    $from = $price[0];
-                    $to = $price[1];
-                    return $query->where('price', '>=', $from)->where('price', '<=', $to);
-                })
                 ->paginate(5);
         } elseif ($request->has('subcategory')) {
             $categories = SubCategories::where('slug', $request->subcategory)->firstOrFail();
-            $products = Products::withAvg('rating', 'point')->withCount('rating')
+            $products = Products::withCount('ratings')
                 ->with(['product_variant', 'categories', 'productImages'])
                 ->where([
                     'sub_cate_id' => $categories->id,
                     'status' => 1,
                 ])
-                ->when($request->has('range'), function ($query) use ($request) {
-                    $price = explode(';', $request->range);
-                    $from = $price[0];
-                    $to = $price[1];
-
-                    return $query->where('price', '>=', $from)->where('price', '<=', $to);
-                })
                 ->paginate(12);
         }
         elseif($request->has('search')){
-            $products = Products::withAvg('rating', 'point')->withCount('rating')
+            $products = Products::withCount('ratings')
             ->with(['product_variant', 'category', 'productImages'])
             ->where(['status' => 1])
             ->where(function ($query) use ($request){
@@ -59,10 +46,10 @@ class FrontendProductController extends Controller
             ->paginate(12);
         }
         else{
-            $products = Products::withAvg('rating', 'point')->withCount('rating')
-            ->with(['product_variant', 'category', 'productImages'])
-            ->where(['status' => 1])->orderBy('id', 'DESC')->paginate(12);
+            
+            $products = Products::all();
         }
+
         $categories = Categories::all();
         return view('frontend.user.pages.product', compact('products', 'categories'));
 

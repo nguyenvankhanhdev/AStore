@@ -36,8 +36,6 @@ Route::get('frontend/index', function () {
 
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
      ->name('auth.logout');
-
-
+     
 //frontend
-
 Route::get('products', [FrontendProductController::class, 'productsIndex'])->name('products.index');;

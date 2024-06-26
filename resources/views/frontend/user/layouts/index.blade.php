@@ -1,3 +1,5 @@
+<div class="over-suggestion"></div>
+<main class="main">
 <div class="category">
     <div class="container">
         {{-- <ol class="breadcrumb">
@@ -345,7 +347,7 @@
                                     <div class="text">Lorem ipsum dolor sit amet.</div><span
                                         class="badge badge-xs badge-link">Mới</span>
                                 </h3>
-                               
+
                                 <div class="product__price">
                                     <div class="text">Giá chỉ</div>
                                     <div class="price">60.990.000đ</div><strike
@@ -376,3 +378,5 @@
         </div>
     </div>
 </div>
+
+</main>

@@ -19,16 +19,16 @@
 <body>
     @include('frontend.user.layouts.header')
 
-    <div class="over-suggestion"></div>
-    <main class="main">
-        @yield('content')
-    </main>
 
+    @yield('content')
+    
     @include('frontend.user.layouts.footer')
 
+    <script src="frontend/asset/js/dropdown.js"></script>
     <script src="frontend/asset/js/header-footer.js"></script>
     <script src="frontend/asset/js/swiper-bundle.min.js"></script>
     <script src="frontend/asset/js/home.1.js"></script>
+    <script src="frontend/asset/js/category.1.js"></script>
 
 </body>
 

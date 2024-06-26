@@ -21,7 +21,7 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('sub-categories.store') }}" method="POST">
+                            <form action="{{ route('admin.sub-categories.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Name</label>

@@ -1,6 +1,8 @@
 @extends('frontend.user.layouts.master')
 
 @section('content')
+<div class="over-suggestion"></div>
+<main class="main">
     <section class="section-wrap home-page">
         <section class="section-module section__cate">
             <div class="container">
@@ -50,6 +52,6 @@
             </div>
         </section>
     </section>
-
+</main>
     @include('frontend.user.layouts.index')
 @endsection
