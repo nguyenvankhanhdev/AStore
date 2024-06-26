@@ -78,9 +78,27 @@ class FrontendProductController extends Controller
     {
         if ($request->has('categories')) {
             $categories = Categories::where('slug', $request->categories)->firstOrFail();
-            $subcategories= SubCategories::where([ 'cate_id' => $categories->id ]);
+            $subcategories= SubCategories::where( 'cate_id', $categories->id )->get();
             $products = Products::where([
                             'cate_id' => $categories->id,
+                            'status' => 1,
+                         ])
+
+                ->paginate(5);
+        }
+        return view('frontend.user.categories.index', compact('products','categories','subcategories'));
+
+
+    }
+
+    public function productSubCategories(Request $request)
+    {
+        if ($request->has('subcategories')) {
+            $subcategory= SubCategories::where( 'slug', $request->subcategories )->first();
+            $categories = Categories::where('id', $subcategory->cate_id)->firstOrFail();
+            $subcategories= SubCategories::where( 'cate_id', $categories->id )->get();
+            $products = Products::where([
+                            'sub_cate_id' => $subcategory->id,
                             'status' => 1,
                          ])
 

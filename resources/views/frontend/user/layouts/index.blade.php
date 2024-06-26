@@ -1,45 +1,10 @@
 <div class="category">
     <div class="container">
-        {{-- <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a class="link" href="#">Trang chủ</a></li>
-            <li class="breadcrumb-item">Mac</li>
-        </ol> --}}
+       
         <h1 class="h1">Mac</h1>
         <div class="card card-md category__container">
             <div class="card-body">
-                {{-- <div class="actions">
-                    <div class="menu js-category-menu">
-                        <div class="swiper">
-                            <div class="swiper-wrapper"> <a class="item swiper-slide active" data-ref="#block-1">Tất
-                                    cả</a><a class="item swiper-slide" data-ref="#block-2">MacBook Air 13”</a><a
-                                    class="item swiper-slide" data-ref="#block-3">MacBook Pro 13”</a><a
-                                    class="item swiper-slide" data-ref="#block-4">MacBook
-                                    Pro 14”</a><a class="item swiper-slide" data-ref="#block-5">MacBook Pro 16”</a><a
-                                    class="item swiper-slide" data-ref="#block-6">Mac mini</a><a
-                                    class="item swiper-slide" data-ref="#block-7">iMac</a><a class="item swiper-slide"
-                                    data-ref="#block-8">MacBook Pro
-                                    16”</a><a class="item swiper-slide" data-ref="#block-9">Mac mini</a><a
-                                    class="item swiper-slide" data-ref="#block-10">iMac</a></div>
-                        </div>
-                        <div class="swiper-button-next sw-button"><i class="ic-angle-right"></i></div>
-                        <div class="swiper-button-prev sw-button"><i class="ic-angle-left"></i></div>
-                    </div>
-                    <div class="sort">
-                        <div class="content">
-                            <div class="text">Sắp xếp theo:</div>
-                            <div class="dropdown js-dropdown">
-                                <div class="dropdown-button"><span>Mới nhất</span><i class="ic-arrow-select ic-sm"></i>
-                                </div>
-                                <div class="dropdown-menu">
-                                    <div class="dropdown-menu-wrapper scrollbar"><a href="#"><span>Option:
-                                                1</span></a><a href="#"><span>Option: 2</span></a><a
-                                            href="#"><span>Option: 3</span></a><a href="#"><span>Option:
-                                                4</span></a><a href="#"><span>Option: 5</span></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
+
                 <div class="tab-pane active" id="block-1">
                     <div class="product-list">
                         @foreach ($products as $product)

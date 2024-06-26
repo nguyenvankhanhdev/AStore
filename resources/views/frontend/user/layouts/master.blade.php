@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="frontend/asset/css/header-footer.css">
     <link rel="stylesheet" href="frontend/asset/css/home.css">
     <link rel="stylesheet" href="frontend/asset/css/category.css">
-    <link rel="stylesheet" href="frontend/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 </head>
 
@@ -29,13 +31,14 @@
     @include('frontend.user.layouts.footer')
 
      <!--jquery library js-->
-    <script src="frontend/js/jquery-3.6.0.min.js"></script>
+    <script src="frontend/asset/js/jquery-3.6.0.min.js"></script>
      <!--bootstrap js-->
-    <script src="frontend/js/bootstrap.bundle.min.js"></script>
+    <script src="frontend/asset/js/bootstrap.bundle.min.js"></script>
     <script src="frontend/asset/js/header-footer.js"></script>
     <script src="frontend/asset/js/swiper-bundle.min.js"></script>
     <script src="frontend/asset/js/home.1.js"></script>
 
+    @stack('scripts')
 </body>
 
 </html>
