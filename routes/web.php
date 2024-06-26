@@ -16,8 +16,7 @@ Route::get('/', function () {
     return view('frontend.user.layouts.section_cate');
 })->name('dashboard');
 
-Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index')
-    ->middleware(RoleMiddleware::class . ':admin');
+Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::get('admin', [AuthenticateSessionController::class, 'index'])
     ->name('auth.admin');
@@ -33,6 +32,8 @@ Route::post('register', [RegisterUserController::class, 'store'])->name('auth.re
 Route::get('frontend/index', function () {
     return view('frontend.user.layouts.section_cate');
 })->name('frontend.index');
+
+
 
 
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
@@ -61,6 +62,7 @@ Route::get('frontend/category',function(){
 
     return view('frontend.user.categories.index');
 });
+
 
 
 // Sub_categories

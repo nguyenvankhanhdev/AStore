@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+
 use Illuminate\Http\RedirectResponse;
+
+
 
 class RegisterUserController extends Controller
 {
@@ -26,6 +29,7 @@ class RegisterUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
+
     {
         $request->validate([
             'username' => 'required|string|max:255',
@@ -42,6 +46,10 @@ class RegisterUserController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect()->route('frontend.index')->with('success', 'Đăng ký và đăng nhập thành công');
+        return redirect()->route('auth.admin')->with('success', 'Đăng kí thành công!');
+
+
+
+
     }
 }

@@ -35,7 +35,6 @@ class ProductDataTable extends DataTable
                 return $editBtn . $deleteBtn . $moreBtn;
             })
             ->addColumn('image', function ($query) {
-
                 return "<img width='70px' src='" . $query->image. "' ></img>";
             })
             ->addColumn('type', function ($query) {
