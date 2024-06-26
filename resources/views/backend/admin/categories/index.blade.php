@@ -9,7 +9,7 @@
                   <div class="card-header">
                     <h3>All Categories</h3>
                     <div class="card-header-action">
-                        <a href="{{route('categories.create')}}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
+                        <a href="{{route('admin.categories.create')}}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
                     </div>
                   </div>
                   <div class="card-body">

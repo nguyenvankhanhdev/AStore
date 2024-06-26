@@ -11,7 +11,7 @@
                     <h4>Create Product</h4>
                   </div>
                   <div class="card-body">
-                    <form action="{{route('product.store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('admin.product.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label>Image</label>
@@ -121,7 +121,7 @@
                 let id = $(this).val();
                 $.ajax({
                     method: 'GET',
-                    url: "{{route('product.get-subcategories')}}",
+                    url: "{{route('admin.product.get-subcategories')}}",
                     data: {
                         id:id
                     },

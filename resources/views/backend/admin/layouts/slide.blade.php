@@ -35,8 +35,8 @@
         </a>
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item " href="{{ route('categories.index') }}">Categories</a>
-                <a class="collapse-item" href="{{ route('sub-categories.index') }}">Sub Categories</a>
+                <a class="collapse-item " href="{{ route('admin.categories.index') }}">Categories</a>
+                <a class="collapse-item" href="{{ route('admin.sub-categories.index') }}">Sub Categories</a>
             </div>
         </div>
     </li>
@@ -50,7 +50,7 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('product.index') }}">Product</a>
+                <a class="collapse-item" href="{{ route('admin.product.index') }}">Product</a>
                 <a class="collapse-item" href="">Product Preview</a>
             </div>
         </div>
@@ -141,6 +141,6 @@
     </div>
 
     <!-- Sidebar Message -->
-   
+
 
 </ul>

@@ -55,7 +55,7 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->save();
 
-        return redirect()->route('product.index')->with('success', 'Product created successfully');
+        return redirect()->route('admin.product.index')->with('success', 'Product created successfully');
     }
 
     public function show(string $id)

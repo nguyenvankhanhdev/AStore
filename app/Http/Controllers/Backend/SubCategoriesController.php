@@ -32,7 +32,7 @@ class SubCategoriesController extends Controller
         $subCategory->slug = Str::slug($request->name);
         $subCategory->cate_id = $request->category;
         $subCategory->save();
-        return redirect()->route('sub-categories.index')->with('success', 'Create successfully');
+        return redirect()->route('admin.sub-categories.index')->with('success', 'Create successfully');
 
     }
     public function show(string $id)
@@ -57,7 +57,7 @@ class SubCategoriesController extends Controller
         $subCategory->slug = Str::slug($request->name);
         $subCategory->category_id = $request->category;
         $subCategory->save();
-        return redirect()->route('sub-categories.index')->with('success', 'Update successfully');
+        return redirect()->route('admin.sub-categories.index')->with('success', 'Update successfully');
     }
     public function destroy(string $id)
     {

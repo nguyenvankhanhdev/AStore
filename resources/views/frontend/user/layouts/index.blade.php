@@ -42,337 +42,55 @@
                 </div> --}}
                 <div class="tab-pane active" id="block-1">
                     <div class="product-list">
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
+                        @foreach ($products as $product)
+                            <div class="product">
 
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
+                                <div class="product__img">
+                                    <a href="#">
+                                        <img src="{{ $product->image }}" alt=""></a>
                                 </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md" href="#">XEM
-                                    CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
+                                <div class="product__info">
 
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
+                                    <h3 class="product__name">
+                                        <div class="text">{{ $product->name }}</div>
+                                        @if ($product->product_type == 'new_arrival')
+                                            <span class="badge badge-xs badge-success badge-link">Mới</span>
+                                        @elseif ($product->product_type == 'featured_product')
+                                            <span class="badge badge-xs badge-warning badge-link">Nổi bật</span>
+                                        @elseif ($product->product_type == 'top_product')
+                                            <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
+                                        @elseif ($product->product_type == 'best_product')
+                                            <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
+                                        @endif
 
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
+                                    </h3>
+                                    <div class="product__price">
+                                        <div class="text">Giá chỉ</div>
+                                        <div class="price">{{ $product->price }}đ</div><strike
+                                            class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md" href="#">XEM
-                                    CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
+                                <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
+                                        href="#">XEM
+                                        CHI TIẾT </a>
                                 </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
 
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="col-xl-12 text-center">
+                        <div class="mt-5" style="display:flex; justify-content:center">
+                            @if ($products->hasPages())
+                            {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
+                        @endif
 
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        <div class="product">
-                            <div class="product__img"><a href="#"><img
-                                        src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2019/9/11/637037687757921048_11-pro-max-chung.png"
-                                        alt=""></a></div>
-                            <div class="product__info">
-
-                                <h3 class="product__name">
-                                    <div class="text">Lorem ipsum dolor sit amet.</div><span
-                                        class="badge badge-xs badge-link">Mới</span>
-                                </h3>
-                               
-                                <div class="product__price">
-                                    <div class="text">Giá chỉ</div>
-                                    <div class="price">60.990.000đ</div><strike
-                                        class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
-                                </div>
-                            </div>
-                            <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                    href="#">XEM CHI TIẾT </a>
-                            </div>
-                        </div>
-                        {{-- <div class="card-nolist w-100">
-                            <div class="noti-img"><img src="assets/img/no-search.png"
-                                    alt="Không tìm thấy sản phẩm phù hợp">
-                            </div>
-                            <p class="noti-title">Không tìm thấy sản phẩm phù hợp</p>
-                            <p class="noti-content">Vui lòng điều chỉnh lại bộ lọc</p>
                         </div>
                     </div>
-                    <div class="viewmore"><a class="btn btn-icon btn-outline-grayscale btn-md"
-                            href="#"><span>Xem thêm 22
-                                sản phẩm</span><i class="ic-angle-down"></i></a></div>
+
+
+
                 </div>
-                <div class="tab-pane" id="block-2">tab2</div>
-                <div class="tab-pane" id="block-3">tab3</div>
-                <div class="tab-pane" id="block-4">tab4</div>
-                <div class="tab-pane" id="block-5">tab5</div> --}}
+
             </div>
         </div>
     </div>
-</div>
