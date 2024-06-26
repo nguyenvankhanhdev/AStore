@@ -8,13 +8,11 @@
                     <div class="product-list">
                         @foreach ($products as $product)
                             <div class="product">
-
                                 <div class="product__img">
                                     <a href="#">
                                         <img src="{{ $product->image }}" alt=""></a>
                                 </div>
                                 <div class="product__info">
-
                                     <h3 class="product__name">
                                         <div class="text">{{ $product->name }}</div>
                                         @if ($product->product_type == 'new_arrival')
@@ -26,7 +24,6 @@
                                         @elseif ($product->product_type == 'best_product')
                                             <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
                                         @endif
-
                                     </h3>
                                     <div class="product__price">
                                         <div class="text">Giá chỉ</div>

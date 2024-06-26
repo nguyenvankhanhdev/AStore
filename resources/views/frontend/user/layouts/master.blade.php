@@ -15,31 +15,40 @@
     <link rel="stylesheet" href="frontend/asset/css/home.css">
     <link rel="stylesheet" href="frontend/asset/css/category.css">
     <link rel="stylesheet" href="frontend/css/bootstrap.min.css">
+    <link rel="stylesheet" href="frontend/asset/css/detail.css">
 
 </head>
 
 <body>
-    @include('frontend.user.layouts.header')
+
+    <body id="page-top">
+
+        @include('frontend.user.layouts.header')
 
 
-    <div class="over-suggestion"></div>
-    <main class="main">
-        @yield('content')
-    </main>
-    @include('frontend.user.layouts.footer')
+        <div class="over-suggestion"></div>
+        <main class="main">
+            @yield('content')
+        </main>
+        @include('frontend.user.layouts.footer')
 
 
-    <script src="frontend/asset/js/dropdown.js"></script>
 
-    <!--jquery library js-->
-    <script src="frontend/js/jquery-3.6.0.min.js"></script>
-    <!--bootstrap js-->
-    <script src="frontend/js/bootstrap.bundle.min.js"></script>
-    <script src="frontend/asset/js/header-footer.js"></script>
-    <script src="frontend/asset/js/swiper-bundle.min.js"></script>
-    <script src="frontend/asset/js/home.1.js"></script>
-    <script src="frontend/asset/js/category.1.js"></script>
 
-</body>
+        <!--jquery library js-->
+        <script src="frontend/js/jquery-3.6.0.min.js"></script>
+        <!--bootstrap js-->
+        <script src="frontend/js/bootstrap.bundle.min.js"></script>
+        <script src="frontend/asset/js/header-footer.js"></script>
+        <script src="frontend/asset/js/swiper-bundle.min.js"></script>
+        <script src="frontend/asset/js/home.1.js"></script>
+        <script src="frontend/asset/js/category.1.js"></script>
+        <script src="frontend/asset/js/modal.js"></script>
+        <script src="frontend/asset/js/detail.1.js">
+            < script src = "frontend/asset/js/dropdown.js" >
+        </script>
+        @stack('scripts')
+
+    </body>
 
 </html>

@@ -1,17 +1,13 @@
 @extends('frontend.user.layouts.master')
 
 @section('content')
-
     <div class="category">
         <div class="container">
-            {{-- <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a class="link" href="#">Trang chủ</a></li>
-            <li class="breadcrumb-item">Mac</li>
-        </ol> --}}
-
-
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="link" href="{{ route('products.index') }}">Trang chủ</a></li>
+                <li class="breadcrumb-item" style="color: #fff">{{ $categories->name }}</li>
+            </ol>
             <h1 class="h1">{{ $categories->name }}</h1>
-
             <div class="card card-md category__container">
                 <div class="card-body">
                     <div class="actions">
@@ -20,8 +16,10 @@
                                 <div class="swiper-wrapper">
                                     <a class="item swiper-slide active" data-ref="#block-1">Tất cả</a>
                                     @foreach ($cate as $subcategory)
-                                        <a class="item swiper-slide" href="#" data-ref="#block-2">{{ $subcategory->name }}</a>
+                                        <a class="item swiper-slide sub_cate" data-id="{{ $subcategory->id }}"
+                                            href="javascript:void(0)" data-ref="#block-2">{{ $subcategory->name }}</a>
                                     @endforeach
+
 
 
                                 </div>
@@ -51,7 +49,7 @@
                                 <div class="product">
 
                                     <div class="product__img">
-                                        <a href="#">
+                                        <a href="{{ route('product.details', $product->slug) }}">
                                             <img src="{{ $product->image }}" alt=""></a>
                                     </div>
                                     <div class="product__info">
@@ -75,7 +73,7 @@
                                         </div>
                                     </div>
                                     <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                            href="#">XEM
+                                            href="{{ route('product.details', $product->slug) }}">XEM
                                             CHI TIẾT </a>
                                     </div>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SubCategoriesController;
 use App\Http\Controllers\Backend\ProductImagesController;
+use App\Http\Controllers\Backend\ProductVariantController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,4 +23,6 @@ Route::resource('categories', CategoriesController::class);
 Route::resource('sub-categories', SubCategoriesController::class);
 
 Route::resource('users', UserController::class);
+
+Route::resource('products-variant', ProductVariantController::class);
 

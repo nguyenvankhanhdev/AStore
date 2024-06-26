@@ -69,7 +69,7 @@ class FrontendProductController extends Controller
 
         $products = Products::where('status', 1)
             ->orderBy('id', 'DESC')
-            ->paginate(2);
+            ->paginate(10);
 
         return view('frontend.user.layouts.section_cate', compact('products'));
     }
@@ -80,13 +80,38 @@ class FrontendProductController extends Controller
             $categories = Categories::where('slug', $request->categories)->firstOrFail();
             $cate = SubCategories::where('cate_id', $categories->id)->get();
             $products = Products::where([
-                            'cate_id' => $categories->id,
-                            'status' => 1,
-                         ])
-
+                'cate_id' => $categories->id,
+                'status' => 1,
+            ])
                 ->paginate(5);
         }
-        return view('frontend.user.categories.index', compact('products','categories','cate'));
+        return view('frontend.user.categories.index', compact('products', 'categories', 'cate'));
     }
+    public function showProduct(string $slug)
+    {
+        $product = Products::with(['productImages'])->where([
+            'slug' => $slug,
+            'status' => 1
+        ])->firstOrFail();
+        $cate = Categories::where('id', $product->cate_id)->first();
+        return view('frontend.user.home.product_details', compact('product', 'cate'));
+    }
+    public function productSubCategories(Request $request)
+    {
+        if ($request->has('id')) {
+            $categories = SubCategories::findOrFail($request->id);
+            $products = Products::where([
+                'sub_cate_id' => $categories->id,
+                'status' => 1,
+            ])->paginate(5);
 
+            return response()->json([
+                'message' => 'Products fetched successfully.',
+                'products' => $products,
+                'categories' => $categories
+            ]);
+        }
+
+        return response()->json(['message' => 'No subcategory found.'], 404);
+    }
 }

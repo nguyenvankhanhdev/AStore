@@ -29,7 +29,7 @@ class ProductDataTable extends DataTable
                 </button>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
                    <a class="dropdown-item has-icon" href="'.route('admin.products-image-gallery.index', ['product' => $query->id]).'"><i class="far fa-heart"></i> Image Gallery</a>
-                   <a class="dropdown-item has-icon" href=""><i class="far fa-file"></i> Variants</a>
+                   <a class="dropdown-item has-icon" href="'.route('admin.products-variant.index', ['product' => $query->id]).'"><i class="far fa-file"></i> Variants</a>
                 </div>
               </div>';
                 return $editBtn . $deleteBtn . $moreBtn;
@@ -48,11 +48,9 @@ class ProductDataTable extends DataTable
                     case 'top_product':
                         return '<i class="badge badge-info">Top Product</i>';
                         break;
-
                     case 'best_product':
-                        return '<i class="badge badge-danger">Top Product</i>';
+                        return '<i class="badge badge-danger">Best Product</i>';
                         break;
-
                     default:
                         return '<i class="badge badge-dark">None</i>';
                         break;
