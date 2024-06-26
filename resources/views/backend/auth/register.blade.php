@@ -56,7 +56,7 @@
                                 @endif
                                 <label for="floatingInput">User Name</label>
                             </div>
-
+                            
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="email" placeholder="name@example.com"
                                     value="{{ old('email') }}">

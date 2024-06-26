@@ -3,7 +3,8 @@
 @section('content')
 
 
-@include('frontend.user.home.sections.category')
+@include('frontend.user.home.sections.categor')
+
 
 
 

@@ -13,9 +13,7 @@ use App\Http\Controllers\Frontend\FrontendProductController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
-Route::get('/', function () {
-    return view('frontend.user.layouts.section_cate');
-})->name('dashboard');
+
 
 Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -30,12 +28,22 @@ Route::get('register', [RegisterUserController::class, 'create'])->name('auth.re
 
 Route::post('register', [RegisterUserController::class, 'store'])->name('auth.register.store');
 
-Route::get('frontend/index', function () {
-    return view('frontend.user.layouts.section_cate');
-})->name('frontend.index');
+// Route::get('frontend/index', function () {
+//     return view('frontend.user.layouts.section_cate');
+// })->name('frontend.index');
 
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
      ->name('auth.logout');
-     
+
 //frontend
+
 Route::get('products', [FrontendProductController::class, 'productsIndex'])->name('products.index');;
+
+Route::get('frontend/category', function(){
+    return view('frontend.user.categories.index');
+
+});
+Route::get('/', [FrontendProductController::class, 'productsIndex'])->name('products.index');
+Route::get('frontend/index', [FrontendProductController::class, 'productsIndex'])->name('products.index');
+Route::get('frontend/category', [FrontendProductController::class, 'productCategories'])->name('products.category');
+

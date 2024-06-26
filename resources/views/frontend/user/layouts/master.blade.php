@@ -14,17 +14,27 @@
     <link rel="stylesheet" href="frontend/asset/css/header-footer.css">
     <link rel="stylesheet" href="frontend/asset/css/home.css">
     <link rel="stylesheet" href="frontend/asset/css/category.css">
+    <link rel="stylesheet" href="frontend/css/bootstrap.min.css">
+
 </head>
 
 <body>
     @include('frontend.user.layouts.header')
 
 
-    @yield('content')
-    
+    <div class="over-suggestion"></div>
+    <main class="main">
+        @yield('content')
+    </main>
     @include('frontend.user.layouts.footer')
 
+
     <script src="frontend/asset/js/dropdown.js"></script>
+
+    <!--jquery library js-->
+    <script src="frontend/js/jquery-3.6.0.min.js"></script>
+    <!--bootstrap js-->
+    <script src="frontend/js/bootstrap.bundle.min.js"></script>
     <script src="frontend/asset/js/header-footer.js"></script>
     <script src="frontend/asset/js/swiper-bundle.min.js"></script>
     <script src="frontend/asset/js/home.1.js"></script>
