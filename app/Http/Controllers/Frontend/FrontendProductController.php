@@ -85,9 +85,6 @@ class FrontendProductController extends Controller
             ])
                 ->paginate(5);
         }
-<<<<<<< HEAD
-        return view('frontend.user.categories.index', compact('products', 'categories', 'cate'));
-=======
         return view('frontend.user.categories.index', compact('products','categories','subcategories'));
 
 
@@ -107,7 +104,6 @@ class FrontendProductController extends Controller
                 ->paginate(5);
         }
         return view('frontend.user.categories.index', compact('products','categories','subcategories'));
->>>>>>> 64610890fb50535b9c9e66f3fdc3e80ab774b234
     }
     public function showProduct(string $slug)
     {
@@ -117,23 +113,5 @@ class FrontendProductController extends Controller
         ])->firstOrFail();
         $cate = Categories::where('id', $product->cate_id)->first();
         return view('frontend.user.home.product_details', compact('product', 'cate'));
-    }
-    public function productSubCategories(Request $request)
-    {
-        if ($request->has('id')) {
-            $categories = SubCategories::findOrFail($request->id);
-            $products = Products::where([
-                'sub_cate_id' => $categories->id,
-                'status' => 1,
-            ])->paginate(5);
-
-            return response()->json([
-                'message' => 'Products fetched successfully.',
-                'products' => $products,
-                'categories' => $categories
-            ]);
-        }
-
-        return response()->json(['message' => 'No subcategory found.'], 404);
     }
 }
