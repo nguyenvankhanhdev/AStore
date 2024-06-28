@@ -1,4 +1,3 @@
-
 <div class="category">
     <div class="container">
 
@@ -44,16 +43,19 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="col-xl-12 text-center">
+                    {{-- <div class="col-xl-12 text-center">
                         <div class="mt-5" style="display:flex; justify-content:center">
                             @if ($products->hasPages())
-                            {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-                        @endif
+                                {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
+                            @endif
 
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>
         </div>
+
+
     </div>
+</div>

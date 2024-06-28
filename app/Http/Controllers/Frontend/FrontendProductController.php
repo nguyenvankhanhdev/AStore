@@ -68,8 +68,8 @@ class FrontendProductController extends Controller
         // return view('frontend.user.pages.product', compact('products', 'categories'));
 
         $products = Products::where('status', 1)
-            ->orderBy('id', 'DESC')
-            ->paginate(2);
+            ->orderBy('id', 'DESC');
+
 
         return view('frontend.user.layouts.section_cate', compact('products'));
     }
