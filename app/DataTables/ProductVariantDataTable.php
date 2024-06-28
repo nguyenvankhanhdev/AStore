@@ -23,8 +23,10 @@ class ProductVariantDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function($query){
+                $editBtn = "<a href='" . route('admin.products-variant.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='".route('admin.products-variant.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-                return $deleteBtn;
+
+                return $editBtn.$deleteBtn;
             })
             ->editColumn('color_id', function ($query) {
                 return $query->color->color; // Assuming the color name is stored in the 'color' column
@@ -78,14 +80,14 @@ class ProductVariantDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('quantity'),
+            Column::make('quantity')->title('Quantity'),
             Column::make('price')->title('Price (VNĐ)'),
             Column::make('color_id')->title('Color'),
             Column::make('storage_id')->title('Storage'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }

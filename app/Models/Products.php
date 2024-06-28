@@ -27,6 +27,7 @@ class Products extends Model
     {
         return $this->hasMany(Ratings::class,'pro_id');
     }
+
     public function variant()
     {
         return $this->hasMany(ProductVariant::class,'pro_id');

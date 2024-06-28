@@ -47,7 +47,7 @@ class ProductVariantController extends Controller
         $variant->storage_id = $request->storage;
         $variant->pro_id = $request->product;
         $variant->save();
-        return redirect()->route('admin.products-variant.index',['product'=> $request->product])->with('success', 'Product Variant created successfully');
+        return redirect()->route('admin.products-variant.index', ['product' => $request->product])->with('success', 'Product Variant created successfully');
     }
 
     /**
@@ -63,7 +63,10 @@ class ProductVariantController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $variant = ProductVariant::findOrFail($id);
+        $colors = ColorProduct::all();
+        $storages = StorageProduct::all();
+        return view('backend.admin.product.product_variant.edit', compact('variant', 'colors', 'storages'));
     }
 
     /**
@@ -71,8 +74,25 @@ class ProductVariantController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'quantity' => ['required', 'integer'],
+            'price' => ['required', 'numeric'],
+            'offer_price' => ['required', 'numeric'],
+            'color' => ['required', 'exists:color_products,id'],
+            'storage' => ['required', 'exists:storage_products,id'],
+        ]);
+
+        $variant = ProductVariant::findOrFail($id);
+        $variant->quantity = $request->quantity;
+        $variant->price = $request->price;
+        $variant->offer_price = $request->offer_price;
+        $variant->color_id = $request->color;
+        $variant->storage_id = $request->storage;
+        $variant->save();
+
+        return redirect()->route('admin.products-variant.index', ['product' => $variant->pro_id])->with('success', 'Product Variant updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -81,6 +101,6 @@ class ProductVariantController extends Controller
     {
         $variant = ProductVariant::findOrFail($id);
         $variant->delete();
-        return response(['status' => 'success','message'=> 'Deleted Successfully!']);
+        return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
     }
 }

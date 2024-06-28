@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SubCategoriesController;
 use App\Http\Controllers\Backend\ProductImagesController;
+use App\Http\Controllers\Frontend\FrontendCartController;
 use App\Http\Controllers\Frontend\FrontendProductController;
 
 use Illuminate\Support\Facades\Route;
@@ -51,5 +52,10 @@ Route::get('category', [FrontendProductController::class, 'productCategories'])-
 Route::get('product/{slug}', [FrontendProductController::class, 'showProduct'])->name('product.details');
 
 Route::get('subcategory', [FrontendProductController::class, 'productSubCategories'])->name('products.subcategory');
+
+
+Route::get('/get-districts/{province_id}', [FrontendCartController::class, 'getDistricts'])->name('get-districts');
+Route::get('/get-wards/{district_id}', [FrontendCartController::class, 'getWards'])->name('get-wards');
+Route::get('/cart', [FrontendCartController::class, 'index'])->name('cart.index');
 
 

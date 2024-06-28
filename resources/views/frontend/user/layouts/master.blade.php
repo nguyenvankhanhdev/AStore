@@ -12,58 +12,46 @@
     <link rel="stylesheet" href="frontend/asset/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="frontend/asset/css/lightgallery-bundle.css">
     <link rel="stylesheet" href="frontend/asset/css/header-footer.css">
+
     <link rel="stylesheet" href="frontend/asset/css/home.css">
     <link rel="stylesheet" href="frontend/asset/css/category.css">
     <link rel="stylesheet" href="frontend/css/bootstrap.min.css">
     <link rel="stylesheet" href="frontend/asset/css/detail.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
 
 </head>
 
-<body>
+<body id="page-top">
 
-    <body id="page-top">
-
-        @include('frontend.user.layouts.header')
+    @include('frontend.user.layouts.header')
 
 
-        <div class="over-suggestion"></div>
-        <main class="main">
-            @yield('content')
-        </main>
-        @include('frontend.user.layouts.footer')
+    <div class="over-suggestion"></div>
+    <main class="main">
+        @yield('content')
+    </main>
+    @include('frontend.user.layouts.footer')
 
 
 
-        <!--jquery library js-->
-        <script src="frontend/js/jquery-3.6.0.min.js"></script>
-        <!--bootstrap js-->
-        <script src="frontend/js/bootstrap.bundle.min.js"></script>
-        <script src="frontend/asset/js/header-footer.js"></script>
-        <script src="frontend/asset/js/swiper-bundle.min.js"></script>
-        <script src="frontend/asset/js/home.1.js"></script>
-        <script src="frontend/asset/js/category.1.js"></script>
-        <script src="frontend/asset/js/modal.js"></script>
-        <script src="frontend/asset/js/detail.1.js">
-            < script src = "frontend/asset/js/dropdown.js" >
-        </script>
-        @stack('scripts')
 
-    </body>
-
-     <!--jquery library js-->
-    <script src="frontend/asset/js/jquery-3.6.0.min.js"></script>
-     <!--bootstrap js-->
     <script src="frontend/asset/js/bootstrap.bundle.min.js"></script>
     <script src="frontend/asset/js/header-footer.js"></script>
     <script src="frontend/asset/js/swiper-bundle.min.js"></script>
+    <script src="frontend/asset/js/home.1.js"></script>
+    <script src="frontend/asset/js/category.1.js"></script>
+    <script src="frontend/asset/js/modal.js"></script>
+    <script src="frontend/asset/js/detail.1.js">
 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="frontend/asset/js/cart.2.js"></script>
+    <script src="frontend/asset/js/cart.3.js"></script>
+    <script src="frontend/asset/js/detail.3.js"></script>
+    <script src="frontend/asset/js/util.js"></script>
+    <script src="frontend/asset/js/dropdown.js"></script>
+    <script src="frontend/asset/js/jquery-3.6.0.min.js"></script>
+    <!--bootstrap js-->
     @stack('scripts')
+
 </body>
+
 </html>

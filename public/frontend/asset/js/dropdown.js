@@ -10922,7 +10922,7 @@ return jQuery;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -10936,14 +10936,14 @@ return jQuery;
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
@@ -10951,6 +10951,7 @@ var __webpack_exports__ = {};
 /* provided dependency */ var $ = __webpack_require__(19755);
 /* provided dependency */ var jQuery = __webpack_require__(19755);
 // dropdown
+
 document.addEventListener(
   "DOMContentLoaded", // make sure DOM is fully parsed before accessing elements!
   function () {
@@ -10974,11 +10975,11 @@ document.addEventListener(
             i.classList.remove("open");
           });
         }
-        // if (clickedElement.closest(".js-dropdown") === null) {
-        //   for (const dropdown of dropdowns) {
-        //     dropdown.querySelector(".dropdown-menu").classList.remove("open");
-        //   }
-        // }
+        if (clickedElement.closest(".js-dropdown") === null) {
+          for (const dropdown of dropdowns) {
+            dropdown.querySelector(".dropdown-menu").classList.remove("open");
+          }
+        }
       }, {
       capture: true,
     }
@@ -10986,7 +10987,7 @@ document.addEventListener(
   }
 );
 
-// event listeners cart
+
 document.addEventListener(
   "DOMContentLoaded", // make sure DOM is fully parsed before accessing elements!
   function () {
@@ -10997,10 +10998,9 @@ document.addEventListener(
           // make sure it's not a click from the dropdown that has bubbled up
           dropdown.querySelector(".c-dropdown-menu").classList.add("open");
         }
+
       });
     }
-
-    // on outside click, close all dropdowns
     document.addEventListener(
       "click",
       function (event) {
@@ -11048,6 +11048,7 @@ jQuery.fn.extend({
         $(this).addClass("active");
         var txt = $(this).find("span").text();
         option.text(txt);
+
         menu.removeClass("open");
       });
       $(document).click(function (e) {
@@ -11061,7 +11062,7 @@ jQuery.fn.extend({
   },
 });
 
-// get item and fill data into dropdown button
+
 function triggerItem() {
 
   var wrapperDropdown = $('.js-dropdown-open');
@@ -11111,7 +11112,7 @@ function handelInput() {
 
       if (dropdownInput) {
         var findDropdownMb = $(this).closest('.cs-suggest__wrapper').find('.c-dropdown-menu');
-        
+
         findDropdownMb.addClass('open');
 
         // set timeout focus input when click ( Mobile)
@@ -11140,6 +11141,9 @@ function handelInput() {
     );
   });
 };
+
+
+
 
 
 function checkTyping() {
@@ -11178,7 +11182,9 @@ function run() {
 }
 
 run();
+
+
+
 })();
 
-/******/ })()
-;
+})();

@@ -65,17 +65,57 @@ class ProductController extends Controller
 
     public function edit(string $id)
     {
-        //
+        $product = Products::findOrFail($id);
+        $categories = Categories::all();
+        $subCategories = SubCategories::where('cate_id', $product->cate_id)->get();
+        return view('backend.admin.product.edit', compact('product', 'categories', 'subCategories'));
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:products,name,' . $id],
+            'price' => ['required'],
+            'quantity' => ['required'],
+            'long_description' => ['max:600'],
+            'short_description' => ['string'],
+            'category' => ['required'],
+            'image' => ['image', 'max:3000'],
+            'status' => ['required'],
+        ]);
+
+        $product = Products::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            $image = $this->uploadImage($request, 'image', 'uploads');
+            $product->image = $image ?: $product->image;
+        }
+
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name);
+        $product->cate_id = $request->category;
+        $product->sub_cate_id = $request->sub_category;
+        $product->long_description = $request->long_description;
+        $product->short_description = $request->short_description;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->offer_price = $request->offer_price;
+        $product->offer_start_date = $request->offer_start_date;
+        $product->offer_end_date = $request->offer_end_date;
+        $product->product_type = $request->product_type;
+        $product->status = $request->status;
+        $product->save();
+
+        return redirect()->route('admin.product.index')->with('success', 'Product updated successfully');
     }
+
+
 
     public function destroy(string $id)
     {
-        //
+        $product = Products::findOrFail($id);
+        $product->delete();
+        return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
     }
 
     public function changeStatus(Request $request)

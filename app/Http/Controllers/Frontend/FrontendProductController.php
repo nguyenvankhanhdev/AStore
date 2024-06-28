@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\Products;
+use App\Models\ProductVariant;
 use App\Models\SubCategories;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Options\Languages\Paginate;
@@ -107,11 +108,13 @@ class FrontendProductController extends Controller
     }
     public function showProduct(string $slug)
     {
-        $product = Products::with(['productImages'])->where([
+        $product = Products::with(['productImages','variant'])->where([
             'slug' => $slug,
             'status' => 1
         ])->firstOrFail();
         $cate = Categories::where('id', $product->cate_id)->first();
-        return view('frontend.user.home.product_details', compact('product', 'cate'));
+        $productvariant = ProductVariant::where('pro_id', $product->id)->get();
+
+        return view('frontend.user.home.product_details', compact('product', 'cate','productvariant'));
     }
 }

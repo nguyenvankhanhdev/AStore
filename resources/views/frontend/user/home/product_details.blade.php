@@ -11,7 +11,9 @@
                 <div class="container">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="link" href="#">Trang chủ</a></li>
-                        <li class="breadcrumb-item"><a class="link" href="{{ route('products.category',['categories'=> $cate->slug]) }}">{{ $cate->name }}</a></li>
+                        <li class="breadcrumb-item"><a class="link"
+                                href="{{ route('products.category', ['categories' => $cate->slug]) }}">{{ $cate->name }}</a>
+                        </li>
                         <li class="breadcrumb-item">{{ $product->name }}</li>
                     </ol>
                 </div>
@@ -84,6 +86,9 @@
                                         </a></div>
 
                                     <div class="colors js-select">
+                                        {{-- @foreach ( )
+
+                                        @endforeach --}}
                                         <div class="item active"><span style="background-color:#124183"></span>
                                             <div>Xanh đen</div>
                                         </div>
