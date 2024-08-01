@@ -3,7 +3,7 @@
       Sự kiện không thể bỏ lỡ.<a class="link-desc m-l-4">Xem chi tiết ></a></div> --}}
     <div class="header-body">
         <div class="container flex-center">
-            <div class="header-logo"><a href=""><img src="frontend/asset/img/logo-fstu-aar.png" alt="logo"></a>
+            <div class="header-logo"><a href="{{ route('dashboard.index') }}"><img src="/frontend/asset/img/logo-fstu-aar.png" alt="logo"></a>
             </div>
             <div class="header-search">
                 <form>
@@ -131,15 +131,18 @@
                     </div>
                 </form>
             </div>
-            <div class="header-user"><a>
+            <div class="header-user"><a href="{{ auth()->check() ? route('user.dashboard') : route('auth.login.web') }}">
                     <div class="user-info flex text-grayscale-300"><span class="form-cart-icon m-r-8"><i
                                 class="ic-user-2"></i></span>
-                        <div class="f-s-ui-14">VIP Member</div>
+                        <div class="f-s-ui-14">
+                            {{ auth()->check() ? auth()->user()->name : 'Đăng nhập' }}
+                        </div>
                     </div>
-                </a></div>
+                </a>
+            </div>
             <div class="header-cart">
                 <a href="{{ route('cart.index') }}">
-                    <div class="c-cart"><span class="form-cart-icon m-r-8"><span class="count">1</span><i
+                    <div class="c-cart"><span class="form-cart-icon m-r-8"><span class="count"></span><i
                                 class="ic-cart"></i></span>
                         <div class="f-s-ui-14">Giỏ hàng</div>
                     </div>
@@ -151,9 +154,9 @@
         <div class="container">
             <div class="header-item">
                 <ul class="flex text-center">
-                    <li><a>iPhone</a></li>
-                    <li><a>iPad</a></li>
-                    <li><a>Mac</a></li>
+                    <li><a href="{{route('products.category', ['categories' => 'iphone']) }}">iPhone</a></li>
+                    <li><a href="{{route('products.category', ['categories' => 'ipad']) }}">iPad</a></li>
+                    <li><a href="{{route('products.category', ['categories' => 'macbook']) }}">Mac</a></li>
                     <li><a>Apple Watch</a></li>
                     <li><a>Phụ kiện</a></li>
                     <li><a>Tin tức - Thủ thuật</a></li>

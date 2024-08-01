@@ -27,8 +27,8 @@
                                     <div class="swiper gallery-main js-open-next">
                                         <div class="swiper-wrapper js-gallery">
                                             @foreach ($product->productImages as $image)
-                                                <div class="swiper-slide" data-src="{{ $image->image }}">
-                                                    <picture><img src="{{ $image->image }}"
+                                                <div class="swiper-slide" data-src="{{ asset($image->image) }}">
+                                                    <picture><img src="{{ asset($image->image) }}"
                                                             alt="MacBook Pro 16” 2021 M1 Pro"></picture>
                                                 </div>
                                             @endforeach
@@ -44,7 +44,7 @@
                                             @foreach ($product->productImages as $image)
                                                 <div class="swiper-slide active">
                                                     <span>
-                                                        <img src="{{ $image->image }}" alt="">
+                                                        <img src="{{ asset($image->image) }}" alt="">
                                                     </span>
                                                 </div>
                                             @endforeach
@@ -71,37 +71,96 @@
                                 </div>
                                 <div class="npi-border">
                                     <div class="price">
-                                        <div class="boxprice"><span class="text text-primary">27.990.000₫</span><strike
-                                                class="text-promo p-l-8 f-s-p-24 f-w-400"> 30.500.000đ</strike></div>
+                                        <div class="boxprice"><span class="text text-primary">27.990.000₫</span>
+                                            <strike class="text-promo p-l-8 f-s-p-24 f-w-400"> 30.500.000đ</strike>
+                                            <span class="txtpricemarketPhanTram badge badge-danger persent-special"
+                                                style="">-12%</span>
+                                        </div>
 
                                     </div>
-                                    <div class="types js-select"><a class="item active">
-                                            <div class="radio"><input id="p22" type="radio" value=""
-                                                    name="p22"><label for="p22">512GB</label></div>
-                                            <p>60.990.000₫</p>
-                                        </a><a class="item">
-                                            <div class="radio"><input id="p23" type="radio" value=""
-                                                    name="p22"><label for="p23">1TB</label></div>
-                                            <p>65.690.000₫</p>
-                                        </a></div>
+                                    <div id="variant-selector" class="types js-select">
+                                        @foreach ($product->variants as $index => $variant)
+                                            @php
+                                                $storage = App\Models\StorageProduct::find($variant->storage_id);
+                                            @endphp
+                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}" data-id="{{ $variant->id }}">
+                                                <div class="radio">
+                                                    <input type="radio"{{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
+                                                    <label>{{ $variant->storage->GB }}</label>
+                                                </div>
+                                                <p>{{ number_format($variant->price - $variant->offer_price, 0, ',', '.') }}₫
+                                                </p>
+                                            </a>
+                                        @endforeach
 
+
+                                    </div>
                                     <div class="colors js-select">
-                                        {{-- @foreach ( )
+                                        @foreach ($product->variants as $index => $variant)
+                                            @switch($variant->color->color)
+                                                @case('Xanh da trời')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#51b3f0"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
 
-                                        @endforeach --}}
-                                        <div class="item active"><span style="background-color:#124183"></span>
-                                            <div>Xanh đen</div>
-                                        </div>
-                                        <div class="item"><span
-                                                style="background: linear-gradient(90deg, #E0901A 52.36%, #E9CA95 52.56%);"></span>
-                                            <div>Vàng</div>
-                                        </div>
-                                        <div class="item"><span style="background-color:#7d7e80"> </span>
-                                            <div>Xám</div>
-                                        </div>
-                                        <div class="item"><span style="background-color:#e2e4e6"> </span>
-                                            <div>Bạc</div>
-                                        </div>
+                                                @case('Đen')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#232A31"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Đỏ')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#FB1634"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Xanh lá')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#77ff82"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Trắng')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#FAF7F2"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Vàng hồng')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#b37249"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Xám')
+                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
+                                                        data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#B2C5D6"></span>
+                                                        <div>{{ $variant->color->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @default
+                                                    <div class="item" data-color-id="{{ $variant->id }}">
+                                                        <span style="background-color:#FFFFFF"></span> <!-- Màu mặc định -->
+                                                        <div>Không xác định</div>
+                                                    </div>
+                                            @endswitch
+                                        @endforeach
                                     </div>
                                     <div class="payment-incentives">
                                         <div class="block-head">
@@ -198,13 +257,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="action action-npi"><a class="btn btn-link btn-xl btn-line-1"
-                                            href="#">
-
-                                            <div class="btn-text">MUA NGAY</div><span class="btn-sub-text">Phiên bản 1 ĐỔI
-                                                1 + Combo Siêu
-                                                Phẩm</span>
-                                        </a><a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
+                                    <div class="action action-npi">
+                                        <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form"
+                                            style="width: 100%">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="quantity" value="1" min="1">
+                                            <input type="hidden" name="variant_id" value="{{ $selectedVariantId }}">
+                                            <button type="submit" class="btn btn-link btn-xl btn-line-1">
+                                                <div class="btn-text">MUA NGAY</div>
+                                                <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
+                                            </button>
+                                        </form>
+                                        <a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
                                             <div class="btn-text">TRẢ GÓP 0%</div><span class="btn-sub-text">Duyệt nhanh
                                                 qua đện
                                                 thoại</span>
@@ -1045,220 +1110,6 @@
                     </div>
                 </div>
             </div>
-            <div class="detail__post">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-9">
-                            <div class="content">
-                                <div class="description">Sắc màu mới nhất của iPhone 13 series đã lộ diện, phiên bản
-                                    Green/Alpine
-                                    Green với màu xanh lá chủ đạo giúp dòng iPhone 13 đem lại cảm nhận khác biệt về cấu trúc
-                                    thẩm mỹ.
-                                </div>
-                                <h3>Nét đẹp sang trọng pha chút bí ẩn</h3>
-                                <p>Sự cao cấp toát lên ở mọi chi tiết là điều mà bạn có thể dễ dàng cảm nhận được trên
-                                    iPhone 13
-                                    Pro. Được chế tác từ khung thép không gỉ cứng cáp, bảo vệ màn hình là mặt gốm Ceramic
-                                    Shield siêu
-                                    cứng cùng ngôn ngữ thiết kế phẳng hiện đại, iPhone 13 Pro có vẻ đẹp trường tồn theo năm
-                                    tháng.</p>
-                                <p>Điện thoại còn đạt chuẩn chống nước IP68, tránh được mọi nguy cơ từ nước trong cuộc sống
-                                    thường
-                                    ngày. Bên cạnh 3 màu sắc quen thuộc là Xám, Vàng, Trắng, iPhone 13 Pro năm nay có thêm
-                                    màu Xanh
-                                    Sierra đẹp theo xu hướng thanh lịch và độc đáo.</p>
-                                <div class="img"><img src="assets/img/post1.png" alt="alt"></div>
-                                <h3>Thể hiện đẳng cấp trong từng đường nét</h3>
-                                <p>Với việc bổ sung thêm tùy chọn Alpine Green vào các phiên bản màu sắc, iPhone 13 Pro màu
-                                    xanh lá
-                                    giờ đây cho thấy vẻ đẹp khác biệt, phô diễn nét đẹp trầm mặc và diện mạo thực sự cao
-                                    cấp. Apple đã
-                                    nghiên cứu kỹ lưỡng để chọn ra sắc màu thành phẩm sau cùng cho chiếc điện thoại nhằm
-                                    truyền tải rõ
-                                    nét tinh thần sang trọng vốn có của sản phẩm.</p>
-                                <div class="img"><img src="assets/img/post2.png" alt="alt"></div>
-                                <p>Sự cao cấp toát lên ở mọi chi tiết là điều mà bạn có thể dễ dàng cảm nhận được trên
-                                    iPhone 13
-                                    Pro. Được chế tác từ khung thép không gỉ cứng cáp, bảo vệ màn hình là mặt gốm Ceramic
-                                    Shield siêu
-                                    cứng cùng ngôn ngữ thiết kế phẳng hiện đại, iPhone 13 Pro có vẻ đẹp trường tồn theo năm
-                                    tháng.</p>
-                                <p>Điện thoại còn đạt chuẩn chống nước IP68, tránh được mọi nguy cơ từ nước trong cuộc sống
-                                    thường
-                                    ngày. Bên cạnh 3 màu sắc quen thuộc là Xám, Vàng, Trắng, iPhone 13 Pro năm nay có thêm
-                                    màu Xanh
-                                    Sierra đẹp theo xu hướng thanh lịch và độc đáo.</p>
-                                <p>Điện thoại còn đạt chuẩn chống nước IP68, tránh được mọi nguy cơ từ nước trong cuộc sống
-                                    thường
-                                    ngày. Bên cạnh 3 màu sắc quen thuộc là Xám, Vàng, Trắng, iPhone 13 Pro năm nay có thêm
-                                    màu Xanh
-                                    Sierra đẹp theo xu hướng thanh lịch và độc đáo.</p>
-                                <div class="img"><img src="assets/img/post2.png" alt="alt"></div>
-                                <div class="img"><img src="https://picsum.photos/seed/slide1/700/497" alt="alt">
-                                </div>
-                                <p>Sự cao cấp toát lên ở mọi chi tiết là điều mà bạn có thể dễ dàng cảm nhận được trên
-                                    iPhone 13
-                                    Pro. Được chế tác từ khung thép không gỉ cứng cáp, bảo vệ màn hình là mặt gốm Ceramic
-                                    Shield siêu
-                                    cứng cùng ngôn ngữ thiết kế phẳng hiện đại, iPhone 13 Pro có vẻ đẹp trường tồn theo năm
-                                    tháng.</p>
-                                <p>Điện thoại còn đạt chuẩn chống nước IP68, tránh được mọi nguy cơ từ nước trong cuộc sống
-                                    thường
-                                    ngày. Bên cạnh 3 màu sắc quen thuộc là Xám, Vàng, Trắng, iPhone 13 Pro năm nay có thêm
-                                    màu Xanh
-                                    Sierra đẹp theo xu hướng thanh lịch và độc đáo.</p>
-                                <div class="img"><img src="assets/img/post3.png" alt="alt"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="detail__landing">
-                <div class="feature feature-l8">
-                    <div class="img"> <img src="assets/img/l8-img1.png" alt="alt"><img
-                            src="assets/img/l8-img2.png" alt="alt">
-                    </div>
-                    <div class="content">
-                        <div class="h1">Siêu mạnh mẽ cho dân Pro </div>
-                        <div class="text">Chip M1 Pro hay M1 Max nhanh như chớp mang đến hiệu suất đột phá và thời lượng
-                            pin ấn
-                            tượng. Màn hình Liquid Retina XDR lộng lẫy và tất cả các cổng kết nối bạn cần. Đây chính là
-                            chiếc máy
-                            tính xách tay bạn hằng mong đợi.</div>
-                    </div>
-                </div>
-                <div class="feature feature-l2 feature--dark">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="img"><img src="assets/img/l2-img1.png" alt="alt"></div>
-                            </div>
-                            <div class="col-6">
-                                <div class="content">
-                                    <div class="h3">Năng lực mạnh mẽ</div>
-                                    <div class="h1">Hiệu năng mạnh mẽ. Không ngốn pin.</div>
-                                    <div class="text">Khả năng tiết kiệm điện đáng kinh ngạc của chip M1 Pro hoặc M1 Max
-                                        đặt ra chuẩn
-                                        mới cho hiệu năng và đưa thời lượng pin lên đẳng cấp mới. Nhờ đó, bạn có thể dễ dàng
-                                        xử lý tác
-                                        vụ chỉnh sửa video 8K, lập trình hay kết xuất cảnh quay phức tạp ở định dạng 3D từ
-                                        bất cứ nơi
-                                        đâu.</div>
-                                    <ul class="list">
-                                        <li> <span>Thời lượng pin lên tới</span>
-                                            <div>21 giờ</div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="feature feature-l9 feature--dark">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="content">
-                                    <div class="h3">Apple Silicon</div>
-                                    <div class="h1">Pro tới Max.</div>
-                                    <div class="text">Hiệu năng đồ họa nhanh gấp 4 lần và công nghệ học máy nhanh gấp 5
-                                        lần trên phiên
-                                        bản 16 inch. Hiệu năng đồ họa nhanh gấp 13 lần và công nghệ học máy nhanh gấp 11 lần
-                                        trên phiên
-                                        bản 14 inch.</div>
-                                </div>
-                            </div>
-                            <div class="col-7">
-                                <div class="img"><img src="assets/img/l9-img1.png" alt="alt"><img
-                                        src="assets/img/l9-img2.png" alt="alt"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="feature feature-l10">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="img"><img src="assets/img/l10-img.png" alt="alt"></div>
-                                <div class="content">
-                                    <div class="h3">Màn hình</div>
-                                    <div class="h1">Đại tiệc cho thị giác trên màn hình XDR.</div>
-                                    <div class="text">Màn hình Liquid Retina XDR cho Extreme Dynamic Range và tỉ lệ tương
-                                        phản tuyệt
-                                        vời. Hình ảnh có độ chi tiết cực đỉnh trong vùng tối, màu đen sâu hơn và nhiều màu
-                                        sắc rực rỡ
-                                        hơn bao giờ hết.</div>
-                                    <ul class="list">
-                                        <li> <span>Độ sáng liên tục lên đến</span>
-                                            <div>1000 nit</div>
-                                        </li>
-                                        <li> <span>Độ sáng cao nhất lên đến</span>
-                                            <div>1600 nit</div>
-                                        </li>
-                                        <li> <span>Tỉ lệ tương phản</span>
-                                            <div>1.000.000:1</div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="feature feature-l5">
-                    <div class="img"><img src="assets/img/l5-img.png" alt="alt"></div>
-                    <div class="content">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col"> </div>
-                                <div class="col-5">
-                                    <div class="h3">Camera, Micro và Loa</div>
-                                    <div class="h1">Gọi video sắc nét hơn. Âm thanh trong veo.</div>
-                                    <div class="text">Camera FaceTime HD 1080p được cải tiến. Hệ thống âm thanh sáu loa
-                                        mạnh mẽ với âm
-                                        thanh không gian. Và dãy micro chất lượng chuẩn studio. Vì vậy hình ảnh và tiếng nói
-                                        của bạn
-                                        luôn rõ đẹp nhất.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="feature feature-l6">
-                    <div class="img"><img src="assets/img/l6-img.png" alt="alt"></div>
-                    <div class="content">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-5">
-                                    <div class="h3">Kết nối</div>
-                                    <div class="h1">Nhiều kết nối hơn bao giờ hết.</div>
-                                    <div class="text">Nhiều cổng kết nối dành cho dân chuyên, bao gồm cả SDXC, HDMI,
-                                        Thunderbolt 4 và
-                                        jack cắm tai nghe. Và sạc bằng cáp MagSafe 3.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="feature feature-l3">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="content">
-                                    <div class="h3">macOS và Các Ứng Dụng Pro</div>
-                                    <div class="h1">Khai phóng sức mạnh của M1 Pro và M1 Max.</div>
-                                    <div class="text">Hơn 10.000 ứng dụng và phần bổ trợ đã được tối ưu hóa cho Apple
-                                        silicon nhờ
-                                        macOS Monterey, bao gồm cả Final Cut Pro, Logic Pro, Cinema 4D và Microsoft 365.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-7">
-                                <div class="img"><img src="assets/img/l3-img.png" alt="alt"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="detail__bottom">
             <div class="product-related m-b-48">
@@ -1340,156 +1191,6 @@
                     </div>
                 </div>
             </div>
-            <div class="detail__question">
-                <div class="container">
-                    <div class="accordion accordion-card m-b-48">
-                        <div class="accordion-title"> <span>Câu hỏi thường gặp</span></div>
-                        <div class="accordion-tab">
-                            <div class="accordion-content">
-                                <div class="accordion-content-title">
-                                    <div class="label"><i class="ic-help ic-circle"></i><span>
-                                            <p>Tại sao hàng chính hãng lại đắt hơn hàng xách tay bán tại các cửa hàng khác ?
-                                            </p>
-                                        </span></div>
-                                </div>
-                                <div class="accordion-content-description">
-                                    <div> F.Studio by FPT là đại lý ủy quyền bán hàng Apple chính hãng tại Việt Nam,
-                                        F.Studio by FPT
-                                        chỉ bán 1 loại hàng hóa duy nhất là: Hàng chính hãng</div>
-                                </div>
-                            </div>
-                            <div class="accordion-action">
-                                <div
-                                    class="js-accordion-action btn btn-icon-single btn-rounded btn-outline-grayscale btn-md">
-                                    <i class="ic-plus"> </i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-tab">
-                            <div class="accordion-content">
-                                <div class="accordion-content-title">
-                                    <div class="label"><i class="ic-help ic-circle"></i><span>
-                                            <p>Tại sao hàng chính hãng lại đắt hơn hàng xách tay bán tại các cửa hàng khác ?
-                                            </p>
-                                        </span></div>
-                                </div>
-                                <div class="accordion-content-description">
-                                    <div> F.Studio by FPT là đại lý ủy quyền bán hàng Apple chính hãng tại Việt Nam,
-                                        F.Studio by FPT
-                                        chỉ bán 1 loại hàng hóa duy nhất là: Hàng chính hãng</div>
-                                </div>
-                            </div>
-                            <div class="accordion-action">
-                                <div
-                                    class="js-accordion-action btn btn-icon-single btn-rounded btn-outline-grayscale btn-md">
-                                    <i class="ic-plus"> </i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-tab">
-                            <div class="accordion-content">
-                                <div class="accordion-content-title">
-                                    <div class="label"><i class="ic-help ic-circle"></i><span>
-                                            <p>Tại sao hàng chính hãng lại đắt hơn hàng xách tay bán tại các cửa hàng khác ?
-                                            </p>
-                                        </span></div>
-                                </div>
-                                <div class="accordion-content-description">
-                                    <div> F.Studio by FPT là đại lý ủy quyền bán hàng Apple chính hãng tại Việt Nam,
-                                        F.Studio by FPT
-                                        chỉ bán 1 loại hàng hóa duy nhất là: Hàng chính hãng</div>
-                                </div>
-                            </div>
-                            <div class="accordion-action">
-                                <div
-                                    class="js-accordion-action btn btn-icon-single btn-rounded btn-outline-grayscale btn-md">
-                                    <i class="ic-plus"> </i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="news m-b-48 news--vertical news--related">
-                <div class="container">
-                    <div class="card card-md">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="news__heading">
-                                        <div class="h4">Tin tức - Thủ thuật về MacBook Pro 16” 2021 M1 Pro </div><a
-                                            class="link link-sm" href="#">Xem tất cả</a>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6 col-xs-12">
-                                    <div class="news-item"><a class="news-item__img" href="#"><img
-                                                src="https://via.placeholder.com/266x176" alt=""></a>
-                                        <div class="news-item__info"><a href="#">
-                                                <div class="news-item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để
-                                                    chiến game </div>
-                                            </a>
-                                            <div class="news-item__badge"> <a class="badge badge-grayscale badge-xs"
-                                                    href="#">Tin khuyến
-                                                    mãi</a><a class="badge badge-grayscale badge-xs" href="#">Mẹo
-                                                    laptop</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6 col-xs-12">
-                                    <div class="news-item"><a class="news-item__img" href="#"><img
-                                                src="https://via.placeholder.com/266x176" alt=""></a>
-                                        <div class="news-item__info"><a href="#">
-                                                <div class="news-item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để
-                                                    chiến game </div>
-                                            </a>
-                                            <div class="news-item__badge"> <a class="badge badge-grayscale badge-xs"
-                                                    href="#">Tin khuyến
-                                                    mãi</a><a class="badge badge-grayscale badge-xs" href="#">Mẹo
-                                                    laptop</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6 col-xs-12">
-                                    <div class="news-item"><a class="news-item__img" href="#"><img
-                                                src="https://via.placeholder.com/266x176" alt=""></a>
-                                        <div class="news-item__info"><a href="#">
-                                                <div class="news-item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để
-                                                    chiến game </div>
-                                            </a>
-                                            <div class="news-item__badge"> <a class="badge badge-grayscale badge-xs"
-                                                    href="#">Tin khuyến
-                                                    mãi</a><a class="badge badge-grayscale badge-xs" href="#">Mẹo
-                                                    laptop</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6 col-xs-12">
-                                    <div class="news-item"><a class="news-item__img" href="#"><img
-                                                src="https://via.placeholder.com/266x176" alt=""></a>
-                                        <div class="news-item__info"><a href="#">
-                                                <div class="news-item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để
-                                                    chiến game </div>
-                                            </a>
-                                            <div class="news-item__badge"> <a class="badge badge-grayscale badge-xs"
-                                                    href="#">Tin khuyến
-                                                    mãi</a><a class="badge badge-grayscale badge-xs" href="#">Mẹo
-                                                    laptop</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 show-mdm">
-                                    <div class="text-center m-t-8 m-b-4"><a class="link link-icon link-sm"
-                                            href="#">Xem tất cả<i class="ic-angle-down m-l-4"></i></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="detail__comments">
                 <div class="fpt-comment">
                     <div class="container">
@@ -1505,40 +1206,36 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="user-form">
-                                    <div class="flex flex-center-ver m-b-8">
-                                        <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận: <strong>Vy</strong>
-                                        </div><a class="link link-xs link-icon"><span class="ic m-r-4"><i
-                                                    class="ic-edit ic-xs text-link"></i></span>Thay đổi</a>
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-input form-input-lg" rows="3"
-                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea><button class="btn btn-lg btn-primary"
-                                            aria-controls="comment-info">GỬI BÌNH LUẬN</button>
-                                    </div>
-                                    <div class="upload-action">
-                                        <div class="btn btn-outline-grayscale btn-md btn-icon btn-icon-left"><span
-                                                class="f-s-ui-16">Thêm ảnh</span><i
-                                                class="ic-camera ic-sm text-grayscale"></i></div><span class="text">Chỉ
-                                            thêm <strong>tối đa 5 ảnh</strong></span>
-                                    </div>
-                                    <div class="upload-list">
-                                        <div class="item">
-                                            <div class="img"><img src="assets/img/thumb1.jpg" alt="alt"></div><a
-                                                class="link link-xs">Xoá</a>
+                                <form method="POST" action="{{ route('comments.store') }}">
+                                    @csrf
+                                    <div class="user-form">
+                                        <div class="flex flex-center-ver m-b-8">
+                                            @if (Auth::check())
+                                                {
+                                                <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
+                                                    <strong>{{ $user->username }}</strong>
+                                                </div>
+                                                }
+                                            @else
+                                                {
+                                                <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
+                                                    <strong>Khách</strong>
+                                                </div>
+                                                }
+                                            @endif
+
+                                            <a class="link link-xs link-icon"><span class="ic m-r-4">
+                                                    <i class="ic-edit ic-xs text-link"></i></span>Thay đổi</a>
                                         </div>
-                                        <div class="item">
-                                            <div class="img"><img src="assets/img/thumb2.jpg" alt="alt"></div><a
-                                                class="link link-xs">Xoá</a>
+                                        <div class="form-group">
+                                            <textarea class="form-input form-input-lg" rows="3"
+                                                placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                            <button type="submit" class="btn btn-lg btn-primary"
+                                                aria-controls="comment-info">GỬI BÌNH LUẬN</button>
                                         </div>
-                                        <div class="item">
-                                            <div class="img"><img src="assets/img/thumb3.jpg" alt="alt"></div>
-                                            <div class="progress-primary progress-sm progress-line">
-                                                <div class="progress-bar" style="width: 70%"></div>
-                                            </div>
-                                        </div>
+
                                     </div>
-                                </div>
+                                </form>
                                 <div class="user-content">
                                     <div class="result">
                                         <div class="text"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
@@ -1742,8 +1439,7 @@
                                                     <div class="avatar-time">
                                                         <div class="text text-grayscale">1 giờ trước</div><i
                                                             class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i
-                                                            class="ic-circle-sm"></i>
+                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
                                                         <div class="link link-xs">Trả lời</div>
                                                     </div>
                                                 </div>
@@ -1751,8 +1447,8 @@
                                         </div>
                                         <div class="user-block reply">
                                             <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png"
-                                                        alt=""></div>
+                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
+                                                </div>
                                                 <div class="avatar-info">
                                                     <div class="avatar-name">
                                                         <div class="text">Trần Quốc Hoàn</div><span
@@ -1771,8 +1467,7 @@
                                                     <div class="avatar-time">
                                                         <div class="text text-grayscale">1 giờ trước</div><i
                                                             class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i
-                                                            class="ic-circle-sm"></i>
+                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
                                                         <div class="link link-xs">Trả lời</div>
                                                     </div>
                                                 </div>
@@ -1814,8 +1509,7 @@
                                                     <div class="avatar-time">
                                                         <div class="text text-grayscale">1 giờ trước</div><i
                                                             class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i
-                                                            class="ic-circle-sm"></i>
+                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
                                                         <div class="link link-xs">Trả lời</div>
                                                     </div>
                                                 </div>
@@ -1823,8 +1517,8 @@
                                         </div>
                                         <div class="user-block reply">
                                             <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png"
-                                                        alt=""></div>
+                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
+                                                </div>
                                                 <div class="avatar-info">
                                                     <div class="avatar-name">
                                                         <div class="text">Trần Quốc Hoàn</div><span
@@ -1900,8 +1594,7 @@
                                                     <div class="avatar-time">
                                                         <div class="text text-grayscale">1 giờ trước</div><i
                                                             class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i
-                                                            class="ic-circle-sm"></i>
+                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
                                                         <div class="link link-xs">Trả lời</div>
                                                     </div>
                                                 </div>
@@ -1909,8 +1602,8 @@
                                         </div>
                                         <div class="user-block reply">
                                             <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png"
-                                                        alt=""></div>
+                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
+                                                </div>
                                                 <div class="avatar-info">
                                                     <div class="avatar-name">
                                                         <div class="text">Trần Quốc Hoàn</div><span
@@ -1939,8 +1632,7 @@
                                                     <div class="flex flex-center-ver m-b-8">
                                                         <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                             <strong>Vy</strong>
-                                                        </div><a class="link link-xs link-icon"><span
-                                                                class="ic m-r-4"><i
+                                                        </div><a class="link link-xs link-icon"><span class="ic m-r-4"><i
                                                                     class="ic-edit ic-xs text-link"></i></span>Thay
                                                             đổi</a>
                                                     </div>
@@ -1965,18 +1657,18 @@
                                         <ul class="pagination pagination-space">
                                             <li class="pagination-item"><a class="pagination-link" href="#"><i
                                                         class="ic-angle-left"></i></a></li>
-                                            <li class="pagination-item"><a class="pagination-link"
-                                                    href="#">1</a></li>
+                                            <li class="pagination-item"><a class="pagination-link" href="#">1</a>
+                                            </li>
                                             <li class="pagination-item active"><a class="pagination-link"
                                                     href="#">2</a></li>
-                                            <li class="pagination-item"><a class="pagination-link"
-                                                    href="#">3</a></li>
-                                            <li class="pagination-item"><a class="pagination-link"
-                                                    href="#">4</a></li>
-                                            <li class="pagination-item"><a class="pagination-link"
-                                                    href="#">...</a></li>
-                                            <li class="pagination-item"><a class="pagination-link"
-                                                    href="#">10</a></li>
+                                            <li class="pagination-item"><a class="pagination-link" href="#">3</a>
+                                            </li>
+                                            <li class="pagination-item"><a class="pagination-link" href="#">4</a>
+                                            </li>
+                                            <li class="pagination-item"><a class="pagination-link" href="#">...</a>
+                                            </li>
+                                            <li class="pagination-item"><a class="pagination-link" href="#">10</a>
+                                            </li>
                                             <li class="pagination-item"><a class="pagination-link" href="#"><i
                                                         class="ic-angle-right"></i></a></li>
                                         </ul>
@@ -2097,3 +1789,38 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const variantSelector = document.getElementById('variant-selector');
+
+        variantSelector.addEventListener('click', function(event) {
+            const clickedElement = event.target.closest('.item');
+            if (clickedElement) {
+                const variantId = clickedElement.getAttribute('data-id');
+                const url = new URL(window.location.href);
+                url.searchParams.set('variant', variantId);
+                window.location.href = url.toString();
+            }
+        });
+    });
+
+    document.querySelectorAll('.colors .item').forEach(item => {
+        item.addEventListener('click', function () {
+            document.querySelectorAll('.colors .item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            let colorId = this.getAttribute('data-color-id');
+            // Store the selected color in the session
+            fetch('{{ route('cart.selectColor') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ color_id: colorId })
+            });
+        });
+    });
+    </script>
+@endpush

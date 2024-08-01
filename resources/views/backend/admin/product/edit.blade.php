@@ -14,6 +14,7 @@
                             <form action="{{ route('admin.product.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
+
                                 <div class="form-group">
                                     <label>Image</label>
                                     <input type="file" class="form-control" name="image">

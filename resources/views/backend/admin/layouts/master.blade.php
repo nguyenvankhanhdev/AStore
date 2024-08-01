@@ -2,13 +2,12 @@
 <html lang="en">
 
 <head>
-    <base href="{{ env('APP_URL') }}">
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="64x64" href="backend/asset/img/image.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('backend/asset/img/image.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>ADMIN</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
@@ -16,13 +15,14 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
-    <link href="backend/asset/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="backend/asset/bootstrap-daterangepicker/daterangepicker.css" />
+    <link href="{{ asset('backend/asset/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('backend/asset/bootstrap-daterangepicker/daterangepicker.css')}}" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-    <link href="backend/asset/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="{{ asset('backend/asset/css/sb-admin-2.min.css')}}" rel="stylesheet">
+
     <style>
         .toast {
             color: black !important;
@@ -41,68 +41,81 @@
         }
 
         #loading-overlay {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    display: none; /* Hide overlay initially */
-}
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            /* Hide overlay initially */
+        }
 
-#loading-content {
-    text-align: center;
-    font-size: 20px;
-    color: #000;
-}
+        #loading-content {
+            text-align: center;
+            font-size: 20px;
+            color: #000;
+        }
 
-.spinner {
-    margin: 20px auto;
-    width: 70px;
-    text-align: center;
-}
+        .spinner {
+            margin: 20px auto;
+            width: 70px;
+            text-align: center;
+        }
 
-.spinner > div {
-    width: 18px;
-    height: 18px;
-    background-color: #333;
-    border-radius: 100%;
-    display: inline-block;
-    -webkit-animation: bouncedelay 1.4s infinite ease-in-out both;
-    animation: bouncedelay 1.4s infinite ease-in-out both;
-}
+        .spinner>div {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: bouncedelay 1.4s infinite ease-in-out both;
+            animation: bouncedelay 1.4s infinite ease-in-out both;
+        }
 
-.spinner .bounce1 {
-    -webkit-animation-delay: -0.32s;
-    animation-delay: -0.32s;
-}
+        .spinner .bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
 
-.spinner .bounce2 {
-    -webkit-animation-delay: -0.16s;
-    animation-delay: -0.16s;
-}
+        .spinner .bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
 
-@-webkit-keyframes bouncedelay {
-    0%, 80%, 100% { -webkit-transform: scale(0); }
-    40% { -webkit-transform: scale(1.0); }
-}
+        @-webkit-keyframes bouncedelay {
 
-@keyframes bouncedelay {
-    0%, 80%, 100% {
-        transform: scale(0);
-        -webkit-transform: scale(0);
-    } 40% {
-        transform: scale(1.0);
-        -webkit-transform: scale(1.0);
-    }
-}
+            0%,
+            80%,
+            100% {
+                -webkit-transform: scale(0);
+            }
 
+            40% {
+                -webkit-transform: scale(1.0);
+            }
+        }
+
+        @keyframes bouncedelay {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+                -webkit-transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+            }
+        }
     </style>
 </head>
 
@@ -207,6 +220,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $('body').on('click', '.delete-item', function(event) {
                 event.preventDefault();
 

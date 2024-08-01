@@ -25,7 +25,6 @@ class ProductVariantDataTable extends DataTable
             ->addColumn('action', function($query){
                 $editBtn = "<a href='" . route('admin.products-variant.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='".route('admin.products-variant.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-
                 return $editBtn.$deleteBtn;
             })
             ->editColumn('color_id', function ($query) {
@@ -46,8 +45,10 @@ class ProductVariantDataTable extends DataTable
      */
     public function query(ProductVariant $model): QueryBuilder
     {
+        $productId = request()->product;
         return $model->newQuery()
             ->with(['color', 'storage'])
+            ->where('pro_id', $productId)
             ->select('product_variants.*');
     }
 

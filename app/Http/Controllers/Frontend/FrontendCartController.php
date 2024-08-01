@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Carts;
 use App\Models\Districts;
+use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\Provinces;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\ProductVariant;
+use App\Models\StorageProduct;
+use App\Models\ColorProduct;
+use App\Models\Coupon;
+use Illuminate\Support\Facades\Session;
 
 class FrontendCartController extends Controller
 {
-
-
     public function getDistricts($province_id)
     {
         $districts = Provinces::find($province_id)->districts;
@@ -26,7 +31,119 @@ class FrontendCartController extends Controller
 
     public function index()
     {
-        $provinces = Provinces::all();
-        return view('frontend.user.home.cart', compact('provinces'));
+        if (!auth()->check()) {
+            return redirect()->route('auth.login.web');
+        } else {
+            $userId = Auth::user()->id;
+            $carts = Carts::where('user_id', $userId)->get();
+
+            $productIds = $carts->pluck('pro_id')->toArray();
+
+            $products = Products::whereIn('id', $productIds)->get();
+
+            $productVariantIds = $carts->pluck('variant_id')->toArray();
+
+            foreach ($products as $product) {
+                $product->variants = ProductVariant::where('pro_id', $product->id)
+                                        ->whereIn('id', $productVariantIds)
+                                        ->get();
+                foreach ($product->variants as $variant) {
+                    $variant->color = ColorProduct::find($variant->color_id);
+                    $variant->storage = StorageProduct::find($variant->storage_id);
+
+                }
+            }
+            $provinces = Provinces::all();
+
+            return view('frontend.user.home.cart-details', compact('provinces', 'carts', 'products'));
+        }
+    }
+    public function addToCart(Request $request)
+    {
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Bạn cần đăng nhập để thực hiện chức năng này.'], 401);
+        }
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity', 1);
+        $variantId = $request->input('variant_id');
+
+        $product = Products::find($productId);
+        if (!$product) {
+            return response()->json(['error' => 'Sản phẩm không tồn tại.'], 404);
+        }
+        $cartItem = Carts::where('user_id', auth()->id())->where('pro_id', $productId)->first();
+        if ($cartItem) {
+            $cartItem->quantity += $quantity;
+            $cartItem->save();
+        } else {
+            Carts::create([
+                'quantity' => $quantity,
+                'variant_id' => $variantId,
+                'user_id' => auth()->id(),
+                'pro_id' => $productId,
+            ]);
+        }
+
+        return redirect()->route('cart.index')->with('success', 'Thêm sản phẩm vào giỏ hàng thành công.');
+    }
+
+    public function destroy()
+    {
+        $carts = Carts::where([
+            'user_id' => Auth::user()->id,
+            'pro_id' => request()->route('id')
+        ])->get();
+
+        foreach ($carts as $cart) {
+            $cart->delete();
+        }
+
+        return response(['status' => 'success', 'message' => 'Xóa sản phẩm thành công!']);
+    }
+    public function update(Request $request)
+    {
+        $cart = Carts::find($request->cart_id);
+        if (!$cart) {
+            return response(['status' => 'error', 'message' => 'Không tìm thấy sản phẩm trong giỏ hàng!']);
+        }
+        else{
+            $cart->quantity = $request->quantity;
+            $cart->save();
+        }
+        return response(['status' => 'success', 'message' => 'Cập nhật giỏ hàng thành công!']);
+    }
+    public function applyCoupon(Request $request)
+    {
+        if($request->coupon_code === null){
+            return response(['status' => 'error', 'message' => 'Coupon filed is required']);
+        }
+        $coupon = Coupon::where(['code' => $request->coupon_code, 'status' => 1])->first();
+        if($coupon === null){
+            return response(['status' => 'error', 'message' => 'Mã giảm giá không tồn tại!']);
+        }elseif($coupon->start_date > date('Y-m-d')){
+            return response(['status' => 'error', 'message' => 'Mã giảm giá không tồn tại!']);
+        }elseif($coupon->end_date < date('Y-m-d')){
+            return response(['status' => 'error', 'message' => 'Mã giảm giá đã hết hạn']);
+        }elseif($coupon->total_used >= $coupon->quantity){
+            return response(['status' => 'error', 'message' => 'Bạn không thể áp dụng phiếu giảm giá này']);
+        }
+
+        if($coupon->discount_type === 'amount'){
+            Session::put('coupon', [
+                'coupon_name' => $coupon->name,
+                'coupon_code' => $coupon->code,
+                'discount_type' => 'amount',
+                'discount' => $coupon->discount
+            ]);
+        }elseif($coupon->discount_type === 'percent'){
+            Session::put('coupon', [
+                'coupon_name' => $coupon->name,
+                'coupon_code' => $coupon->code,
+                'discount_type' => 'percent',
+                'discount' => $coupon->discount
+            ]);
+        }
+        return response(['status' => 'success', 'message' => 'Áp dụng mã giảm giá thành công!']);
+
     }
 }

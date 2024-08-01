@@ -32,13 +32,4 @@ class Products extends Model
     {
         return $this->hasMany(ProductVariant::class,'pro_id');
     }
-
-
-
-
-
-
-
-
-
 }
