@@ -3,6 +3,7 @@
 
 <head>
     <base href="{{ env('APP_URL') }}">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -15,20 +16,31 @@
     <link rel="stylesheet" href="frontend/asset/css/home.css">
     <link rel="stylesheet" href="frontend/asset/css/category.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="frontend/asset/css/detail.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="backend/asset/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
 
 </head>
 
 <body>
-    @include('frontend.user.layouts.header')
+
+    <body id="page-top">
+
+        @include('frontend.user.layouts.header')
 
 
-    <div class="over-suggestion"></div>
-    <main class="main">
-        @yield('content')
-    </main>
-    @include('frontend.user.layouts.footer')
+        <div class="over-suggestion"></div>
+        <main class="main">
+            @yield('content')
+        </main>
+        @include('frontend.user.layouts.footer')
+
+
+
 
      <!--jquery library js-->
     <script src="frontend/asset/js/jquery-3.6.0.min.js"></script>
@@ -36,11 +48,11 @@
     <script src="frontend/asset/js/bootstrap.bundle.min.js"></script>
     <script src="frontend/asset/js/header-footer.js"></script>
     <script src="frontend/asset/js/swiper-bundle.min.js"></script>
-    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    {{-- <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> --}}
     @stack('scripts')
 </body>
-
 </html>

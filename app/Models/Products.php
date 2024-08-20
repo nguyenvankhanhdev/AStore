@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Frontend\CommentController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +30,12 @@ class Products extends Model
     }
     public function variant()
     {
-        return $this->hasMany(ProductVariants::class,'pro_id');
+        return $this->hasMany(ProductVariant::class,'pro_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comments::class,'pro_id');
     }
 
 

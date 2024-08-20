@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductVariants extends Model
+class StorageProduct extends Model
 {
     use HasFactory;
-    public function product()
+
+    public function productVariant()
     {
-        return $this->belongsTo(Products::class,'pro_id');
+        return $this->hasMany(ProductVariant::class, 'storage_id');
     }
 }

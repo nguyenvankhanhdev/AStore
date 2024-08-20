@@ -1,6 +1,6 @@
 <div class="header">
-    <div class="header-top text-grayscale-700 b-b-200"><span class="f-w-500">Pre-Opening Super F.Studio by FPT</span>-
-      Sự kiện không thể bỏ lỡ.<a class="link-desc m-l-4">Xem chi tiết ></a></div>
+    {{-- <div class="header-top text-grayscale-700 b-b-200"><span class="f-w-500">Pre-Opening Super F.Studio by FPT</span>-
+      Sự kiện không thể bỏ lỡ.<a class="link-desc m-l-4">Xem chi tiết ></a></div> --}}
     <div class="header-body">
       <div class="container flex-center">
         <div class="header-logo"><a href=""><img src="frontend/asset/img/logo-fstu-aar.png" alt="logo"></a></div>

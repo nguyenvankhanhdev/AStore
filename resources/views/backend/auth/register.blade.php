@@ -37,7 +37,7 @@
 <body>
     <div class="container">
         <div style="margin-top: 20px">
-            <a href="{{ route('frontend.index') }}" style="color: #fff; text-decoration:none;"> <- Back</a>
+            <a href="{{route('products.index')}}" style="color: #fff; text-decoration:none;"> <- Back</a>
         </div>
         <div class="row">
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -56,7 +56,7 @@
                                 @endif
                                 <label for="floatingInput">User Name</label>
                             </div>
-                            
+
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="email" placeholder="name@example.com"
                                     value="{{ old('email') }}">

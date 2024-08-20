@@ -7394,7 +7394,8 @@ hr {
     display: flex;
     background: #212529;
     flex-wrap: wrap;
-    position: relative
+    position: relative;
+    width: 1200px;
 }
 
 .product-list .center-1 {
@@ -8008,7 +8009,8 @@ main {
 }
 
 .category .card {
-    overflow: initial
+    overflow: initial;
+    margin-bottom: 25px;
 }
 
 .category .h1 {
@@ -8018,6 +8020,7 @@ main {
     font-weight: 500;
     margin-bottom: 32px;
     color: white;
+    text-decoration: underline;
 }
 
 .category .actions {
@@ -8086,10 +8089,12 @@ main {
     flex-direction: column;
     /* flex-basis: calc(100% / 3); */
     margin-right: 15px;
-    margin-left: 28px;
+    margin-left: 5px;
     border: solid 1px #edeeef;
     border-top: none;
-    border-left: none
+    border-left: none;
+    width: 380px;
+
 }
 
 .category .product:before {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <base href="{{ env('APP_URL') }}">
     <meta charset="utf-8">
@@ -24,18 +25,98 @@
     <link href="backend/asset/css/sb-admin-2.min.css" rel="stylesheet">
     <style>
         .toast {
-            color: black !important; /* Màu chữ */
-            background-color: white !important; /* Màu nền */
-            border: 1px solid #ccc; /* Viền */
+            color: black !important;
+            /* Màu chữ */
+            background-color: white !important;
+            /* Màu nền */
+            border: 1px solid #ccc;
+            /* Viền */
         }
+
         .toast-success {
-            background-color: #349734 !important; /* Màu nền khi thành công */
-            color: white !important; /* Màu chữ khi thành công */
+            background-color: #349734 !important;
+            /* Màu nền khi thành công */
+            color: white !important;
+            /* Màu chữ khi thành công */
         }
+
+        #loading-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none; /* Hide overlay initially */
+}
+
+#loading-content {
+    text-align: center;
+    font-size: 20px;
+    color: #000;
+}
+
+.spinner {
+    margin: 20px auto;
+    width: 70px;
+    text-align: center;
+}
+
+.spinner > div {
+    width: 18px;
+    height: 18px;
+    background-color: #333;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: bouncedelay 1.4s infinite ease-in-out both;
+    animation: bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+@-webkit-keyframes bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0); }
+    40% { -webkit-transform: scale(1.0); }
+}
+
+@keyframes bouncedelay {
+    0%, 80%, 100% {
+        transform: scale(0);
+        -webkit-transform: scale(0);
+    } 40% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
     </style>
 </head>
 
 <body id="page-top">
+    <div id="loading-overlay">
+        <div id="loading-content">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+            <p>Waiting...</p>
+        </div>
+    </div>
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -172,9 +253,30 @@
             })
 
         })
-
-
     </script>
+    <script>
+        // Show overlay before page unloads
+        window.addEventListener('beforeunload', function() {
+            var overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'flex';
+        });
+
+        // Hide overlay when page is fully loaded
+        window.addEventListener('load', function() {
+            var overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'none';
+        });
+
+        // Hide overlay when page is navigated back from cache
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                var overlay = document.getElementById('loading-overlay');
+                overlay.style.display = 'none';
+            }
+        });
+    </script>
+
+
 
     @stack('scripts')
 
