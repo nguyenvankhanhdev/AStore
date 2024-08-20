@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="product__info">
                                         <div class="product__color">
-                                            @foreach ($product->variants as $variant)
+                                            {{-- @foreach ($product->variants as $variant)
                                                 @switch($variant->color->color)
                                                     @case('Đen')
                                                         <span style="background-color:#232A31"></span>
@@ -76,7 +76,7 @@
                                                     @default
                                                         <span style="background-color:#FFFFFF"></span> <!-- default color -->
                                                 @endswitch
-                                            @endforeach
+                                            @endforeach --}}
                                         </div>
 
                                         <h3 class="product__name">

@@ -5,8 +5,10 @@ use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Frontend\CommentController;
-use App\Http\Controllers\Frontend\FrontendCartController;
-use App\Http\Controllers\Frontend\FrontendProductController;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckOutController;
+use App\Http\Controllers\Frontend\ProductController;
+use App\Http\Controllers\Frontend\PaymentController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -36,30 +38,34 @@ Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
 
 //frontend
 
-Route::get('products', [FrontendProductController::class, 'productsIndex'])->name('products.index');;
+Route::get('products', [ProductController::class, 'productsIndex'])->name('products.index');;
 
 Route::get('frontend/category', function () {
     return view('frontend.user.categories.index');
 });
-Route::get('/', [FrontendProductController::class, 'productsIndex'])->name('products.index');
-Route::get('index', [FrontendProductController::class, 'productsIndex'])->name('products.index');
-Route::get('category', [FrontendProductController::class, 'productCategories'])->name('products.category');
+Route::get('/', [ProductController::class, 'productsIndex'])->name('products.index');
+Route::get('index', [ProductController::class, 'productsIndex'])->name('products.index');
+Route::get('category', [ProductController::class, 'productCategories'])->name('products.category');
 
 //details
-Route::get('product/{slug}', [FrontendProductController::class, 'showProduct'])->name('product.details');
+Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 
-Route::get('subcategory', [FrontendProductController::class, 'productSubCategories'])->name('products.subcategory');
-Route::get('/get-districts/{province_id}', [FrontendCartController::class, 'getDistricts'])->name('get-districts');
-Route::get('/get-wards/{district_id}', [FrontendCartController::class, 'getWards'])->name('get-wards');
-Route::get('/cart', [FrontendCartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [FrontendCartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/update', [FrontendCartController::class, 'update'])->name('cart.updateQuantity');
+Route::get('subcategory', [ProductController::class, 'productSubCategories'])->name('products.subcategory');
+Route::get('/get-districts/{province_id}', [CartController::class, 'getDistricts'])->name('get-districts');
+Route::get('/get-wards/{district_id}', [CartController::class, 'getWards'])->name('get-wards');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updateQuantity');
 
-Route::get('apply-coupon', [FrontendCartController::class, 'applyCoupon'])->name('apply-coupon');
+Route::get('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply-coupon');
+Route::get('remove-coupon', [CartController::class, 'removeCoupon'])->name('remove-coupon');
 
-Route::delete('/cart/{id}', [FrontendCartController::class, 'destroy'])->name('cart.destroy');
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::resource('comments', CommentController::class);
+
+
+// thanh toán
 
 
 
@@ -68,5 +74,14 @@ Route::resource('comments', CommentController::class);
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
 
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+
+// thanh toán paypal
+    Route::post('paypal/payment',[PaymentController::class,'payment'])->name('paypal.payment');
+    Route::get('paypal/success',[PaymentController::class,'success'])->name('paypal.success');
+    Route::get('paypal/cancel',[PaymentController::class,'cancel'])->name('paypal.cancel');
+// thanh toán COD
+Route::post('payment/cod', [CheckOutController::class, 'checkOut'])->name('cod.store');
+
+
+
 });
-Route::post('/cart/select-color', [FrontendCartController::class, 'selectColor'])->name('cart.selectColor');

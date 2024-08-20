@@ -189,18 +189,18 @@
             </div>
         </div>
     </div>
-    <script src="backend/asset/vendor/jquery/jquery.min.js"></script>
-    <script src="backend/asset/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="backend/asset/vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="backend/asset/js/sb-admin-2.min.js"></script>
-    <script src="backend/asset/vendor/chart.js/Chart.min.js"></script>
-    <script src="backend/asset/js/demo/chart-area-demo.js'"></script>
-    <script src="backend/asset/js/demo/chart-pie-demo.js'"></script>
+    <script src="/backend/asset/vendor/jquery/jquery.min.js"></script>
+    <script src="/backend/asset/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/backend/asset/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/backend/asset/js/sb-admin-2.min.js"></script>
+    <script src="/backend/asset/vendor/chart.js/Chart.min.js"></script>
+    <script src="/backend/asset/js/demo/chart-area-demo.js'"></script>
+    <script src="/backend/asset/js/demo/chart-pie-demo.js'"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <script src="backend/asset/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="/backend/asset/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>

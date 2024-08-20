@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ColorProduct extends Model
+class Orders extends Model
 {
     use HasFactory;
-    public function variant()
-    {
-        return $this->hasMany(VariantColors::class,'color_id');
+    public function users(){
+        return $this->belongsTo(User::class,'user_id');
     }
 }

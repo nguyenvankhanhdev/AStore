@@ -12,8 +12,9 @@ use App\Models\StorageProduct;
 use App\Models\ColorProduct;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\VariantColors;
 
-class FrontendProductController extends Controller
+class ProductController extends Controller
 {
     public function productsIndex(Request $request)
     {
@@ -73,7 +74,7 @@ class FrontendProductController extends Controller
 
 
         $products = Products::where('status', 1)
-            ->orderBy('id', 'DESC')
+            ->orderBy('id', 'ASC')
             ->paginate(10);
 
         return view('frontend.user.layouts.section_cate', compact('products'));
@@ -82,6 +83,7 @@ class FrontendProductController extends Controller
     public function productCategories(Request $request)
     {
         $products = collect();
+
         $subcategories = collect();
         $categories = null;
         if ($request->has('categories')) {
@@ -96,9 +98,7 @@ class FrontendProductController extends Controller
                 $product->variants = ProductVariant::where('pro_id', $product->id)->get();
                 foreach ($product->variants as $variant) {
                     $variant->storage = StorageProduct::find($variant->storage_id);
-                    $variant->color = ColorProduct::find($variant->color_id);
                 }
-
             }
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
@@ -106,20 +106,19 @@ class FrontendProductController extends Controller
 
     public function showProduct(string $slug, Request $request)
     {
-        $product = Products::with(['productImages', 'variant'])->where([
+        $product = Products::with(['productImages', 'variants.variantColors','ratings','category','subcategory'])->where([
             'slug' => $slug,
             'status' => 1
-        ])->firstOrFail();
-        $cate = Categories::where('id', $product->cate_id)->first();
-        $product->variants = ProductVariant::where('pro_id', $product->id)->get();
+        ])->first();
+
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
-        $color = ProductVariant::where('id', $selectedVariantId)->first()->color_id;
+        $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
 
         if (Auth::id() > 0) {
             $user = User::find(Auth::id());
-            return view('frontend.user.home.product_details', compact('product', 'cate', 'selectedVariantId', 'color', 'user'));
+            return view('frontend.user.home.product_details', compact('product', 'selectedVariantId', 'colors', 'user'));
         }
-        return view('frontend.user.home.product_details', compact('product', 'cate', 'selectedVariantId', 'color'));
+        return view('frontend.user.home.product_details', compact('product', 'selectedVariantId', 'colors'));
     }
 
 

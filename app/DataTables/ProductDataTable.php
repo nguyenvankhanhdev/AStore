@@ -35,7 +35,7 @@ class ProductDataTable extends DataTable
                 return $editBtn . $deleteBtn . $moreBtn;
             })
             ->addColumn('image', function ($query) {
-                return "<img width='70px' src='" . $query->image. "' ></img>";
+                return "<img width='70px' src='" . asset($query->image) . "' ></img>";
             })
             ->addColumn('type', function ($query) {
                 switch ($query->product_type) {
@@ -55,9 +55,6 @@ class ProductDataTable extends DataTable
                         return '<i class="badge badge-dark">None</i>';
                         break;
                 }
-            })
-            ->editColumn('price', function ($query) {
-                return number_format($query->price, 0, ',', '.'); // Format price with thousands separator
             })
             ->addColumn('status', function ($query) {
                 if ($query->status == 1) {
@@ -113,7 +110,6 @@ class ProductDataTable extends DataTable
             Column::make('id'),
             Column::make('image'),
             Column::make('name'),
-            Column::make('price')->title('Price (VNĐ)'),
             Column::make('type')->width(150),
             Column::make('status'),
             Column::computed('action')

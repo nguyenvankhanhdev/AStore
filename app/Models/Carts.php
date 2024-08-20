@@ -9,28 +9,18 @@ use App\Models\User;
 class Carts extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'variant_id',
-        'user_id',
-        'pro_id',
-        'quantity',
-    ];
+
     public function product()
     {
-        return $this->belongsTo(Products::class,'pro_id');
+        return $this->belongsTo(Products::class, 'pro_id');
     }
-    public function variant()
+    public function variant_color()
     {
-        return $this->belongsTo(ProductVariant::class,'variant_id');
+        return $this->belongsTo(VariantColors::class,'variant_color_id');
     }
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class);
     }
-
-
-
-
-
 
 }

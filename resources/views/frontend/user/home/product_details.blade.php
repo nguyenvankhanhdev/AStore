@@ -12,7 +12,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="link" href="#">Trang chủ</a></li>
                         <li class="breadcrumb-item"><a class="link"
-                                href="{{ route('products.category', ['categories' => $cate->slug]) }}">{{ $cate->name }}</a>
+                                href="{{ route('products.category', ['categories' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                         </li>
                         <li class="breadcrumb-item">{{ $product->name }}</li>
                     </ol>
@@ -63,7 +63,7 @@
                                         <div class="npi-special-inner">
                                             <div class="npi-special-caption">
                                                 <div class="npi-special-caption-icon"><img
-                                                        src="frontend/asset/img/fxemoji_star.svg" alt="fxemoji_star"></div>
+                                                        src="/frontend/asset/img/fxemoji_star.svg" alt="fxemoji_star"></div>
                                                 <div class="npi-special-caption-label">Giá phiên bản 1 Đổi 1</div>
                                             </div>
                                         </div>
@@ -76,92 +76,92 @@
                                             <span class="txtpricemarketPhanTram badge badge-danger persent-special"
                                                 style="">-12%</span>
                                         </div>
-
                                     </div>
                                     <div id="variant-selector" class="types js-select">
                                         @foreach ($product->variants as $index => $variant)
-                                            @php
-                                                $storage = App\Models\StorageProduct::find($variant->storage_id);
-                                            @endphp
-                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}" data-id="{{ $variant->id }}">
+                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}"
+                                                data-id="{{ $variant->id }}">
                                                 <div class="radio">
-                                                    <input type="radio"{{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
+                                                    <input
+                                                        type="radio"{{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
                                                     <label>{{ $variant->storage->GB }}</label>
                                                 </div>
-                                                <p>{{ number_format($variant->price - $variant->offer_price, 0, ',', '.') }}₫
-                                                </p>
+                                                @if ($variant->variantColors->first())
+                                                    <p>{{ number_format($variant->variantColors->first()->price - $variant->variantColors->first()->offer_price, 0, ',', '.') }}₫</p>
+                                                @else
+                                                    <p>Không có giá</p>
+                                                @endif
                                             </a>
                                         @endforeach
-
-
                                     </div>
                                     <div class="colors js-select">
-                                        @foreach ($product->variants as $index => $variant)
-                                            @switch($variant->color->color)
+                                        @foreach ($colors as $index => $color)
+                                            @php
+                                                $name = App\Models\ColorProduct::find($color->color_id);
+                                                $isActive = $index === 0 ? 'active' : '';
+                                                if ($isActive === 'active') {
+                                                    $selectedColorId = $name->id;
+                                                }
+                                            @endphp
+                                            @switch($name->color)
                                                 @case('Xanh da trời')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#51b3f0"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Đen')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#232A31"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Đỏ')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FB1634"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Xanh lá')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#77ff82"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Trắng')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FAF7F2"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Vàng hồng')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
-                                                        <span style="background-color:#b37249"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#ffe194"></span>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Xám')
-                                                    <div class="item {{ $index === 0 ? 'active' : '' }}"
-                                                        data-color-id="{{ $variant->id }}">
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#B2C5D6"></span>
-                                                        <div>{{ $variant->color->color }}</div>
+                                                        <div>{{ $name->color }}</div>
                                                     </div>
                                                 @break
 
                                                 @default
-                                                    <div class="item" data-color-id="{{ $variant->id }}">
+                                                    <div class="item" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FFFFFF"></span> <!-- Màu mặc định -->
                                                         <div>Không xác định</div>
                                                     </div>
                                             @endswitch
                                         @endforeach
                                     </div>
+
                                     <div class="payment-incentives">
                                         <div class="block-head">
                                             <div class="block-head-title">Ưu đãi thanh toán</div><span
@@ -258,18 +258,28 @@
                                         </div>
                                     </div>
                                     <div class="action action-npi">
+
+                                        @php
+                                            $variant = App\Models\VariantColors::where('variant_id', $selectedVariantId)
+                                                ->where('color_id', $selectedColorId)
+                                                ->first();
+
+                                        @endphp
+
                                         <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form"
                                             style="width: 100%">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                                             <input type="hidden" name="quantity" value="1" min="1">
                                             <input type="hidden" name="variant_id" value="{{ $selectedVariantId }}">
+                                            <input type="hidden" name="selected_color_id" id="selected_color_id"
+                                                value="{{ $selectedColorId }}">
                                             <button type="submit" class="btn btn-link btn-xl btn-line-1">
                                                 <div class="btn-text">MUA NGAY</div>
                                                 <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
                                             </button>
                                         </form>
-                                        <a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
+                                        {{-- <a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
                                             <div class="btn-text">TRẢ GÓP 0%</div><span class="btn-sub-text">Duyệt nhanh
                                                 qua đện
                                                 thoại</span>
@@ -277,7 +287,7 @@
                                             <div class="btn-text">TRẢ GÓP QUA THẺ</div><span class="btn-sub-text">Visa,
                                                 Master Card,
                                                 JCB</span>
-                                        </a>
+                                        </a> --}}
                                     </div>
 
 
@@ -1791,36 +1801,22 @@
 @endsection
 @push('scripts')
     <script>
+        var selectedColorId = @json($selectedColorId)
+
+
 
         document.addEventListener('DOMContentLoaded', function() {
-        const variantSelector = document.getElementById('variant-selector');
+            const variantSelector = document.getElementById('variant-selector');
 
-        variantSelector.addEventListener('click', function(event) {
-            const clickedElement = event.target.closest('.item');
-            if (clickedElement) {
-                const variantId = clickedElement.getAttribute('data-id');
-                const url = new URL(window.location.href);
-                url.searchParams.set('variant', variantId);
-                window.location.href = url.toString();
-            }
-        });
-    });
-
-    document.querySelectorAll('.colors .item').forEach(item => {
-        item.addEventListener('click', function () {
-            document.querySelectorAll('.colors .item').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-            let colorId = this.getAttribute('data-color-id');
-            // Store the selected color in the session
-            fetch('{{ route('cart.selectColor') }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ color_id: colorId })
+            variantSelector.addEventListener('click', function(event) {
+                const clickedElement = event.target.closest('.item');
+                if (clickedElement) {
+                    const variantId = clickedElement.getAttribute('data-id');
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('variant', variantId);
+                    window.location.href = url.toString();
+                }
             });
         });
-    });
     </script>
 @endpush

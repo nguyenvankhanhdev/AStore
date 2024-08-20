@@ -23,27 +23,18 @@ class ProductVariantController extends Controller
 
     public function create(Request $request)
     {
-        $colors = ColorProduct::all();
         $storages = StorageProduct::all();
         $product = Products::findOrFail($request->product);
-        return view('backend.admin.product.product_variant.create', compact('colors', 'storages', 'product'));
+        return view('backend.admin.product.product_variant.create', compact('storages', 'product'));
     }
 
 
     public function store(Request $request)
     {
         $request->validate([
-            'quantity' => ['required'],
-            'price' => ['required'],
-            'offer_price' => ['required'],
-            'color' => ['required'],
             'storage' => ['required'],
         ]);
         $variant = new ProductVariant();
-        $variant->quantity = $request->quantity;
-        $variant->price = $request->price;
-        $variant->offer_price = $request->offer_price;
-        $variant->color_id = $request->color;
         $variant->storage_id = $request->storage;
         $variant->pro_id = $request->product;
         $variant->save();
@@ -64,9 +55,8 @@ class ProductVariantController extends Controller
     public function edit(string $id)
     {
         $variant = ProductVariant::findOrFail($id);
-        $colors = ColorProduct::all();
         $storages = StorageProduct::all();
-        return view('backend.admin.product.product_variant.edit', compact('variant', 'colors', 'storages'));
+        return view('backend.admin.product.product_variant.edit', compact('variant', 'storages'));
     }
 
     /**
@@ -75,18 +65,10 @@ class ProductVariantController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'quantity' => ['required', 'integer'],
-            'price' => ['required', 'numeric'],
-            'offer_price' => ['required', 'numeric'],
-            'color' => ['required', 'exists:color_products,id'],
             'storage' => ['required', 'exists:storage_products,id'],
         ]);
 
         $variant = ProductVariant::findOrFail($id);
-        $variant->quantity = $request->quantity;
-        $variant->price = $request->price;
-        $variant->offer_price = $request->offer_price;
-        $variant->color_id = $request->color;
         $variant->storage_id = $request->storage;
         $variant->save();
 

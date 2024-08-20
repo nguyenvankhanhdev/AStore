@@ -28,7 +28,6 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:products,name'],
-            'price' => ['required'],
             'quantity' => ['required'],
             'long_description' => ['max:600'],
             'short_description' => ['string'],
@@ -46,9 +45,7 @@ class ProductController extends Controller
         $product->sub_cate_id = $request->sub_category;
         $product->long_description = $request->long_description;
         $product->short_description = $request->short_description;
-        $product->price = $request->price;
         $product->quantity = $request->quantity;
-        $product->offer_price = $request->offer_price;
         $product->offer_start_date = $request->offer_start_date;
         $product->offer_end_date = $request->offer_end_date;
         $product->product_type = $request->product_type;
@@ -75,7 +72,6 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:products,name,' . $id],
-            'price' => ['required'],
             'quantity' => ['required'],
             'long_description' => ['max:600'],
             'short_description' => ['string'],
@@ -97,9 +93,7 @@ class ProductController extends Controller
         $product->sub_cate_id = $request->sub_category;
         $product->long_description = $request->long_description;
         $product->short_description = $request->short_description;
-        $product->price = $request->price;
         $product->quantity = $request->quantity;
-        $product->offer_price = $request->offer_price;
         $product->offer_start_date = $request->offer_start_date;
         $product->offer_end_date = $request->offer_end_date;
         $product->product_type = $request->product_type;
