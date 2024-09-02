@@ -10922,7 +10922,7 @@ return jQuery;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -10936,14 +10936,14 @@ return jQuery;
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
@@ -26874,7 +26874,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         slidesPerView: 'auto',
         spaceBetween: 10,
     });
-	
+
 	const gallery =  document.querySelector('.js-gallery');
 
     const thumbItems = document.querySelectorAll('.gallery-thumbs .swiper-slide');
@@ -26896,8 +26896,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
         });
         thumbItems[index].classList.add('active');
     });
-	
-	// add gallery when click to image 
+
+	// add gallery when click to image
     detail_$(".swiper.gallery-main").click(function (e) {
         var senderElement = e.target;
         // Check if sender is the <div> element e.g.
@@ -26922,13 +26922,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
                 });
                 plugin.openGallery()
             }
-            
+
         }
         else {
             document.querySelector('.js-open-gallery').click()
         }
     });
-    
+
     let lgTemp =  lightgallery_es5(document.querySelector('#animated-thumbnails-gallery'), {
         controls: false,
         counter: false,
@@ -26938,7 +26938,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         autoplay: true,
     });
 
-    
+
     const subPlugin = lightgallery_es5(gallery,{
         plugins: [lg_zoom_es5, lg_thumbnail_es5, lg_fullscreen_es5, lg_autoplay_es5],
 		speed: 500,
@@ -26955,7 +26955,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 			// showZoomInOutIcons: false
 		},
     });
-  
+
     document.querySelector(".view-gallery.js-open-gallery").addEventListener("click",function(e){
         e.preventDefault();
         if(subPlugin){
@@ -26969,7 +26969,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelectorAll(".footer .swiper-slide").forEach(item=>{
         item.addEventListener("click",()=>{
             lgTemp && lgTemp.destroy();
-         
+
             lightgallery_es5(document.querySelector('#animated-thumbnails-gallery'), {
                 plugins: [lg_zoom_es5, lg_thumbnail_es5, lg_fullscreen_es5, lg_autoplay_es5],
 				speed: 500,
@@ -26989,7 +26989,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         })
     })
 
-    
+
 
     // Modal Box
     var propertiesGalleryThumb = new core('.properties-gallery-thumb', {
@@ -27128,7 +27128,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
                     showCloseIcon: true,
                 },
                 plugins: [lg_zoom_es5, lg_thumbnail_es5, lg_fullscreen_es5, lg_autoplay_es5],
-                
+
             });
         });
     }

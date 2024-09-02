@@ -25,25 +25,25 @@
     <div class="footer-top">
       <div class="container">
         <ul class="key-selling-point">
-          <li><img src="frontend/asset/img/like.png" alt="like-icon">
+          <li><img src="/frontend/asset/img/like.png" alt="like-icon">
             <div class="group-text">
               <div class="title">Thương hiệu đảm bảo</div>
               <div class="desc">Sản phẩm chính hãng Apple </div>
             </div>
           </li>
-          <li><img src="frontend/asset/img/shield.png" alt="shield-icon">
+          <li><img src="/frontend/asset/img/shield.png" alt="shield-icon">
             <div class="group-text">
               <div class="title">Bảo hành chính hãng</div>
               <div class="desc">Bảo hành theo chính sách Apple</div>
             </div>
           </li>
-          <li><img src="frontend/asset/img/deli.png" alt="deli-icon">
+          <li><img src="/frontend/asset/img/deli.png" alt="deli-icon">
             <div class="group-text">
               <div class="title">Giao hàng tận nơi</div>
               <div class="desc">Tại 63 tỉnh thành</div>
             </div>
           </li>
-          <li><img src="frontend/asset/img/crown.png" alt="crown-icon">
+          <li><img src="/frontend/asset/img/crown.png" alt="crown-icon">
             <div class="group-text">
               <div class="title">Trải nghiệm Premium</div>
               <div class="desc">Không gian trải nghiệm cao cấp</div>
@@ -86,7 +86,7 @@
                 <li>Cần Thơ: 52 - 54 - 56 Đường 30/4, P. An Phú, Q. Ninh Kiều, Cần Thơ</li>
               </ul>
             </div>
-            <div class="img"><img src="frontend/asset/img/item.png" alt="item-footer"></div>
+            <div class="img"><img src="/frontend/asset/img/item.png" alt="item-footer"></div>
           </div>
           <div class="footer-category">
             <div class="category-item">

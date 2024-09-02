@@ -23,17 +23,20 @@ class ProductVariantDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function($query){
+                $editBtn = "<a href='" . route('admin.products-variant.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='".route('admin.products-variant.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-                return $deleteBtn;
-            })
-            ->editColumn('color_id', function ($query) {
-                return $query->color->color; // Assuming the color name is stored in the 'color' column
+                $moreBtn = '<div class="dropdown dropleft d-inline">
+                <button class="btn btn-primary dropdown-toggle ml-1" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-cog"></i>
+                </button>
+                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
+                   <a class="dropdown-item has-icon" href="'.route('admin.variant-colors.index', ['variants' => $query->id]).'"><i class="far fa-heart"></i> Colors</a>
+                </div>
+              </div>';
+                return $editBtn.$deleteBtn.$moreBtn;
             })
             ->editColumn('storage_id', function ($query) {
                 return $query->storage->GB; // Assuming the storage size is stored in the 'GB' column
-            })
-            ->editColumn('price', function ($query) {
-                return number_format($query->price, 0, ',', '.'); // Format price with thousands separator
             })
             ->rawColumns(['action'])
             ->setRowId('id');
@@ -44,8 +47,9 @@ class ProductVariantDataTable extends DataTable
      */
     public function query(ProductVariant $model): QueryBuilder
     {
+        $productId = request()->product;
         return $model->newQuery()
-            ->with(['color', 'storage'])
+            ->where('pro_id', $productId)
             ->select('product_variants.*');
     }
 
@@ -77,15 +81,12 @@ class ProductVariantDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
-            Column::make('quantity'),
-            Column::make('price')->title('Price (VNĐ)'),
-            Column::make('color_id')->title('Color'),
-            Column::make('storage_id')->title('Storage'),
-            Column::computed('action')
+            Column::make('id')->width(150),
+            Column::make('storage_id')->title('Storage')->width(150),
+            Column::computed('action')->width(150)
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                ->width(200)
                 ->addClass('text-center'),
         ];
     }

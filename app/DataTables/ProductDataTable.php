@@ -21,8 +21,8 @@ class ProductDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $editBtn = "<a href='" . route('admin.sub-categories.edit', $query->id) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='" . route('admin.sub-categories.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
+                $editBtn = "<a href='" . route('admin.product.edit', $query->id) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
+                $deleteBtn = "<a href='" . route('admin.product.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
                 $moreBtn = '<div class="dropdown dropleft d-inline">
                 <button class="btn btn-primary dropdown-toggle ml-1" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-cog"></i>
@@ -35,7 +35,7 @@ class ProductDataTable extends DataTable
                 return $editBtn . $deleteBtn . $moreBtn;
             })
             ->addColumn('image', function ($query) {
-                return "<img width='70px' src='" . $query->image. "' ></img>";
+                return "<img width='70px' src='" . asset($query->image) . "' ></img>";
             })
             ->addColumn('type', function ($query) {
                 switch ($query->product_type) {
@@ -110,7 +110,6 @@ class ProductDataTable extends DataTable
             Column::make('id'),
             Column::make('image'),
             Column::make('name'),
-            Column::make('price'),
             Column::make('type')->width(150),
             Column::make('status'),
             Column::computed('action')

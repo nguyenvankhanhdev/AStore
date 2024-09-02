@@ -2,15 +2,14 @@
 
 use App\Http\Controllers\Auth\AuthenticateSessionController;
 use App\Http\Controllers\Auth\RegisterUserController;
-use App\Http\Controllers\Backend\CategoriesController;
-use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\SubCategoriesController;
-use App\Http\Controllers\Backend\ProductImagesController;
 use App\Http\Controllers\Frontend\CommentController;
-use App\Http\Controllers\Frontend\FrontendProductController;
-use App\Models\Comment;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckOutController;
+use App\Http\Controllers\Frontend\ProductController;
+use App\Http\Controllers\Frontend\PaymentController;
+
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -24,6 +23,7 @@ Route::get('admin', [AuthenticateSessionController::class, 'index'])
 
 Route::post('login', [AuthenticateSessionController::class, 'store'])->name('auth.login');
 
+Route::get('login', [AuthenticateSessionController::class, 'index'])->name('auth.login.web');
 
 Route::get('register', [RegisterUserController::class, 'create'])->name('auth.register');
 
@@ -34,24 +34,35 @@ Route::post('register', [RegisterUserController::class, 'store'])->name('auth.re
 // })->name('frontend.index');
 
 Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
-     ->name('auth.logout');
+    ->name('auth.logout');
 
 //frontend
 
-Route::get('products', [FrontendProductController::class, 'productsIndex'])->name('products.index');;
+Route::get('products', [ProductController::class, 'productsIndex'])->name('products.index');;
 
-Route::get('frontend/category', function(){
+Route::get('frontend/category', function () {
     return view('frontend.user.categories.index');
-
 });
-Route::get('/', [FrontendProductController::class, 'productsIndex'])->name('products.index');
-Route::get('index', [FrontendProductController::class, 'productsIndex'])->name('products.index');
-Route::get('category', [FrontendProductController::class, 'productCategories'])->name('products.category');
+Route::get('/', [ProductController::class, 'productsIndex'])->name('products.index');
+Route::get('index', [ProductController::class, 'productsIndex'])->name('products.index');
+Route::get('category', [ProductController::class, 'productCategories'])->name('products.category');
 
 //details
-Route::get('product/{slug}', [FrontendProductController::class, 'showProduct'])->name('product.details');
+Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 
-Route::get('subcategory', [FrontendProductController::class, 'productSubCategories'])->name('products.subcategory');
+Route::get('subcategory', [ProductController::class, 'productSubCategories'])->name('products.subcategory');
+Route::get('/get-districts/{province_id}', [CartController::class, 'getDistricts'])->name('get-districts');
+Route::get('/get-wards/{district_id}', [CartController::class, 'getWards'])->name('get-wards');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updateQuantity');
+
+Route::get('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply-coupon');
+Route::get('remove-coupon', [CartController::class, 'removeCoupon'])->name('remove-coupon');
+
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+Route::resource('comments', CommentController::class);
 
 Route::resource('comments', CommentController::class);
 Route::post('comments/change-status', [CommentController::class, 'changeStatus'])->name('comments.change-status');
@@ -60,3 +71,23 @@ Route::post('comments/update', [CommentController::class, 'update'])->name('comm
 Route::post('comments/likeComment', [CommentController::class, 'likeComment'])->name('comments.likeComment');
 
 
+// thanh toán
+
+
+
+
+
+Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
+
+    Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+
+// thanh toán paypal
+    Route::post('paypal/payment',[PaymentController::class,'payment'])->name('paypal.payment');
+    Route::get('paypal/success',[PaymentController::class,'success'])->name('paypal.success');
+    Route::get('paypal/cancel',[PaymentController::class,'cancel'])->name('paypal.cancel');
+// thanh toán COD
+Route::post('payment/cod', [CheckOutController::class, 'checkOut'])->name('cod.store');
+
+
+
+});

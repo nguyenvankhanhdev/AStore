@@ -17,7 +17,6 @@
                     </div>
                     <div class="card-header-action">
                         <a href="{{ route('admin.products-variant.create', ['product' => $product->id]) }}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
-
                     </div>
                   </div>
                   <div class="card-body">

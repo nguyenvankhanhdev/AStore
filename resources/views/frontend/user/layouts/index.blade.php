@@ -28,12 +28,12 @@
                                     </h3>
                                     <div class="product__price">
                                         <div class="text">Giá chỉ</div>
-                                        <div class="price">{{ $product->price }}đ</div><strike
+                                        <div class="price">{{ number_format($product->price,0,",",".") }}đ</div><strike
                                             class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
                                     </div>
                                 </div>
                                 <div class="product__detail"><a class="btn btn-outline-grayscale btn-md"
-                                        href="#">XEM
+                                        href="{{ route('product.details',$product->slug) }}">XEM
                                         CHI TIẾT </a>
                                 </div>
 

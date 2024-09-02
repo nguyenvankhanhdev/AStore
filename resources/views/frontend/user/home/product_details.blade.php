@@ -12,7 +12,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="link" href="#">Trang chủ</a></li>
                         <li class="breadcrumb-item"><a class="link"
-                                href="{{ route('products.category', ['categories' => $cate->slug]) }}">{{ $cate->name }}</a>
+                                href="{{ route('products.category', ['categories' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                         </li>
                         <li class="breadcrumb-item">{{ $product->name }}</li>
                     </ol>
@@ -27,8 +27,8 @@
                                     <div class="swiper gallery-main js-open-next">
                                         <div class="swiper-wrapper js-gallery">
                                             @foreach ($product->productImages as $image)
-                                                <div class="swiper-slide" data-src="{{ $image->image }}">
-                                                    <picture><img src="{{ $image->image }}"
+                                                <div class="swiper-slide" data-src="{{ asset($image->image) }}">
+                                                    <picture><img src="{{ asset($image->image) }}"
                                                             alt="MacBook Pro 16” 2021 M1 Pro"></picture>
                                                 </div>
                                             @endforeach
@@ -44,7 +44,7 @@
                                             @foreach ($product->productImages as $image)
                                                 <div class="swiper-slide active">
                                                     <span>
-                                                        <img src="{{ $image->image }}" alt="">
+                                                        <img src="{{ asset($image->image) }}" alt="">
                                                     </span>
                                                 </div>
                                             @endforeach
@@ -63,7 +63,7 @@
                                         <div class="npi-special-inner">
                                             <div class="npi-special-caption">
                                                 <div class="npi-special-caption-icon"><img
-                                                        src="frontend/asset/img/fxemoji_star.svg" alt="fxemoji_star"></div>
+                                                        src="/frontend/asset/img/fxemoji_star.svg" alt="fxemoji_star"></div>
                                                 <div class="npi-special-caption-label">Giá phiên bản 1 Đổi 1</div>
                                             </div>
                                         </div>
@@ -71,35 +71,97 @@
                                 </div>
                                 <div class="npi-border">
                                     <div class="price">
-                                        <div class="boxprice"><span class="text text-primary">27.990.000₫</span><strike
-                                                class="text-promo p-l-8 f-s-p-24 f-w-400"> 30.500.000đ</strike></div>
-
+                                        <div class="boxprice"><span class="text text-primary">27.990.000₫</span>
+                                            <strike class="text-promo p-l-8 f-s-p-24 f-w-400"> 30.500.000đ</strike>
+                                            <span class="txtpricemarketPhanTram badge badge-danger persent-special"
+                                                style="">-12%</span>
+                                        </div>
                                     </div>
-                                    <div class="types js-select"><a class="item active">
-                                            <div class="radio"><input id="p22" type="radio" value=""
-                                                    name="p22"><label for="p22">512GB</label></div>
-                                            <p>60.990.000₫</p>
-                                        </a><a class="item">
-                                            <div class="radio"><input id="p23" type="radio" value=""
-                                                    name="p22"><label for="p23">1TB</label></div>
-                                            <p>65.690.000₫</p>
-                                        </a></div>
-
+                                    <div id="variant-selector" class="types js-select">
+                                        @foreach ($product->variants as $index => $variant)
+                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}"
+                                                data-id="{{ $variant->id }}">
+                                                <div class="radio">
+                                                    <input
+                                                        type="radio"{{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
+                                                    <label>{{ $variant->storage->GB }}</label>
+                                                </div>
+                                                @if ($variant->variantColors->first())
+                                                    <p>{{ number_format($variant->variantColors->first()->price - $variant->variantColors->first()->offer_price, 0, ',', '.') }}₫</p>
+                                                @else
+                                                    <p>Không có giá</p>
+                                                @endif
+                                            </a>
+                                        @endforeach
+                                    </div>
                                     <div class="colors js-select">
-                                        <div class="item active"><span style="background-color:#124183"></span>
-                                            <div>Xanh đen</div>
-                                        </div>
-                                        <div class="item"><span
-                                                style="background: linear-gradient(90deg, #E0901A 52.36%, #E9CA95 52.56%);"></span>
-                                            <div>Vàng</div>
-                                        </div>
-                                        <div class="item"><span style="background-color:#7d7e80"> </span>
-                                            <div>Xám</div>
-                                        </div>
-                                        <div class="item"><span style="background-color:#e2e4e6"> </span>
-                                            <div>Bạc</div>
-                                        </div>
+                                        @foreach ($colors as $index => $color)
+                                            @php
+                                                $name = App\Models\ColorProduct::find($color->color_id);
+                                                $isActive = $index === 0 ? 'active' : '';
+                                                if ($isActive === 'active') {
+                                                    $selectedColorId = $name->id;
+                                                }
+                                            @endphp
+                                            @switch($name->color)
+                                                @case('Xanh da trời')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#51b3f0"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Đen')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#232A31"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Đỏ')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#FB1634"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Xanh lá')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#77ff82"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Trắng')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#FAF7F2"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Vàng hồng')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#ffe194"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Xám')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#B2C5D6"></span>
+                                                        <div>{{ $name->color }}</div>
+                                                    </div>
+                                                @break
+
+                                                @default
+                                                    <div class="item" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#FFFFFF"></span> <!-- Màu mặc định -->
+                                                        <div>Không xác định</div>
+                                                    </div>
+                                            @endswitch
+                                        @endforeach
                                     </div>
+
                                     <div class="payment-incentives">
                                         <div class="block-head">
                                             <div class="block-head-title">Ưu đãi thanh toán</div><span
@@ -195,13 +257,29 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="action action-npi"><a class="btn btn-link btn-xl btn-line-1"
-                                            href="#">
+                                    <div class="action action-npi">
 
-                                            <div class="btn-text">MUA NGAY</div><span class="btn-sub-text">Phiên bản 1 ĐỔI
-                                                1 + Combo Siêu
-                                                Phẩm</span>
-                                        </a><a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
+                                        @php
+                                            $variant = App\Models\VariantColors::where('variant_id', $selectedVariantId)
+                                                ->where('color_id', $selectedColorId)
+                                                ->first();
+
+                                        @endphp
+
+                                        <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form"
+                                            style="width: 100%">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="quantity" value="1" min="1">
+                                            <input type="hidden" name="variant_id" value="{{ $selectedVariantId }}">
+                                            <input type="hidden" name="selected_color_id" id="selected_color_id"
+                                                value="{{ $selectedColorId }}">
+                                            <button type="submit" class="btn btn-link btn-xl btn-line-1">
+                                                <div class="btn-text">MUA NGAY</div>
+                                                <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
+                                            </button>
+                                        </form>
+                                        {{-- <a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
                                             <div class="btn-text">TRẢ GÓP 0%</div><span class="btn-sub-text">Duyệt nhanh
                                                 qua đện
                                                 thoại</span>
@@ -209,7 +287,7 @@
                                             <div class="btn-text">TRẢ GÓP QUA THẺ</div><span class="btn-sub-text">Visa,
                                                 Master Card,
                                                 JCB</span>
-                                        </a>
+                                        </a> --}}
                                     </div>
 
 
@@ -1042,8 +1120,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
         <div class="detail__bottom">
 
@@ -1088,11 +1164,13 @@
                                         </div>
                                         <div class="form-group">
 
+
                                             <textarea name="content" class="form-input form-input-lg" rows="3"
-                                                placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
                                             <button type="submit" class="btn btn-lg btn-primary"
                                                 aria-controls="comment-info">GỬI BÌNH LUẬN</button>
                                         </div>
+
                                         @if ($errors->has('content'))
                                             <span id="contentError"
                                                 class="text-danger">{{ $errors->first('content') }}</span>
@@ -1277,32 +1355,16 @@
 
 
                                                         </div>
+
                                                     @endforeach
                                                 @endforeach
                                             @endif
 
+
+
                                         </div>
                                     </div>
-                                    {{-- <div class="pages">
-                                        <ul class="pagination pagination-space">
-                                            <li class="pagination-item"><a class="pagination-link" href="#"><i
-                                                        class="ic-angle-left"></i></a></li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">1</a>
-                                            </li>
-                                            <li class="pagination-item active"><a class="pagination-link"
-                                                    href="#">2</a></li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">3</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">4</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">...</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">10</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#"><i
-                                                        class="ic-angle-right"></i></a></li>
-                                        </ul>
-                                    </div> --}}
+
                                     <input type="hidden" id="currentPage" value="1">
 
                                     <div id="pagination-container">
@@ -1320,259 +1382,31 @@
     </div>
 @endsection
 
+
+
+
 @push('scripts')
-
-    {{-- Xử lý chuyển trang không load lại  --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Xử lý nhấp vào liên kết phân trang
-            $(document).on('click', '.pagination-link[data-url]', function(e) {
-                e.preventDefault();
-                var url = $(this).data('url');
-                if (url) {
-                    // Tải nội dung trang mới
-                    $.ajax({
-                        url: url,
-                        method: 'GET',
-                        success: function(response) {
-                            // Cập nhật nội dung trang
-                            $('#comments-container').html($(response).find('#comments-container').html());
-                            $('#pagination-container').html($(response).find('#pagination-container').html());
-
-                            // Cuộn đến phần tử có lớp 'user-content'
-                            $('html, body').animate({
-                                scrollTop: $('.user-content').offset().top
-                            }, 500);
-                        },
-                        error: function(xhr, status, error) {
-                            console.log('Error:', error);
-                        }
-                    });
-                }
-            });
-        });
-    </script> --}}
-
-
-    {{-- Bắt sự kiện gửi bình luận và reload tại vị trí cũ --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Scroll to the saved position after reload
-            if (sessionStorage.getItem('scrollPosition') !== null) {
-                $(window).scrollTop(sessionStorage.getItem('scrollPosition'));
-                sessionStorage.removeItem('scrollPosition');
-            }
-
-            $('#commentForm').on('submit', function(e) {
-                // Save the current scroll position
-                sessionStorage.setItem('scrollPosition', $(window).scrollTop());
-
-                // Allow the form to submit normally
-            });
-        });
-    </script> --}}
-
-    {{-- Bắt sự kiện click nào nút báo cáo của comment root và comment rep --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút báo cáo
-            $('.warningcm,.warningrepcm').click(function(e) {
-                // e.preventDefault();
-                var id = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                console.log(id);
-
-                // Hiển thị cửa sổ xác nhận
-                if (confirm('Bạn có muốn báo cáo bình luận này không?')) {
-                    // Gửi yêu cầu Ajax
-                    $.ajax({
-                        url: "{{ route('comments.change-status') }}",
-                        method: 'POST',
-                        data: {
-                            cm_id: id,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            // Lưu vị trí scroll hiện tại vào localStorage
-                            localStorage.setItem('scrollPosition', $(window).scrollTop());
-                            // Tải lại trang
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Đã xảy ra lỗi: ' + error);
-                        }
-                    });
-                }
-            });
-
-            // Kiểm tra nếu có localStorage về vị trí scroll
-            var scrollPosition = localStorage.getItem('scrollPosition');
-            if (scrollPosition) {
-                // Đặt lại vị trí scroll và xóa localStorage sau khi sử dụng
-                $(window).scrollTop(scrollPosition);
-                localStorage.removeItem('scrollPosition');
-            }
-        });
-    </script> --}}
-
-    {{-- Bắt sự kiện nút xóa của comment root và rep --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút xóa
-            $('.deletecm,.deleterepcm').click(function(e) {
-                // e.preventDefault();
-                var id = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                console.log(id);
-
-                // Hiển thị cửa sổ xác nhận
-                if (confirm('Bạn có muốn xóa bình luận này không?')) {
-                    // Gửi yêu cầu Ajax
-                    $.ajax({
-                        url: "{{ route('comments.destroy') }}",
-                        method: 'POST',
-                        data: {
-                            cm_id: id,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            // Lưu vị trí scroll hiện tại vào localStorage
-                            localStorage.setItem('scrollPosition', $(window).scrollTop());
-                            // Tải lại trang
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Đã xảy ra lỗi: ' + error);
-                        }
-                    });
-                }
-            });
-
-            // Kiểm tra nếu có localStorage về vị trí scroll
-            var scrollPosition = localStorage.getItem('scrollPosition');
-            if (scrollPosition) {
-                // Đặt lại vị trí scroll và xóa localStorage sau khi sử dụng
-                $(window).scrollTop(scrollPosition);
-                localStorage.removeItem('scrollPosition');
-            }
-        });
-    </script> --}}
-
-    {{-- Bắt sự kiện sửa comment của root và rep --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút sửa
-            $('.btneditcm,.btneditrepcm').click(function(e) {
-                // e.preventDefault();
-                var id = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                var content = $('#commentForm_' + id).find('textarea[name="editcm"]')
-                    .val(); // Lấy giá trị của textarea
-
-                console.log(id);
-
-                // Hiển thị cửa sổ xác nhận
-                if (confirm('Bạn có muốn sửa bình luận này không?')) {
-                    // Gửi yêu cầu Ajax
-                    $.ajax({
-                        url: "{{ route('comments.update') }}",
-                        method: 'POST',
-                        data: {
-                            cm_id: id,
-                            content: content,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            // Lưu vị trí scroll hiện tại vào localStorage
-                            localStorage.setItem('scrollPosition', $(window).scrollTop());
-                            // Tải lại trang
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Đã xảy ra lỗi: ' + error);
-                        }
-                    });
-                }
-            });
-
-            // Kiểm tra nếu có localStorage về vị trí scroll
-            var scrollPosition = localStorage.getItem('scrollPosition');
-            if (scrollPosition) {
-                // Đặt lại vị trí scroll và xóa localStorage sau khi sử dụng
-                $(window).scrollTop(scrollPosition);
-                localStorage.removeItem('scrollPosition');
-            }
-        });
-    </script> --}}
-
-    {{-- <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút xóa
-            $('.btnrepcm').click(function(e) {
-                // e.preventDefault();
-                var id = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                var cmt_id = $(this).closest('.form-groupcm').find('input[data-cmt-id]').data('cmt-id');
-                var content = $('#repcommentForm_' + id).find('textarea[name="repcm"]')
-                    .val(); // Lấy giá trị của textarea
-                var pro_id = $('#repcommentForm_' + id).find('input[name="pro_id"]').val();
-
-                console.log(id, content, pro_id);
-
-                // Hiển thị cửa sổ xác nhận
-                if (confirm('Bạn có muốn trả lời bình luận này không?')) {
-                    // Gửi yêu cầu Ajax
-                    $.ajax({
-                        url: "{{ route('comments.store') }}",
-                        method: 'POST',
-                        data: {
-                            cmt_id: cmt_id,
-                            content: content,
-                            pro_id: pro_id,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            // Lưu vị trí scroll hiện tại vào localStorage
-                            localStorage.setItem('scrollPosition', $(window).scrollTop());
-                            // Tải lại trang
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Đã xảy ra lỗi: ' + error);
-                        }
-                    });
-                }
-            });
-
-            // Kiểm tra nếu có localStorage về vị trí scroll
-            var scrollPosition = localStorage.getItem('scrollPosition');
-            if (scrollPosition) {
-                // Đặt lại vị trí scroll và xóa localStorage sau khi sử dụng
-                $(window).scrollTop(scrollPosition);
-                localStorage.removeItem('scrollPosition');
-            }
-        });
-    </script>
-
     <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút chỉnh sửa (editcm)
-            $('.editcm, .editrepcm').click(function(e) {
-                e.preventDefault(); // Ngăn chặn hành động mặc định của nút
+        var selectedColorId = @json($selectedColorId)
 
-                var commentId = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                var commentForm = $('#commentForm_' + commentId);
 
-                // Kiểm tra trạng thái hiển thị của commentForm
-                if (commentForm.is(':visible')) {
-                    commentForm.hide(); // Nếu đang hiển thị thì ẩn đi
-                } else {
-                    $('.form-groupcm').hide(); // Ẩn tất cả các form-group khác trước khi hiển thị form mới
-                    commentForm.show(); // Hiển thị form tương ứng với commentId
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const variantSelector = document.getElementById('variant-selector');
+
+            variantSelector.addEventListener('click', function(event) {
+                const clickedElement = event.target.closest('.item');
+                if (clickedElement) {
+                    const variantId = clickedElement.getAttribute('data-id');
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('variant', variantId);
+                    window.location.href = url.toString();
+
                 }
             });
         });
     </script>
+
 
     <script>
         $(document).ready(function() {
@@ -1592,46 +1426,9 @@
                 }
             });
         });
-    </script> --}}
+    </script>
 
-    {{-- Bắt sự kiện like --}}
-    {{-- <script>
-        $(document).ready(function() {
-            // Bắt sự kiện click vào nút "Thích"
-            $('.like-button').click(function(e) {
-                e.preventDefault();
 
-                var commentId = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                var likeButton = $(this); // Lưu lại đối tượng nút Thích để cập nhật sau này
-
-                $.ajax({
-                    url: "{{ route('comments.likeComment') }}",
-                    method: 'POST',
-                    data: {
-                        cmt_id: commentId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        // Xử lý thành công, cập nhật số lượng like
-                        if (data.status === 'liked') {
-                            likeButton.text('(' + data.likesCount + ') Bỏ Thích');
-                        }
-                        else if (data.status === 'unliked') {
-                            likeButton.text('(' + data.likesCount + ') Thích');
-                        }
-
-                        // Hiển thị thông báo nếu có
-                        if (data.message) {
-                            alert(data.message); // Hoặc hiển thị bằng cách khác
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Đã xảy ra lỗi: ' + error);
-                    }
-                });
-            });
-        });
-    </script> --}}
 
 
     {{-- Khởi tạo các sự kiện để phân trang không bị lỗi  --}}
@@ -1794,7 +1591,7 @@
                     e.preventDefault();
                     var commentId = $(this).data('comment-id');
                     var commentForm = $('#commentForm_' + commentId);
-                    
+
                     if (commentForm.is(':visible')) {
                         commentForm.hide();
                     } else {
@@ -1987,6 +1784,7 @@
             khoiTaoSuKienBinhLuan();
         });
     </script>
+
 
 
 @endpush

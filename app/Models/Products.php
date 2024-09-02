@@ -28,9 +28,14 @@ class Products extends Model
     {
         return $this->hasMany(Ratings::class,'pro_id');
     }
-    public function variant()
+
+    public function variants()
     {
         return $this->hasMany(ProductVariant::class,'pro_id');
+    }
+    public function carts()
+    {
+        return $this->hasMany(Carts::class.'pro_id');
     }
 
     public function comments()

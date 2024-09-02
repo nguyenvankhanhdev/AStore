@@ -26,7 +26,7 @@ class ProductImagesDataTable extends DataTable
             return $deleteBtn;
         })
         ->addColumn('image', function($query){
-            return "<img width='200px' src='".$query->image."' ></img>";
+            return "<img width='200px' src='".asset($query->image)."' ></img>";
         })
         ->rawColumns(['image', 'action'])
         ->setRowId('id');

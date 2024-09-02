@@ -8081,7 +8081,7 @@ main {
 
 .category .product {
     margin-bottom: 20px;
-    height: 444px;
+    height: 530px;
     background: #fff;
     border-radius: 12px;
     padding: 24px 12px 32px;
@@ -8156,7 +8156,7 @@ main {
 .category .product__info {
     display: flex;
     flex-direction: column;
-    gap: 8px
+    gap: 10px
 }
 
 .category .product__info .text-promo {

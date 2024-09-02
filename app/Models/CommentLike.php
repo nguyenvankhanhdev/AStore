@@ -9,6 +9,6 @@ class CommentLike extends Model
 {
     use HasFactory;
 
-    
 
+    
 }

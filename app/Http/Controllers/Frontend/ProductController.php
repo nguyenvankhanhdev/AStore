@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\Products;
+use App\Models\ProductVariant;
 use App\Models\SubCategories;
-use App\Models\User;
-use App\Models\Comments;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Html\Options\Languages\Paginate;
+use App\Models\StorageProduct;
+use App\Models\ColorProduct;
 use Illuminate\Support\Facades\Auth;
-
-class FrontendProductController extends Controller
+use App\Models\User;
+use App\Models\VariantColors;
+use App\Models\Comments;
+class ProductController extends Controller
 {
     public function productsIndex(Request $request)
     {
@@ -70,6 +72,12 @@ class FrontendProductController extends Controller
         // $categories = Categories::all();
         // return view('frontend.user.pages.product', compact('products', 'categories'));
 
+
+        // $products = Products::where('status', 1)
+        //     ->orderBy('id', 'ASC')
+        //     ->paginate(10);
+
+        // return view('frontend.user.layouts.section_cate', compact('products'));
         $productsNewArrival = Products::where('status', 1)
             ->where('product_type', 'new_arrival')
             ->orderBy('id', 'DESC')
@@ -97,17 +105,68 @@ class FrontendProductController extends Controller
 
     public function productCategories(Request $request)
     {
+        $products = collect();
+
+        $subcategories = collect();
+        $categories = null;
         if ($request->has('categories')) {
             $categories = Categories::where('slug', $request->categories)->firstOrFail();
             $subcategories = SubCategories::where('cate_id', $categories->id)->get();
             $products = Products::where([
                 'cate_id' => $categories->id,
                 'status' => 1,
-            ])
-                ->paginate(5);
+            ])->get();
+
+            foreach ($products as $product) {
+                $product->variants = ProductVariant::where('pro_id', $product->id)->get();
+                foreach ($product->variants as $variant) {
+                    $variant->storage = StorageProduct::find($variant->storage_id);
+                }
+            }
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
     }
+
+    public function showProduct(string $slug, Request $request)
+    {
+        $product = Products::with(['productImages', 'variants.variantColors','ratings','category','subcategory'])->where([
+            'slug' => $slug,
+            'status' => 1
+        ])->first();
+
+        $selectedVariantId = $request->query('variant', $product->variants->first()->id);
+        $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
+        if (Auth::id() > 0) {
+            $user = User::find(Auth::id());
+            $comment = Comments::with('user')
+                ->where([
+                    'pro_id'=> $product->id,
+                    'status'=> 0,
+                    'cmt_id' => 0
+                    ])
+                ->orderBy('created_at', 'desc')
+                ->paginate(6); // Phân trang với 6 bình luận mỗi trang
+                //->get();
+            return view('frontend.user.home.product_details', compact('product', 'user', 'comment','selectedVariantId', 'colors'));
+        } else {
+            $comment = Comments::with('user')
+            ->where([
+                'pro_id'=> $product->id,
+                'status'=> 0,
+                'cmt_id' => 0
+
+                ])
+                ->orderBy('created_at', 'desc')
+                ->paginate(6); // Phân trang với 6 bình luận mỗi trang
+                //->get();
+            return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors'));
+        }
+
+
+
+    }
+
+
 
     public function productSubCategories(Request $request)
     {
@@ -119,50 +178,12 @@ class FrontendProductController extends Controller
                 'sub_cate_id' => $subcategory->id,
                 'status' => 1,
             ])
-
                 ->paginate(5);
+
+            foreach ($products as $product) {
+                $product->variants = ProductVariant::where('pro_id', $product->id)->get();
+            };
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
-    }
-
-
-
-    public function showProduct(string $slug)
-    {
-        if (Auth::id() > 0) {
-            $user = User::find(Auth::id());
-            $product = Products::with(['productImages'])->where([
-                'slug' => $slug,
-                'status' => 1
-            ])->firstOrFail();
-            $cate = Categories::where('id', $product->cate_id)->first();
-            $comment = Comments::with('user')
-                ->where([
-                    'pro_id'=> $product->id,
-                    'status'=> 0,
-                    'cmt_id' => 0
-                    ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(6); // Phân trang với 6 bình luận mỗi trang
-                //->get();
-            return view('frontend.user.home.product_details', compact('product', 'cate', 'user', 'comment'));
-        } else {
-            $product = Products::with(['productImages'])->where([
-                'slug' => $slug,
-                'status' => 1
-            ])->firstOrFail();
-            $cate = Categories::where('id', $product->cate_id)->first();
-            $comment = Comments::with('user')
-            ->where([
-                'pro_id'=> $product->id,
-                'status'=> 0,
-                'cmt_id' => 0
-
-                ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(6); // Phân trang với 6 bình luận mỗi trang
-                //->get();
-            return view('frontend.user.home.product_details', compact('product', 'cate', 'comment'));
-        }
     }
 }

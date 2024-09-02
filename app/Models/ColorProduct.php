@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ColorProduct extends Model
 {
     use HasFactory;
-    public function productVariant()
+    public function variant()
     {
-        return $this->hasMany(ProductVariant::class, 'color_id');
+        return $this->hasMany(VariantColors::class,'color_id');
     }
 }

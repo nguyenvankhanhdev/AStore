@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments_reply', function (Blueprint $table) {
+        Schema::create('variant_colors', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('pro_id');
-            $table->integer('cmt_id');
-            $table->text('content');
+            $table->integer('variant_id');
+            $table->integer('color_id');
+            $table->integer('quantity');
+            $table->bigInteger('price');
+            $table->bigInteger('offer_price')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments_reply');
+        Schema::dropIfExists('variant_colors');
     }
 };
