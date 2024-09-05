@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\SubCategoriesController;
 use App\Http\Controllers\Backend\ProductImagesController;
 use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
+use App\Http\Controllers\Backend\CommentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,5 +31,4 @@ Route::resource('products-variant', ProductVariantController::class);
 
 Route::resource('variant-colors', VariantColorController::class);
 
-
-
+Route::resource('comment', CommentController::class);

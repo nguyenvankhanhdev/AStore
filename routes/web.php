@@ -64,6 +64,12 @@ Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.dest
 
 Route::resource('comments', CommentController::class);
 
+Route::resource('comments', CommentController::class);
+Route::post('comments/change-status', [CommentController::class, 'changeStatus'])->name('comments.change-status');
+Route::post('comments/delete', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::post('comments/update', [CommentController::class, 'update'])->name('comments.update');
+Route::post('comments/likeComment', [CommentController::class, 'likeComment'])->name('comments.likeComment');
+
 
 // thanh toán
 

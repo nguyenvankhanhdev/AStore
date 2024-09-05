@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Frontend\CommentController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,4 +37,18 @@ class Products extends Model
     {
         return $this->hasMany(Carts::class.'pro_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comments::class,'pro_id');
+    }
+
+
+
+
+
+
+
+
+
 }

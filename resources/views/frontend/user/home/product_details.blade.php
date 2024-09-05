@@ -1122,85 +1122,8 @@
             </div>
         </div>
         <div class="detail__bottom">
-            <div class="product-related m-b-48">
-                <div class="container">
-                    <div class="card card-md">
-                        <div class="card-body">
-                            <div class="row no-gutters">
-                                <div class="col-12">
-                                    <div class="product-related__heading">
-                                        <div class="h4">Dòng sản phẩm khác</div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+
             <div class="detail__comments">
                 <div class="fpt-comment">
                     <div class="container">
@@ -1216,9 +1139,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{{ route('comments.store') }}">
+                                <form id="commentForm" method="POST" action="{{ route('comments.store') }}">
                                     @csrf
                                     <div class="user-form">
+                                        <input type="hidden" name="cmt_id" value="0">
+                                        <input type="hidden" name="pro_id" value="{{ $product->id }}">
                                         <div class="flex flex-center-ver m-b-8">
                                             @if (Auth::check())
                                                 {
@@ -1238,14 +1163,21 @@
                                                     <i class="ic-edit ic-xs text-link"></i></span>Thay đổi</a>
                                         </div>
                                         <div class="form-group">
-                                            <textarea class="form-input form-input-lg" rows="3"
-                                                placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+
+
+                                            <textarea name="content" class="form-input form-input-lg" rows="3"
+                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
                                             <button type="submit" class="btn btn-lg btn-primary"
                                                 aria-controls="comment-info">GỬI BÌNH LUẬN</button>
                                         </div>
 
+                                        @if ($errors->has('content'))
+                                            <span id="contentError"
+                                                class="text-danger">{{ $errors->first('content') }}</span>
+                                        @endif
                                     </div>
                                 </form>
+
                                 <div class="user-content">
                                     <div class="result">
                                         <div class="text"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
@@ -1267,422 +1199,178 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="user-wrapper">
+                                    <div id="comments-container" class="user-wrapper">
                                         <div class="user-block">
-                                            <div class="avatar avatar-md avatar-text avatar-circle">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p>-----Phần này để test -------------</p>
-                                            <div class="avatar avatar-md avatar-text avatar-circle js-gallery-container">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                        <div
-                                                            class="alert alert-success alert-xs alert-single alert-no-fill">
-                                                            <div class="label label-xs"><i
-                                                                    class="ic-check ic-circle ic-xs m-r-4"></i><span
-                                                                    class="alert-text label-text">Đã mua tại
-                                                                    FPTShop</span></div>
+                                            @if ($comment->isEmpty())
+                                                <h2>Sản phẩm chưa có bình luận</h2>
+                                            @else
+                                                @foreach ($comment as $cm)
+                                                    <div class="avatar avatar-md avatar-text avatar-circle">
+
+                                                        <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span>
                                                         </div>
-                                                    </div>
-                                                    <div class="avatar-rate">
-                                                        <ul class="list-star">
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-grayscale"></span></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-image">
-                                                        <div class="upload-list">
-                                                            <div class="item" data-src="assets/img/thumb1.jpg">
-                                                                <div class="img"><img src="assets/img/thumb1.jpg"
-                                                                        alt="alt"></div>
+                                                        <div class="avatar-info">
+                                                            <div class="avatar-name">
+                                                                <div class="text">
+                                                                    {{ $cm->user->username }}</div>
                                                             </div>
-                                                            <div class="item" data-src="assets/img/thumb2.jpg">
-                                                                <div class="img"><img src="assets/img/thumb2.jpg"
-                                                                        alt="alt"></div>
+                                                            <div class="avatar-para">
+                                                                <div class="text">{{ $cm->content }}</div>
                                                             </div>
-                                                            <div class="item" data-src="assets/img/thumb3.jpg">
-                                                                <div class="img"><img src="assets/img/thumb3.jpg"
-                                                                        alt="alt"></div>
+                                                            <div class="avatar-time">
+                                                                <div class="text text-grayscale">
+                                                                    {{ $cm->created_at->diffForHumans() }}</div><i
+                                                                    class="ic-circle-sm"></i>
+                                                                    @php
+                                                                        $userId = Auth::id(); // Lấy ID của người dùng hiện tại
+                                                                    @endphp
+                                                                <div data-comment-id="{{ $cm->id }}"
+                                                                    class="link link-xs like-button {{ $cm->isLikedByUser($userId) ? 'liked' : '' }}">
+                                                                   ({{ $cm->cmt_likes }})
+                                                                   {{ $cm->isLikedByUser($userId) ? 'Bỏ Thích' : 'Thích' }}
+                                                               </div>
+                                                                <i class="ic-circle-sm"></i>
+                                                                <div data-comment-id="{{ $cm->id }}"
+                                                                    class="link active_repcm link-xs">Trả lời</div>
                                                             </div>
                                                         </div>
+
+                                                        @if (Auth::id() == $cm->user_id)
+                                                            <a data-comment-id="{{ $cm->id }}"
+                                                                class='btn editcm btn-dark'><i
+                                                                    class='far fa-edit'></i></a>
+                                                            <a data-comment-id="{{ $cm->id }}"
+                                                                class='btn deletecm btn-dark'><i
+                                                                    class='far fa-trash-alt'></i></a>
+                                                        @else
+                                                            <a data-comment-id="{{ $cm->id }}" name="cm_id"
+                                                                value="{{ $cm->id }}"
+                                                                class='btn warningcm btn-dark'><i
+                                                                    class="fas fa-exclamation-triangle"></i></a>
+                                                        @endif
+
+
                                                     </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="avatar avatar-md avatar-text avatar-circle js-gallery-container">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                        <div
-                                                            class="alert alert-success alert-xs alert-single alert-no-fill">
-                                                            <div class="label label-xs"><i
-                                                                    class="ic-check ic-circle ic-xs m-r-4"></i><span
-                                                                    class="alert-text label-text">Đã mua tại
-                                                                    FPTShop</span></div>
+                                                    <div  id="commentForm_{{ $cm->id }}"  style="display:none;"  class="avatar-form form-groupcm">
+                                                        <div class="form-group ">
+
+                                                            <textarea name="editcm" class="form-input form-input-lg" rows="3"
+                                                                placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                                            <a data-comment-id="{{ $cm->id }}"
+                                                                class="btn btneditcm btn-lg btn-primary"
+                                                                aria-controls="comment-info">SỬA BÌNH LUẬN</a>
                                                         </div>
+                                                        @if ($errors->has('editcm'))
+                                                            <span id="contentError"
+                                                            class="text-danger">{{ $errors->first('content') }}</span>
+                                                        @endif
                                                     </div>
-                                                    <div class="avatar-rate">
-                                                        <ul class="list-star">
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-warning"></span></li>
-                                                            <li><span class="ic-star ic-color-grayscale"></span></li>
-                                                        </ul>
+                                                    <div id="repcommentForm_{{ $cm->id }}" style="display:none;" class="avatar-form form-groupcm">
+                                                        <div class="form-group">
+                                                            <input data-cmt-id="{{ $cm->id }}" type="hidden" name="cmt_id"
+                                                                value="{{ $cm->id }}">
+                                                            <input type="hidden" name="pro_id"
+                                                                value="{{ $product->id }}">
+                                                            <textarea name="repcm" class="form-input form-input-lg" rows="3"
+                                                                placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                                            <a data-comment-id="{{ $cm->id }}"
+                                                                class="btn btnrepcm btn-lg btn-primary"
+                                                                aria-controls="comment-info">GỬI BÌNH LUẬN</a>
+                                                        </div>
+                                                        @if ($errors->has('repcm'))
+                                                        <span id="contentError"
+                                                            class="text-danger">{{ $errors->first('content') }}</span>
+                                                            @endif
                                                     </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-image">
-                                                        <div class="upload-list">
-                                                            <div class="item" data-src="assets/img/thumb1.jpg">
-                                                                <div class="img"><img src="assets/img/thumb1.jpg"
-                                                                        alt="alt"></div>
+                                                    <!-- Hiển thị các trả lời -->
+                                                    @foreach ($cm->replies as $reply)
+                                                        <div class="user-block reply">
+                                                            <div class="avatar avatar-md avatar-text avatar-circle">
+                                                                <div class="avatar-shape"><span
+                                                                        class="f-s-p-20 f-w-500">SL</span></div>
+                                                                <div class="avatar-info">
+                                                                    <div class="avatar-name">
+                                                                        <div class="text">{{ $reply->user->username }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="avatar-para">
+                                                                        <div class="text">{{ $reply->content }}</div>
+                                                                    </div>
+                                                                    <div class="avatar-time">
+                                                                        <div class="text text-grayscale">
+                                                                            {{ $reply->created_at->diffForHumans() }}</div>
+                                                                        <i class="ic-circle-sm"></i>
+                                                                        @php
+                                                                            $userId = Auth::id(); // Lấy ID của người dùng hiện tại
+                                                                        @endphp
+                                                                       <div data-comment-id="{{ $reply->id }}"
+                                                                                class="link link-xs like-button {{ $reply->isLikedByUser($userId) ? 'liked' : '' }}">
+                                                                            ({{ $reply->cmt_likes }})
+                                                                            {{ $reply->isLikedByUser($userId) ? 'Bỏ Thích' : 'Thích' }}
+                                                                        </div>
+                                                                        <i class="ic-circle-sm"></i>
+                                                                        <div data-comment-id="{{ $reply->id }}"
+                                                                            class="link active_repcm link-xs">Trả lời</div>
+                                                                    </div>
+                                                                    @if (Auth::id() == $reply->user_id)
+                                                                        <a data-comment-id="{{ $reply->id }}"
+                                                                            class='btn editrepcm btn-dark'><i
+                                                                                class='far fa-edit'></i></a>
+                                                                        <a data-comment-id="{{ $reply->id }}"
+                                                                            class='btn deleterepcm btn-dark'><i
+                                                                                class='far fa-trash-alt'></i></a>
+                                                                    @else
+                                                                        <a data-comment-id="{{ $reply->id }}"
+                                                                            name="cm_id" value="{{ $reply->id }}"
+                                                                            class='btn warningrepcm btn-dark'><i
+                                                                                class="fas fa-exclamation-triangle"></i></a>
+                                                                    @endif
+
+                                                                </div>
+
+                                                                <div  style="display:none;" id="commentForm_{{ $reply->id }}"  class="avatar-form form-groupcm">
+                                                                    <div class="form-group ">
+                                                                        <textarea name="editcm" class="form-input form-input-lg" rows="3"
+                                                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                                                        <a data-comment-id="{{ $reply->id }}"
+                                                                            class="btn btneditrepcm btn-lg btn-primary"
+                                                                            aria-controls="comment-info">SỬA BÌNH LUẬN</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="display:none;" id="repcommentForm_{{ $reply->id }}" class="avatar-form form-groupcm">
+                                                                    <div class="form-group ">
+                                                                        <input data-cmt-id="{{ $cm->id }}" type="hidden"
+                                                                            value="{{ $cm->id }}">
+                                                                        <input type="hidden" name="pro_id"
+                                                                            value="{{ $product->id }}">
+                                                                        <textarea name="repcm" class="form-input form-input-lg" rows="3"
+                                                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                                                        <a data-comment-id="{{ $reply->id }}"
+                                                                            class="btn btnrepcm btn-lg btn-primary"
+                                                                            aria-controls="comment-info">GỬI BÌNH LUẬN</a>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
-                                                            <div class="item" data-src="assets/img/thumb2.jpg">
-                                                                <div class="img"><img src="assets/img/thumb2.jpg"
-                                                                        alt="alt"></div>
-                                                            </div>
-                                                            <div class="item" data-src="assets/img/thumb3.jpg">
-                                                                <div class="img"><img src="assets/img/thumb3.jpg"
-                                                                        alt="alt"></div>
-                                                            </div>
+
+
                                                         </div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p>-----Phần này để test end -------------</p>
-                                        </div>
-                                        <div class="user-block reply">
-                                            <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
-                                                </div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trần Quốc Hoàn</div><span
-                                                            class="badge badge-grayscale badge-xxs m-l-4">Quản trị
-                                                            viên</span>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">
-                                                            <p>Chào chị Hoàng Yến Nam Bình,</p>
-                                                            <p>Dạ trường hợp này không biết chị để máy không sử dụng trong
-                                                                bao lâu và máy tụt bao
-                                                                nhiêu phần trăm pin vậy ạ</p>
-                                                            <p>Mong phản hồi từ chị.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block">
-                                            <div class="avatar avatar-md avatar-text avatar-circle">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs link-icon"><i
-                                                                class="ic-like ic-xs m-r-4"></i>Thích (1)</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block">
-                                            <div class="avatar avatar-md avatar-text avatar-circle">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block reply">
-                                            <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
-                                                </div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trần Quốc Hoàn</div><span
-                                                            class="badge badge-grayscale badge-xxs m-l-4">Quản trị
-                                                            viên</span>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">
-                                                            <p>Chào chị Hoàng Yến Nam Bình,</p>
-                                                            <p>Dạ trường hợp này không biết chị để máy không sử dụng trong
-                                                                bao lâu và máy tụt bao
-                                                                nhiêu phần trăm pin vậy ạ</p>
-                                                            <p>Mong phản hồi từ chị.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block reply">
-                                            <div class="avatar avatar-md avatar-text avatar-circle">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">SL</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Sơn Lâm</div>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">
-                                                            <p>@Trần Quốc Hoàn: ok mình cảm ơn</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs link-icon"><i
-                                                                class="ic-like ic-xs m-r-4"></i>Thích (1)</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block">
-                                            <div class="avatar avatar-md avatar-text avatar-circle">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block reply">
-                                            <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
-                                                </div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trần Quốc Hoàn</div><span
-                                                            class="badge badge-grayscale badge-xxs m-l-4">Quản trị
-                                                            viên</span>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">
-                                                            <p>Chào chị Hoàng Yến Nam Bình,</p>
-                                                            <p>Dạ trường hợp này không biết chị để máy không sử dụng trong
-                                                                bao lâu và máy tụt bao
-                                                                nhiêu phần trăm pin vậy ạ</p>
-                                                            <p>Mong phản hồi từ chị.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs link-icon"><i
-                                                                class="ic-like ic-xs m-r-4"></i>Thích (1)</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                                <div class="avatar-form">
-                                                    <div class="form-group">
-                                                        <textarea class="form-input form-input-lg" rows="3"
-                                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)...">@Trần Quốc Hoàn mình cảm ơn nhiều</textarea><button class="btn btn-lg btn-primary"
-                                                            aria-controls="comment-info">GỬI BÌNH LUẬN</button>
-                                                    </div>
-                                                    <div class="upload-action">
-                                                        <div
-                                                            class="btn btn-outline-grayscale btn-md btn-icon btn-icon-left">
-                                                            <span class="f-s-ui-16">Thêm ảnh</span><i
-                                                                class="ic-camera ic-sm text-grayscale"></i>
-                                                        </div><span class="text">Chỉ thêm <strong>tối đa 5
-                                                                ảnh</strong></span>
-                                                    </div>
-                                                    <div class="upload-list">
-                                                        <div class="item">
-                                                            <div class="img"><img src="assets/img/thumb1.jpg"
-                                                                    alt="alt"></div><a class="link link-xs">Xoá</a>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="img"><img src="assets/img/thumb2.jpg"
-                                                                    alt="alt"></div><a class="link link-xs">Xoá</a>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="img"><img src="assets/img/thumb3.jpg"
-                                                                    alt="alt"></div><a class="link link-xs">Xoá</a>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="img"><img src="assets/img/thumb4.jpg"
-                                                                    alt="alt"></div>
-                                                            <div class="progress-primary progress-sm progress-line">
-                                                                <div class="progress-bar" style="width: 70%"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block">
-                                            <div class="avatar avatar-md avatar-text avatar-circle">
-                                                <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span></div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trương Thảo</div>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">Thái nguyên có hàng không vậy?</div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Thích</div><i class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="user-block reply">
-                                            <div class="avatar avatar-md avatar-logo avatar-circle">
-                                                <div class="avatar-shape"><img src="assets/img/logo.png" alt="">
-                                                </div>
-                                                <div class="avatar-info">
-                                                    <div class="avatar-name">
-                                                        <div class="text">Trần Quốc Hoàn</div><span
-                                                            class="badge badge-grayscale badge-xxs m-l-4">Quản trị
-                                                            viên</span>
-                                                    </div>
-                                                    <div class="avatar-para">
-                                                        <div class="text">
-                                                            <p>Chào chị Hoàng Yến Nam Bình,</p>
-                                                            <p>Dạ trường hợp này không biết chị để máy không sử dụng trong
-                                                                bao lâu và máy tụt bao
-                                                                nhiêu phần trăm pin vậy ạ</p>
-                                                            <p>Mong phản hồi từ chị.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="avatar-time">
-                                                        <div class="text text-grayscale">1 giờ trước</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs link-icon"><i
-                                                                class="ic-like ic-xs m-r-4"></i>Thích (1)</div><i
-                                                            class="ic-circle-sm"></i>
-                                                        <div class="link link-xs">Trả lời</div>
-                                                    </div>
-                                                </div>
-                                                <div class="avatar-form">
-                                                    <div class="flex flex-center-ver m-b-8">
-                                                        <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
-                                                            <strong>Vy</strong>
-                                                        </div><a class="link link-xs link-icon"><span class="ic m-r-4"><i
-                                                                    class="ic-edit ic-xs text-link"></i></span>Thay
-                                                            đổi</a>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <textarea class="form-input form-input-lg" rows="3"
-                                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)...">@Trần Quốc Hoàn mình cảm ơn nhiều</textarea><button class="btn btn-lg btn-primary"
-                                                            aria-controls="comment-info">GỬI BÌNH LUẬN</button>
-                                                    </div>
-                                                    <div class="upload-action">
-                                                        <div
-                                                            class="btn btn-outline-grayscale btn-md btn-icon btn-icon-left">
-                                                            <span class="f-s-ui-16">Thêm ảnh</span><i
-                                                                class="ic-camera ic-sm text-grayscale"></i>
-                                                        </div><span class="text">Chỉ thêm <strong>tối đa 5
-                                                                ảnh</strong></span>
-                                                    </div>
-                                                </div>
-                                            </div>
+
+                                                    @endforeach
+                                                @endforeach
+                                            @endif
+
+
+
                                         </div>
                                     </div>
-                                    <div class="pages">
-                                        <ul class="pagination pagination-space">
-                                            <li class="pagination-item"><a class="pagination-link" href="#"><i
-                                                        class="ic-angle-left"></i></a></li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">1</a>
-                                            </li>
-                                            <li class="pagination-item active"><a class="pagination-link"
-                                                    href="#">2</a></li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">3</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">4</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">...</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#">10</a>
-                                            </li>
-                                            <li class="pagination-item"><a class="pagination-link" href="#"><i
-                                                        class="ic-angle-right"></i></a></li>
-                                        </ul>
+
+                                    <input type="hidden" id="currentPage" value="1">
+
+                                    <div id="pagination-container">
+                                        {{ $comment->links('vendor.pagination.bootstrap-4') }}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1690,115 +1378,13 @@
                 </div>
             </div>
         </div>
-        <div class="modal modal-animation js-modal scale popup-modal modal-incentives" id="modal-incentives"
-            data-animation="on">
-            <div class="modal-wrapper" tabindex="-1">
-                <div class="modal-box">
-                    <div class="modal-header modal-title">
-                        <div class="title">Ưu đãi thanh toán</div><span class="modal-close js-modal-close"><i
-                                class="ic-close"></i></span>
-                    </div>
-                    <div class="modal-body">
-                        <ul>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button class="btn btn-rounded btn-icon"><span
-                                                    class="ic-check"></span><span class="btn-label">Chọn</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button class="btn btn-rounded btn-icon "><span
-                                                    class="ic-check"></span><span class="btn-label">Chọn
-                                                </span></button></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button
-                                                class="btn btn-rounded btn-icon btn-active"><span
-                                                    class="ic-check"></span><span class="btn-label">Đã Chọn
-                                                </span></button></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button class="btn btn-rounded btn-icon "><span
-                                                    class="ic-check"></span><span class="btn-label">Chọn
-                                                </span></button></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button class="btn btn-rounded btn-icon "><span
-                                                    class="ic-check"></span><span class="btn-label">Chọn
-                                                </span></button></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button class="btn btn-rounded btn-icon "><span
-                                                    class="ic-check"></span><span class="btn-label">Chọn</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="prod-card">
-                                    <div class="prod-card-img"><img src="" alt=""></div>
-                                    <div class="prod-card-info">
-                                        <p class="prod-card-name">OCB</p>
-                                        <p class="prod-card-desc"></p>Giảm thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                            class="link">Chi tiết</a>
-                                        <div class="prod-card-btn"> <button class="btn btn-rounded btn-icon "><span
-                                                    class="ic-check"></span><span class="btn-label">Chọn
-                                                </span></button></div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 @endsection
+
+
+
+
 @push('scripts')
     <script>
         var selectedColorId = @json($selectedColorId)
@@ -1815,8 +1401,390 @@
                     const url = new URL(window.location.href);
                     url.searchParams.set('variant', variantId);
                     window.location.href = url.toString();
+
                 }
             });
         });
     </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Bắt sự kiện click vào nút chỉnh sửa (editcm)
+            $('.active_repcm').click(function(e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của nút
+
+                var commentId = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
+                var commentForm = $('#repcommentForm_' + commentId);
+
+                // Kiểm tra trạng thái hiển thị của commentForm
+                if (commentForm.is(':visible')) {
+                    commentForm.hide(); // Nếu đang hiển thị thì ẩn đi
+                } else {
+                    $('.form-groupcm').hide(); // Ẩn tất cả các form-group khác trước khi hiển thị form mới
+                    commentForm.show(); // Hiển thị form tương ứng với commentId
+                }
+            });
+        });
+    </script>
+
+
+
+
+    {{-- Khởi tạo các sự kiện để phân trang không bị lỗi  --}}
+
+
+    <script>
+        $(document).ready(function() {
+
+
+            // Hàm để khởi tạo các sự kiện tương tác với bình luận
+            function khoiTaoSuKienBinhLuan() {
+                // Bắt sự kiện click vào nút "Thích"
+                $('.like-button').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var commentId = $(this).data('comment-id');
+                    var likeButton = $(this);
+
+                    $.ajax({
+                        url: "{{ route('comments.likeComment') }}",
+                        method: 'POST',
+                        data: {
+                            cmt_id: commentId,
+
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(data) {
+                            if (data.status === 'liked') {
+                                likeButton.text('(' + data.likesCount + ') Bỏ Thích');
+                            } else if (data.status === 'unliked') {
+                                likeButton.text('(' + data.likesCount + ') Thích');
+                            }
+
+                            if (data.message) {
+                                alert(data.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Đã xảy ra lỗi: ' + error);
+                        }
+                    });
+                });
+
+                // Bắt sự kiện click vào nút xóa
+                $('.deletecm,.deleterepcm').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('comment-id');
+                    var page = $('#currentPage').val(); // Lấy trang hiện tại từ input ẩn
+
+                    if (confirm('Bạn có muốn xóa bình luận này không?')) {
+                        $.ajax({
+                            url: "{{ route('comments.destroy') }}",
+                            method: 'POST',
+                            data: {
+                                cm_id: id,
+                                page: page,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                // Reload để áp dụng các thay đổi và giữ vị trí cuộn
+                                reloadPage1(page);
+
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Đã xảy ra lỗi: ' + error);
+                            }
+                        });
+                    }
+                });
+
+                // Bắt sự kiện click vào nút báo cáo
+                $('.warningcm,.warningrepcm').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('comment-id');
+                    var page = $('#currentPage').val();
+                    if (confirm('Bạn có muốn báo cáo bình luận này không?')) {
+                        $.ajax({
+                            url: "{{ route('comments.change-status') }}",
+                            method: 'POST',
+                            data: {
+                                cm_id: id,
+                                page: page,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                // Reload để áp dụng các thay đổi và giữ vị trí cuộn
+                                 reloadPage1(page);
+
+                                // if (response.status === 'success') {
+                                //     alert(response.message);
+
+
+                                // }
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Đã xảy ra lỗi: ' + error);
+                            }
+                        });
+                    }
+                });
+
+                // Bắt sự kiện click vào nút chỉnh sửa
+                $('.btneditcm,.btneditrepcm').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('comment-id');
+                    var content = $('#commentForm_' + id).find('textarea[name="editcm"]').val();
+                    var page = $('#currentPage').val();
+                    if (confirm('Bạn có muốn sửa bình luận này không?')) {
+                        $.ajax({
+                            url: "{{ route('comments.update') }}",
+                            method: 'POST',
+                            data: {
+                                cm_id: id,
+                                content: content,
+                                page: page,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                // Reload để áp dụng các thay đổi và giữ vị trí cuộn
+                                reloadPage1(page);
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Đã xảy ra lỗi: ' + error);
+                            }
+                        });
+                    }
+                });
+
+                // Bắt sự kiện click vào nút trả lời bình luận
+                $('.btnrepcm').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('comment-id');
+                    var cmt_id = $(this).closest('.form-groupcm').find('input[data-cmt-id]').data('cmt-id');
+                    var content = $('#repcommentForm_' + id).find('textarea[name="repcm"]').val();
+                    var pro_id = $('#repcommentForm_' + id).find('input[name="pro_id"]').val();
+                    var page = $('#currentPage').val();
+                    if (confirm('Bạn có muốn trả lời bình luận này không?')) {
+                        $.ajax({
+                            url: "{{ route('comments.store') }}",
+                            method: 'POST',
+                            data: {
+                                cmt_id: cmt_id,
+                                content: content,
+                                pro_id: pro_id,
+                                page: page,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                // Reload để áp dụng các thay đổi và giữ vị trí cuộn
+                                reloadPage1(page);
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Đã xảy ra lỗi: ' + error);
+                            }
+                        });
+                    }
+                });
+
+                // Bắt sự kiện click vào nút chỉnh sửa (editcm)
+                $('.editcm, .editrepcm').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var commentId = $(this).data('comment-id');
+                    var commentForm = $('#commentForm_' + commentId);
+
+                    if (commentForm.is(':visible')) {
+                        commentForm.hide();
+                    } else {
+                        $('.form-groupcm').hide();
+                        commentForm.show();
+                    }
+                });
+
+                // Bắt sự kiện click vào nút trả lời (active_repcm)
+                $('.active_repcm').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    var commentId = $(this).data('comment-id');
+                    var commentForm = $('#repcommentForm_' + commentId);
+
+                    if (commentForm.is(':visible')) {
+                        commentForm.hide();
+                    } else {
+                        $('.form-groupcm').hide();
+                        commentForm.show();
+                    }
+                });
+            }
+
+            // Hàm để reload trang và giữ vị trí cuộn
+            // Hàm để reload trang và giữ vị trí cuộn
+        function reloadPage() {
+            var scrollPosition = $(window).scrollTop();
+
+            location.reload();
+
+        }
+
+            // Lưu giá trị biến vào sessionStorage
+            function saveShouldMoveToUserContent(value) {
+                sessionStorage.setItem('shouldMoveToUserContent', value);
+            }
+
+            // Đọc giá trị biến từ sessionStorage
+            function getShouldMoveToUserContent() {
+                return sessionStorage.getItem('shouldMoveToUserContent') === 'true';
+            }
+
+
+
+            // Hàm để lưu giá trị currentPage vào sessionStorage
+            function saveCurrentPage(page) {
+                sessionStorage.setItem('currentPage', page);
+            }
+
+            // Hàm để lấy giá trị currentPage từ sessionStorage
+            function getCurrentPage() {
+                return sessionStorage.getItem('currentPage') || 1; // Mặc định là trang 1 nếu không có giá trị lưu trữ
+            }
+
+
+            function moveToUserContent() {
+                if (getShouldMoveToUserContent() || sessionStorage.getItem('scrollToUserContent') === 'true') {
+                    $('html, body').animate({
+                        scrollTop: $('.user-content').offset().top
+                    }, 500);
+                    // Reset biến sau khi di chuyển
+                    saveShouldMoveToUserContent(false);
+                    sessionStorage.removeItem('scrollToUserContent');
+                }
+
+
+            }
+
+            function reloadPage1(page) {
+                // var scrollPosition = $(window).scrollTop();
+                // var url = new URL(window.location.href);
+                // url.searchParams.set('page', page); // Đặt tham số page vào URL
+                // window.location.href = url.toString(); // Tải lại trang với URL mới
+                $('#currentPage').val(page);
+
+                var urlWithPage = new URL(window.location.href);
+                urlWithPage.searchParams.set('page', page);
+
+
+                // Lưu trạng thái cuộn vào sessionStorage
+                saveShouldMoveToUserContent(true);
+                // Lưu giá trị currentPage vào sessionStorage
+                saveCurrentPage(page);
+
+                // Chuyển đến URL mới và tải lại trang
+                window.location.href = urlWithPage.toString();
+                $('#currentPage').val(page);
+
+
+
+            }
+
+            $(document).ready(function() {
+                // Khôi phục giá trị currentPage từ sessionStorage vào input ẩn
+                var currentPage = getCurrentPage();
+                $('#currentPage').val(currentPage);
+
+                // Di chuyển đến phần tử .user-content sau khi tải lại trang
+                moveToUserContent();
+
+                khoiTaoSuKienBinhLuan();
+                // Xóa giá trị currentPage từ sessionStorage sau khi đã sử dụng
+                sessionStorage.removeItem('currentPage');
+            });
+
+
+
+            // Xử lý nhấp vào liên kết phân trang
+            $(document).on('click', '.pagination-link[data-url]', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                console.log('URL:', url); // Xuất URL ra console
+
+                // Lấy giá trị trang từ URL
+                var urlParams = new URLSearchParams(new URL(url).search);
+                var page = urlParams.get('page');
+
+                console.log('Page:', page); // Xuất giá trị trang ra console
+
+                if (url) {
+                    currentPage = $(this).text(); // Cập nhật trang hiện tại
+
+
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(response) {
+                            $('#comments-container').html($(response).find('#comments-container').html());
+                            $('#pagination-container').html($(response).find('#pagination-container').html());
+
+                             // Cập nhật giá trị currentPage trong input ẩn
+                            $('#currentPage').val(page);
+
+
+                             // Lưu giá trị currentPage vào sessionStorage
+                            sessionStorage.setItem('currentPage', page);
+                            // Khởi tạo lại các sự kiện tương tác với bình luận sau khi tải nội dung mới
+                            khoiTaoSuKienBinhLuan();
+
+                            $('html, body').animate({
+                                scrollTop: $('.user-content').offset().top
+                            }, 500);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('Error:', error);
+                        }
+                    });
+                }
+            });
+
+            // // Bắt sự kiện gửi bình luận và reload tại vị trí cũ
+             // Scroll to the saved position after reload
+             if (sessionStorage.getItem('scrollPosition') !== null) {
+                $(window).scrollTop(sessionStorage.getItem('scrollPosition'));
+                sessionStorage.removeItem('scrollPosition');
+            }
+
+            $('#commentForm').on('submit', function(e) {
+                // Save the current scroll position
+                sessionStorage.setItem('scrollPosition', $(window).scrollTop());
+
+                // Allow the form to submit normally
+            });
+
+            // Khôi phục vị trí cuộn sau khi trang reload
+            $(window).on('load', function() {
+                var url = new URL(window.location.href);
+                var currentPage = url.searchParams.get('page');
+                var pageInput = $('#currentPage').val();
+
+                // Kiểm tra nếu cần di chuyển đến .user-content
+                if (getShouldMoveToUserContent()) {
+                    moveToUserContent();
+
+                } else {
+                    // Nếu không cần di chuyển, kiểm tra trang hiện tại
+                    if (  (pageInput === '1' && currentPage !== '1' && currentPage !== null) ) {
+                        sessionStorage.setItem('scrollToUserContent', 'true');
+                        // Nếu không phải trang 1 và không phải do chuyển trang, cập nhật URL và tải lại trang
+                        url.searchParams.set('page', 1);
+                        window.location.href = url.toString();
+                        khoiTaoSuKienBinhLuan();
+                    }
+
+                }
+            });
+
+
+            // Khởi tạo các sự kiện tương tác với bình luận khi trang load
+            khoiTaoSuKienBinhLuan();
+        });
+    </script>
+
+
+
 @endpush
