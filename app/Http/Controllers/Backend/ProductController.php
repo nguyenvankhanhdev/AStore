@@ -28,7 +28,6 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:products,name'],
-            'quantity' => ['required'],
             'long_description' => ['max:600'],
             'short_description' => ['string'],
             'category' => ['required'],
@@ -45,13 +44,9 @@ class ProductController extends Controller
         $product->sub_cate_id = $request->sub_category;
         $product->long_description = $request->long_description;
         $product->short_description = $request->short_description;
-        $product->quantity = $request->quantity;
-        $product->offer_start_date = $request->offer_start_date;
-        $product->offer_end_date = $request->offer_end_date;
         $product->product_type = $request->product_type;
         $product->status = $request->status;
         $product->save();
-
         return redirect()->route('admin.product.index')->with('success', 'Product created successfully');
     }
 
@@ -72,7 +67,6 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:products,name,' . $id],
-            'quantity' => ['required'],
             'long_description' => ['max:600'],
             'short_description' => ['string'],
             'category' => ['required'],
@@ -93,9 +87,6 @@ class ProductController extends Controller
         $product->sub_cate_id = $request->sub_category;
         $product->long_description = $request->long_description;
         $product->short_description = $request->short_description;
-        $product->quantity = $request->quantity;
-        $product->offer_start_date = $request->offer_start_date;
-        $product->offer_end_date = $request->offer_end_date;
         $product->product_type = $request->product_type;
         $product->status = $request->status;
         $product->save();

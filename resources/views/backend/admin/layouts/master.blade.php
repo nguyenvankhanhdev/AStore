@@ -7,9 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('backend/asset/img/image.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="/backend/asset/img/image.png">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>ADMIN</title>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
@@ -117,6 +118,7 @@
             }
         }
     </style>
+
 </head>
 
 <body id="page-top">
@@ -194,14 +196,17 @@
     <script src="/backend/asset/vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="/backend/asset/js/sb-admin-2.min.js"></script>
     <script src="/backend/asset/vendor/chart.js/Chart.min.js"></script>
-    <script src="/backend/asset/js/demo/chart-area-demo.js'"></script>
-    <script src="/backend/asset/js/demo/chart-pie-demo.js'"></script>
+    <script src="/backend/asset/js/demo/chart-area-demo.js"></script>
+    <script src="/backend/asset/js/demo/chart-pie-demo.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="/backend/asset/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- <script src="/backend/asset/summernote/summernote-bs4.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -289,6 +294,23 @@
             }
         });
     </script>
+<script>
+    $(document).ready(function() {
+        $('.summernote').summernote({
+            height: 300, // Chiều cao của editor
+            placeholder: 'Nhập nội dung ở đây...',
+            toolbar: [
+                // Các công cụ bạn muốn hiển thị trong thanh công cụ
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
+</script>
 
 
 

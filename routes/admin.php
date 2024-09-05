@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('product/get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
+
 Route::resource('product', ProductController::class);
 
 // ProductImageGallery
@@ -28,4 +29,6 @@ Route::resource('users', UserController::class);
 Route::resource('products-variant', ProductVariantController::class);
 
 Route::resource('variant-colors', VariantColorController::class);
+
+
 

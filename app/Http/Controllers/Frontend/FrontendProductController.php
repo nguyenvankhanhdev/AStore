@@ -8,13 +8,9 @@ use App\Models\Products;
 use App\Models\ProductVariant;
 use App\Models\SubCategories;
 use Illuminate\Http\Request;
-use App\Models\StorageProduct;
-use App\Models\ColorProduct;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\VariantColors;
+use Yajra\DataTables\Html\Options\Languages\Paginate;
 
-class ProductController extends Controller
+class FrontendProductController extends Controller
 {
     public function productsIndex(Request $request)
     {
@@ -72,9 +68,8 @@ class ProductController extends Controller
         // $categories = Categories::all();
         // return view('frontend.user.pages.product', compact('products', 'categories'));
 
-
         $products = Products::where('status', 1)
-            ->orderBy('id', 'ASC')
+            ->orderBy('id', 'DESC')
             ->paginate(10);
 
         return view('frontend.user.layouts.section_cate', compact('products'));
@@ -82,62 +77,44 @@ class ProductController extends Controller
 
     public function productCategories(Request $request)
     {
-        $products = collect();
-        $subcategories = collect();
-        $categories = null;
         if ($request->has('categories')) {
             $categories = Categories::where('slug', $request->categories)->firstOrFail();
-            $subcategories = SubCategories::where('cate_id', $categories->id)->get();
+            $subcategories= SubCategories::where( 'cate_id', $categories->id )->get();
             $products = Products::where([
                 'cate_id' => $categories->id,
                 'status' => 1,
-            ])->get();
-
-            foreach ($products as $product) {
-                $product->variants = ProductVariant::where('pro_id', $product->id)->get();
-                foreach ($product->variants as $variant) {
-                    $variant->storage = StorageProduct::find($variant->storage_id);
-                }
-            }
+            ])
+                ->paginate(5);
         }
-        return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
+        return view('frontend.user.categories.index', compact('products','categories','subcategories'));
+
+
     }
-
-    public function showProduct(string $slug, Request $request)
-    {
-        $product = Products::with(['productImages', 'variants.variantColors','ratings','category','subcategory'])->where([
-            'slug' => $slug,
-            'status' => 1
-        ])->first();
-
-        $selectedVariantId = $request->query('variant', $product->variants->first()->id);
-        $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
-
-        if (Auth::id() > 0) {
-            $user = User::find(Auth::id());
-            return view('frontend.user.home.product_details', compact('product', 'selectedVariantId', 'colors', 'user'));
-        }
-        return view('frontend.user.home.product_details', compact('product', 'selectedVariantId', 'colors'));
-    }
-
-
 
     public function productSubCategories(Request $request)
     {
         if ($request->has('subcategories')) {
-            $subcategory = SubCategories::where('slug', $request->subcategories)->first();
+            $subcategory= SubCategories::where( 'slug', $request->subcategories )->first();
             $categories = Categories::where('id', $subcategory->cate_id)->firstOrFail();
-            $subcategories = SubCategories::where('cate_id', $categories->id)->get();
+            $subcategories= SubCategories::where( 'cate_id', $categories->id )->get();
             $products = Products::where([
-                'sub_cate_id' => $subcategory->id,
-                'status' => 1,
-            ])
-                ->paginate(5);
+                            'sub_cate_id' => $subcategory->id,
+                            'status' => 1,
+                         ])
 
-            foreach ($products as $product) {
-                $product->variants = ProductVariant::where('pro_id', $product->id)->get();
-            };
+                ->paginate(5);
         }
-        return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
+        return view('frontend.user.categories.index', compact('products','categories','subcategories'));
+    }
+    public function showProduct(string $slug)
+    {
+        $product = Products::with(['productImages','variant'])->where([
+            'slug' => $slug,
+            'status' => 1
+        ])->firstOrFail();
+        $cate = Categories::where('id', $product->cate_id)->first();
+        $productvariant = ProductVariant::where('pro_id', $product->id)->get();
+
+        return view('frontend.user.home.product_details', compact('product', 'cate','productvariant'));
     }
 }

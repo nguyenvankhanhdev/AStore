@@ -142,7 +142,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="{{ asset('backend/asset/img/undraw_profile_4.svg') }}"
+                        <img class="rounded-circle" src=""
                             alt="...">
                         <div class="status-indicator bg-success"></div>
                     </div>

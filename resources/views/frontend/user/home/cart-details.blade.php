@@ -30,7 +30,7 @@
                                                 <label
                                                     class="ant-checkbox-wrapper ant-checkbox-wrapper-checked css-bvvl68 css-10ed4xt">
                                                     <span class="ant-checkbox css-10ed4xt ant-checkbox-checked">
-                                                        <input type="checkbox" class="ant-checkbox-input" value="" checked>
+                                                        <input type="checkbox" class="ant-checkbox-input" value="" >
                                                         <span class="ant-checkbox-inner"></span>
                                                     </span>
                                                 </label>
@@ -109,6 +109,7 @@
                                     @php
                                         if (Session::has('coupon')) {
                                             $coupon = Session::get('coupon');
+                                            echo $coupon['coupon_code'];
                                             $discount = $coupon['coupon_code'];
                                             $hasCoupon = true;
                                         } else {
@@ -321,9 +322,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="c-cart__full m-t-8"><input
-                                                            class="cs-input form-input-sm is-invalid" type="text"
-                                                            name="address" id="" placeholder="Nhập địa chỉ*">
+                                                    <div class="c-cart__full m-t-8"><input class="cs-input form-input-sm is-invalid" type="text"
+                                                            name="address" placeholder="Nhập địa chỉ*">
                                                         <div class="feedback error-general m-t-8">
                                                             <div class="stack"><span
                                                                     class="ic-minus-circled"></span>Thông tin bắt buộc
@@ -715,6 +715,7 @@
             filterDropdown('#search-ward', '#ward-list');
 
             var hasCoupon = @json($hasCoupon);
+
             document.addEventListener('DOMContentLoaded', function() {
                 if (hasCoupon) {
                     document.getElementById('coupon-badge').style.display = 'block';
@@ -818,36 +819,41 @@
                     var totalPrice = 0;
                     var discountAll = document.querySelectorAll('#discountAll');
                     var totalDiscount = 0;
-                    var checkboxes = document.querySelectorAll('.ant-checkbox-input'); // Lấy tất cả các checkbox
+                    var checkboxes = document.querySelectorAll('.ant-checkbox-input');
 
                     priceMainElements.forEach(function(priceElement, index) {
-                        // Kiểm tra xem checkbox có được chọn hay không
                         if (checkboxes[index].checked) {
                             var priceValue = priceElement.textContent.trim().replace(/\./g, '').replace('₫', '');
                             var quantity = quantityCart[index].value;
-                            var discountValue = discountAll[index].textContent.trim().replace(/\./g, '').replace('-', '').replace('₫', '');
-                            totalDiscount += discountValue * quantity;
                             totalPrice += parseInt(priceValue, 10) * quantity;
                         }
                     });
-
-                    discount.textContent = totalDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫';
-
                     amount.textContent = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫';
-
                     var totalPriceAfterDiscount = totalPrice - totalDiscount;
                     amountDiscount.textContent = totalPriceAfterDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫';
                 }
+
+
                 document.addEventListener('DOMContentLoaded', function() {
                     var checkboxes = document.querySelectorAll('.ant-checkbox-input');
+
                     checkboxes.forEach(function(checkbox, index) {
+                        // Khôi phục trạng thái từ localStorage
                         var savedState = localStorage.getItem('checkbox_' + index);
                         if (savedState !== null) {
                             checkbox.checked = savedState === 'true';
                         }
+
+                        // Lắng nghe sự kiện thay đổi trạng thái của checkbox
+                        checkbox.addEventListener('change', function() {
+                            localStorage.setItem('checkbox_' + index, checkbox.checked);
+                            updateCartTotal(); // Cập nhật lại tổng giá khi trạng thái thay đổi
+                        });
                     });
-                    updateCartTotal();
+
+                    updateCartTotal(); // Cập nhật tổng giá khi trang tải
                 });
+
 
                 document.querySelectorAll('.ant-checkbox-input').forEach(function(checkbox, index) {
                     checkbox.addEventListener('change', function() {
@@ -855,6 +861,7 @@
                         updateCartTotal();
                     });
                 });
+
                 $('#coupon_form').on('click', function(e) {
                     e.preventDefault();
                     let couponCode = $('#coupon_code').val();
@@ -867,13 +874,16 @@
                         success: function(data) {
                             if (data.status === 'error') {
                                 $('.text-inValid-success').hide();
-                                $('.text-inValid-failed').text(data.message).show();
+                                $('.text-inValid-failed').text('Áp dụng không thành công').show();
+                                window.location.reload();
                                 toastr.error(data.message);
+
                             } else if (data.status === 'success') {
                                 $('.text-inValid-failed').hide();
-                                $('.text-inValid-success').text('Áp dụng thành công giảm ' + data
-                                    .code).show();
+                                $('.text-inValid-success').text('Áp dụng thành công giảm ' + data.code).show();
+                                window.location.reload();
                                 toastr.success(data.message);
+
                             }
                         },
                         error: function(data) {
@@ -897,65 +907,110 @@
                         }
                     });
                 });
-                $("#checkout").on('click', function(e){
 
 
-                });
+
+
+                var province = '';
+                var districtId = '';
+                var ward = '';
+                var deliveryTime='';
 
                 $('.item-region').on('click', function(){
-                        var province =$(this).text();
-                        console.log(province);
-
+                    province= $(this).text();
                 });
 
                 $(document).on('click', '#district-list .region-district', function() {
-                    var districtId = $(this).text();
-                    console.log(districtId);
+                     districtId = $(this).text();
                 });
 
                 $(document).on('click', '#ward-list .region-ward', function() {
-                    var ward = $(this).text();
-                    console.log(ward);
+                     ward = $(this).text();
                 });
 
-
-                $('input[name="gender"]').change(function() {
-                    if ($(this).is(':checked')) {
-                    var gender = $(this).val();
-                    }
-                    console.log(gender);
-
+                $(document).on('click', '.dropdown-menu-wrapper a', function(e) {
+                    e.preventDefault();
+                    deliveryTime = $(this).find('span').text().trim();
+                    $(this).closest('.dropdown').find('.dropdown-button span').text(deliveryTime);
                 });
+                $("#checkout").on('click', function(e) {
+                    e.preventDefault();
 
-                $('input[name="firstname"]').change(function(){
-                    if(this==null){
+                    // Collect information
+                    var gender = $('input[name="gender"]:checked').val(); // Only the checked one
+                    var firstname = $('input[name="firstname"]').val();
+                    var phonenumber = $('input[name="phonenumber"]').val();
+                    var email = $('input[name="email"]').val();
+                    var address = $('input[name="address"]').val();
 
-                    }
-                    var firstname = $(this).val();
-                    console.log(firstname);
+                    // Log the collected information (for testing)
+                    console.log('Province:', province);
+                    console.log('District:', districtId);
+                    console.log('Ward:', ward);
+                    console.log('Gender:', gender);
+                    console.log('First Name:', firstname);
+                    console.log('Phone Number:', phonenumber);
+                    console.log('Email:', email);
+                    console.log('Address:', address);
+                    console.log('Delivery Time:', deliveryTime);
+                    console.log('Payment Method:', paymentMethod);
+
+                    // You can now send this data to your server or handle it as needed
                 });
-                $('input[name="phonenumber"]').change(function(){
-                    if(this==null){
+                // $('.item-region').on('click', function(){
+                //         var province =$(this).text();
+                //         console.log(province);
 
-                    }
-                    var phonenumber = $(this).val();
-                    console.log(phonenumber);
-                });
-                $('input[name="email"]').change(function(){
-                    if(this==null){
+                // });
 
-                    }
-                    var email = $(this).val();
-                    console.log(email);
-                });
-                $('input["address"]').change(function(){
-                    if(this==null){
+                // $(document).on('click', '#district-list .region-district', function() {
+                //     var districtId = $(this).text();
+                //     console.log(districtId);
+                // });
 
-                    }
-                    var address = $(this).val();
-                    console.log(address);
-                });
-            
+                // $(document).on('click', '#ward-list .region-ward', function() {
+                //     var ward = $(this).text();
+                //     console.log(ward);
+                // });
+
+                //$('input[name="gender"]').prop('checked', false);
+
+                // $('input[name="gender"]').on('click', function() {
+                //     var label = $(this).val();
+                //     console.log(label);
+                // });
+
+
+
+                // $('input[name="firstname"]').change(function(){
+                //     if(this==null){
+
+                //     }
+                //     var firstname = $(this).val();
+                //     console.log(firstname);
+                // });
+                // $('input[name="phonenumber"]').change(function(){
+                //     if(this==null){
+
+                //     }
+                //     var phonenumber = $(this).val();
+                //     console.log(phonenumber);
+                // });
+                // $('input[name="email"]').change(function(){
+                //     if(this==null){
+
+                //     }
+                //     var email = $(this).val();
+                //     console.log(email);
+                // });
+                // $('input[name="address"]').change(function(){
+                //     if(this==null){
+
+                //     }
+                //     var address = $(this).val();
+                //     console.log(address);
+                // });
+
 
             });
         </script>
