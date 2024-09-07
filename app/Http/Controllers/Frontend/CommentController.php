@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Products;
 use App\Models\Comments;
 use App\Models\CommentLike;
 
@@ -178,7 +177,7 @@ class CommentController extends Controller
                 $comment->cmt_likes = $comment->cmt_likes + 1;
                 $comment->save();
 
-                    // Tạo đối tượng CommentLike mới
+                // Tạo đối tượng CommentLike mới
                 $newLike = new CommentLike();
                 $newLike->cmt_id = $commentId;
                 $newLike->user_id = $userId;

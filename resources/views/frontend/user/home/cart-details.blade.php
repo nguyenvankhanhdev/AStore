@@ -100,27 +100,15 @@
                                             <p>Nhập voucher để áp dụng</p>
                                         </div>
                                         <div class="apply-btn m-l-8">
-                                            <a class="btn btn-link btn-sm" id="coupon_form"
-                                                href="{{ route('apply-coupon') }}">Áp dụng</a>
+                                            <a class="btn btn-link btn-sm" id="coupon_form" href="{{ route('apply-coupon') }}">Áp dụng</a>
                                         </div>
                                     </div>
                                     <p class="text-inValid-success m-t-8">Áp dụng thành công giảm 1.500.000₫ </p>
                                     <p class="text-inValid-failed m-t-8">Mã giảm giá không hợp lệ</p>
-                                    @php
-                                        if (Session::has('coupon')) {
-                                            $coupon = Session::get('coupon');
-                                            echo $coupon['coupon_code'];
-                                            $discount = $coupon['coupon_code'];
-                                            $hasCoupon = true;
-                                        } else {
-                                            $discount = 0;
-                                            $hasCoupon = false;
-                                        }
-                                    @endphp
                                     <div class="c-cart-badge m-t-8" id="coupon-badge"><a
                                             class="badge badge-grayscale badge-xxxs badge-xxs badge-close m-r-8 m-b-8"
                                             href="{{ route('remove-coupon') }}"><i
-                                                class="ic-tag m-r-4"></i><span>{{ $discount }}</span><span
+                                                class="ic-tag m-r-4"></i><span>{{ getCodeCoupon() }}</span><span
                                                 class="btn btn-icon-single btn-square btn-grayscale btn-xs"><i
                                                     class="ic-close f-s-ui-16"></i></span></a>
 
@@ -128,15 +116,14 @@
                                 </div>
                                 <div class="c-cart__total">
                                     <p class="text-normal"><span>Tổng tiền:</span><span class="total_price"
-                                            id="amount"></span></p>
-                                    <p class="text-normal"><span>Giảm:</span><span id="discount"></span></p>
+                                            id="amount">{{ number_format(getTotal(),0,",",".") }}đ</span></p>
+                                    <p class="text-normal"><span>Giảm:</span><span id="discount">- {{ number_format(getCartDiscount(),0,",",".") }}đ</span></p>
                                     {{-- {{ number_format($variant->offer_price * $cart->quantity, 0, ',', '.') }} --}}
                                     <p class="text--lg"><span class="text-size--lg">Cần thanh toán:</span><span
-                                            class="re-price f-w-500 f-s-p-16 re-red"></span></p>
+                                            class="re-price f-w-500 f-s-p-16 re-red">{{ number_format(getSubTotal(),0,",",".") }}đ</span></p>
                                 </div>
                             </div>
                         </div>
-
                         <div class="c-cart__group-customer p-x-24 p-t-16">
                             <div class="c-cart__title">Thông tin khách hàng</div>
                             <div class="c-cart__form__block m-t-8">
@@ -714,8 +701,6 @@
             filterDropdown('#search-district', '#district-list');
             filterDropdown('#search-ward', '#ward-list');
 
-            var hasCoupon = @json($hasCoupon);
-
             document.addEventListener('DOMContentLoaded', function() {
                 if (hasCoupon) {
                     document.getElementById('coupon-badge').style.display = 'block';
@@ -724,7 +709,6 @@
                 }
             });
             $(document).ready(function() {
-
                 $(document).on('click', '#province-list .item-region', function(e) {
                     e.preventDefault();
                     var provinceId = $(this).data('id');
@@ -809,31 +793,6 @@
                         }
                     });
                 }
-
-                function updateCartTotal() {
-                    var priceMainElements = document.querySelectorAll('#cs-price--main');
-                    var quantityCart = document.querySelectorAll('.cs-input-cart');
-                    var amount = document.getElementById('amount');
-                    var amountDiscount = document.querySelector('.re-red');
-                    var discount = document.getElementById('discount');
-                    var totalPrice = 0;
-                    var discountAll = document.querySelectorAll('#discountAll');
-                    var totalDiscount = 0;
-                    var checkboxes = document.querySelectorAll('.ant-checkbox-input');
-
-                    priceMainElements.forEach(function(priceElement, index) {
-                        if (checkboxes[index].checked) {
-                            var priceValue = priceElement.textContent.trim().replace(/\./g, '').replace('₫', '');
-                            var quantity = quantityCart[index].value;
-                            totalPrice += parseInt(priceValue, 10) * quantity;
-                        }
-                    });
-                    amount.textContent = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫';
-                    var totalPriceAfterDiscount = totalPrice - totalDiscount;
-                    amountDiscount.textContent = totalPriceAfterDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '₫';
-                }
-
-
                 document.addEventListener('DOMContentLoaded', function() {
                     var checkboxes = document.querySelectorAll('.ant-checkbox-input');
 
@@ -850,8 +809,6 @@
                             updateCartTotal(); // Cập nhật lại tổng giá khi trạng thái thay đổi
                         });
                     });
-
-                    updateCartTotal(); // Cập nhật tổng giá khi trang tải
                 });
 
 
@@ -867,30 +824,26 @@
                     let couponCode = $('#coupon_code').val();
                     $.ajax({
                         method: 'GET',
-                        url: "{{ route('apply-coupon') }}",
+                        url: '{{ route('apply-coupon') }}',
                         data: {
+                            _token: "{{ csrf_token() }}",
                             coupon_code: couponCode
                         },
                         success: function(data) {
                             if (data.status === 'error') {
-                                $('.text-inValid-success').hide();
-                                $('.text-inValid-failed').text('Áp dụng không thành công').show();
                                 window.location.reload();
                                 toastr.error(data.message);
-
                             } else if (data.status === 'success') {
-                                $('.text-inValid-failed').hide();
-                                $('.text-inValid-success').text('Áp dụng thành công giảm ' + data.code).show();
                                 window.location.reload();
                                 toastr.success(data.message);
-
                             }
                         },
                         error: function(data) {
-                            console.log(data);
+                            toastr.error('Có lỗi xảy ra');
                         }
                     });
                 });
+
                 $('.badge-close').on('click', function(e) {
                     e.preventDefault();
                     $.ajax({
@@ -898,8 +851,9 @@
                         url: "{{ route('remove-coupon') }}",
                         success: function(data) {
                             if (data.status === 'success') {
+                                window.location.reload();
                                 toastr.success(data.message);
-                                history.pushState(null, null, "{{ route('cart.index') }}");
+
                             }
                         },
                         error: function(data) {
@@ -907,18 +861,12 @@
                         }
                     });
                 });
-
-
-
-
-                var province = '';
-                var districtId = '';
-                var ward = '';
-                var deliveryTime='';
+                var province='', districtId='' , ward='' , deliveryTime='';
 
                 $('.item-region').on('click', function(){
                     province= $(this).text();
                 });
+
 
                 $(document).on('click', '#district-list .region-district', function() {
                      districtId = $(this).text();
@@ -954,63 +902,7 @@
                     console.log('Address:', address);
                     console.log('Delivery Time:', deliveryTime);
                     console.log('Payment Method:', paymentMethod);
-
-                    // You can now send this data to your server or handle it as needed
                 });
-                // $('.item-region').on('click', function(){
-                //         var province =$(this).text();
-                //         console.log(province);
-
-                // });
-
-                // $(document).on('click', '#district-list .region-district', function() {
-                //     var districtId = $(this).text();
-                //     console.log(districtId);
-                // });
-
-                // $(document).on('click', '#ward-list .region-ward', function() {
-                //     var ward = $(this).text();
-                //     console.log(ward);
-                // });
-
-                //$('input[name="gender"]').prop('checked', false);
-
-                // $('input[name="gender"]').on('click', function() {
-                //     var label = $(this).val();
-                //     console.log(label);
-                // });
-
-
-
-                // $('input[name="firstname"]').change(function(){
-                //     if(this==null){
-
-                //     }
-                //     var firstname = $(this).val();
-                //     console.log(firstname);
-                // });
-                // $('input[name="phonenumber"]').change(function(){
-                //     if(this==null){
-
-                //     }
-                //     var phonenumber = $(this).val();
-                //     console.log(phonenumber);
-                // });
-                // $('input[name="email"]').change(function(){
-                //     if(this==null){
-
-                //     }
-                //     var email = $(this).val();
-                //     console.log(email);
-                // });
-                // $('input[name="address"]').change(function(){
-                //     if(this==null){
-
-                //     }
-                //     var address = $(this).val();
-                //     console.log(address);
-                // });
-
 
             });
         </script>

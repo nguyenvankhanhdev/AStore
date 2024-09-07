@@ -58,6 +58,7 @@ Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updateQuantity');
 
 Route::get('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply-coupon');
+
 Route::get('remove-coupon', [CartController::class, 'removeCoupon'])->name('remove-coupon');
 
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
@@ -70,7 +71,9 @@ Route::post('comments/delete', [CommentController::class, 'destroy'])->name('com
 Route::post('comments/update', [CommentController::class, 'update'])->name('comments.update');
 Route::post('comments/likeComment', [CommentController::class, 'likeComment'])->name('comments.likeComment');
 
-
+// load lại tt giỏ hàng khi xóa discount
+Route::get('reloadCart', [CartController::class, 'reloadCartDiscount'])->name('reloadCart');
+Route::get('reloadCodeCoupon', [CartController::class, 'reloadCodeCoupon'])->name('reloadCodeCoupon');
 // thanh toán
 
 

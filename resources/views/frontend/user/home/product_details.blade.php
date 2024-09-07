@@ -1451,7 +1451,6 @@
                         method: 'POST',
                         data: {
                             cmt_id: commentId,
-
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(data) {

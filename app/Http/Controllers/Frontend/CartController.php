@@ -10,9 +10,6 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\Provinces;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ProductVariant;
-use App\Models\ColorProduct;
-use App\Models\StorageProduct;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Session;
 
@@ -102,7 +99,9 @@ class CartController extends Controller
     public function applyCoupon(Request $request)
     {
         if ($request->coupon_code === null) {
-            return response(['status' => 'error', 'message' => 'Coupon filed is required']);
+            //return response(['status' => 'error', 'message' => 'Coupon filed is required']);
+            toastr()->error('Vui lòng điền mã giảm giá!!.');
+            return redirect()->back();
         }
         $coupon = Coupon::where(['code' => $request->coupon_code, 'status' => 1])->first();
         if ($coupon === null) {
@@ -130,6 +129,9 @@ class CartController extends Controller
                 'discount' => $coupon->discount
             ]);
         }
+        $coupon->total_used += 1;
+        $coupon->quantity--;
+        $coupon->save();
         return response(['status' => 'success', 'message' => 'Áp dụng mã giảm giá thành công!']);
     }
     public function removeCoupon()
@@ -138,13 +140,12 @@ class CartController extends Controller
         return response(['status' => 'success', 'message' => 'Xóa mã giảm giá thành công!']);
     }
 
-
-    public function couponCalculation()
-    {
-        if (Session::has('coupon')) {
-            $coupon = Session::get('coupon');
-        }
+    public function reloadCartDiscount(){
+        return getCartDiscount();
+    }
+    public function reloadCodeCoupon(){
+        return getCodeCoupon();
     }
 
-    
+
 }
