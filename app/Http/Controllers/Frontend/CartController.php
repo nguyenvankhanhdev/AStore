@@ -142,7 +142,6 @@ class CartController extends Controller
 
     public function reloadCartDiscount(){
         return getCartDiscount();
-        rsr
     }
     public function reloadCodeCoupon(){
         return getCodeCoupon();
