@@ -1122,8 +1122,6 @@
             </div>
         </div>
         <div class="detail__bottom">
-
-
             <div class="detail__comments">
                 <div class="fpt-comment">
                     <div class="container">
@@ -1146,11 +1144,10 @@
                                         <input type="hidden" name="pro_id" value="{{ $product->id }}">
                                         <div class="flex flex-center-ver m-b-8">
                                             @if (Auth::check())
-                                                {
                                                 <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                     <strong>{{ $user->username }}</strong>
                                                 </div>
-                                                }
+
                                             @else
                                                 {
                                                 <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
@@ -1159,12 +1156,10 @@
                                                 }
                                             @endif
 
-                                            <a class="link link-xs link-icon"><span class="ic m-r-4">
-                                                    <i class="ic-edit ic-xs text-link"></i></span>Thay đổi</a>
+                                            {{-- <a class="link link-xs link-icon"><span class="ic m-r-4">
+                                                    <i class="ic-edit ic-xs text-link"></i></span>Thay đổi</a> --}}
                                         </div>
                                         <div class="form-group">
-
-
                                             <textarea name="content" class="form-input form-input-lg" rows="3"
                                             placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
                                             <button type="submit" class="btn btn-lg btn-primary"
@@ -1180,7 +1175,7 @@
 
                                 <div class="user-content">
                                     <div class="result">
-                                        <div class="text"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
+                                        <div class="text" style="color: #444b52;"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
                                             128GB”</div>
                                         <div class="auto">
                                             <div class="text">Sắp xếp theo</div>
@@ -1382,18 +1377,11 @@
     </div>
 @endsection
 
-
-
-
 @push('scripts')
     <script>
         var selectedColorId = @json($selectedColorId)
-
-
-
         document.addEventListener('DOMContentLoaded', function() {
             const variantSelector = document.getElementById('variant-selector');
-
             variantSelector.addEventListener('click', function(event) {
                 const clickedElement = event.target.closest('.item');
                 if (clickedElement) {
@@ -1406,8 +1394,6 @@
             });
         });
     </script>
-
-
     <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút chỉnh sửa (editcm)
@@ -1427,13 +1413,6 @@
             });
         });
     </script>
-
-
-
-
-    {{-- Khởi tạo các sự kiện để phân trang không bị lỗi  --}}
-
-
     <script>
         $(document).ready(function() {
 
@@ -1614,7 +1593,6 @@
                 });
             }
 
-            // Hàm để reload trang và giữ vị trí cuộn
             // Hàm để reload trang và giữ vị trí cuộn
         function reloadPage() {
             var scrollPosition = $(window).scrollTop();

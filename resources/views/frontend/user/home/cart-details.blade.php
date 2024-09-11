@@ -17,9 +17,7 @@
                 <div class="card">
                     <div class="card-title">Có {{ count($carts) }} sản phẩm trong giỏ hàng<span class="c-modal--close js-modal__close"></span>
                     </div>
-
                     <div class="card-body">
-
                         <div class="c-cart__block">
                             @foreach ($carts as $cart)
                                 <div class="c-cart__product" data-productid="{{ $cart->product->id }}" data-variantcolorid= {{ $cart->variant_color->id }}>
