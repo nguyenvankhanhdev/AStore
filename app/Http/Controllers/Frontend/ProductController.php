@@ -70,7 +70,6 @@ class ProductController extends Controller
             'slug' => $slug,
             'status' => 1
         ])->first();
-
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
         if (Auth::id() > 0) {
