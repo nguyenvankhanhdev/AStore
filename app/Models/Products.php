@@ -43,6 +43,9 @@ class Products extends Model
         return $this->hasMany(Comments::class,'pro_id');
     }
 
+    public function orderDetails(){
+        return $this->hasMany(OrderDetails::class,'pro_id');
+    }
 
 
 

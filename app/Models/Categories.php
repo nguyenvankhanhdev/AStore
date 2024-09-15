@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categories extends Model
 {
-
     use HasFactory;
-
     public function subCategories()
     {
         return $this->hasMany(SubCategories::class, 'cate_id');
+    }
+    public function products()
+    {
+        return $this->hasMany(Products::class, 'cate_id');
     }
 }
