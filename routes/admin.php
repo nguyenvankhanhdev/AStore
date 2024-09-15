@@ -7,9 +7,8 @@ use App\Http\Controllers\Backend\ProductImagesController;
 use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Route;
-
-
 
 Route::get('product/get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
@@ -18,6 +17,7 @@ Route::resource('product', ProductController::class);
 
 // ProductImageGallery
 Route::resource('products-image-gallery', ProductImagesController::class);
+Route::resource('dashboard', DashboardController::class);
 
 // caterogies
 Route::resource('categories', CategoriesController::class);

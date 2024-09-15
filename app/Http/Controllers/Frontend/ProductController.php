@@ -53,24 +53,16 @@ class ProductController extends Controller
                 'cate_id' => $categories->id,
                 'status' => 1,
             ])->get();
-
-            foreach ($products as $product) {
-                $product->variants = ProductVariant::where('pro_id', $product->id)->get();
-                foreach ($product->variants as $variant) {
-                    $variant->storage = StorageProduct::find($variant->storage_id);
-                }
-            }
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
     }
 
     public function showProduct(string $slug, Request $request)
     {
-        $product = Products::with(['productImages', 'variants.variantColors', 'ratings', 'category', 'subcategory'])->where([
+        $product = Products::with(relations: ['productImages', 'variants.variantColors', 'ratings', 'category', 'subcategory'])->where(column: [
             'slug' => $slug,
             'status' => 1
         ])->first();
-
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
         if (Auth::id() > 0) {
@@ -119,5 +111,22 @@ class ProductController extends Controller
             };
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
+    }
+    public function getPrice(Request $request)
+    {
+        $variant = $request->variant_id;
+        $color = $request->color_id;
+        $price = VariantColors::where([
+            'color_id' => $color,
+            'variant_id' => $variant
+        ])->first();
+        $storage = ProductVariant::where([
+            'id' => $variant
+        ])->first();
+        return response()->json(['price' => $price, 'storage' => $storage]);
+
+
+
+
     }
 }

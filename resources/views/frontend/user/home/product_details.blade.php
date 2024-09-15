@@ -71,29 +71,28 @@
                                 </div>
                                 <div class="npi-border">
                                     <div class="price">
-                                        <div class="boxprice"><span class="text text-primary">27.990.000₫</span>
-                                            <strike class="text-promo p-l-8 f-s-p-24 f-w-400"> 30.500.000đ</strike>
+                                        <div class="boxprice"><span class="text text-primary price-sale"></span>
+                                            <strike class="text-promo p-l-8 f-s-p-24 f-w-400"></strike>
                                             <span class="txtpricemarketPhanTram badge badge-danger persent-special"
                                                 style="">-12%</span>
                                         </div>
                                     </div>
                                     <div id="variant-selector" class="types js-select">
                                         @foreach ($product->variants as $index => $variant)
-                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}"
-                                                data-id="{{ $variant->id }}">
+                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}" data-id="{{ $variant->id }}">
                                                 <div class="radio">
-                                                    <input
-                                                        type="radio"{{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
+                                                    <input type="radio" {{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
                                                     <label>{{ $variant->storage->GB }}</label>
                                                 </div>
                                                 @if ($variant->variantColors->first())
-                                                    <p>{{ number_format($variant->variantColors->first()->price - $variant->variantColors->first()->offer_price, 0, ',', '.') }}₫</p>
+                                                    <p class="price-variant">{{ number_format($variant->variantColors->first()->price - $variant->variantColors->first()->offer_price, 0, ',', '.') }}₫</p>
                                                 @else
                                                     <p>Không có giá</p>
                                                 @endif
                                             </a>
                                         @endforeach
                                     </div>
+
                                     <div class="colors js-select">
                                         @foreach ($colors as $index => $color)
                                             @php
@@ -103,53 +102,53 @@
                                                     $selectedColorId = $name->id;
                                                 }
                                             @endphp
-                                            @switch($name->color)
+                                            @switch($name->name)
                                                 @case('Xanh da trời')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#51b3f0"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Đen')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#232A31"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Đỏ')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FB1634"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Xanh lá')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#77ff82"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Trắng')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FAF7F2"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Vàng hồng')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#ffe194"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
                                                 @case('Xám')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#B2C5D6"></span>
-                                                        <div>{{ $name->color }}</div>
+                                                        <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
 
@@ -1122,8 +1121,6 @@
             </div>
         </div>
         <div class="detail__bottom">
-
-
             <div class="detail__comments">
                 <div class="fpt-comment">
                     <div class="container">
@@ -1146,11 +1143,10 @@
                                         <input type="hidden" name="pro_id" value="{{ $product->id }}">
                                         <div class="flex flex-center-ver m-b-8">
                                             @if (Auth::check())
-                                                {
                                                 <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                     <strong>{{ $user->username }}</strong>
                                                 </div>
-                                                }
+
                                             @else
                                                 {
                                                 <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
@@ -1159,12 +1155,10 @@
                                                 }
                                             @endif
 
-                                            <a class="link link-xs link-icon"><span class="ic m-r-4">
-                                                    <i class="ic-edit ic-xs text-link"></i></span>Thay đổi</a>
+                                            {{-- <a class="link link-xs link-icon"><span class="ic m-r-4">
+                                                    <i class="ic-edit ic-xs text-link"></i></span>Thay đổi</a> --}}
                                         </div>
                                         <div class="form-group">
-
-
                                             <textarea name="content" class="form-input form-input-lg" rows="3"
                                             placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
                                             <button type="submit" class="btn btn-lg btn-primary"
@@ -1180,7 +1174,7 @@
 
                                 <div class="user-content">
                                     <div class="result">
-                                        <div class="text"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
+                                        <div class="text" style="color: #444b52;"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
                                             128GB”</div>
                                         <div class="auto">
                                             <div class="text">Sắp xếp theo</div>
@@ -1350,18 +1344,11 @@
                                                                             aria-controls="comment-info">GỬI BÌNH LUẬN</a>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
-
-
                                                         </div>
-
                                                     @endforeach
                                                 @endforeach
                                             @endif
-
-
-
                                         </div>
                                     </div>
 
@@ -1382,30 +1369,66 @@
     </div>
 @endsection
 
-
-
-
 @push('scripts')
     <script>
-        var selectedColorId = @json($selectedColorId)
 
+        $(document).ready(function() {
+        
+            var selectedColorId = @json($selectedColorId);
+            $('#variant-selector').on('click', '.item', function() {
+                const variantId = $(this).data('id');
+                const url = new URL(window.location.href);
+                url.searchParams.set('variant', variantId);
+                window.location.href = url.toString();
+            });
+            $('.colors .item').on('click', function() {
+                var colorId = $(this).data('color-id');
+                let variantId = $('#variant-selector .item.active').data('id');
+                $('.colors .item').removeClass('active');
+                $(this).addClass('active');
+                $.ajax({
+                    url: '{{ route('getPrice') }}',
+                    method: 'GET',
+                    data: {
+                        color_id: colorId,
+                        variant_id: variantId
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
 
+                        if (data.price) {
+                            const price = data.price.price;
+                            const offerPrice = data.price.offer_price;
+                            const discountPercent = (offerPrice / price) * 100;
+                            const priceSale = price - offerPrice;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const variantSelector = document.getElementById('variant-selector');
+                            // Cập nhật giá bán và giá gốc
+                            $('#variant-selector .item.active .price-variant').text(priceSale.toLocaleString('vi-VN') + ' đ');
+                            $('.boxprice .price-sale').text(priceSale.toLocaleString('vi-VN') + ' đ');
+                            $('.boxprice strike').text(price.toLocaleString('vi-VN') + ' đ');
 
-            variantSelector.addEventListener('click', function(event) {
-                const clickedElement = event.target.closest('.item');
-                if (clickedElement) {
-                    const variantId = clickedElement.getAttribute('data-id');
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('variant', variantId);
-                    window.location.href = url.toString();
-
-                }
+                            // Cập nhật phần trăm giảm giá
+                            if (discountPercent > 0) {
+                                $('.boxprice .persent-special').text('-' + Math.round(discountPercent) + '%');
+                            } else {
+                                $('.boxprice .persent-special').text('0%');
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Đã xảy ra lỗi: ' + error);
+                    }
+                });
             });
         });
+
+
+
+
+
     </script>
+
 
 
     <script>
@@ -1427,13 +1450,6 @@
             });
         });
     </script>
-
-
-
-
-    {{-- Khởi tạo các sự kiện để phân trang không bị lỗi  --}}
-
-
     <script>
         $(document).ready(function() {
 
@@ -1614,7 +1630,6 @@
                 });
             }
 
-            // Hàm để reload trang và giữ vị trí cuộn
             // Hàm để reload trang và giữ vị trí cuộn
         function reloadPage() {
             var scrollPosition = $(window).scrollTop();

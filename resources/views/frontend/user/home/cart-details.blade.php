@@ -17,9 +17,7 @@
                 <div class="card">
                     <div class="card-title">Có {{ count($carts) }} sản phẩm trong giỏ hàng<span class="c-modal--close js-modal__close"></span>
                     </div>
-
                     <div class="card-body">
-
                         <div class="c-cart__block">
                             @foreach ($carts as $cart)
                                 <div class="c-cart__product" data-productid="{{ $cart->product->id }}" data-variantcolorid= {{ $cart->variant_color->id }}>
@@ -30,7 +28,7 @@
                                                 <label
                                                     class="ant-checkbox-wrapper ant-checkbox-wrapper-checked css-bvvl68 css-10ed4xt">
                                                     <span class="ant-checkbox css-10ed4xt ant-checkbox-checked">
-                                                        <input type="checkbox" class="ant-checkbox-input" value="" >
+                                                        <input type="checkbox" class="ant-checkbox-input" data-price="{{ ($cart->variant_color->price -  $cart->variant_color->offer_price) * $cart->quantity }}" >
                                                         <span class="ant-checkbox-inner"></span>
                                                     </span>
                                                 </label>
@@ -46,7 +44,7 @@
                                                 </h3>
                                                 <div class="product-cart__line" style="display: flex"></div>
                                                 <p style="margin-left: 2px">Màu sắc:
-                                                    <span>{{ $cart->variant_color->color->color }}</span><i
+                                                    <span>{{ $cart->variant_color->color->name }}</span><i
                                                         class="ic-check ic-sm m-l-8"></i>
                                                 </p>
                                                 <div class="product-cart__line" style="display: flex"></div>
@@ -116,11 +114,11 @@
                                 </div>
                                 <div class="c-cart__total">
                                     <p class="text-normal"><span>Tổng tiền:</span><span class="total_price"
-                                            id="amount">{{ number_format(getTotal(),0,",",".") }}đ</span></p>
-                                    <p class="text-normal"><span>Giảm:</span><span id="discount">- {{ number_format(getCartDiscount(),0,",",".") }}đ</span></p>
+                                            id="amount"></span></p>
+                                    <p class="text-normal"><span>Giảm:</span><span id="discount"></span></p>
                                     {{-- {{ number_format($variant->offer_price * $cart->quantity, 0, ',', '.') }} --}}
                                     <p class="text--lg"><span class="text-size--lg">Cần thanh toán:</span><span
-                                            class="re-price f-w-500 f-s-p-16 re-red">{{ number_format(getSubTotal(),0,",",".") }}đ</span></p>
+                                            class="re-price f-w-500 f-s-p-16 re-red"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -680,6 +678,7 @@
                                 </svg><span class="spinner-text">Đang cập nhật giỏ hàng...</span></div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -709,6 +708,13 @@
                 }
             });
             $(document).ready(function() {
+
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
                 $(document).on('click', '#province-list .item-region', function(e) {
                     e.preventDefault();
                     var provinceId = $(this).data('id');
@@ -759,65 +765,73 @@
                     wrapperItem.removeClass('open');
                 });
 
-                $('.js--btn-minus').on('click', function() {
-                    var input = $(this).siblings('.cs-input-cart');
-                    var currentValue = parseInt(input.val());
-                    if (currentValue > 1) {
-                        input.val(currentValue - 1);
-                        updateCartQuantity($(this).data('cart-id'), currentValue - 1);
+                $(document).ready(function () {
+
+                var checkboxes = $('.ant-checkbox-input');
+                var totalPriceElement = $('.re-price'); // Phần hiển thị tổng tiền cần thanh toán
+                var discountElement = $('#discount'); // Phần hiển thị giảm giá
+                var totalAmountElement = $('#amount'); // Phần hiển thị tổng tiền
+
+                // Hàm để tính và cập nhật tổng tiền
+                function updateTotal() {
+                    var totalPrice = 0;
+                    var totalDiscount = 0;
+                    checkboxes.each(function () {
+                        if ($(this).is(':checked')) {
+                            var price = parseFloat($(this).data('price')) || 0;
+                            var quantity = parseInt($('#quantity-' + $(this).closest('.c-cart__product').data('productid')).val()) || 1;
+                            totalPrice += price * quantity;
+
+                            // Nếu có giảm giá thì tính cả giảm giá
+                            var discount = parseFloat($(this).data('discount')) || 0;
+                            totalDiscount += discount * quantity;
+                        }
+                    });
+
+                    // Cập nhật tổng tiền và giảm giá
+                    totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + '₫');
+                    totalAmountElement.text(totalPrice.toLocaleString('vi-VN') + '₫');
+                    discountElement.text('-' + totalDiscount.toLocaleString('vi-VN') + '₫');
+                }
+
+                // Thêm sự kiện 'change' cho tất cả các checkbox
+                checkboxes.on('change', function () {
+                    updateTotal();
+                });
+
+                // Sự kiện cho nút cộng
+                $('.js--btn-plus').on('click', function () {
+                    var cartId = $(this).data('cart-id');
+                    var quantityInput = $('#quantity-' + cartId);
+                    var currentQuantity = parseInt(quantityInput.val()) || 1;
+                    quantityInput.val(currentQuantity + 1);
+                    updateTotal();
+                });
+
+                // Sự kiện cho nút trừ
+                $('.js--btn-minus').on('click', function () {
+                    var cartId = $(this).data('cart-id');
+                    var quantityInput = $('#quantity-' + cartId);
+                    var currentQuantity = parseInt(quantityInput.val()) || 1;
+                    if (currentQuantity > 1) {
+                        quantityInput.val(currentQuantity - 1);
                     }
-                });
-
-                $('.js--btn-plus').on('click', function() {
-                    var input = $(this).siblings('.cs-input-cart');
-                    var currentValue = parseInt(input.val());
-                    input.val(currentValue + 1);
-                    updateCartQuantity($(this).data('cart-id'), currentValue + 1);
-                });
-
-                function updateCartQuantity(cartId, quantity) {
-                    $.ajax({
-                        url: '{{ route('cart.updateQuantity') }}',
+                    $ajax({
+                        url:"{{ route('cart.updateQuantity')  }}",
                         method: 'POST',
                         data: {
-                            _token: '{{ csrf_token() }}',
-                            cart_id: cartId,
-                            quantity: quantity
+                            _token: "{{ csrf_token() }}",
+                            cartId: cartId,
+                            quantity: currentQuantity
                         },
-                        success: function(response) {
-                           updateCartTotal();
-
-                        },
-                        error: function(xhr) {
-                            console.error(xhr.responseText);
-                        }
-                    });
-                }
-                document.addEventListener('DOMContentLoaded', function() {
-                    var checkboxes = document.querySelectorAll('.ant-checkbox-input');
-
-                    checkboxes.forEach(function(checkbox, index) {
-                        // Khôi phục trạng thái từ localStorage
-                        var savedState = localStorage.getItem('checkbox_' + index);
-                        if (savedState !== null) {
-                            checkbox.checked = savedState === 'true';
-                        }
-
-                        // Lắng nghe sự kiện thay đổi trạng thái của checkbox
-                        checkbox.addEventListener('change', function() {
-                            localStorage.setItem('checkbox_' + index, checkbox.checked);
-                            updateCartTotal(); // Cập nhật lại tổng giá khi trạng thái thay đổi
-                        });
-                    });
+                    })
+                    updateTotal();
                 });
 
+                // Gọi hàm cập nhật ngay khi trang được tải
+                updateTotal();
+            });
 
-                document.querySelectorAll('.ant-checkbox-input').forEach(function(checkbox, index) {
-                    checkbox.addEventListener('change', function() {
-                        localStorage.setItem('checkbox_' + index, checkbox.checked);
-                        updateCartTotal();
-                    });
-                });
 
                 $('#coupon_form').on('click', function(e) {
                     e.preventDefault();

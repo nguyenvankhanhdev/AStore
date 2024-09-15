@@ -61,7 +61,7 @@ class CartController extends Controller
             $cartItem->quantity += $quantity;
             $cartItem->save();
         } else {
-            Carts::create([
+            Carts::create(attributes: [
                 'quantity' => $quantity,
                 'variant_color_id' => $variant_color_id,
                 'user_id' => auth()->id(),
@@ -96,6 +96,8 @@ class CartController extends Controller
         }
         return response(['status' => 'success', 'message' => 'Cập nhật giỏ hàng thành công!']);
     }
+
+    
     public function applyCoupon(Request $request)
     {
         if ($request->coupon_code === null) {
@@ -140,12 +142,31 @@ class CartController extends Controller
         return response(['status' => 'success', 'message' => 'Xóa mã giảm giá thành công!']);
     }
 
+
     public function reloadCartDiscount(){
-        return getCartDiscount();
+        if(Session::has('coupon')){
+            $coupon = Session::get('coupon');
+            $subTotal = getTotal();
+            if($coupon['discount_type'] === 'amount'){
+                return $coupon['discount'];
+            }elseif($coupon['discount_type'] === 'percent'){
+                $discount = ($subTotal * $coupon['discount'] / 100);
+                return $discount;
+
+            }
+        }
+        else{
+            return 0;
+        }
     }
     public function reloadCodeCoupon(){
-        return getCodeCoupon();
-        rfgrjfgrtj;
+        if(Session::has('coupon')){
+            $coupon = Session::get('coupon');
+            return $coupon['coupon_code'];
+        }
+        else{
+            return null;
+        }
     }
 
 

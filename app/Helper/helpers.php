@@ -2,6 +2,16 @@
 use App\Models\Carts;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+function setActive(array $route){
+    if(is_array($route)){
+        foreach($route as $r){
+            if(request()->routeIs($r)){
+                return 'active';
+            }
+        }
+    }
+}
+
 
 function getTotal(){
     $total = 0;

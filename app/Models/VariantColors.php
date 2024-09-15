@@ -20,5 +20,9 @@ class VariantColors extends Model
     public function carts(){
         return $this->hasMany(Carts::class,'variant_color_id');
     }
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetails::class,'variant_color_id');
+    }
 
 }
