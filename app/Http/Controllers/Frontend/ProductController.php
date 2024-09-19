@@ -9,75 +9,16 @@ use App\Models\ProductVariant;
 use App\Models\SubCategories;
 use Illuminate\Http\Request;
 use App\Models\StorageProduct;
-use App\Models\ColorProduct;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\VariantColors;
 use App\Models\Comments;
+use function App\Helper\getTotal;
+
 class ProductController extends Controller
 {
     public function productsIndex(Request $request)
     {
-        // if ($request->has('categories')) {
-        //     $categories = Categories::where('slug', $request->categories)->firstOrFail();
-        //     $products = Products::withAvg('rating', 'point')->withCount('rating')
-        //         ->with(['product_variant', 'categories', 'productImages'])
-        //         ->where([
-        //             'cate_id' => $categories->id,
-        //             'status' => 1,
-        //         ])
-        //         ->when($request->has('range'), function ($query) use ($request) {
-        //             $price = explode(';', $request->range);
-        //             $from = $price[0];
-        //             $to = $price[1];
-        //             return $query->where('price', '>=', $from)->where('price', '<=', $to);
-        //         })
-        //         ->paginate(5);
-        // } elseif ($request->has('subcategory')) {
-        //     $categories = SubCategories::where('slug', $request->subcategory)->firstOrFail();
-        //     $products = Products::withAvg('rating', 'point')->withCount('rating')
-        //         ->with(['product_variant', 'categories', 'productImages'])
-        //         ->where([
-        //             'sub_cate_id' => $categories->id,
-        //             'status' => 1,
-        //         ])
-        //         ->when($request->has('range'), function ($query) use ($request) {
-        //             $price = explode(';', $request->range);
-        //             $from = $price[0];
-        //             $to = $price[1];
-
-        //             return $query->where('price', '>=', $from)->where('price', '<=', $to);
-        //         })
-        //         ->paginate(12);
-        // }
-        // elseif($request->has('search')){
-        //     $products = Products::withAvg('rating', 'point')->withCount('rating')
-        //     ->with(['product_variant', 'category', 'productImages'])
-        //     ->where(['status' => 1])
-        //     ->where(function ($query) use ($request){
-        //         $query->where('name', 'like', '%'.$request->search.'%')
-        //             ->orWhere('long_description', 'like', '%'.$request->search.'%')
-        //             ->orWhereHas('categories', function($query) use ($request){
-        //                 $query->where('name', 'like', '%'.$request->search.'%')
-        //                     ->orWhere('long_description', 'like', '%'.$request->search.'%');
-        //             });
-        //     })
-        //     ->paginate(12);
-        // }
-        // else{
-        //     $products = Products::withAvg('rating', 'point')->withCount('rating')
-        //     ->with(['product_variant', 'category', 'productImages'])
-        //     ->where(['status' => 1])->orderBy('id', 'DESC')->paginate(12);
-        // }
-        // $categories = Categories::all();
-        // return view('frontend.user.pages.product', compact('products', 'categories'));
-
-
-        // $products = Products::where('status', 1)
-        //     ->orderBy('id', 'ASC')
-        //     ->paginate(10);
-
-        // return view('frontend.user.layouts.section_cate', compact('products'));
         $productsNewArrival = Products::where('status', 1)
             ->where('product_type', 'new_arrival')
             ->orderBy('id', 'DESC')
@@ -97,9 +38,6 @@ class ProductController extends Controller
             ->where('product_type', 'best_product')
             ->orderBy('id', 'DESC')
             ->paginate(6);
-
-
-
         return view('frontend.user.layouts.section_cate', compact('productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest'));
     }
 
@@ -115,54 +53,43 @@ class ProductController extends Controller
                 'cate_id' => $categories->id,
                 'status' => 1,
             ])->get();
-
-            foreach ($products as $product) {
-                $product->variants = ProductVariant::where('pro_id', $product->id)->get();
-                foreach ($product->variants as $variant) {
-                    $variant->storage = StorageProduct::find($variant->storage_id);
-                }
-            }
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
     }
 
     public function showProduct(string $slug, Request $request)
     {
-        $product = Products::with(['productImages', 'variants.variantColors','ratings','category','subcategory'])->where([
+        $product = Products::with(relations: ['productImages', 'variants.variantColors', 'ratings', 'category', 'subcategory'])->where(column: [
             'slug' => $slug,
             'status' => 1
         ])->first();
-
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
         if (Auth::id() > 0) {
             $user = User::find(Auth::id());
             $comment = Comments::with('user')
                 ->where([
-                    'pro_id'=> $product->id,
-                    'status'=> 0,
+                    'pro_id' => $product->id,
+                    'status' => 0,
                     'cmt_id' => 0
-                    ])
+                ])
                 ->orderBy('created_at', 'desc')
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
-                //->get();
-            return view('frontend.user.home.product_details', compact('product', 'user', 'comment','selectedVariantId', 'colors'));
+            //->get();
+            return view('frontend.user.home.product_details', compact('product', 'user', 'comment', 'selectedVariantId', 'colors'));
         } else {
             $comment = Comments::with('user')
-            ->where([
-                'pro_id'=> $product->id,
-                'status'=> 0,
-                'cmt_id' => 0
+                ->where([
+                    'pro_id' => $product->id,
+                    'status' => 0,
+                    'cmt_id' => 0
 
                 ])
                 ->orderBy('created_at', 'desc')
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
-                //->get();
+            //->get();
             return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors'));
         }
-
-
-
     }
 
 
@@ -184,5 +111,22 @@ class ProductController extends Controller
             };
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
+    }
+    public function getPrice(Request $request)
+    {
+        $variant = $request->variant_id;
+        $color = $request->color_id;
+        $price = VariantColors::where([
+            'color_id' => $color,
+            'variant_id' => $variant
+        ])->first();
+        $storage = ProductVariant::where([
+            'id' => $variant
+        ])->first();
+        return response()->json(['price' => $price, 'storage' => $storage]);
+
+
+
+
     }
 }

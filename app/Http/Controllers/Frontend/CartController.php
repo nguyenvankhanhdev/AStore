@@ -10,9 +10,6 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\Provinces;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ProductVariant;
-use App\Models\ColorProduct;
-use App\Models\StorageProduct;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Session;
 
@@ -64,7 +61,7 @@ class CartController extends Controller
             $cartItem->quantity += $quantity;
             $cartItem->save();
         } else {
-            Carts::create([
+            Carts::create(attributes: [
                 'quantity' => $quantity,
                 'variant_color_id' => $variant_color_id,
                 'user_id' => auth()->id(),
@@ -99,10 +96,14 @@ class CartController extends Controller
         }
         return response(['status' => 'success', 'message' => 'Cập nhật giỏ hàng thành công!']);
     }
+
+    
     public function applyCoupon(Request $request)
     {
         if ($request->coupon_code === null) {
-            return response(['status' => 'error', 'message' => 'Coupon filed is required']);
+            //return response(['status' => 'error', 'message' => 'Coupon filed is required']);
+            toastr()->error('Vui lòng điền mã giảm giá!!.');
+            return redirect()->back();
         }
         $coupon = Coupon::where(['code' => $request->coupon_code, 'status' => 1])->first();
         if ($coupon === null) {
@@ -130,6 +131,9 @@ class CartController extends Controller
                 'discount' => $coupon->discount
             ]);
         }
+        $coupon->total_used += 1;
+        $coupon->quantity--;
+        $coupon->save();
         return response(['status' => 'success', 'message' => 'Áp dụng mã giảm giá thành công!']);
     }
     public function removeCoupon()
@@ -139,12 +143,31 @@ class CartController extends Controller
     }
 
 
-    public function couponCalculation()
-    {
-        if (Session::has('coupon')) {
+    public function reloadCartDiscount(){
+        if(Session::has('coupon')){
             $coupon = Session::get('coupon');
+            $subTotal = getTotal();
+            if($coupon['discount_type'] === 'amount'){
+                return $coupon['discount'];
+            }elseif($coupon['discount_type'] === 'percent'){
+                $discount = ($subTotal * $coupon['discount'] / 100);
+                return $discount;
+
+            }
+        }
+        else{
+            return 0;
+        }
+    }
+    public function reloadCodeCoupon(){
+        if(Session::has('coupon')){
+            $coupon = Session::get('coupon');
+            return $coupon['coupon_code'];
+        }
+        else{
+            return null;
         }
     }
 
-    
+
 }
