@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticateSessionController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Frontend\UserDashboardController;
-use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Frontend\CommentController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckOutController;
@@ -88,13 +88,10 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
-// thanh toán paypal
-    Route::post('paypal/payment',[PaymentController::class,'payment'])->name('paypal.payment');
-    Route::get('paypal/success',[PaymentController::class,'success'])->name('paypal.success');
-    Route::get('paypal/cancel',[PaymentController::class,'cancel'])->name('paypal.cancel');
-// thanh toán COD
-Route::post('payment/cod', [CheckOutController::class, 'checkOut'])->name('cod.store');
-
-
-
+    // thanh toán paypal
+    Route::post('paypal/payment', [PaymentController::class, 'payment'])->name('paypal.payment');
+    Route::get('paypal/success', [PaymentController::class, 'success'])->name('paypal.success');
+    Route::get('paypal/cancel', [PaymentController::class, 'cancel'])->name('paypal.cancel');
+    // thanh toán COD
+    Route::post('payment/cod', [CheckOutController::class, 'checkOut'])->name('cod.store');
 });

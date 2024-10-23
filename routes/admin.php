@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Backend\CategoriesController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('product/get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
@@ -32,3 +34,7 @@ Route::resource('products-variant', ProductVariantController::class);
 Route::resource('variant-colors', VariantColorController::class);
 
 Route::resource('comment', CommentController::class);
+
+
+
+Route::get('/reports', [ReportController::class, 'index'])->name('reports');

@@ -17,6 +17,7 @@
                                 <h4>Todays Orders</h4>
                             </div>
                             <div class="card-body">
+
                             </div>
                         </div>
                     </div>
@@ -51,7 +52,7 @@
                                 <h4>Total Orders</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -213,7 +214,7 @@
                                 <h4>Total Categories</h4>
                             </div>
                             <div class="card-body">
-                             
+                             {{$categoryCount ?? 0 }}
                             </div>
                         </div>
                     </div>
@@ -286,7 +287,7 @@
                              <h4>Total Users</h4>
                          </div>
                          <div class="card-body">
-                             {{-- {{$totalUsers}} --}}
+                           {{ $userCount ?? 0  }}
                          </div>
                      </div>
                  </div>
