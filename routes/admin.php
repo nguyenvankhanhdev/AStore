@@ -38,3 +38,4 @@ Route::resource('comment', CommentController::class);
 
 
 Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+Route::get('reports/byCategory', [ReportController::class, 'reportByCategory'])->name('reports.byCategory');

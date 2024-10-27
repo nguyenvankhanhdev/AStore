@@ -6,13 +6,12 @@
 
 @section('content')
     <div class="container my-5">
-        <!-- Title of the report -->
         <h1 class="text-center mb-4" style="font-weight: bold; font-size: 1.75rem;">
-            Báo cáo bán hàng từ {{ Carbon::parse($fromDate)->format('d/m/Y') }} đến {{ Carbon::parse($toDate)->format('d/m/Y') }}
+            Báo cáo theo danh mục sản phẩm từ {{ Carbon::parse($fromDate)->format('d/m/Y') }} đến {{ Carbon::parse($toDate)->format('d/m/Y') }}
         </h1>
 
         <!-- Date selection form -->
-        <form method="GET" action="{{ route('admin.reports') }}" class="d-flex justify-content-center align-items-center mb-4">
+        <form method="GET" action="{{ route('admin.reports.byCategory') }}" class="d-flex justify-content-center align-items-center mb-4">
             <div class="form-group mr-3">
                 <label for="from_date" class="mr-2">Từ ngày:</label>
                 <input type="date" id="from_date" name="from_date" class="form-control" required value="{{ Carbon::parse($fromDate)->format('Y-m-d') }}">
@@ -26,22 +25,16 @@
             <button type="submit" class="btn btn-primary px-4 py-2" style="font-size: 1rem;">Lấy báo cáo</button>
         </form>
 
-        <!-- Check if there is report data -->
         @if(count($report) > 0)
-            <!-- Display the report table -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover table-striped">
                             <thead class="thead-light">
                                 <tr class="text-center">
-                                    <th>Tên sản phẩm</th>
+                                    <th>Tên danh mục</th>
                                     <th>Số lượng nhập</th>
                                     <th>Số lượng đã bán</th>
-                                    <th>Giá nhập</th>
-                                    <th>Giá bán</th>
-                                    <th>Giá hàng tồn kho</th>
-                                    <th>Tồn kho</th>
                                     <th>Tổng doanh thu</th>
                                     <th>Lợi nhuận</th>
                                 </tr>
@@ -49,15 +42,11 @@
                             <tbody>
                                 @foreach($report as $data)
                                     <tr class="text-center">
-                                        <td>{{ $data['product_name'] }} - {{ $data['variant_name'] }} GB - {{ $data['color_name'] }}</td>
+                                        <td>{{ $data['category_name'] }}</td>
                                         <td>{{ $data['quantity_imported'] }}</td>
                                         <td>{{ $data['total_sold'] }}</td>
-                                        <td>{{ number_format($data['warehouse_price'], 0, '', ',') }} đ</td>
-                                        <td>{{ number_format($data['offer_price'], 0, '', ',') }} ₫</td>
-                                        <td>{{ number_format($data['inventory_value'], 0, '', ',') }} ₫</td>
-                                        <td>{{ $data['stock'] }}</td>
-                                        <td>{{ number_format($data['revenue'], 0, '', ',') }} đ</td>
-                                        <td>{{ number_format($data['profit'], 0, '', ',') }} đ</td>
+                                        <td>{{ number_format($data['revenue'], 2) }} $</td>
+                                        <td>{{ number_format($data['profit'], 2) }} $</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -75,7 +64,6 @@
                             <tr class="text-center">
                                 <th>Tổng số lượng nhập</th>
                                 <th>Tổng số lượng đã bán</th>
-                                <th>Tổng giá trị hàng tồn kho</th>
                                 <th>Tổng doanh thu</th>
                                 <th>Tổng lợi nhuận</th>
                             </tr>
@@ -84,16 +72,14 @@
                             <tr class="text-center">
                                 <td>{{ $totalQuantityImported }}</td>
                                 <td>{{ $totalSold }}</td>
-                                <td>{{ number_format($totalInventoryValue, 0, '', ',') }} ₫</td>
-                                <td>{{ number_format($totalRevenue, 0, '', ',') }} đ</td>
-                                <td>{{ number_format($totalProfit, 0, '', ',') }} đ</td>
+                                <td>{{ number_format($totalRevenue, 2) }} $</td>
+                                <td>{{ number_format($totalProfit, 2) }} $</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         @else
-            <!-- Display a message if no data is available -->
             <p class="text-center text-muted">Không có dữ liệu bán hàng trong khoảng thời gian này.</p>
         @endif
     </div>
