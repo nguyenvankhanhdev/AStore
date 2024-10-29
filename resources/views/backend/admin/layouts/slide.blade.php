@@ -83,6 +83,16 @@
         </div>
     </li>
 
+     {{-- Tin nhắn --}}
+     <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('admin.message.index') }}"
+            aria-expanded="true" >
+            <i>&#9993;</i>
+            <span>Message</span>
+        </a>
+
+    </li>
+
 
     <!-- Nav Item - Utilities Collapse Menu -->
     {{-- <li class="nav-item">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\ProductImagesController;
 use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
+use App\Http\Controllers\Backend\MessageController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,3 +33,9 @@ Route::resource('variant-colors', VariantColorController::class);
 
 // Comments
 Route::resource('comment', CommentController::class);
+
+Route::get('message',[ MessageController::class, 'index' ])->name('message.index');
+
+Route::post('message',[ MessageController::class, 'store' ])->name('message.store');
+
+Route::get('message/newMessage',[ MessageController::class, 'getNewMessages' ])->name('message.getNewMessages');

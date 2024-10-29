@@ -1387,7 +1387,7 @@
 
 @push('scripts')
     <script>
-        var selectedColorId = @json($selectedColorId)
+        var selectedColorId = @json($selectedColorId);
 
 
 

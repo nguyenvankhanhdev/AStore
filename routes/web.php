@@ -7,9 +7,10 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Frontend\CommentController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckOutController;
+
 use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\PaymentController;
-
+use App\Http\Controllers\Frontend\MessageController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -47,6 +48,7 @@ Route::get('/', [ProductController::class, 'productsIndex'])->name('products.ind
 Route::get('index', [ProductController::class, 'productsIndex'])->name('products.index');
 Route::get('category', [ProductController::class, 'productCategories'])->name('products.category');
 
+
 //details
 Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 
@@ -64,6 +66,7 @@ Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.dest
 
 Route::resource('comments', CommentController::class);
 
+
 Route::resource('comments', CommentController::class);
 Route::post('comments/change-status', [CommentController::class, 'changeStatus'])->name('comments.change-status');
 Route::post('comments/delete', [CommentController::class, 'destroy'])->name('comments.destroy');
@@ -78,8 +81,12 @@ Route::post('comments/likeComment', [CommentController::class, 'likeComment'])->
 
 
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
+    Route::post('message/sentmessage', [MessageController::class,'store'])->name('message.store');
+    Route::get('message/getNewMessages', [MessageController::class,'getNewMessages'])->name('message.getNewMessages');
 
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('message', [MessageController::class,'index'])->name('message.index');
 
 // thanh toán paypal
     Route::post('paypal/payment',[PaymentController::class,'payment'])->name('paypal.payment');

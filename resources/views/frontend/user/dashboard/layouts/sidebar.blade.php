@@ -5,10 +5,10 @@
     </span>
     <a href="javascript:;" class="dash_logo"><img src="" alt="logo" class="img-fluid"></a>
     <ul class="dashboard_link">
-        <li><a class="" href=""><i
+        <li><a class="" href="{{ route('user.dashboard') }}"><i
                     class="fas fa-tachometer"></i>Dashboard</a></li>
 
-        <li><a class="" href=""><i
+        <li><a class="" href="{{ route('user.message.index') }}"><i
                     class="fas fa-tachometer"></i>Messages</a></li>
 
         <li><a class="" href="{{ url('/') }}"><i class="fas fa-home"></i>Go To Home Page</a></li>
@@ -22,7 +22,7 @@
                     class="far fa-user"></i> My Profile</a></li>
         <li><a class="" href=""><i
                     class="fal fa-gift-card"></i> Addresses</a></li>
-       
+
         <li>
 
             <form method="POST" action="{{ route('auth.logout') }}">

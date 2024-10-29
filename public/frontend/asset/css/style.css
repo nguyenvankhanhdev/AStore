@@ -11,6 +11,84 @@ body {
   background: #f5f6f7;
 }
 
+/* css message */
+.chat-container {
+    width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-height: 560px;
+
+    overflow-y: auto;
+}
+.message {
+    display: flex;
+    margin-bottom: 10px;
+}
+.message .content {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.message.you {
+    justify-content: flex-end;
+}
+.message.you .content {
+    background-color: #dcf8c6;
+    text-align: right;
+}
+.message.other .content {
+    background-color: #f1f1f1;
+}
+.message-time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+/*end css message */
+/* CSS for input and button */
+.input-container {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: #f9f9f9;
+    position: sticky;
+    bottom: 0;
+}
+.input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+.input-container button {
+    background-color: #0b93f6;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+.input-container button:hover {
+    background-color: #0a7edb;
+}
+.input-container button i {
+    font-size: 18px;
+}
+/*end css message */
+
+
 ul,
 ol {
   list-style: none;
