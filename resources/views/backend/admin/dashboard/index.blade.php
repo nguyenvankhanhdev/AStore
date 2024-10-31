@@ -17,7 +17,7 @@
                                 <h4>Todays Orders</h4>
                             </div>
                             <div class="card-body">
-
+                                {{ $todaysOrders }}
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                                 <h4>Total Orders</h4>
                             </div>
                             <div class="card-body">
-
+                                {{ $totalOrders }}
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                                 <h4>Total Pending Orders</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                                 <h4>Todays Earnings</h4>
                             </div>
                             <div class="card-body">
-                               
+                             {{ number_format($dailyProfit) }}đ
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                                 <h4>This Month Earnings</h4>
                             </div>
                             <div class="card-body">
-                         
+                                 {{ number_format($monthlyProfit) }}đ
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                 <h4>This Years Earnings</h4>
                             </div>
                             <div class="card-body">
-                               
+                                {{ number_format($yearlyProfit) }}đ
                             </div>
                         </div>
                     </div>

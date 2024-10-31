@@ -28,14 +28,14 @@
             </div>
         </form>
 
- <!-- Report type selection -->
- <div class="text-center mb-4">
-    <label for="report_type" class="form-label">Chọn loại báo cáo:</label>
-    <select id="report_type" class="form-select d-inline w-auto" onchange="window.location.href=this.value">
-        <option value="{{ route('admin.reports') }}" {{ request()->routeIs('admin.reports') ? 'selected' : '' }}>Doanh thu tất cả sản phẩm</option>
-        <option value="{{ route('admin.reports.byCategory') }}" {{ request()->routeIs('admin.reports.byCategory') ? 'selected' : '' }}>Doanh thu theo danh mục</option>
-    </select>
-</div>
+        <!-- Report type selection -->
+        <div class="text-center mb-4">
+            <label for="report_type" class="form-label">Chọn loại báo cáo:</label>
+            <select id="report_type" class="form-select d-inline w-auto" onchange="window.location.href=this.value">
+                <option value="{{ route('admin.reports') }}" {{ request()->routeIs('admin.reports') ? 'selected' : '' }}>Doanh thu tất cả sản phẩm</option>
+                <option value="{{ route('admin.reports.byCategory') }}" {{ request()->routeIs('admin.reports.byCategory') ? 'selected' : '' }}>Doanh thu theo danh mục</option>
+            </select>
+        </div>
 
         <!-- Check if there is report data -->
         @if(count($report) > 0)
@@ -87,8 +87,8 @@
                             <tr>
                                 <td>{{ $totalQuantityImported }}</td>
                                 <td>{{ $totalSold }}</td>
-                                <td>{{ number_format($totalRevenue, 2) }} $</td>
-                                <td>{{ number_format($totalProfit, 2) }} $</td>
+                                <td>{{ number_format($totalRevenue, 2) }} đ</td>
+                                <td>{{ number_format($totalProfit, 2) }} đ</td>
                             </tr>
                         </tbody>
                     </table>

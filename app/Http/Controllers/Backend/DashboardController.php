@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\Order;
+use App\Models\Orders;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -17,10 +19,48 @@ class DashboardController extends Controller
     {
         $userCount = User::count();
         $categoryCount = Categories::count();
+        $totalOrders = Orders::count();
+        $todaysOrders = Orders::whereDate('created_at', Carbon::today())->count();
 
+        // Lấy đơn hàng trong ngày
+        $todaysOrdersData = Orders::whereDate('created_at', Carbon::today())
+            ->where('status', 'delivered')
+            ->get();
 
-        // Pass the user count to the view
-        return view('backend.admin.dashboard.index', compact('userCount', 'categoryCount'));
+        // Tính lợi nhuận trong PHP
+        $dailyProfit = $todaysOrdersData->sum(function ($order) {
+            return $order->total_amount - $order->cost_price;
+        });
+
+        // Lấy đơn hàng trong tháng
+        $monthlyOrdersData = Orders::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('status', 'delivered')
+            ->get();
+
+        $monthlyProfit = $monthlyOrdersData->sum(function ($order) {
+            return $order->total_amount - $order->cost_price;
+        });
+
+        // Lấy đơn hàng trong năm
+        $yearlyOrdersData = Orders::whereYear('created_at', Carbon::now()->year)
+            ->where('status', 'delivered')
+            ->get();
+
+        $yearlyProfit = $yearlyOrdersData->sum(function ($order) {
+            return $order->total_amount - $order->cost_price;
+        });
+
+        // Truyền dữ liệu vào view
+        return view('backend.admin.dashboard.index', compact(
+            'userCount',
+            'categoryCount',
+            'totalOrders',
+            'todaysOrders',
+            'dailyProfit',
+            'monthlyProfit',
+            'yearlyProfit'
+        ));
     }
 
     /**

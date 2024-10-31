@@ -11,6 +11,7 @@ use App\Models\ProductVariant;
 use App\Models\VariantColors;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -33,13 +34,14 @@ class ReportController extends Controller
             ->groupBy('variant_color_id')
             ->get();
 
-        $report = $productsSold->map(function ($product) {
-            // Find variant color by variant_color_id from order_details
-            $variantColor = VariantColors::with('color', 'variant')->find($product->variant_color_id);
+        $report = $productsSold->map(function ($product) use ($fromDate, $toDate) {
+            $variantColor = VariantColors::with('color', 'variant.storage')->find($product->variant_color_id);
 
             if (!$variantColor) {
                 return [
                     'product_name' => 'Unknown product',
+                    'variant_name' => 'N/A',
+                    'color_name' => 'N/A',
                     'total_sold' => $product->total_sold,
                     'stock' => 0,
                     'revenue' => 0,
@@ -58,6 +60,8 @@ class ReportController extends Controller
             if (!$productModel) {
                 return [
                     'product_name' => 'Unknown product',
+                    'variant_name' => 'N/A',
+                    'color_name' => 'N/A',
                     'total_sold' => $product->total_sold,
                     'stock' => 0,
                     'revenue' => 0,
@@ -71,15 +75,39 @@ class ReportController extends Controller
 
             // Extract product details including warehouse price and offer price
             $productName = $productModel->name;
-            $variantName = $productVariant->GB;
+            $variantName = $productVariant->storage->GB;
             $colorName = $variantColor->color->name;
-            $quantityImported = $variantColor->quantity; // Số lượng nhập
-            $warehousePrice = $variantColor->warehouse_price; // Giá nhập kho
-            $offerPrice = $variantColor->offer_price; // Giá bán
-            $totalSold = $product->total_sold; // Số lượng đã bán
-            $remainingStock = $quantityImported - $totalSold; // Số lượng tồn kho
 
-            // Calculate profit based on quantity sold
+            // Tính tồn kho từ các tháng trước
+            $previousStock = WarehouseDetails::where('variant_color_id', $variantColor->id)
+                ->whereHas('warehouse', function ($query) use ($fromDate) {
+                    $query->whereDate('import_date', '<', $fromDate);
+                })
+                ->sum('quantity') - OrderDetails::where('variant_color_id', $variantColor->id)
+                ->whereDate('created_at', '<', $fromDate)
+                ->sum('quantity');
+
+            // Lấy số lượng nhập kho trong tháng hiện tại
+            $newImports = WarehouseDetails::where('variant_color_id', $variantColor->id)
+                ->whereHas('warehouse', function ($query) use ($fromDate, $toDate) {
+                    $query->whereBetween('import_date', [$fromDate, $toDate]);
+                })
+                ->sum('quantity');
+
+            // Tính số lượng tồn kho cuối cùng sau khi bán hàng trong tháng
+            $totalSold = $product->total_sold;
+            $remainingStock = $previousStock + $newImports - $totalSold;
+
+            // Lấy giá nhập kho trung bình
+            $warehousePrice = WarehouseDetails::where('variant_color_id', $variantColor->id)
+                ->whereHas('warehouse', function ($query) use ($toDate) {
+                    $query->whereDate('import_date', '<=', $toDate);
+                })
+                ->avg('warehouse_price');
+
+            $offerPrice = $variantColor->offer_price;
+
+            // Tính lợi nhuận và giá trị tồn kho
             $profit = ($offerPrice * $totalSold) - ($warehousePrice * $totalSold);
 
             // Calculate inventory value (remaining stock * warehouse price)
@@ -90,13 +118,14 @@ class ReportController extends Controller
                 'variant_name' => $variantName,
                 'color_name' => $colorName,
                 'total_sold' => $totalSold,
-                'quantity_imported' => $quantityImported,
+                'quantity_imported' => $newImports,
                 'stock' => $remainingStock,
                 'revenue' => $totalSold * $offerPrice, // Revenue from sold items
                 'profit' => $profit, // Profit from sold items
                 'inventory_value' => $inventoryValue, // Inventory value of remaining stock
                 'warehouse_price' => $warehousePrice,
                 'offer_price' => $offerPrice,
+                'new_imports' => $newImports,
             ];
         });
 
@@ -119,6 +148,10 @@ class ReportController extends Controller
         ));
     }
 
+
+
+
+
     public function reportByCategory(Request $request)
     {
         $fromDate = $request->input('from_date');
@@ -132,14 +165,17 @@ class ReportController extends Controller
             $toDate = Carbon::parse($toDate)->format('Y-m-d');
         }
 
+        // Lấy danh sách các danh mục đã có sản phẩm bán trong khoảng thời gian
         $categoriesSold = OrderDetails::with('variantColors.variant.product.category')
-            ->whereBetween('order_details.created_at', [$fromDate, $toDate])
+            ->whereDate('order_details.created_at', '>=', $fromDate)
+            ->whereDate('order_details.created_at', '<=', $toDate)
             ->selectRaw('products.cate_id as category_id, SUM(order_details.quantity) as total_sold, SUM(order_details.total_price) as total_revenue')
             ->join('variant_colors', 'order_details.variant_color_id', '=', 'variant_colors.id')
             ->join('product_variants', 'variant_colors.variant_id', '=', 'product_variants.id')
             ->join('products', 'product_variants.pro_id', '=', 'products.id')
             ->groupBy('products.cate_id')
             ->get();
+
 
         // Tính toán doanh thu và lợi nhuận cho từng danh mục
         $report = $categoriesSold->map(function ($categoryData) {
@@ -155,12 +191,15 @@ class ReportController extends Controller
                 ];
             }
 
-            // Tính tổng chi phí của tất cả sản phẩm trong danh mục
+            // Tính tổng chi phí của tất cả sản phẩm đã bán trong danh mục
             $productsInCategory = Products::where('cate_id', $category->id)->get();
-            $totalCost = $productsInCategory->sum(function ($product) {
-                $totalSoldQuantity = OrderDetails::whereHas('variantColors.variant.product', function ($query) use ($product) {
-                    $query->where('products.id', $product->id);
-                })->sum('quantity');
+            $totalCost = $productsInCategory->sum(function ($product) use ($categoryData) {
+                // Lấy tổng số lượng bán của từng sản phẩm trong khoảng thời gian
+                $totalSoldQuantity = OrderDetails::where('variant_color_id', $categoryData->variant_color_id)
+                    ->whereHas('variantColors.variant.product', function ($query) use ($product) {
+                        $query->where('products.id', $product->id);
+                    })
+                    ->sum('quantity');
 
                 return $product->cost_price * $totalSoldQuantity;
             });
