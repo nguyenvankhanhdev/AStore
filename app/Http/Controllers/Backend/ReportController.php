@@ -9,6 +9,7 @@ use App\Models\Orders;
 use App\Models\Products;
 use App\Models\ProductVariant;
 use App\Models\VariantColors;
+use App\Models\WarehouseDetails;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -28,8 +29,10 @@ class ReportController extends Controller
             $toDate = Carbon::parse($toDate)->format('Y-m-d');
         }
 
+        // Lấy sản phẩm đã bán trong khoảng thời gian đó
         $productsSold = OrderDetails::with('variantColors.variant.product')
-            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->whereDate('created_at', '>=', $fromDate)
+            ->whereDate('created_at', '<=', $toDate)
             ->selectRaw('variant_color_id, SUM(quantity) as total_sold, SUM(total_price) as total_revenue')
             ->groupBy('variant_color_id')
             ->get();
@@ -50,10 +53,10 @@ class ReportController extends Controller
                     'warehouse_price' => 0,
                     'offer_price' => 0,
                     'inventory_value' => 0,
+                    'new_imports' => 0,
                 ];
             }
 
-            // Get product details
             $productVariant = $variantColor->variant;
             $productModel = Products::find($productVariant->pro_id);
 
@@ -70,10 +73,10 @@ class ReportController extends Controller
                     'warehouse_price' => 0,
                     'offer_price' => 0,
                     'inventory_value' => 0,
+                    'new_imports' => 0,
                 ];
             }
 
-            // Extract product details including warehouse price and offer price
             $productName = $productModel->name;
             $variantName = $productVariant->storage->GB;
             $colorName = $variantColor->color->name;
@@ -109,8 +112,6 @@ class ReportController extends Controller
 
             // Tính lợi nhuận và giá trị tồn kho
             $profit = ($offerPrice * $totalSold) - ($warehousePrice * $totalSold);
-
-            // Calculate inventory value (remaining stock * warehouse price)
             $inventoryValue = $remainingStock * $warehousePrice;
 
             return [
@@ -120,22 +121,23 @@ class ReportController extends Controller
                 'total_sold' => $totalSold,
                 'quantity_imported' => $newImports,
                 'stock' => $remainingStock,
-                'revenue' => $totalSold * $offerPrice, // Revenue from sold items
-                'profit' => $profit, // Profit from sold items
-                'inventory_value' => $inventoryValue, // Inventory value of remaining stock
+                'revenue' => $totalSold * $offerPrice,
+                'profit' => $profit,
+                'inventory_value' => $inventoryValue,
                 'warehouse_price' => $warehousePrice,
                 'offer_price' => $offerPrice,
                 'new_imports' => $newImports,
             ];
         });
 
+        // Tính tổng các giá trị cho toàn bộ báo cáo
         $totalQuantityImported = $report->sum('quantity_imported');
         $totalSold = $report->sum('total_sold');
         $totalInventoryValue = $report->sum('inventory_value');
         $totalRevenue = $report->sum('revenue');
         $totalProfit = $report->sum('profit');
 
-
+        // Trả dữ liệu về view
         return view('backend.admin.reports.index', compact(
             'report',
             'totalQuantityImported',
@@ -147,6 +149,7 @@ class ReportController extends Controller
             'toDate'
         ));
     }
+
 
 
 
