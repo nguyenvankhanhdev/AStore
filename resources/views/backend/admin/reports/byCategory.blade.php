@@ -6,12 +6,12 @@
 
 @section('content')
     <div class="container my-5 p-4 bg-light rounded shadow-sm">
-        <!-- Title of the report -->
+        <!-- Tiêu đề báo cáo -->
         <h2 class="text-center mb-4" style="font-weight: bold; color: #2c3e50;">
             Báo cáo theo danh mục sản phẩm từ {{ Carbon::parse($fromDate)->format('d/m/Y') }} đến {{ Carbon::parse($toDate)->format('d/m/Y') }}
         </h2>
 
-        <!-- Date selection form -->
+        <!-- Form chọn ngày -->
         <form method="GET" action="{{ route('admin.reports.byCategory') }}" class="row justify-content-center align-items-center mb-4 g-3">
             <div class="col-md-3">
                 <label for="from_date" class="form-label">Từ ngày:</label>
@@ -28,7 +28,7 @@
             </div>
         </form>
 
-        <!-- Report type selection -->
+        <!-- Lựa chọn loại báo cáo -->
         <div class="text-center mb-4">
             <label for="report_type" class="form-label">Chọn loại báo cáo:</label>
             <select id="report_type" class="form-select d-inline w-auto" onchange="window.location.href=this.value">
@@ -37,9 +37,8 @@
             </select>
         </div>
 
-        <!-- Check if there is report data -->
+        <!-- Hiển thị báo cáo -->
         @if(count($report) > 0)
-            <!-- Display the category report table -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <h5 class="text-center mb-4" style="font-weight: bold; color: #34495e;">Báo Cáo Theo Danh Mục</h5>
@@ -60,8 +59,8 @@
                                         <td>{{ $data['category_name'] }}</td>
                                         <td>{{ $data['quantity_imported'] }}</td>
                                         <td>{{ $data['total_sold'] }}</td>
-                                        <td>{{ number_format($data['revenue']) }} đ</td>
-                                        <td>{{ number_format($data['profit']) }} đ</td>
+                                        <td>{{ number_format($data['revenue'], 0, ',', '.') }} đ</td>
+                                        <td>{{ number_format($data['profit'], 0, ',', '.') }} đ</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -70,7 +69,7 @@
                 </div>
             </div>
 
-            <!-- Summary Table Below the Main Report Table -->
+            <!-- Bảng tổng quan -->
             <div class="card shadow-sm mt-4">
                 <div class="card-body">
                     <h5 class="text-center mb-4" style="font-weight: bold; color: #34495e;">Tổng Quan</h5>
@@ -87,15 +86,15 @@
                             <tr>
                                 <td>{{ $totalQuantityImported }}</td>
                                 <td>{{ $totalSold }}</td>
-                                <td>{{ number_format($totalRevenue, 2) }} đ</td>
-                                <td>{{ number_format($totalProfit, 2) }} đ</td>
+                                <td>{{ number_format($totalRevenue, 0, ',', '.') }} đ</td>
+                                <td>{{ number_format($totalProfit, 0, ',', '.') }} đ</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         @else
-            <!-- No Data Message -->
+            <!-- Thông báo không có dữ liệu -->
             <p class="text-center text-muted my-4">Không có dữ liệu bán hàng trong khoảng thời gian này.</p>
         @endif
     </div>

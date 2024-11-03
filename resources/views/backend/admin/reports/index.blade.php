@@ -51,7 +51,8 @@
                                     <th class="fw-bold">Số lượng nhập</th>
                                     <th class="fw-bold">Số lượng đã bán</th>
                                     <th class="fw-bold">Giá nhập</th>
-                                    <th class="fw-bold">Giá bán</th>
+                                    <th class="fw-bold">Giá gốc</th>
+                                    <th class="fw-bold">Giá sau giảm</th>
                                     <th class="fw-bold">Giá hàng tồn kho</th>
                                     <th class="fw-bold">Tồn kho</th>
                                     <th class="fw-bold">Tổng doanh thu</th>
@@ -67,7 +68,7 @@
                                             </div>
                                             <ul style="list-style: none; padding: 0; margin: 5px 0 0;">
                                                 <li style="font-size: 0.9em; color: #34495e;">
-                                                    {{ $data['variant_name'] }}GB
+                                                    {{ $data['variant_name'] }}
                                                 </li>
                                                 <li style="font-size: 0.9em; color: #34495e;">
                                                     {{ $data['color_name'] }}
@@ -82,12 +83,13 @@
 
                                         <td>{{ $data['quantity_imported'] }}</td>
                                         <td>{{ $data['total_sold'] }}</td>
-                                        <td>{{ number_format($data['warehouse_price'], 0, '', ',') }}đ</td>
-                                        <td>{{ number_format($data['offer_price'], 0, '', ',') }}₫</td>
+                                        <td>{{ number_format($data['warehouse_price'], 0, '', ',') }}₫</td>
+                                        <td>{{ number_format($data['price'], 0, '', ',') }}₫</td>
+                                        <td>{{ number_format($data['price'] - $data['offer_price'], 0, '', ',') }}₫</td>
                                         <td>{{ number_format($data['inventory_value'], 0, '', ',') }}₫</td>
                                         <td>{{ $data['stock'] }}</td>
-                                        <td>{{ number_format($data['revenue'], 0, '', ',') }}đ</td>
-                                        <td>{{ number_format($data['profit'], 0, '', ',') }}đ</td>
+                                        <td>{{ number_format($data['revenue'], 0, '', ',') }}₫</td>
+                                        <td>{{ number_format($data['profit'], 0, '', ',') }}₫</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -114,9 +116,9 @@
                             <tr>
                                 <td>{{ $totalQuantityImported }}</td>
                                 <td>{{ $totalSold }}</td>
-                                <td>{{ number_format($totalInventoryValue, 0, '', ',') }} ₫</td>
-                                <td>{{ number_format($totalRevenue, 0, '', ',') }} đ</td>
-                                <td>{{ number_format($totalProfit, 0, '', ',') }} đ</td>
+                                <td>{{ number_format($totalInventoryValue, 0, '', ',') }}₫</td>
+                                <td>{{ number_format($totalRevenue, 0, '', ',') }}₫</td>
+                                <td>{{ number_format($totalProfit, 0, '', ',') }}₫</td>
                             </tr>
                         </tbody>
                     </table>
