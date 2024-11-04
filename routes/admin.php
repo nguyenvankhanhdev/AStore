@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Backend\CategoriesController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\DashboardController;
+
+use App\Http\Controllers\Backend\ReportController;
 
 use App\Http\Controllers\Backend\PaymentSettingController;
 use App\Http\Controllers\Backend\PaypalSettingController;
@@ -43,6 +46,10 @@ Route::resource('variant-colors', VariantColorController::class);
 Route::resource('comment', CommentController::class);
 
 
+
+Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+Route::get('reports/byCategory', [ReportController::class, 'reportByCategory'])->name('reports.byCategory');
+
 Route::get('payment-settings', [PaymentSettingController::class, 'index'])->name('payment-settings.index');
 Route::resource('paypal-setting', PaypalSettingController::class);
 
@@ -55,4 +62,5 @@ Route::post('message/changeStatus',[ MessageController::class, 'changeStatus' ])
 Route::get('message/newMessage',[ MessageController::class, 'getNewMessages' ])->name('message.getNewMessages');
 Route::get('message/takeCountUnseenMessage',[ MessageController::class, 'takeCountUnseenMessage' ])->name('message.takeCountUnseenMessage');
 Route::post('message/takeNewUserMessage',[ MessageController::class, 'takeNewUserMessage' ])->name('message.takeNewUserMessage');
+
 

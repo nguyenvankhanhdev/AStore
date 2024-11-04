@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticateSessionController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Frontend\UserDashboardController;
+use App\Http\Controllers\Backend\DashboardController;
 
 use App\Http\Controllers\Frontend\CommentController;
 use App\Http\Controllers\Frontend\CartController;
@@ -103,6 +104,8 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::post('zalo-pay-callback', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');
 
     Route::get('message', [MessageController::class,'index'])->name('message.index');
+
+
 
 // thanh toán paypal
     Route::post('paypal/payment',[PaymentController::class,'payment'])->name('paypal.payment');

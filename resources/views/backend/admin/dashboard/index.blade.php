@@ -17,6 +17,7 @@
                                 <h4>Todays Orders</h4>
                             </div>
                             <div class="card-body">
+                                {{ $todaysOrders }}
                             </div>
                         </div>
                     </div>
@@ -51,6 +52,9 @@
                                 <h4>Total Orders</h4>
                             </div>
                             <div class="card-body">
+
+                                {{ $totalOrders }}
+
 
                             </div>
                         </div>
@@ -121,7 +125,7 @@
                                 <h4>Todays Earnings</h4>
                             </div>
                             <div class="card-body">
-
+                             {{ number_format($dailyProfit) }}đ
                             </div>
                         </div>
                     </div>
@@ -139,6 +143,7 @@
                                 <h4>This Month Earnings</h4>
                             </div>
                             <div class="card-body">
+                                 {{ number_format($monthlyProfit) }}đ
 
                             </div>
                         </div>
@@ -157,6 +162,7 @@
                                 <h4>This Years Earnings</h4>
                             </div>
                             <div class="card-body">
+                                {{ number_format($yearlyProfit) }}đ
 
                             </div>
                         </div>
@@ -212,6 +218,7 @@
                                 <h4>Total Categories</h4>
                             </div>
                             <div class="card-body">
+                             {{$categoryCount ?? 0 }}
 
                             </div>
                         </div>
@@ -285,7 +292,7 @@
                              <h4>Total Users</h4>
                          </div>
                          <div class="card-body">
-                             {{-- {{$totalUsers}} --}}
+                           {{ $userCount ?? 0  }}
                          </div>
                      </div>
                  </div>

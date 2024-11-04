@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Orders extends Model
 {
     use HasFactory;
-    public function users(){
-        return $this->belongsTo(User::class,'user_id');
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
-    public function orderDetails(){
-        return $this->hasMany(OrderDetails::class,'order_id');
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetails::class, 'order_id');
     }
 }
