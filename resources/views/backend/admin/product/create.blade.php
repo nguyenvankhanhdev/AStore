@@ -44,32 +44,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Offer Start Date</label>
-                                    <input type="text" class="form-control datepicker" name="offer_start_date" value="{{old('offer_start_date')}}">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Offer End Date</label>
-                                    <input type="text" class="form-control datepicker" name="offer_end_date" value="{{old('offer_end_date')}}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Stock Quantity</label>
-                            <input type="number" min="0" class="form-control" name="quantity" value="{{old('quantity')}}">
-                        </div>
-
                         <div class="form-group">
                             <label>Short Description</label>
                             <textarea name="short_description" class="form-control">{{ old('short_description') }}</textarea>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group wsus_input">
                             <label>Long Description</label>
                             <textarea name="long_description" class="form-control summernote">{{ old('long_description') }}</textarea>
                         </div>

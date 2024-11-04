@@ -36,6 +36,16 @@ class Message extends Model
                     ->get();
     }
 
+    public static function getSeenMessagesByUserId($userId)
+{
+    return self::where(function ($query) use ($userId) {
+                    $query->where('sender_id', $userId)
+                          ->orWhere('received_id', $userId);
+                })
+                ->where('seen', 1) // Chỉ lấy tin nhắn có seen = 1
+                ->orderBy('created_at', 'asc')
+                ->get();
+}
     public static function getLatestMessageByUserId($userId)
     {
         return self::where(function ($query) use ($userId) {
@@ -55,5 +65,16 @@ class Message extends Model
                         ->where('id', '>', $LastId) // Chỉ lấy tin nhắn sau thời gian latestMessage
                         ->orderBy('created_at', 'asc') // Sắp xếp theo thời gian tăng dần
                         ->get();
+    }
+
+    public static function getExcludedUsersByMessage(array $userIds)
+    {
+        return self::select('sender_id')
+            ->whereNotIn('sender_id', $userIds)
+            ->orWhereNotIn('received_id', $userIds)
+            ->distinct() // Lấy các sender_id duy nhất
+            ->pluck('sender_id')
+            ->unique()
+            ->values(); // Trả về danh sách user_id không nằm trong mảng
     }
 }

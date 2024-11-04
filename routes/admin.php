@@ -7,17 +7,18 @@ use App\Http\Controllers\Backend\ProductImagesController;
 use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\MessageController;
 use Illuminate\Support\Facades\Route;
 
-
-
 Route::get('product/get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
+
 Route::resource('product', ProductController::class);
 
 // ProductImageGallery
 Route::resource('products-image-gallery', ProductImagesController::class);
+Route::resource('dashboard', DashboardController::class);
 
 // caterogies
 Route::resource('categories', CategoriesController::class);
@@ -31,11 +32,14 @@ Route::resource('products-variant', ProductVariantController::class);
 
 Route::resource('variant-colors', VariantColorController::class);
 
-// Comments
 Route::resource('comment', CommentController::class);
 
 Route::get('message',[ MessageController::class, 'index' ])->name('message.index');
 
 Route::post('message',[ MessageController::class, 'store' ])->name('message.store');
 
+Route::post('message/changeStatus',[ MessageController::class, 'changeStatus' ])->name('message.changeStatus');
+
 Route::get('message/newMessage',[ MessageController::class, 'getNewMessages' ])->name('message.getNewMessages');
+Route::get('message/takeCountUnseenMessage',[ MessageController::class, 'takeCountUnseenMessage' ])->name('message.takeCountUnseenMessage');
+Route::post('message/takeNewUserMessage',[ MessageController::class, 'takeNewUserMessage' ])->name('message.takeNewUserMessage');

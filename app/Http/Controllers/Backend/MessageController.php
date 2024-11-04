@@ -27,6 +27,36 @@ class MessageController extends Controller
         return view('backend.admin.message.index',compact('users'));
     }
 
+    public function takeNewUserMessage(Request $request)
+    {
+        $userIds = $request->input('user_ids', []); // Giả sử danh sách user_id được truyền qua input 'user_ids'
+        $userIds[] = 1;
+        // Gọi hàm getExcludedUsersByMessage để lấy các user_id không nằm trong danh sách
+        $excludedUsers = Message::getExcludedUsersByMessage($userIds);
+
+        // Trả về kết quả dưới dạng JSON
+        return response()->json($excludedUsers);
+    }
+    public function takeCountUnseenMessage(Request $request)
+    {
+        $user_id=$request->user_id;
+        $count = Message::countSeenMessagesBySender($user_id);
+
+        // Trả về kết quả
+        return response()->json(['count' => $count]);
+    }
+    public function changeStatus(Request $request)
+    {
+        $user_id=$request->user_id;
+        // Lấy tất cả các tin nhắn đã được xem (seen = 1) của user_id
+        $seenMessages = Message::getSeenMessagesByUserId($user_id);
+
+        // Cập nhật thuộc tính seen của từng tin nhắn thành 0
+        foreach ($seenMessages as $message) {
+            $message->seen = 0;
+            $message->save();
+        }
+    }
     public function getNewMessages(Request $request)
     {
         $senderId = $request->sender_id;

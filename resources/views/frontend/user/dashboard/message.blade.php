@@ -9,10 +9,11 @@
 
             <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
                 <div class="chat-container">
-                    @if($messages->isEmpty())
-                        <p>Chưa có cuộc trò chuyện</p>
-                    @else
                     <div id="messageList">
+                    @if($messages->isEmpty())
+                        <p id="noMessages">Chưa có cuộc trò chuyện</p>
+                    @else
+
                         @foreach ($messages as $message)
                         @if ($message->sender_id==Auth::id())
                          <!-- Tin nhắn của bạn -->
@@ -45,10 +46,11 @@
                             </div>
                         @endif
                     @endforeach
-                    </div>
+
 
 
                     @endif
+                </div>
                 </div>
 
                  <!-- Input nhắn tin -->
@@ -124,7 +126,7 @@ $(document).ready(function() {
                                 // Cuộn xuống đến tin nhắn mới
                                 const newMessageElement = $('#messageList .message.other[data-message-id="' + messageId + '"]');
                                 newMessageElement[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                            
+
                             }
                         });
                     }
@@ -197,6 +199,70 @@ function scrollToLastMessage() {
     }
 }
 
+// document.getElementById('sendButton').addEventListener('click', function(event) {
+//     event.preventDefault(); // Ngăn form reload trang
+
+//     // Lấy nội dung từ input
+//     const message = document.getElementById('messageInput').value;
+
+//     // Kiểm tra nếu nội dung tin nhắn trống
+//     if (!message) {
+//         alert("Vui lòng nhập tin nhắn.");
+//         return;
+//     }
+
+//     // Gửi AJAX request
+//     $.ajax({
+//         url: "{{ route('user.message.store') }}", // Địa chỉ URL để gửi yêu cầu
+//         method: 'POST',
+//         data: {
+//             message: message, // Nội dung tin nhắn
+//             _token: '{{ csrf_token() }}' // Token CSRF cho bảo mật
+//         },
+//         success: function(response) {
+//             // Xóa nội dung input sau khi gửi thành công
+//             document.getElementById('messageInput').value = '';
+
+//             // Thêm tin nhắn mới vào danh sách tin nhắn với cấu trúc HTML đúng
+//             const messageList = document.getElementById('messageList');
+//             const newMessage = document.createElement('div');
+//             newMessage.className = 'message you';
+//             newMessage.id = `message-${response.message_id}`; // Thiết lập ID cho tin nhắn mới
+//             newMessage.innerHTML = `
+//                 <div class="content">
+//                     ${message}
+//                     <div class="message-time">
+//                         ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} <!-- Thời gian hiện tại -->
+//                     </div>
+//                 </div>
+//             `;
+
+//             messageList.appendChild(newMessage); // Thêm tin nhắn vào cuối danh sách
+
+//              const successMessage = document.createElement('div');
+//             successMessage.className = 'success-message';
+//             successMessage.innerText = 'Gửi thành công';
+//             successMessage.style.fontSize = '12px';
+//             successMessage.style.color = 'green';
+//             successMessage.style.textAlign = 'right';
+//             successMessage.style.marginTop = '10px';
+
+//             // Thêm thông báo vào dưới danh sách tin nhắn và căn phải
+//             messageList.appendChild(successMessage);
+//             // Cuộn đến tin nhắn mới
+//             scrollToLastMessage();
+//             setTimeout(() => {
+//                 successMessage.style.display = 'none';
+//             }, 2000);
+//         },
+//         error: function(xhr, status, error) {
+//             console.error("Có lỗi xảy ra:", error);
+//             alert('Đã xảy ra lỗi: ' + error);
+//         }
+//     });
+// });
+
+// test thêm phần nhắn khi chưa có tin nhắn nào
 document.getElementById('sendButton').addEventListener('click', function(event) {
     event.preventDefault(); // Ngăn form reload trang
 
@@ -223,6 +289,13 @@ document.getElementById('sendButton').addEventListener('click', function(event) 
 
             // Thêm tin nhắn mới vào danh sách tin nhắn với cấu trúc HTML đúng
             const messageList = document.getElementById('messageList');
+
+            // Xóa thông báo "Chưa có cuộc trò chuyện" nếu tồn tại
+            const noMessagesElement = document.getElementById('noMessages');
+            if (noMessagesElement) {
+                noMessagesElement.remove(); // Xóa phần tử <p> này
+            }
+
             const newMessage = document.createElement('div');
             newMessage.className = 'message you';
             newMessage.id = `message-${response.message_id}`; // Thiết lập ID cho tin nhắn mới
@@ -237,7 +310,7 @@ document.getElementById('sendButton').addEventListener('click', function(event) 
 
             messageList.appendChild(newMessage); // Thêm tin nhắn vào cuối danh sách
 
-             const successMessage = document.createElement('div');
+            const successMessage = document.createElement('div');
             successMessage.className = 'success-message';
             successMessage.innerText = 'Gửi thành công';
             successMessage.style.fontSize = '12px';

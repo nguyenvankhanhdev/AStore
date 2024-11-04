@@ -28,7 +28,7 @@ class VariantColorsDataTable extends DataTable
             return $editBtn.$deleteBtn;
         })
         ->editColumn('color_id', function ($query) {
-            return $query->color->color;
+            return $query->color->name;
         })
         ->editColumn('offer_price', function ($query) {
             return number_format($query->offer_price, 0, ',', '.');
