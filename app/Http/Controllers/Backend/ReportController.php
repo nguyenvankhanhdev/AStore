@@ -156,12 +156,6 @@ class ReportController extends Controller
     }
 
 
-
-
-
-
-
-
     public function reportByCategory(Request $request)
     {
         $fromDate = $request->input('from_date');
@@ -200,7 +194,7 @@ class ReportController extends Controller
                 ];
             }
 
-            // Tính tổng chi phí dựa trên số lượng thực tế trong order_details và giá nhập kho từ warehouse_details trong khoảng thời gian
+            // Tính tổng chi phí dựa trên số lượng bán ra và giá nhập kho trong khoảng thời gian
             $totalCost = OrderDetails::whereHas('variantColors.variant.product', function ($query) use ($categoryData) {
                 $query->where('products.cate_id', $categoryData->category_id);
             })
@@ -208,34 +202,29 @@ class ReportController extends Controller
                 ->whereDate('order_details.created_at', '<=', $toDate)
                 ->with('variantColors')
                 ->get()
-                ->groupBy('variant_color_id') // Nhóm theo variant_color_id để tránh tính trùng lặp
-                ->sum(function ($orderDetails) {
-                    $orderDetail = $orderDetails->first(); // Lấy một bản ghi đại diện cho nhóm
-                    $warehouseDetails = WarehouseDetails::where('variant_color_id', $orderDetail->variant_color_id)->first();
+                ->sum(function ($orderDetail) {
+                    $warehouseDetails = WarehouseDetails::where('variant_color_id', $orderDetail->variant_color_id)
+                        ->whereDate('created_at', '<=', $orderDetail->created_at)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
                     if (!$warehouseDetails) {
                         Log::warning("Không tìm thấy giá nhập kho cho variant_color_id: " . $orderDetail->variant_color_id);
                         return 0;
                     }
+
                     $costPrice = $warehouseDetails->warehouse_price;
-                    $quantitySold = $orderDetails->sum('quantity'); // Tính tổng số lượng bán ra của nhóm
-
-                    // echo "Variant Color ID: {$orderDetail->variant_color_id}, ";
-                    // echo "Cost Price: {$costPrice}, ";
-                    // echo "Quantity Sold: {$quantitySold}, ";
-                    // echo "Total Cost for this variant color: " . ($costPrice * $quantitySold) . "<br>";
-
+                    $quantitySold = $orderDetail->quantity;
                     return $costPrice * $quantitySold;
                 });
 
+            // Tính số lượng nhập trong khoảng thời gian được chọn
             $totalQuantityImported = WarehouseDetails::whereHas('variantColor.variant.product', function ($query) use ($category) {
                 $query->where('products.cate_id', $category->id);
-            })->sum('quantity');
-
-
-            // echo "Category: {$category->name}, ";
-            // echo "Total Revenue: {$categoryData->total_revenue}, ";
-            // echo "Total Cost: {$totalCost}, ";
-            // echo "Profit: " . ($categoryData->total_revenue - $totalCost) . "<br>";
+            })
+                ->whereDate('created_at', '>=', $fromDate)
+                ->whereDate('created_at', '<=', $toDate)
+                ->sum('quantity');
 
             return [
                 'category_name' => $category->name,
@@ -251,12 +240,6 @@ class ReportController extends Controller
         $totalSold = $report->sum('total_sold');
         $totalRevenue = $report->sum('revenue');
         $totalProfit = $report->sum('profit');
-
-
-        // echo "Total Quantity Imported: {$totalQuantityImported}, ";
-        // echo "Total Sold: {$totalSold}, ";
-        // echo "Total Revenue: {$totalRevenue}, ";
-        // echo "Total Profit: {$totalProfit}<br>";
 
         return view('backend.admin.reports.byCategory', compact(
             'report',
