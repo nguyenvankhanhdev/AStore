@@ -7395,7 +7395,7 @@ hr {
     background: #212529;
     flex-wrap: wrap;
     position: relative;
-    width: 1200px;
+    /* width: 1200px; */
 }
 
 .product-list .center-1 {
@@ -8020,7 +8020,7 @@ main {
     font-weight: 500;
     margin-bottom: 32px;
     color: white;
-    text-decoration: underline;
+
 }
 
 .category .actions {

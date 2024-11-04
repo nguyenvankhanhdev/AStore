@@ -8,8 +8,12 @@ use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\DashboardController;
+
 use App\Http\Controllers\Backend\PaymentSettingController;
 use App\Http\Controllers\Backend\PaypalSettingController;
+
+use App\Http\Controllers\Backend\MessageController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,3 +45,14 @@ Route::resource('comment', CommentController::class);
 
 Route::get('payment-settings', [PaymentSettingController::class, 'index'])->name('payment-settings.index');
 Route::resource('paypal-setting', PaypalSettingController::class);
+
+Route::get('message',[ MessageController::class, 'index' ])->name('message.index');
+
+Route::post('message',[ MessageController::class, 'store' ])->name('message.store');
+
+Route::post('message/changeStatus',[ MessageController::class, 'changeStatus' ])->name('message.changeStatus');
+
+Route::get('message/newMessage',[ MessageController::class, 'getNewMessages' ])->name('message.getNewMessages');
+Route::get('message/takeCountUnseenMessage',[ MessageController::class, 'takeCountUnseenMessage' ])->name('message.takeCountUnseenMessage');
+Route::post('message/takeNewUserMessage',[ MessageController::class, 'takeNewUserMessage' ])->name('message.takeNewUserMessage');
+

@@ -27,7 +27,9 @@ class AuthenticateSessionController extends Controller
         $request->session()->regenerate();
 
         if($request->user()->role === 'admin') {
+
             return redirect()->route('admin.dashboard.index')->withSuccess('Đăng nhập thành công');
+
         }
 
         return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');

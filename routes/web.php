@@ -3,17 +3,37 @@
 use App\Http\Controllers\Auth\AuthenticateSessionController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Frontend\UserDashboardController;
-use App\Http\Controllers\Dashboard\DashboardController;
+
 use App\Http\Controllers\Frontend\CommentController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckOutController;
+
 use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\PaymentController;
-
+use App\Http\Controllers\Frontend\MessageController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
 
+
+Route::get('admin', [AuthenticateSessionController::class, 'index'])
+    ->name('auth.admin');
+
+
+Route::post('login', [AuthenticateSessionController::class, 'store'])->name('auth.login');
+
+Route::get('login', [AuthenticateSessionController::class, 'index'])->name('auth.login.web');
+
+Route::get('register', [RegisterUserController::class, 'create'])->name('auth.register');
+
+Route::post('register', [RegisterUserController::class, 'store'])->name('auth.register.store');
+
+// Route::get('frontend/index', function () {
+//     return view('frontend.user.layouts.section_cate');
+// })->name('frontend.index');
+
+Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
+    ->name('auth.logout');
 
 //frontend
 require __DIR__ . '/auth.php';
@@ -26,6 +46,7 @@ Route::get('frontend/category', function () {
 Route::get('/', [ProductController::class, 'productsIndex'])->name('home');
 Route::get('index', [ProductController::class, 'productsIndex'])->name('products.index');
 Route::get('category', [ProductController::class, 'productCategories'])->name('products.category');
+
 
 //details
 Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
@@ -45,6 +66,7 @@ Route::get('remove-coupon', [CartController::class, 'removeCoupon'])->name('remo
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::resource('comments', CommentController::class);
+
 
 Route::resource('comments', CommentController::class);
 Route::post('comments/change-status', [CommentController::class, 'changeStatus'])->name('comments.change-status');
@@ -68,13 +90,24 @@ Route::post('momo-payment-atm', [PaymentController::class, 'payWithMOMO_ATM'])->
 Route::post('momo-payment-qr-', [PaymentController::class, 'payWithMOMO_QR'])->name('payment.momoqr');
 
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
+    Route::post('message/sentmessage', [MessageController::class,'store'])->name('message.store');
+    Route::get('message/getNewMessages', [MessageController::class,'getNewMessages'])->name('message.getNewMessages');
 
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
     Route::get('paypal/payment', [CheckOutController::class, 'checkOutPayPal'])->name('paypal.payment');
     Route::get('paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
     Route::get('paypal/cancel', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');
 
+
     Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
     Route::post('zalo-pay-callback', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');
 
+    Route::get('message', [MessageController::class,'index'])->name('message.index');
+
+// thanh toán paypal
+    Route::post('paypal/payment',[PaymentController::class,'payment'])->name('paypal.payment');
+    Route::get('paypal/success',[PaymentController::class,'success'])->name('paypal.success');
+    Route::get('paypal/cancel',[PaymentController::class,'cancel'])->name('paypal.cancel');
+// thanh toán COD
+Route::post('payment/cod', [CheckOutController::class, 'checkOut'])->name('cod.store');
 });

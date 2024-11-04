@@ -194,7 +194,7 @@
             </li>
 
             <li><a class="nav-link {{ setActive(['admin.messages.index']) }}"
-                    href=""><i class="fas fa-user"></i>
+                    href="{{ route('admin.message.index') }}"><i class="fas fa-user"></i>
                     <span>Messages</span></a></li>
 
 

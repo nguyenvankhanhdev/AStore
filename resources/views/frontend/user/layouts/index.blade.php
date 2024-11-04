@@ -1,6 +1,15 @@
 <div class="category">
     <div class="container">
 
+        <h1 class=" choose-product">Lựa chọn sản phẩm</h1>
+        <div class="product-selection">
+            <button class="btn btn-primary" onclick="showSection('new')">New</button>
+            <button class="btn btn-primary" onclick="showSection('hot')">Hot</button>
+            <button class="btn btn-primary" onclick="showSection('top')">Top</button>
+            <button class="btn btn-primary" onclick="showSection('best')">Best</button>
+        </div>
+
+        <div id="section-new" class="product-section">
         <h1 class="h1">Sản phẩm mới</h1>
         <div class="card card-md category__container">
             <div class="card-body">
@@ -52,7 +61,9 @@
 
             </div>
         </div>
+        </div>
 
+        <div id="section-hot" class="product-section" style="display: none;">
         <h1 class="h1">Sản phẩm nổi bật</h1>
         <div class="card card-md category__container">
             <div class="card-body">
@@ -104,7 +115,10 @@
 
             </div>
         </div>
+        </div>
 
+
+        <div id="section-top" class="product-section" style="display: none;">
         <h1 class="h1">Sản phẩm hàng đầu</h1>
         <div class="card card-md category__container">
             <div class="card-body">
@@ -156,7 +170,9 @@
 
             </div>
         </div>
+        </div>
 
+        <div id="section-best" class="product-section" style="display: none;">
         <h1 class="h1">Sản phẩm tốt nhất</h1>
         <div class="card card-md category__container">
             <div class="card-body">
@@ -208,7 +224,21 @@
 
             </div>
         </div>
-
+        </div>
 
     </div>
 </div>
+
+@push('scripts')
+
+<script>
+    function showSection(section) {
+        const sections = document.querySelectorAll('.product-section');
+        sections.forEach(s => s.style.display = 'none');
+
+        const selectedSection = document.getElementById(`section-${section}`);
+        selectedSection.style.display = 'block';
+    }
+    </script>
+
+@endpush
