@@ -11,8 +11,6 @@ function setActive(array $route){
         }
     }
 }
-
-
 function getTotal(){
     $total = 0;
     foreach (Carts::where('user_id', Auth::id())->get() as $cart) {

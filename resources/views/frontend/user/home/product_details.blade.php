@@ -1371,62 +1371,24 @@
 
 @push('scripts')
     <script>
+        var selectedColorId = @json($selectedColorId);
 
-        $(document).ready(function() {
-        
-            var selectedColorId = @json($selectedColorId);
-            $('#variant-selector').on('click', '.item', function() {
-                const variantId = $(this).data('id');
-                const url = new URL(window.location.href);
-                url.searchParams.set('variant', variantId);
-                window.location.href = url.toString();
-            });
-            $('.colors .item').on('click', function() {
-                var colorId = $(this).data('color-id');
-                let variantId = $('#variant-selector .item.active').data('id');
-                $('.colors .item').removeClass('active');
-                $(this).addClass('active');
-                $.ajax({
-                    url: '{{ route('getPrice') }}',
-                    method: 'GET',
-                    data: {
-                        color_id: colorId,
-                        variant_id: variantId
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
 
-                        if (data.price) {
-                            const price = data.price.price;
-                            const offerPrice = data.price.offer_price;
-                            const discountPercent = (offerPrice / price) * 100;
-                            const priceSale = price - offerPrice;
 
-                            // Cập nhật giá bán và giá gốc
-                            $('#variant-selector .item.active .price-variant').text(priceSale.toLocaleString('vi-VN') + ' đ');
-                            $('.boxprice .price-sale').text(priceSale.toLocaleString('vi-VN') + ' đ');
-                            $('.boxprice strike').text(price.toLocaleString('vi-VN') + ' đ');
+        document.addEventListener('DOMContentLoaded', function() {
+            const variantSelector = document.getElementById('variant-selector');
 
-                            // Cập nhật phần trăm giảm giá
-                            if (discountPercent > 0) {
-                                $('.boxprice .persent-special').text('-' + Math.round(discountPercent) + '%');
-                            } else {
-                                $('.boxprice .persent-special').text('0%');
-                            }
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Đã xảy ra lỗi: ' + error);
-                    }
-                });
+            variantSelector.addEventListener('click', function(event) {
+                const clickedElement = event.target.closest('.item');
+                if (clickedElement) {
+                    const variantId = clickedElement.getAttribute('data-id');
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('variant', variantId);
+                    window.location.href = url.toString();
+
+                }
             });
         });
-
-
-
-
-
     </script>
 
 

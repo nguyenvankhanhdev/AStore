@@ -30,7 +30,7 @@ class CartController extends Controller
     public function index()
     {
         if (!auth()->check()) {
-            return redirect()->route('auth.login.web');
+            return redirect()->route('login');
         } else {
             $userId = Auth::user()->id;
             $carts = Carts::with(['product', 'variant_color', 'user'])->where('user_id', $userId)->get();
@@ -69,7 +69,7 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Thêm sản phẩm vào giỏ hàng thành công.');
+        return redirect()->route('cart.index')->withSuccess('Thêm sản phẩm vào giỏ hàng thành công.');
     }
 
     public function destroy()
@@ -87,24 +87,30 @@ class CartController extends Controller
     }
     public function update(Request $request)
     {
-        $cart = Carts::find($request->cart_id);
+        $cart = Carts::findOrFail($request->cart_id);
         if (!$cart) {
             return response(['status' => 'error', 'message' => 'Không tìm thấy sản phẩm trong giỏ hàng!']);
+        }
+        else if($request->quantity >= $cart->variant_color->quantity){
+            return response(['status' => 'error', 'message' => 'Số lượng sản phẩm trong kho không đủ!']);
+        }
+        else if($request->quantity == $cart->quantity)
+        {
+
         } else {
             $cart->quantity = $request->quantity;
             $cart->save();
+            return response(['status' => 'success','quantity'=>$cart->quantity, 'message' => 'Cập nhật giỏ hàng thành công!']);
         }
-        return response(['status' => 'success', 'message' => 'Cập nhật giỏ hàng thành công!']);
     }
 
-    
+
     public function applyCoupon(Request $request)
     {
         if ($request->coupon_code === null) {
-            //return response(['status' => 'error', 'message' => 'Coupon filed is required']);
-            toastr()->error('Vui lòng điền mã giảm giá!!.');
-            return redirect()->back();
+            return response()->json(['status' => 'error', 'message' => 'Vui lòng nhập mã giảm giá!']);
         }
+
         $coupon = Coupon::where(['code' => $request->coupon_code, 'status' => 1])->first();
         if ($coupon === null) {
             return response(['status' => 'error', 'message' => 'Mã giảm giá không tồn tại!']);
@@ -115,7 +121,6 @@ class CartController extends Controller
         } elseif ($coupon->total_used >= $coupon->quantity) {
             return response(['status' => 'error', 'message' => 'Bạn không thể áp dụng phiếu giảm giá này']);
         }
-
         if ($coupon->discount_type === 'amount') {
             Session::put('coupon', [
                 'coupon_name' => $coupon->name,
@@ -134,8 +139,14 @@ class CartController extends Controller
         $coupon->total_used += 1;
         $coupon->quantity--;
         $coupon->save();
-        return response(['status' => 'success', 'message' => 'Áp dụng mã giảm giá thành công!']);
+
+        return response([
+            'status' => 'success',
+            'coupon_code' => $coupon->code,
+            'message' => 'Áp dụng mã giảm giá thành công!'
+        ]);
     }
+
     public function removeCoupon()
     {
         Session::forget('coupon');
@@ -152,7 +163,6 @@ class CartController extends Controller
             }elseif($coupon['discount_type'] === 'percent'){
                 $discount = ($subTotal * $coupon['discount'] / 100);
                 return $discount;
-
             }
         }
         else{

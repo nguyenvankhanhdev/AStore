@@ -32,10 +32,10 @@
             <li
                 class="dropdown {{ setActive([
                     'admin.brand.*',
-                    'admin.products.*',
-                    'admin.products-image-gallery.*',
-                    'admin.products-variant.*',
-                    'admin.products-variant-item.*',
+                    'admin.product.*',
+                    'admin.product-image-gallery.*',
+                    'admin.product-variant.*',
+                    'admin.product-variant-item.*',
                     'admin.seller-products.*',
                     'admin.seller-pending-products.*',
                 ]) }}">
@@ -46,10 +46,10 @@
                             href="">Brands</a></li>
                     <li
                         class="{{ setActive([
-                            'admin.products.*',
-                            'admin.products-image-gallery.*',
-                            'admin.products-variant.*',
-                            'admin.products-variant-item.*',
+                            'admin.product.*',
+                            'admin.product-image-gallery.*',
+                            'admin.product-variant.*',
+                            'admin.product-variant-item.*',
                             'admin.reviews.*',
                         ]) }}">
                         <a class="nav-link" href="{{ route('admin.product.index') }}">Products</a>
@@ -129,7 +129,7 @@
                     <li class="{{ setActive(['admin.vendor-profile.*']) }}"><a class="nav-link"
                             href="">Vendor Profile</a></li>
                     <li class="{{ setActive(['admin.payment-settings.*']) }}"><a class="nav-link"
-                            href="">Payment Settings</a></li>
+                            href="{{ route('admin.payment-settings.index') }}">Payment Settings</a></li>
 
                 </ul>
             </li>
@@ -203,7 +203,7 @@
             </li>
 
             <li><a class="nav-link {{ setActive(['admin.messages.index']) }}"
-                    href=""><i class="fas fa-user"></i>
+                    href="{{ route('admin.message.index') }}"><i class="fas fa-user"></i>
                     <span>Messages</span></a></li>
 
 

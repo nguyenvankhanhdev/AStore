@@ -9,8 +9,19 @@ use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\DashboardController;
+
 use App\Http\Controllers\Backend\ReportController;
+
+use App\Http\Controllers\Backend\PaymentSettingController;
+use App\Http\Controllers\Backend\PaypalSettingController;
+
+use App\Http\Controllers\Backend\MessageController;
+
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 Route::get('product/get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
@@ -19,12 +30,11 @@ Route::resource('product', ProductController::class);
 
 // ProductImageGallery
 Route::resource('products-image-gallery', ProductImagesController::class);
+
 Route::resource('dashboard', DashboardController::class);
 
-// caterogies
 Route::resource('categories', CategoriesController::class);
 
-// Sub_categories
 Route::resource('sub-categories', SubCategoriesController::class);
 
 Route::resource('users', UserController::class);
@@ -39,3 +49,18 @@ Route::resource('comment', CommentController::class);
 
 Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 Route::get('reports/byCategory', [ReportController::class, 'reportByCategory'])->name('reports.byCategory');
+
+Route::get('payment-settings', [PaymentSettingController::class, 'index'])->name('payment-settings.index');
+Route::resource('paypal-setting', PaypalSettingController::class);
+
+Route::get('message',[ MessageController::class, 'index' ])->name('message.index');
+
+Route::post('message',[ MessageController::class, 'store' ])->name('message.store');
+
+Route::post('message/changeStatus',[ MessageController::class, 'changeStatus' ])->name('message.changeStatus');
+
+Route::get('message/newMessage',[ MessageController::class, 'getNewMessages' ])->name('message.getNewMessages');
+Route::get('message/takeCountUnseenMessage',[ MessageController::class, 'takeCountUnseenMessage' ])->name('message.takeCountUnseenMessage');
+Route::post('message/takeNewUserMessage',[ MessageController::class, 'takeNewUserMessage' ])->name('message.takeNewUserMessage');
+
+

@@ -59,7 +59,16 @@
   <!--=============================
     DASHBOARD START
   ==============================-->
-    @yield('content')
+  <section id="wsus__dashboard">
+    <div class="container-fluid">
+        @include('frontend.user.dashboard.layouts.sidebar')
+        <div class="row">
+
+                @yield('content')
+
+        </div>
+    </div>
+</section>
   <!--=============================
     DASHBOARD START
   ==============================-->
