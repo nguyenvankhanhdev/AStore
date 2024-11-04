@@ -16,9 +16,7 @@
             <i class="fas fa-cog"></i> Settings
           </a>
           <div class="dropdown-divider"></div>
-
-            <!-- Authentication -->
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('logout') }}">
             @csrf
                 <a href="" onclick="event.preventDefault();
                 this.closest('form').submit();" class="dropdown-item has-icon text-danger">

@@ -11,19 +11,34 @@
     <link rel="icon" type="image/png" sizes="64x64" href="/frontend/asset/img/favicon.png">
     <link rel="stylesheet" href="/frontend/asset/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/lightgallery-bundle.css">
+
     <link rel="stylesheet" href="/frontend/asset/css/header-footer.css">
+    <link rel="stylesheet" href="/frontend/asset/css/home.css">
+
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/detail.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/frontend/asset/css/home.css">
+
     <link rel="stylesheet" href="/frontend/asset/css/category.css">
     <link rel="stylesheet" href="/frontend/asset/css/detail.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link href="/backend/asset/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/backend/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/frontend/asset/css/main.css">
+    <link rel="stylesheet" href="/frontend/asset/css/header-footer-mb.css" media="only screen and (max-width: 768px)">
+    <link rel="stylesheet" href="/frontend/asset/css/home-mb.css" media="only screen and (max-width: 768px)">
     <style>
+        .toast-container{
+            background: rgb(50, 130, 11);
+        }
+        .toast-message{
+
+        }
+        .toast-success{
+            background: rgb(50, 130, 11);
+        }
         .swal2-icon.swal2-warning {
             border-radius: 50%; /* Tạo viền tròn */
             border: 2px solid #f8bb86; /* Màu viền */
@@ -31,6 +46,18 @@
             box-sizing: content-box; /* Đảm bảo padding không ảnh hưởng đến kích thước */
             margin-left: 200px; /* Khoảng cách với nội dung */
             margin-top: 10px
+        }
+        .containerr {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+
+            padding-left: 12px;
+            margin-right: auto;
+            margin-left: auto;
         }
 
         .swal2-icon.swal2-warning .swal2-icon-content {
@@ -47,6 +74,39 @@
         .swal2-icon.swal2-success .swal2-icon-content {
             font-size: 30px; /* Kích thước biểu tượng */
         }
+        .text-section {
+            margin: 20px;
+            flex: 1;
+            margin-top: 111px;
+        }
+        .text-section h1 {
+            font-size: 21px;
+            color: #333333;
+            margin: 0;
+        }
+        .text-section p {
+            color: #666666;
+            margin: 10px 0 20px;
+        }
+        .text-section button {
+            background-color: #d32f2f;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .image-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 
 </head>
@@ -59,18 +119,16 @@
         @yield('content')
     </main>
     @include('frontend.user.layouts.footer')
-
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/frontend/asset/js/bootstrap.bundle.min.js"></script>
     <script src="/frontend/asset/js/header-footer.js"></script>
     <script src="/frontend/asset/js/swiper-bundle.min.js"></script>
     <script src="/frontend/asset/js/home.1.js"></script>
     <script src="/frontend/asset/js/modal.js"></script>
-    <script src="/frontend/asset/js/detail.1.js"></script>
+    {{-- <script src="/frontend/asset/js/detail.1.js"></script> --}}
+    <script src="/frontend/asset/js/detail.js"></script>
     <script src="/frontend/asset/js/cart.2.js" ></script>
     <script src="/frontend/asset/js/cart.3.js"></script>
-    <script src="/frontend/asset/js/detail.3.js"></script>
+    {{-- <script src="/frontend/asset/js/detail.3.js"></script> --}}
     <script src="/frontend/asset/js/util.js"></script>
     <script src="/frontend/asset/js/dropdown.js"></script>
     <script src="/frontend/asset/js/jquery-3.6.0.min.js"></script>

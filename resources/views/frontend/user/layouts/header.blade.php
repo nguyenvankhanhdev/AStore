@@ -1,7 +1,8 @@
 <div class="header">
     <div class="header-body">
         <div class="container flex-center">
-            <div class="header-logo"><a href="{{ route('products.index') }}"><img src="/frontend/asset/img/logo-fstu-aar.png" alt="logo"></a>
+            <div class="header-logo"><a href="{{ route('products.index') }}"><img
+                        src="/frontend/asset/img/logo-fstu-aar.png" alt="logo"></a>
             </div>
             <div class="header-search">
                 <form>
@@ -129,18 +130,31 @@
                     </div>
                 </form>
             </div>
-            <div class="header-user"><a href="{{ auth()->check() ? route('user.dashboard') : route('auth.login.web') }}">
+            <div class="header-user"><a href="{{ auth()->check() ? route('admin.dashboard.index') : route('login')}}">
                     <div class="user-info flex text-grayscale-300"><span class="form-cart-icon m-r-8"><i
                                 class="ic-user-2"></i></span>
                         <div class="f-s-ui-14">
-                            {{ auth()->check() ? auth()->user()->name : 'Đăng nhập' }}
+                            @if (auth()->check())
+                                @if (auth()->user()->role === 'user')
+
+                                    {{ auth()->user()->name }}
+
+                                @else
+                                    {{ auth()->user()->name }}
+
+                                @endif
+                            @else
+                                {{ 'Đăng nhập' }}
+                            @endif
                         </div>
                     </div>
                 </a>
             </div>
             <div class="header-cart">
                 <a href="{{ route('cart.index') }}">
-                    <div class="c-cart"><span class="form-cart-icon m-r-8"><span class="count"></span><i
+                    <div class="c-cart"><span class="form-cart-icon m-r-8"><span class="count">
+
+                    </span><i
                                 class="ic-cart"></i></span>
                         <div class="f-s-ui-14">Giỏ hàng</div>
                     </div>
@@ -152,9 +166,9 @@
         <div class="container">
             <div class="header-item">
                 <ul class="flex text-center">
-                    <li><a href="{{route('products.category', ['categories' => 'iphone']) }}">iPhone</a></li>
-                    <li><a href="{{route('products.category', ['categories' => 'ipad']) }}">iPad</a></li>
-                    <li><a href="{{route('products.category', ['categories' => 'macbook']) }}">Mac</a></li>
+                    <li><a href="{{ route('products.category', ['categories' => 'iphone']) }}">iPhone</a></li>
+                    <li><a href="{{ route('products.category', ['categories' => 'ipad']) }}">iPad</a></li>
+                    <li><a href="{{ route('products.category', ['categories' => 'macbook']) }}">Mac</a></li>
                     <li><a>Apple Watch</a></li>
                     <li><a>Phụ kiện</a></li>
                     <li><a>Tin tức - Thủ thuật</a></li>

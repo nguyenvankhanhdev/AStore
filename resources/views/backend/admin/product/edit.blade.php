@@ -14,11 +14,10 @@
                             <form action="{{ route('admin.product.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-
                                 <div class="form-group">
                                     <label>Image</label>
                                     <input type="file" class="form-control" name="image">
-                                    <img src="{{ asset('uploads/' . $product->image) }}" width="100" alt="Current Image">
+                                    <img src="{{ asset($product->image) }}" width="100" alt="Current Image">
                                 </div>
 
                                 <div class="form-group">
@@ -134,4 +133,5 @@
             });
         });
     </script>
+
 @endpush

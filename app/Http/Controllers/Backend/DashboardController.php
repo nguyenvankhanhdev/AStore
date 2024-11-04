@@ -62,4 +62,7 @@ class DashboardController extends Controller
     {
         //
     }
+    public function login(){
+        return view('backend.auth.login');
+    }
 }

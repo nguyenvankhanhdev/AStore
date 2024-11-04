@@ -45,7 +45,7 @@
                     <div class="card-body p-4 p-sm-5">
                         <h5 class="card-title text-center mb-5 fw-light fs-5">Create Account</h5>
 
-                        <form method="POST" action="{{ route('auth.register.store') }}">
+                        <form method="POST" action="{{ route('register.store') }}">
                             @csrf
 
                             <div class="form-floating mb-3">
@@ -82,7 +82,7 @@
 
                             <div class="form-check mb-3">
                                 <label class="form-check-label" for="register">
-                                    <a href="{{ route('auth.admin') }}">Login</a>
+                                    <a href="{{ route('admin.login') }}">Login</a>
                                 </label>
 
                             </div>
