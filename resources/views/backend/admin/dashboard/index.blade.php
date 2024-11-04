@@ -33,7 +33,7 @@
                                 <h4>Todays Peding Orders</h4>
                             </div>
                             <div class="card-body">
-                              
+
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                                 <h4>Total Orders</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                 <h4>Total Pending Orders</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,6 @@
                                 <h4>Total Canceled Orders</h4>
                             </div>
                             <div class="card-body">
-                               
                             </div>
                         </div>
                     </div>
@@ -105,7 +104,7 @@
                                 <h4>Total Complelte Orders</h4>
                             </div>
                             <div class="card-body">
-                              
+
                             </div>
                         </div>
                     </div>
@@ -122,7 +121,7 @@
                                 <h4>Todays Earnings</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -140,7 +139,7 @@
                                 <h4>This Month Earnings</h4>
                             </div>
                             <div class="card-body">
-                         
+
                             </div>
                         </div>
                     </div>
@@ -158,7 +157,7 @@
                                 <h4>This Years Earnings</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -176,7 +175,7 @@
                                 <h4>Total Reviews</h4>
                             </div>
                             <div class="card-body">
-                             
+
                             </div>
                         </div>
                     </div>
@@ -195,7 +194,7 @@
                                 <h4>Total Brands</h4>
                             </div>
                             <div class="card-body">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -213,7 +212,7 @@
                                 <h4>Total Categories</h4>
                             </div>
                             <div class="card-body">
-                             
+
                             </div>
                         </div>
                     </div>
@@ -238,7 +237,7 @@
             </a>
             </div>
 
-            
+
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <a href="">
                  <div class="card card-statistic-1">

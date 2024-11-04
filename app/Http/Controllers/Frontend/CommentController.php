@@ -49,13 +49,13 @@ class CommentController extends Controller
            $comment->save();
 
                 // Lưu thành công
-            return redirect()->back()->with('success', 'Bình luận thành công');
+            return redirect()->back()->withSuccess('Bình luận thành công');
 
         }
 
         else
         {
-            return redirect()->route('auth.admin')->with('error','Vui lòng đăng nhập');
+            return redirect()->route('auth.admin')->withErrors('Vui lòng đăng nhập');
         }
 
     }

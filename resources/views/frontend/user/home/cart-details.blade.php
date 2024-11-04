@@ -14,13 +14,16 @@
                             Tiếp tục mua hàng</a></li>
 
                 </ol>
+
                 <div class="card">
-                    <div class="card-title">Có {{ count($carts) }} sản phẩm trong giỏ hàng<span class="c-modal--close js-modal__close"></span>
+                    <div class="card-title">Có {{ count($carts) }} sản phẩm trong giỏ hàng<span
+                            class="c-modal--close js-modal__close"></span>
                     </div>
                     <div class="card-body">
                         <div class="c-cart__block">
                             @foreach ($carts as $cart)
-                                <div class="c-cart__product" data-productid="{{ $cart->product->id }}" data-variantcolorid= {{ $cart->variant_color->id }}>
+                                <div class="c-cart__product" data-productid="{{ $cart->product->id }}"
+                                    data-variantcolorid={{ $cart->variant_color->id }}>
                                     <div class="product-cart">
                                         <div class="product-cart__img">
                                             <div
@@ -28,7 +31,8 @@
                                                 <label
                                                     class="ant-checkbox-wrapper ant-checkbox-wrapper-checked css-bvvl68 css-10ed4xt">
                                                     <span class="ant-checkbox css-10ed4xt ant-checkbox-checked">
-                                                        <input type="checkbox" class="ant-checkbox-input" data-price="{{ ($cart->variant_color->price -  $cart->variant_color->offer_price) * $cart->quantity }}" >
+                                                        <input type="checkbox" class="ant-checkbox-input"
+                                                            data-price="{{ ($cart->variant_color->price - $cart->variant_color->offer_price) * $cart->quantity }}">
                                                         <span class="ant-checkbox-inner"></span>
                                                     </span>
                                                 </label>
@@ -93,30 +97,26 @@
                                             <input class="form-input form-input-sm" type="text" id="coupon_code"
                                                 placeholder="Nhập mã giảm giá">
                                         </div>
-                                        <div class="feedback error-voucher">
-                                            <div class="stack"></div><span class="ic-minus-circled"></span>
-                                            <p>Nhập voucher để áp dụng</p>
-                                        </div>
                                         <div class="apply-btn m-l-8">
-                                            <a class="btn btn-link btn-sm" id="coupon_form" href="{{ route('apply-coupon') }}">Áp dụng</a>
+                                            <a class="btn btn-link btn-sm" id="coupon_form"
+                                                href="{{ route('apply-coupon') }}">Áp dụng</a>
                                         </div>
                                     </div>
-                                    <p class="text-inValid-success m-t-8">Áp dụng thành công giảm 1.500.000₫ </p>
-                                    <p class="text-inValid-failed m-t-8">Mã giảm giá không hợp lệ</p>
+
                                     <div class="c-cart-badge m-t-8" id="coupon-badge"><a
                                             class="badge badge-grayscale badge-xxxs badge-xxs badge-close m-r-8 m-b-8"
-                                            href="{{ route('remove-coupon') }}"><i
-                                                class="ic-tag m-r-4"></i><span>{{ getCodeCoupon() }}</span><span
+                                            href="{{ route('remove-coupon') }}"><i class="ic-tag m-r-4"></i><span
+                                                id="getcoupon_code"> </span><span
                                                 class="btn btn-icon-single btn-square btn-grayscale btn-xs"><i
                                                     class="ic-close f-s-ui-16"></i></span></a>
 
                                     </div>
                                 </div>
                                 <div class="c-cart__total">
-                                    <p class="text-normal"><span>Tổng tiền:</span><span class="total_price"
-                                            id="amount"></span></p>
-                                    <p class="text-normal"><span>Giảm:</span><span id="discount"></span></p>
-                                    {{-- {{ number_format($variant->offer_price * $cart->quantity, 0, ',', '.') }} --}}
+                                    <p class="text-normal"><span>Tổng tiền:</span><span
+                                            class="total_price"id="amount"></span></p>
+                                    <p class="text-normal"><span>Giảm: </span><span id="discount"></span></p>
+                                    <p class="text-normal"><span>Điểm tích lũy: </span><span id="point"></span></p>
                                     <p class="text--lg"><span class="text-size--lg">Cần thanh toán:</span><span
                                             class="re-price f-w-500 f-s-p-16 re-red"></span></p>
                                 </div>
@@ -129,11 +129,13 @@
                                 <div class="form-customer">
                                     <div class="c-cart__form__line m-t-8">
                                         <div class="radio margin-right-2x">
-                                            <input id="radio-cart1" readonly="" type="radio" name="gender" value="Anh" checked>
+                                            <input id="radio-cart1" readonly="" type="radio" name="gender"
+                                                value="Anh" checked>
                                             <label for="radio-cart1">Anh</label>
                                         </div>
                                         <div class="radio">
-                                            <input id="radio-cart2" readonly="" type="radio" name="gender" value="Chị">
+                                            <input id="radio-cart2" readonly="" type="radio" name="gender"
+                                                value="Chị">
                                             <label for="radio-cart2">Chị</label>
                                         </div>
                                     </div>
@@ -141,7 +143,8 @@
                                         <div class="box-namecus">
                                             <div class="form-group"><input
                                                     class="cs-input form-input-md cs-input-size--full txt-Email"
-                                                    type="text" placeholder="Nhập họ và tên" name="firstname" value=""></div>
+                                                    type="text" placeholder="Nhập họ và tên" name="firstname"
+                                                    value=""></div>
                                             <div class="feedback error-name">
                                                 <div class="stack"><span class="ic-minus-circled"></span>
                                                     <div id="tx-err-Name">Vui lòng nhập thông tin còn thiếu!</div>
@@ -151,7 +154,8 @@
                                         <div class="box-phonecus">
                                             <div class="form-group"><input
                                                     class="cs-input form-input-md cs-input-size--full txt-Email"
-                                                    type="text" placeholder="Nhập số điện thoại" name="phonenumber" value=""></div>
+                                                    type="text" placeholder="Nhập số điện thoại" name="phonenumber"
+                                                    value=""></div>
                                             <div class="feedback error-email">
                                                 <div class="stack"><span class="ic-minus-circled"></span>
                                                     <div id="tx-err-Phone">Vui lòng nhập thông tin còn thiếu!</div>
@@ -209,10 +213,13 @@
                                                                     <div class="c-dropdown-menu__search">
                                                                         <div class="cs-input-group cs-input-group--search">
                                                                             <span class="ic-search cs-input-search"></span>
-                                                                            <input class="cs-input js-input-typing" id="search-province" type="text"
+                                                                            <input class="cs-input js-input-typing"
+                                                                                id="search-province" type="text"
                                                                                 placeholder="Nhập địa chỉ"
-                                                                                autocomplete="none"><span class="form-search-icon form-search-clear close-btn js-form-clear open"
-                                                                                data-name="delete"><i class="ic-close ic-sm"></i></span>
+                                                                                autocomplete="none"><span
+                                                                                class="form-search-icon form-search-clear close-btn js-form-clear open"
+                                                                                data-name="delete"><i
+                                                                                    class="ic-close ic-sm"></i></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -226,7 +233,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="feedback error-general">
-                                                            <div class="stack" id="provinceError"><span class="ic-minus-circled"></span>
+                                                            <div class="stack" id="provinceError"><span
+                                                                    class="ic-minus-circled"></span>
                                                                 Thông tin bắt buộc
                                                             </div>
                                                         </div>
@@ -243,8 +251,7 @@
                                                                     <div class="c-dropdown-menu__search">
                                                                         <div class="cs-input-group cs-input-group--search">
                                                                             <span class="ic-search cs-input-search"></span>
-                                                                            <input
-                                                                                class="cs-input js-input-typing"
+                                                                            <input class="cs-input js-input-typing"
                                                                                 id="search-district" type="text"
                                                                                 placeholder="Nhập địa chỉ"
                                                                                 autocomplete="none"><span
@@ -307,7 +314,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="c-cart__full m-t-8"><input class="cs-input form-input-sm is-invalid" type="text"
+                                                    <div class="c-cart__full m-t-8"><input
+                                                            class="cs-input form-input-sm is-invalid" type="text"
                                                             name="address" placeholder="Nhập địa chỉ*">
                                                         <div class="feedback error-general m-t-8">
                                                             <div class="stack"><span
@@ -586,56 +594,36 @@
                                                                 class="form-search-icon form-search-clear close-btn js-form-clear open"><i
                                                                     class="ic-close ic-sm"></i></span></div>
                                                     </div>
-                                                    <ul class="cs-suggest js--suggestion-w-product" id="bank-suggest">
-                                                        <li class="cs-suggest__item active" style="display: flex">
-                                                            <div class="img img--md margin-right"><img
-                                                                    src="https://fptshop.com.vn/gio-hang-v2/Content/Checkout/images/bank/ABB.jpg"
-                                                                    alt="Ngân hàng thương mại cổ phần An Bình (ABBANK)">
-                                                            </div>
-                                                            <div class="info">
-                                                                <h3 class="text-normal text-size--lg">Ngân hàng thương mại
-                                                                    cổ phần An Bình (ABBANK)
-                                                                </h3>
-                                                            </div>
-                                                        </li>
-                                                        <li class="cs-suggest__item" style="display: flex">
-                                                            <div class="img img--md margin-right"><img
-                                                                    src="https://fptshop.com.vn/gio-hang-v2/Content/Checkout/images/bank/ACB.jpg"
-                                                                    alt="Ngân hàng ACB"></div>
-                                                            <div class="info">
-                                                                <h3 class="text-normal text-size--lg"> Ngân hàng ACB</h3>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
                                                 </div>
                                                 <div class="c-cart__select m-t-8" id="list-bank-item">
-                                                    <div class="c-cart__select__item" id="KIENLONGBANK" data-name=""
+                                                    <div class="c-cart__select__item" id="VNPay" data-name=""
                                                         value="VNPay"><img
                                                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp1v7T287-ikP1m7dEUbs2n1SbbLEqkMd1ZA&s"
-                                                            alt="Ngân hàng TMCP Kiên Long (KIENLONGBANK)">
+                                                            alt="Momo">
                                                     </div>
-                                                    <div class="c-cart__select__item" id="BAOVIETBANK"
-                                                        data-name="Ngân Hàng Tmcp Bảo Việt (Baovietbank)"
-                                                        value="BAOVIETBANK"><img
+                                                    <div class="c-cart__select__item" id="Momo" data-name="Momo"
+                                                        value="Momo"><img
                                                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9Q_OJ9bSa7fER1itMbUeaQrWfkKCz5Tinw2T8usjtjx2NdkZeaJSapjJpM7aTWPWD5UI&usqp=CAU"
-                                                            alt="Ngân Hàng Tmcp Bảo Việt (Baovietbank)">
+                                                            alt="Momo">
                                                     </div>
+
                                                 </div>
-                                                <p class="cls-text--desc m-t-8" data-promotion="VNPAYATM">Gợi ý: <span
+                                                {{-- <p class="cls-text--desc m-t-8" data-promotion="VNPAYATM">Gợi ý: <span
                                                         class="text-success f-w-500">Nhập mã "VNPAY300" </span>giảm 3% tối
                                                     đa 300.000₫ qua
-                                                    VNPAY-QR khi thanh toán online 100%</p>
+                                                    VNPAY-QR khi thanh toán online 100%</p> --}}
                                             </div>
                                         </li>
                                         <li class="cls-list-payment" data-name="open-bank-visa">
                                             <div class="radio paymentmethod"><input class="js--tabs-child" id="pay3"
                                                     type="radio" data-promotion="" name="cart2"
-                                                    value="4"><label for="pay3">Thanh toán bằng thẻ quốc tế Paypal,
+                                                    value="3"><label for="pay3">Thanh toán bằng thẻ quốc tế
+                                                    Paypal,
                                                     Stripe, Razorpay</label></div>
                                             <div class="c-cart__form__list__expand js--cart__tabs-item group-bank-visa"
                                                 id="se3t6">
                                                 <div class="c-cart__select" id="listvisa">
-                                                    <div class="c-cart__select__item"  data-name="Visa" value="Visa">
+                                                    <div class="c-cart__select__item" data-name="Visa" value="Visa">
                                                         <img src="https://banner2.cleanpng.com/20190313/wce/kisspng-logo-paypal-x-com-image-brand-1713901610285.webp"
                                                             alt="">
                                                     </div>
@@ -659,7 +647,6 @@
 
                             <form id="checkout">
                                 @csrf
-                                <input type="hidden" name="price" value="40">
                                 <div class="c-cart__submit">
                                     <button class="btn btn-xl btn-link" type="submid" id="btnCompleteOrder"
                                         style="display: inline-block">HOÀN TẤT ĐẶT HÀNG</button><button
@@ -671,6 +658,52 @@
                                             sử dụng </a> của FStudio by FPT</p>
                                 </div>
                             </form>
+                            <form action="{{ route('payment.momoatm') }}" method="POST">
+                                @csrf
+                                <div class="c-cart__submit">
+                                    <button class="btn btn-xl btn-link" type="submid" id="btnCompleteOrder"
+                                        style="display: inline-block">HOÀN TẤT ĐẶT HÀNG MOMO ATM</button><button
+                                        class="btn btn-xl btn-link" id="btnInstallment" style="display: none">MUA TRẢ
+                                        GÓP</button>
+                                    <p>Bằng cách đặt hàng, bạn đồng ý với <a class="re-link--gray"
+                                            href="https://fptshop.com.vn/tos" style="text-decoration: underline">Điều
+                                            khoản
+                                            sử dụng </a> của FStudio by FPT</p>
+                                </div>
+                            </form>
+                            <form action="{{ route('payment.momoqr') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="price" value="50">
+                                <div class="c-cart__submit">
+                                    <button class="btn btn-xl btn-link" type="submid" id="btnCompleteOrder"
+                                        style="display: inline-block">HOÀN TẤT ĐẶT HÀNG MOMO QR</button><button
+                                        class="btn btn-xl btn-link" id="btnInstallment" style="display: none">MUA TRẢ
+                                        GÓP</button>
+                                    <p>Bằng cách đặt hàng, bạn đồng ý với <a class="re-link--gray"
+                                            href="https://fptshop.com.vn/tos" style="text-decoration: underline">Điều
+                                            khoản
+                                            sử dụng </a> của FStudio by FPT</p>
+                                </div>
+                            </form>
+                            <form action="{{ route('user.payment.zalopay') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="price" value="50">
+                                <div class="c-cart__submit">
+                                    <button class="btn btn-xl btn-link" type="submid" id="btnCompleteOrder"
+                                        style="display: inline-block">HOÀN TẤT ĐẶT HÀNG ZALO PAY</button><button
+                                        class="btn btn-xl btn-link" id="btnInstallment" style="display: none">MUA TRẢ
+                                        GÓP</button>
+                                    <p>Bằng cách đặt hàng, bạn đồng ý với <a class="re-link--gray"
+                                            href="https://fptshop.com.vn/tos" style="text-decoration: underline">Điều
+                                            khoản
+                                            sử dụng </a> của FStudio by FPT</p>
+                                </div>
+                            </form>
+                            <form>
+                                <a href="{{ route('user.paypal.payment') }}">HOÀN TẤT ĐẶT HÀNG PAYPAL</a>
+                            </form>
+
+
                         </div>
                         <div class="ghslod-lg hide">
                             <div class="spinner spinner-primary spinner-big"><svg>
@@ -678,246 +711,357 @@
                                 </svg><span class="spinner-text">Đang cập nhật giỏ hàng...</span></div>
                         </div>
                     </div>
-
+                    <div class="containerr">
+                        <div class="text-section">
+                            <h1>
+                                Chưa có sản phẩm nào trong giỏ hàng
+                            </h1>
+                            <p>
+                                Cùng mua sắm hàng ngàn sản phẩm tại FPTShop nhé!
+                            </p>
+                            <button style="margin-left: 100px;" class="shoping">
+                                Mua hàng
+                            </button>
+                        </div>
+                        <div class="image-section">
+                            <img alt="Illustration of a shopping cart with small people around it" height="300"
+                                src="https://storage.googleapis.com/a1aa/image/7HbH5YVfanXQba48flDo4wZwib9owPw2zwTJ8kGONl66JQoTA.jpg"
+                                width="400" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    @endsection
 
-    @push('scripts')
-        <link rel="stylesheet" href="frontend/asset/css/main.css">
+    </div>
+@endsection
 
-        <script>
-            function filterDropdown(inputId, listId) {
-                $(inputId).on('keyup', function() {
-                    var value = $(this).val().toLowerCase();
-                    $(listId + ' .item-region').filter(function() {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                    });
+@push('scripts')
+    <link rel="stylesheet" href="frontend/asset/css/main.css">
+
+    <script>
+        function filterDropdown(inputId, listId) {
+            $(inputId).on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $(listId + ' .item-region').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
-            }
-            filterDropdown('#search-province', '#province-list');
-            filterDropdown('#search-district', '#district-list');
-            filterDropdown('#search-ward', '#ward-list');
+            });
+        }
+        filterDropdown('#search-province', '#province-list');
+        filterDropdown('#search-district', '#district-list');
+        filterDropdown('#search-ward', '#ward-list');
 
-            document.addEventListener('DOMContentLoaded', function() {
-                if (hasCoupon) {
-                    document.getElementById('coupon-badge').style.display = 'block';
-                } else {
-                    document.getElementById('coupon-badge').style.display = 'none';
+
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $(document).ready(function() {
 
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+            $('.shoping').on('click', function() {
+                window.location.href = "{{ route('home') }}";
+            })
+
+
+            $(document).on('click', '#province-list .item-region', function(e) {
+                e.preventDefault();
+                var provinceId = $(this).data('id');
+                $.ajax({
+                    url: '{{ url('get-districts') }}/' + provinceId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#district-list').html('');
+                        $.each(data, function(key, value) {
+                            $('#district-list').append(
+                                '<a class="item-region region-district" id="district_id" data-id="' +
+                                value.id +
+                                '" >' + value.name + '</a>'
+                            );
+                        });
+
                     }
                 });
-                $(document).on('click', '#province-list .item-region', function(e) {
-                    e.preventDefault();
-                    var provinceId = $(this).data('id');
-                    $.ajax({
-                        url: '{{ url('get-districts') }}/' + provinceId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#district-list').html('');
-                            $.each(data, function(key, value) {
-                                $('#district-list').append(
-                                    '<a class="item-region region-district" id="district_id" data-id="' + value.id +
-                                    '" >' + value.name + '</a>'
-                                );
-                            });
+            });
 
-                        }
-                    });
+            $(document).on('click', '#district-list .item-region', function(e) {
+                e.preventDefault();
+                var districtId = $(this).data('id');
+                $('#ward-list').html(''); // Clear ward list
+                $.ajax({
+                    url: '{{ url('get-wards') }}/' + districtId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#ward-list').html('');
+                        $.each(data, function(key, value) {
+                            $('#ward-list').append(
+                                '<a class="item-region region-ward" data-id="' +
+                                value.id + '" >' + value.name + '</a>');
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click', '.js-dropdown-open .item-region', function(e) {
+                e.preventDefault();
+                var wrapperItem = $(this).closest('.c-dropdown-menu');
+                var getItem = wrapperItem.find('.c-dropdown-menu__wrapper .item-region');
+                var fillValue = $(this).closest('.js-dropdown-open').find('.c-dropdown-button');
+
+                getItem.removeClass('active');
+                $(this).addClass('active');
+                fillValue.text($(this).text());
+                wrapperItem.removeClass('open');
+            });
+
+            var checkboxes = $('.ant-checkbox-input');
+            var totalPriceElement = $('.re-price');
+            var discountElement = $('#discount');
+            var totalAmountElement = $('#amount');
+
+            function updateTotal() {
+                var totalPrice = 0;
+                var totalDiscount = 0;
+
+                checkboxes.each(function() {
+                    var checkbox = $(this);
+                    var productId = checkbox.closest('.c-cart__product').data('variantcolorid');
+                    localStorage.setItem('checkbox-' + productId, checkbox.is(':checked'));
+
+                    if (checkbox.is(':checked')) {
+                        var price = parseFloat(checkbox.data('price')) || 0;
+                        var discount = parseFloat(checkbox.data('discount')) || 0;
+                        var quantity = parseInt($('#quantity-' + productId).val()) || 1;
+                        totalPrice += price * quantity;
+                        totalDiscount += discount * quantity;
+                    }
                 });
 
-                $(document).on('click', '#district-list .item-region', function(e) {
-                    e.preventDefault();
-                    var districtId = $(this).data('id');
-                    $('#ward-list').html(''); // Clear ward list
-                    $.ajax({
-                        url: '{{ url('get-wards') }}/' + districtId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#ward-list').html('');
-                            $.each(data, function(key, value) {
-                                $('#ward-list').append('<a class="item-region region-ward" data-id="' +
-                                    value.id + '" >' + value.name + '</a>');
-                            });
-                        }
-                    });
-                });
-
-                $(document).on('click', '.js-dropdown-open .item-region', function(e) {
-                    e.preventDefault();
-                    var wrapperItem = $(this).closest('.c-dropdown-menu');
-                    var getItem = wrapperItem.find('.c-dropdown-menu__wrapper .item-region');
-                    var fillValue = $(this).closest('.js-dropdown-open').find('.c-dropdown-button');
-
-                    getItem.removeClass('active');
-                    $(this).addClass('active');
-                    fillValue.text($(this).text());
-                    wrapperItem.removeClass('open');
-                });
-
-                $(document).ready(function () {
-
-                var checkboxes = $('.ant-checkbox-input');
-                var totalPriceElement = $('.re-price'); // Phần hiển thị tổng tiền cần thanh toán
-                var discountElement = $('#discount'); // Phần hiển thị giảm giá
-                var totalAmountElement = $('#amount'); // Phần hiển thị tổng tiền
-
-                // Hàm để tính và cập nhật tổng tiền
-                function updateTotal() {
-                    var totalPrice = 0;
-                    var totalDiscount = 0;
-                    checkboxes.each(function () {
-                        if ($(this).is(':checked')) {
-                            var price = parseFloat($(this).data('price')) || 0;
-                            var quantity = parseInt($('#quantity-' + $(this).closest('.c-cart__product').data('productid')).val()) || 1;
-                            totalPrice += price * quantity;
-
-                            // Nếu có giảm giá thì tính cả giảm giá
-                            var discount = parseFloat($(this).data('discount')) || 0;
-                            totalDiscount += discount * quantity;
-                        }
-                    });
-
-                    // Cập nhật tổng tiền và giảm giá
-                    totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + '₫');
-                    totalAmountElement.text(totalPrice.toLocaleString('vi-VN') + '₫');
-                    discountElement.text('-' + totalDiscount.toLocaleString('vi-VN') + '₫');
+                totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + '₫');
+                totalAmountElement.text(totalPrice.toLocaleString('vi-VN') + '₫');
+                discountElement.text('-' + totalDiscount.toLocaleString('vi-VN') + '₫');
+            }
+            checkboxes.each(function() {
+                var checkbox = $(this);
+                var productId = checkbox.closest('.c-cart__product').data('variantcolorid');
+                var storedState = localStorage.getItem('checkbox-' + productId);
+                if (storedState === 'true') {
+                    checkbox.prop('checked', true);
+                } else {
+                    checkbox.prop('checked', false);
                 }
+            });
+            checkboxes.on('change', updateTotal);
 
-                // Thêm sự kiện 'change' cho tất cả các checkbox
-                checkboxes.on('change', function () {
-                    updateTotal();
-                });
+            $('.quantity-input').on('input', updateTotal());
 
-                // Sự kiện cho nút cộng
-                $('.js--btn-plus').on('click', function () {
-                    var cartId = $(this).data('cart-id');
-                    var quantityInput = $('#quantity-' + cartId);
-                    var currentQuantity = parseInt(quantityInput.val()) || 1;
-                    quantityInput.val(currentQuantity + 1);
-                    updateTotal();
-                });
+            updateTotal();
 
-                // Sự kiện cho nút trừ
-                $('.js--btn-minus').on('click', function () {
-                    var cartId = $(this).data('cart-id');
-                    var quantityInput = $('#quantity-' + cartId);
-                    var currentQuantity = parseInt(quantityInput.val()) || 1;
-                    if (currentQuantity > 1) {
-                        quantityInput.val(currentQuantity - 1);
-                    }
-                    $ajax({
-                        url:"{{ route('cart.updateQuantity')  }}",
+
+            $('.js--btn-minus').on('click', function() {
+                var cartId = $(this).data('cart-id');
+                var quantityInput = $('#quantity-' + cartId);
+                var currentQuantity = parseInt(quantityInput.val()) || 1;
+
+                if (currentQuantity > 1) {
+                    currentQuantity--;
+                    quantityInput.val(currentQuantity);
+
+                    $.ajax({
+                        url: "{{ route('cart.updateQuantity') }}",
                         method: 'POST',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            cartId: cartId,
+                            cart_id: cartId,
                             quantity: currentQuantity
                         },
-                    })
-                    updateTotal();
-                });
-
-                // Gọi hàm cập nhật ngay khi trang được tải
-                updateTotal();
-            });
-
-
-                $('#coupon_form').on('click', function(e) {
-                    e.preventDefault();
-                    let couponCode = $('#coupon_code').val();
-                    $.ajax({
-                        method: 'GET',
-                        url: '{{ route('apply-coupon') }}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            coupon_code: couponCode
-                        },
-                        success: function(data) {
-                            if (data.status === 'error') {
-                                window.location.reload();
-                                toastr.error(data.message);
-                            } else if (data.status === 'success') {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
-                        },
-                        error: function(data) {
-                            toastr.error('Có lỗi xảy ra');
-                        }
-                    });
-                });
-
-                $('.badge-close').on('click', function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        method: 'GET',
-                        url: "{{ route('remove-coupon') }}",
                         success: function(data) {
                             if (data.status === 'success') {
-                                window.location.reload();
                                 toastr.success(data.message);
+                                updateTotal();
 
+                            } else {
+                                toastr.error(data.message);
                             }
                         },
                         error: function(data) {
                             console.log(data);
                         }
                     });
-                });
-                var province='', districtId='' , ward='' , deliveryTime='';
-
-                $('.item-region').on('click', function(){
-                    province= $(this).text();
-                });
-
-
-                $(document).on('click', '#district-list .region-district', function() {
-                     districtId = $(this).text();
-                });
-
-                $(document).on('click', '#ward-list .region-ward', function() {
-                     ward = $(this).text();
-                });
-
-                $(document).on('click', '.dropdown-menu-wrapper a', function(e) {
-                    e.preventDefault();
-                    deliveryTime = $(this).find('span').text().trim();
-                    $(this).closest('.dropdown').find('.dropdown-button span').text(deliveryTime);
-                });
-                $("#checkout").on('click', function(e) {
-                    e.preventDefault();
-
-                    // Collect information
-                    var gender = $('input[name="gender"]:checked').val(); // Only the checked one
-                    var firstname = $('input[name="firstname"]').val();
-                    var phonenumber = $('input[name="phonenumber"]').val();
-                    var email = $('input[name="email"]').val();
-                    var address = $('input[name="address"]').val();
-
-                    // Log the collected information (for testing)
-                    console.log('Province:', province);
-                    console.log('District:', districtId);
-                    console.log('Ward:', ward);
-                    console.log('Gender:', gender);
-                    console.log('First Name:', firstname);
-                    console.log('Phone Number:', phonenumber);
-                    console.log('Email:', email);
-                    console.log('Address:', address);
-                    console.log('Delivery Time:', deliveryTime);
-                    console.log('Payment Method:', paymentMethod);
-                });
-
+                }
             });
-        </script>
-    @endpush
+
+            $('.js--btn-plus').on('click', function() {
+                var cartId = $(this).data('cart-id');
+                var quantityInput = $('#quantity-' + cartId);
+                var currentQuantity = parseInt(quantityInput.val()) || 1;
+                quantityInput.val(currentQuantity + 1);
+
+                $.ajax({
+                    url: "{{ route('cart.updateQuantity') }}",
+                    method: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        cart_id: cartId,
+                        quantity: currentQuantity + 1
+                    },
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            toastr.success(data.message);
+                            updateTotal();
+
+                        } else {
+                            $('.js--btn-plus').prop('disabled', true);
+                            toastr.error(data.message);
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            });
+            var displayCoupon = $('#coupon-badge');
+            var getcoupon_code = $('#getcoupon_code');
+            if (!$('#coupon-badge').val()) {
+                displayCoupon.hide();
+            }
+
+            $('#coupon_form').on('click', function(e) {
+                e.preventDefault();
+                let couponCode = $('#coupon_code').val();
+                $.ajax({
+                    method: 'GET',
+                    url: "{{ route('apply-coupon') }}",
+                    data: {
+                        coupon_code: couponCode
+                    },
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            toastr.success(data.message);
+                            displayCoupon.show();
+                            getcoupon_code.text(data.coupon_code);
+
+
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+                console.log(couponCode);
+            });
+
+            $('.badge-close').on('click', function(e) {
+                e.preventDefault();
+                let display = $('#coupon-badge');
+                $.ajax({
+                    method: 'GET',
+                    url: "{{ route('remove-coupon') }}",
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            display.hide();
+                            toastr.success(data.message);
+                            updateTotal();
+
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            });
+            var province = '',
+                districtId = '',
+                ward = '',
+                deliveryTime = '';
+
+            $('.item-region').on('click', function() {
+                province = $(this).text();
+            });
+
+            $(document).on('click', '#district-list .region-district', function() {
+                districtId = $(this).text();
+            });
+
+            $(document).on('click', '#ward-list .region-ward', function() {
+                ward = $(this).text();
+            });
+
+            $(document).on('click', '.dropdown-menu-wrapper a', function(e) {
+                e.preventDefault();
+                deliveryTime = $(this).find('span').text().trim();
+                $(this).closest('.dropdown').find('.dropdown-button span').text(deliveryTime);
+            });
+
+            var selectedProductIds = [];
+
+            $("#checkout").on('click', function(e) {
+                e.preventDefault();
+                var paymentMethod = $('input[name="cart2"]:checked').val();
+                var gender = $('input[name="gender"]:checked').val();
+                var firstname = $('input[name="firstname"]').val();
+                var phonenumber = $('input[name="phonenumber"]').val();
+                var email = $('input[name="email"]').val();
+                var address = [];
+                var info = [];
+                var endMoney = $('.re-price').text();
+
+                endMoney = endMoney.replace('₫', '').replace(/\./g, '');
+
+                address.push(province, districtId, ward);
+                info.push(gender, firstname, phonenumber, email);
+                checkboxes.each(function() {
+                    var checkbox = $(this);
+                    if (checkbox.is(':checked')) {
+                        var productIds = checkbox.closest('.c-cart__product').data(
+                            'variantcolorid');
+                        selectedProductIds.push(productIds);
+                    }
+                });
+
+                paymentMethod = 3;
+
+                if (!selectedProductIds || !paymentMethod || !gender || !firstname || !phonenumber || !
+                    email || !province || !districtId || !ward || !endMoney) {
+                    toastr.error("Vui lòng điền đầy dủ thông tin.");
+                    return;
+                }
+                $.ajax({
+                    method: paymentMethod === 3 ? 'GET' : 'POST',
+                    url: paymentMethod === 3 ? "{{ route('user.paypal.payment') }}" : "{{ route('checkout') }}",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        paymentMethod: paymentMethod,
+                        info: info,
+                        address: address,
+                        total_amount: endMoney,
+                        productIds: selectedProductIds
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            window.location.href = response.redirect;
+                        } else {
+                            toastr.error(response.message);
+                        }
+
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+
+                });
+            });
+
+        });
+    </script>
+@endpush

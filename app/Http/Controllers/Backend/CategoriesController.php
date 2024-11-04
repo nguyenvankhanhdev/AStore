@@ -30,7 +30,7 @@ class CategoriesController extends Controller
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
         $category->save();
-        return redirect()->route('admin.categories.index')->with('success', 'Create successfully');
+        return redirect()->route('admin.categories.index')->withSuccess('Create successfully');
     }
     public function show(string $id)
     {
@@ -50,7 +50,7 @@ class CategoriesController extends Controller
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
         $category->save();
-        return redirect()->route('admin.categories.index')->with('success', 'Update successfully');
+        return redirect()->route('admin.categories.index')->withSuccess('Update successfully');
     }
     public function destroy(string $id)
     {

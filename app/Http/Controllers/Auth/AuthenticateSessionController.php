@@ -27,10 +27,10 @@ class AuthenticateSessionController extends Controller
         $request->session()->regenerate();
 
         if($request->user()->role === 'admin') {
-            return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công');
+            return redirect()->route('admin.dashboard.index')->withSuccess('Đăng nhập thành công');
         }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -41,6 +41,6 @@ class AuthenticateSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('products.index');
+        return redirect()->route('home')->withSuccess('Đăng xuất thành công');
     }
 }

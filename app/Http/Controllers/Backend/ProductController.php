@@ -18,9 +18,11 @@ class ProductController extends Controller
     {
         return $dataTable->render('backend.admin.product.index');
     }
+
     public function create()
     {
         $categories = Categories::all();
+        
         return view('backend.admin.product.create', compact('categories'));
     }
 
