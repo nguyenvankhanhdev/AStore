@@ -53,34 +53,14 @@ class ReportController extends Controller
                     'warehouse_price' => 0,
                     'price' => 0,
                     'offer_price' => 0,
-                    'inventory_value' => 0,
+                    'total_import_cost' => 0,
                     'new_imports' => 0,
+                    'remaining_cost' => 0
                 ];
             }
 
-            $productVariant = $variantColor->variant;
-            $productModel = Products::find($productVariant->pro_id);
-
-            if (!$productModel) {
-                return [
-                    'product_name' => 'Unknown product',
-                    'variant_name' => 'N/A',
-                    'color_name' => 'N/A',
-                    'total_sold' => $product->total_sold,
-                    'stock' => 0,
-                    'revenue' => 0,
-                    'profit' => 0,
-                    'quantity_imported' => 0,
-                    'warehouse_price' => 0,
-                    'price' => 0,
-                    'offer_price' => 0,
-                    'inventory_value' => 0,
-                    'new_imports' => 0,
-                ];
-            }
-
-            $productName = $productModel->name;
-            $variantName = $productVariant->storage->GB;
+            $productName = $variantColor->variant->product->name;
+            $variantName = $variantColor->variant->storage->GB;
             $colorName = $variantColor->color->name;
 
             // Tính tồn kho từ các tháng trước
@@ -99,24 +79,56 @@ class ReportController extends Controller
                 })
                 ->sum('quantity');
 
-            // Tính số lượng tồn kho cuối cùng sau khi bán hàng trong tháng
+            // Tổng số lượng cần xuất kho (tổng số lượng đã bán)
             $totalSold = $product->total_sold;
+
+            // Lấy danh sách các lô hàng nhập theo thứ tự FIFO (ngày nhập sớm nhất trước)
+            $fifoEntries = WarehouseDetails::where('variant_color_id', $variantColor->id)
+                ->join('warehouses', 'warehouse_details.warehouse_id', '=', 'warehouses.id')
+                ->whereDate('warehouses.import_date', '<=', $toDate)
+                ->orderBy('warehouses.import_date', 'asc')
+                ->select('warehouse_details.*', 'warehouses.import_date')
+                ->get();
+
+            // Nếu không có nhập kho mới trong tháng hiện tại, lấy giá nhập từ lô hàng tồn cuối cùng của tháng trước
+            if ($newImports == 0 && $previousStock > 0) {
+                $lastStockEntry = $fifoEntries->filter(function ($entry) use ($fromDate) {
+                    return $entry->import_date < $fromDate;
+                })->last(); // Lấy lô cuối cùng từ tháng trước
+
+                if ($lastStockEntry) {
+                    $fifoEntries = collect([$lastStockEntry]); // Chỉ sử dụng lô cuối cùng từ tháng trước
+                }
+            }
+
+            // Tính chi phí nhập kho theo phương pháp FIFO cho sản phẩm đã bán
+            $remainingQuantityToSell = $totalSold;
+            $fifoCost = 0;
+
+            foreach ($fifoEntries as $entry) {
+                if ($remainingQuantityToSell <= 0) {
+                    break;
+                }
+
+                if ($entry->quantity <= $remainingQuantityToSell) {
+                    $fifoCost += $entry->quantity * $entry->warehouse_price;
+                    $remainingQuantityToSell -= $entry->quantity;
+                } else {
+                    $fifoCost += $remainingQuantityToSell * $entry->warehouse_price;
+                    $remainingQuantityToSell = 0;
+                }
+            }
+
+            // Tính số lượng tồn kho cuối cùng sau khi bán hàng trong tháng
             $remainingStock = $previousStock + $newImports - $totalSold;
 
-            // Lấy giá nhập kho trung bình
-            $warehousePrice = WarehouseDetails::where('variant_color_id', $variantColor->id)
-                ->whereHas('warehouse', function ($query) use ($toDate) {
-                    $query->whereDate('import_date', '<=', $toDate);
-                })
-                ->avg('warehouse_price');
+            // Giá gốc và giá bán sau khi giảm giá
+            $originalPrice = $variantColor->price;
+            $discountedPrice = $originalPrice - $variantColor->offer_price;
 
-            $originalPrice = $variantColor->price; // Lấy giá gốc từ cột price
-            $discountedPrice = $originalPrice - $variantColor->offer_price; // Tính giá bán sau khi giảm giá
-
-            // Tính lợi nhuận và giá trị tồn kho
+            // Doanh thu và lợi nhuận
             $revenue = $totalSold * $discountedPrice;
-            $profit = ($discountedPrice * $totalSold) - ($warehousePrice * $totalSold);
-            $inventoryValue = $remainingStock * $warehousePrice;
+            $profit = $revenue - $fifoCost;
 
             return [
                 'product_name' => $productName,
@@ -127,9 +139,9 @@ class ReportController extends Controller
                 'stock' => $remainingStock,
                 'revenue' => $revenue,
                 'profit' => $profit,
-                'inventory_value' => $inventoryValue,
-                'warehouse_price' => $warehousePrice,
-                'price' => $originalPrice, // Đảm bảo giá gốc được trả về
+                'fifo_cost' => $fifoCost,
+                'warehouse_price' => $fifoCost / max($totalSold, 1),
+                'price' => $originalPrice,
                 'offer_price' => $variantColor->offer_price,
                 'new_imports' => $newImports,
             ];
@@ -138,7 +150,7 @@ class ReportController extends Controller
         // Tính tổng các giá trị cho toàn bộ báo cáo
         $totalQuantityImported = $report->sum('quantity_imported');
         $totalSold = $report->sum('total_sold');
-        $totalInventoryValue = $report->sum('inventory_value');
+        $totalFifoCost = $report->sum('fifo_cost');
         $totalRevenue = $report->sum('revenue');
         $totalProfit = $report->sum('profit');
 
@@ -147,13 +159,20 @@ class ReportController extends Controller
             'report',
             'totalQuantityImported',
             'totalSold',
-            'totalInventoryValue',
+            'totalFifoCost',
             'totalRevenue',
             'totalProfit',
             'fromDate',
             'toDate'
         ));
     }
+
+
+
+
+
+
+
 
 
     public function reportByCategory(Request $request)

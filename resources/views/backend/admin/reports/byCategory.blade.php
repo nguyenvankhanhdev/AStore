@@ -66,14 +66,8 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
 
-            <!-- Bảng tổng quan -->
-            <div class="card shadow-sm mt-4">
-                <div class="card-body">
-                    <h5 class="text-center mb-4" style="font-weight: bold; color: #34495e;">Tổng Quan</h5>
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped text-center" style="width: 60%; margin: 0;"">
                         <thead class="table-secondary text-center">
                             <tr>
                                 <th>Tổng số lượng nhập</th>
@@ -93,6 +87,7 @@
                     </table>
                 </div>
             </div>
+
         @else
             <!-- Thông báo không có dữ liệu -->
             <p class="text-center text-muted my-4">Không có dữ liệu bán hàng trong khoảng thời gian này.</p>
