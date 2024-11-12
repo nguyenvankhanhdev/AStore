@@ -36,7 +36,7 @@ class ProductVariantDataTable extends DataTable
                 return $editBtn.$deleteBtn.$moreBtn;
             })
             ->editColumn('storage_id', function ($query) {
-                return $query->storage->GB; // Assuming the storage size is stored in the 'GB' column
+                return $query->storage->GB;
             })
             ->rawColumns(['action'])
             ->setRowId('id');

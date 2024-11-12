@@ -12,8 +12,6 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-use Illuminate\Http\RedirectResponse;
-
 
 
 class RegisterUserController extends Controller
@@ -34,7 +32,7 @@ class RegisterUserController extends Controller
         $request->validate([
             'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
@@ -44,12 +42,9 @@ class RegisterUserController extends Controller
         ]);
 
         event(new Registered($user));
+
         Auth::login($user);
 
-        return redirect()->route('auth.admin')->with('success', 'Đăng kí thành công!');
-
-
-
-
+        return redirect()->route('auth.admin')->withSuccess('Đăng kí thành công!');
     }
 }

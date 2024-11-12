@@ -3,17 +3,16 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Product</h1>
+            <h1>All Product</h1>
         </div>
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>All Product</h4>
+                            <h4></h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.product.create') }}" class="btn btn-dark"><i class="fas fa-plus"></i>
-                                    Create New</a>
+                                <a href="{{ route('admin.product.create') }}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -25,6 +24,7 @@
         </div>
     </section>
 @endsection
+
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
     <script>
@@ -46,46 +46,8 @@
                     error: function(xhr, status, error) {
                         console.log(error);
                     }
-                })
-
-            })
-        })
-    </script>
-
-    {{-- <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $(document).ready(function() {
-                // Bắt sự kiện click vào nút báo cáo
-                $('.warningcm').click(function(e) {
-                    // e.preventDefault();
-                    var id = $(this).data('comment-id'); // Lấy giá trị của data-comment-id
-                    console.log(id);
-
-                    // Hiển thị cửa sổ xác nhận
-                    if (confirm('Bạn có muốn báo cáo bình luận này không?')) {
-                        // Gửi yêu cầu Ajax
-                        $.ajax({
-                            url: "{{ route('comments.change-status') }}",
-                            method: 'PUT',
-                            data: {
-                                id: id,
-
-                            },
-                            success: function(data) {
-                                console.log(data);
-                            },
-                            error: function(xhr, status, error) {
-                                alert('Đã xảy ra lỗi: ' + error);
-                            }
-                        });
-                    }
                 });
             });
         });
-    </script> --}}
+    </script>
 @endpush

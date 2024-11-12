@@ -37,6 +37,9 @@ class ProductDataTable extends DataTable
             ->addColumn('image', function ($query) {
                 return "<img width='70px' src='" . asset($query->image) . "' ></img>";
             })
+            ->addColumn('sub_cate_id', function ($query) {
+                return $query->subCategory->name;
+            })
             ->addColumn('type', function ($query) {
                 switch ($query->product_type) {
                     case 'new_arrival':
@@ -70,7 +73,7 @@ class ProductDataTable extends DataTable
                 }
                 return $button;
             })
-            ->rawColumns(['image', 'type', 'status', 'action'])
+            ->rawColumns(['image','sub_cate_id', 'type', 'status', 'action'])
             ->setRowId('id');
     }
 
@@ -104,11 +107,13 @@ class ProductDataTable extends DataTable
             ]);
     }
 
+
     public function getColumns(): array
     {
         return [
             Column::make('id'),
             Column::make('image'),
+            Column::make('sub_cate_id')->title('Sub Category'),
             Column::make('name'),
             Column::make('type')->width(150),
             Column::make('status'),
