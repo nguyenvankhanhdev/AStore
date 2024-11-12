@@ -53,6 +53,11 @@ Route::get('category', [ProductController::class, 'productCategories'])->name('p
 Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 Route::get('getPrice', [ProductController::class, 'getPrice'])->name('getPrice');
 
+Route::post('rating', [ProductController::class, 'rating'])->name('product.rating');
+
+
+
+
 Route::get('subcategory', [ProductController::class, 'productSubCategories'])->name('products.subcategory');
 Route::get('get-districts/{province_id}', [CartController::class, 'getDistricts'])->name('get-districts');
 Route::get('get-wards/{district_id}', [CartController::class, 'getWards'])->name('get-wards');

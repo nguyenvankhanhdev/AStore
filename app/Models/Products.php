@@ -49,7 +49,17 @@ class Products extends Model
 
 
 
+    public static function hasUserPurchasedProduct($userId, $productId)
+    {
+        // Lấy danh sách order_id của user
+        $orderIds = Orders::getOrderIdsByUserId($userId);
 
+        // Lấy danh sách product_id từ order_id
+        $productIds = OrderDetails::getProductIdsByOrderIds($orderIds);
+
+        // Kiểm tra productId có trong danh sách productIds không
+        return $productIds->contains($productId);
+    }
 
 
 
