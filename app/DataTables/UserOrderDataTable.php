@@ -28,14 +28,17 @@ class UserOrderDataTable extends DataTable
                 $showBtn = "<a href='" . route('user.order.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
                 return $showBtn;
             })
-            ->addColumn('name', function ($query) {
-                return $query->users->name;
-            })
+            // ->addColumn('name', function ($query) {
+            //     return $query->users->name;
+            // })
             ->editColumn('total_amount', function ($query) {
                 return number_format($query->total_amount, 0, ',', '.');
             })
             ->addColumn('order_date', function ($query) {
                 return date('d-m-Y', strtotime($query->created_at));
+            })
+            ->addColumn('payment_status', function ($query) {
+                return $query->payment_status;
             })
             ->addColumn('payment_method', function ($query) {
                 return $query->payment_method;
@@ -108,10 +111,11 @@ class UserOrderDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('name')->title('Tên khách hàng'),
+
             Column::make('total_amount')->title('Tổng tiền'),
             Column::make('status')->title('Trạng thái'),
             Column::make('order_date')->title('Ngày đặt hàng'),
+            Column::make('payment_status')->title('Phương thức thanh toán'),
             Column::make('payment_method')->title('Phương thức thanh toán'),
             Column::computed('action')->title('Xem chi tiết')
                 ->exportable(false)

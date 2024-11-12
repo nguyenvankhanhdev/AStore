@@ -282,7 +282,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderDetails> $orderDetails
  * @property-read int|null $order_details_count
- * @property-read \App\Models\User|null $users
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Orders query()
@@ -456,6 +456,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Products|null $product
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings query()
@@ -548,6 +549,7 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property-read \App\Models\UserAddress|null $userAddress
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCoupons> $usercoupons
  * @property-read int|null $usercoupons_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -586,7 +588,7 @@ namespace App\Models{
  * @property string $ward
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $users
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|UserAddress newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAddress newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAddress query()
