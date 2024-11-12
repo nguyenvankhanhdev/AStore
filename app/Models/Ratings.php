@@ -13,4 +13,27 @@ class Ratings extends Model
         return $this->belongsTo(Products::class,'pro_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public static function getCountByStar($pro_id)
+    {
+        $counts = [];
+
+        // Đếm số lượng đánh giá cho từng mức điểm từ 1 đến 5
+        for ($star = 1; $star <= 5; $star++) {
+            $counts[$star] = self::where('pro_id', $pro_id)
+                                ->where('point', $star)
+                                ->count();
+        }
+
+        return $counts;
+    }
+
+    public static function getAverageRating($pro_id)
+    {
+        return self::where('pro_id', $pro_id)->avg('point') ?? 0;
+    }
 }

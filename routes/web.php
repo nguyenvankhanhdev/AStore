@@ -52,7 +52,7 @@ Route::get('category', [ProductController::class, 'productCategories'])->name('p
 //details
 Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 Route::get('getPrice', [ProductController::class, 'getPrice'])->name('getPrice');
-
+Route::post('rating', [ProductController::class, 'rating'])->name('product.rating');
 
 
 

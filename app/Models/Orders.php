@@ -15,4 +15,9 @@ class Orders extends Model
     public function orderDetails(){
         return $this->hasMany(OrderDetails::class,'order_id');
     }
+
+    public static function getOrderIdsByUserId($userId)
+    {
+        return self::where('user_id', $userId)->pluck('id');
+    }
 }
