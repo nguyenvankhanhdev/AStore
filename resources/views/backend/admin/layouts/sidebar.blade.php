@@ -20,7 +20,7 @@
                     <span>Manage Categories</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.category.*']) }}"><a class="nav-link"
-                            href="">Category</a></li>
+                            href="{{ route('admin.categories.index') }}">Category</a></li>
                     <li class="{{ setActive(['admin.sub-category.*']) }}"><a class="nav-link"
                             href="">Sub Category</a></li>
                     <li class="{{ setActive(['admin.child-category.*']) }}"> <a class="nav-link"

@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
 Route::get('product/get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
 
@@ -45,9 +44,10 @@ Route::resource('variant-colors', VariantColorController::class);
 
 Route::resource('comment', CommentController::class);
 
+Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 
 
-Route::get('reports', [ReportController::class, 'index'])->name('reports');
+
 Route::get('reports/byCategory', [ReportController::class, 'reportByCategory'])->name('reports.byCategory');
 
 Route::get('orders', [OrderController::class, 'index'])->name('orders');

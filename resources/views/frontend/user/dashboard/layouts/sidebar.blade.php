@@ -13,14 +13,16 @@
 
         <li><a class="" href="{{ url('/') }}"><i class="fas fa-home"></i>Go To Home Page</a></li>
 
-        <li><a class="" href=""><i
+        <li><a class="{{ setActive(['user.order.index']) }}" href="{{ route('user.order.index') }}"><i
                     class="fas fa-list-ul"></i> Orders</a></li>
+        <li><a class="{{ setActive(['user.user-coupons.*']) }}" href="{{ route('user.user-coupons.index') }}"><i
+                        class="fas fa-coins"></i>Coupons</a></li>
         <li><a class="" href=""><i
                     class="far fa-star"></i> Reviews</a></li>
 
-        <li><a class="" href=""><i
+        <li><a class="{{ setActive(['user.dashboard.profile']) }}" href="{{ route('user.dashboard.profile') }}"><i
                     class="far fa-user"></i> My Profile</a></li>
-        <li><a class="" href=""><i
+        <li><a class="{{ setActive(['user.address.*']) }}" href="{{ route('user.address.index') }}"><i
                     class="fal fa-gift-card"></i> Addresses</a></li>
 
         <li>

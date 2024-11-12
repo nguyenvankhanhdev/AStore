@@ -12,7 +12,6 @@
                             <p class="f-s-p-18 text-grayscale-800 f-w-500 p-t-8">Cảm ơn quý khách đã mua hàng tại F.Studio by
                                 FPT
                             </p>
-
                         </div>
                         {{-- <div class="c-cart__data-user">
                             <div class="c-modal__row info-ship">

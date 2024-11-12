@@ -10993,7 +10993,6 @@ $(document).ready(function (e) {
     // hide footer
     function hideFooter() {
         let footerEffect = $('.gallery-off');
-        console.log(footerEffect.length);
         if (footerEffect.length != 0) {
             $('.footer .section__gallery').css({ display: 'none' });
         }

@@ -10922,7 +10922,7 @@ return jQuery;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -10936,20 +10936,20 @@ return jQuery;
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 /* provided dependency */ var $ = __webpack_require__(19755);
-// "use strict" 
+// "use strict"
 
 $(document).ready(function (e) {
 
@@ -10993,7 +10993,6 @@ $(document).ready(function (e) {
     // hide footer
     function hideFooter() {
         let footerEffect = $('.gallery-off');
-        console.log(footerEffect.length);
         if (footerEffect.length != 0) {
             $('.footer .section__gallery').css({ display: 'none' });
         }
