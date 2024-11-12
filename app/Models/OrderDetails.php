@@ -9,14 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class OrderDetails extends Model
 {
     use HasFactory;
-    public function products(): BelongsTo
-    {
-        return $this->belongsTo(
-            Products::class,
-            'pro_id',
-            'id'
-        );
-    }
+
 
     public function variantColors(): BelongsTo
     {

@@ -574,7 +574,7 @@ body {
 }
 
 a {
-    color: #0664f9;
+    /* color: #0664f9; */
     text-decoration: none;
     background-color: transparent;
     -webkit-text-decoration-skip: objects
@@ -10423,7 +10423,7 @@ a.checkbox.active:after {
 }
 
 .fst__address .address-info {
-    max-width: 327px;
+    /* max-width: 327px; */
     width: 1005
 }
 
@@ -14631,4 +14631,8 @@ input[type=text]:focus-visible {
     display: flex;
     justify-content: center;
     flex-direction: row
+}
+.product-cart__remove.delete-item:hover{
+    color: #484b4d;
+    font-size: 14px;
 }

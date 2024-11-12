@@ -12,8 +12,8 @@
   </title>
   <link rel="icon" type="image/png" href="/">
 
-  <link rel="stylesheet" href="{{ asset('frontend/asset/css/all.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/asset/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="/frontend/asset/css/all.min.css">
+  <link rel="stylesheet" href="/frontend/asset/css/bootstrap.min.css">
   <link rel="stylesheet" href="/frontend/asset/css/select2.min.css">
   <link rel="stylesheet" href="/frontend/asset/css/slick.css">
   <link rel="stylesheet" href="/frontend/asset/css/jquery.nice-number.min.css">
@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="/frontend/asset/css/style.css">
   <link rel="stylesheet" href="/frontend/asset/css/responsive.css">
+  <link rel="icon" href="images/favicon.ico" />
   {{-- @if($settings->layout === 'RTL')
   <link rel="stylesheet" href="{{asset('frontend/css/rtl.css')}}">
   @endif
@@ -46,7 +47,7 @@
   ==============================-->
   <div class="wsus__dashboard_menu">
     <div class="wsusd__dashboard_user">
-      <img src="uth()->user()->image)}}" alt="img" class="img-fluid">
+      <img src="{{ asset(auth()->user()->image) }}" alt="img" class="img-fluid">
       <p>{{auth()->user()->name}}</p>
     </div>
   </div>

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('guest')->group(function() {
-
     Route::get('admin/login', [DashboardController::class, 'login']) ->name('admin.login');
 
     Route::get('register', [RegisterUserController::class, 'create'])->name('register');

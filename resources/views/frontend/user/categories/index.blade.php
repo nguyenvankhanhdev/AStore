@@ -53,30 +53,6 @@
                                     </div>
                                     <div class="product__info">
                                         <div class="product__color">
-                                            {{-- @foreach ($product->variants as $variant)
-                                                @switch($variant->color->color)
-                                                    @case('Đen')
-                                                        <span style="background-color:#232A31"></span>
-                                                        @break
-                                                    @case('Xanh da trời')
-                                                        <span style="background-color:#51b3f0"></span>
-                                                        @break
-                                                    @case('Xanh lá')
-                                                        <span style="background-color:#4859f2"></span>
-                                                        @break
-                                                    @case('Trắng')
-                                                        <span style="background-color:#FAF7F2"></span>
-                                                        @break
-                                                    @case('Vàng hồng')
-                                                        <span style="background-color:#F0D95B"></span>
-                                                        @break
-                                                    @case('Xám')
-                                                        <span style="background-color:#B2C5D6"></span>
-                                                        @break
-                                                    @default
-                                                        <span style="background-color:#FFFFFF"></span> <!-- default color -->
-                                                @endswitch
-                                            @endforeach --}}
                                         </div>
 
                                         <h3 class="product__name">
@@ -94,8 +70,6 @@
                                         <div class="product__memory js-select">
                                             @foreach ($product->variants as $index => $variant)
                                                 <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
-                                                    data-price="{{ $variant->price }}"
-                                                    data-offer-price="{{ $variant->offer_price }}"
                                                     data-variant-id="{{ $variant->id }}">
                                                     <strong>{{ $variant->storage->GB }}</strong>
                                                 </div>
@@ -106,15 +80,10 @@
                                             @php
                                                 $firstVariant = $product->variants->first();
                                             @endphp
-                                            @if ($firstVariant)
-                                                <div class="price">
-                                                    {{ number_format($firstVariant->price - $firstVariant->offer_price, 0, ',', '.') }}đ
-                                                </div>
-                                                <strike
-                                                    class="text-promo p-l-6 f-s-p-16 f-w-400">{{ number_format($firstVariant->price, 0, ',', '.') }}đ</strike>
-                                            @else
-                                                <div class="price">N/A</div>
-                                            @endif
+
+                                            <div class="price"> </div>
+                                            <strike class="text-promo p-l-6 f-s-p-16 f-w-400"> </strike>
+
                                         </div>
                                     </div>
                                     <div class="product__detail">
@@ -122,10 +91,6 @@
                                             <a class="btn btn-outline-grayscale btn-md"
                                                 href="{{ route('product.details', ['slug' => $product->slug, 'variant' => $firstVariant->id]) }}">XEM
                                                 CHI TIẾT</a>
-                                        @else
-                                            <a class="btn btn-outline-grayscale btn-md"
-                                                href="{{ route('product.details', ['slug' => $product->slug]) }}">XEM CHI
-                                                TIẾT</a>
                                         @endif
                                     </div>
                                 </div>
@@ -142,6 +107,53 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
+            function getPriceByVariantId(productElement) {
+                var variantId = productElement.find('.product__memory__item.active').data('variant-id');
+                console.log(variantId);
+                $.ajax({
+                    url: '{{ route('getByVariant') }}',
+                    method: 'GET',
+                    data: {
+                        variantId: variantId
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const price = response.variantColors.price;
+                            const discount = response.variantColors.offer_price;
+                            const endPrice = price - discount;
+                            productElement.find('.product__price .price').text(endPrice.toLocaleString(
+                                'vi-VN') + ' ₫');
+                            productElement.find('.product__price .text-promo').text(price
+                                .toLocaleString('vi-VN') + ' ₫');
+                        }
+                    },
+                    error: function(error) {
+                        console.error("Error fetching price:", error);
+                    }
+                });
+            }
+
+            $('.product').each(function() {
+                getPriceByVariantId($(this));
+            });
+
+            $('.product__memory__item').on('click', function() {
+                const productElement = $(this).closest('.product');
+                $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
+                $(this).addClass('active');
+
+                const variantId = $(this).data('variant-id');
+                const detailLink = productElement.find('.product__detail a');
+                const url = new URL(detailLink.attr('href'));
+                url.searchParams.set('variant', variantId);
+                detailLink.attr('href', url.toString());
+
+                getPriceByVariantId(productElement);
+            });
+
+
+
             function setActiveSlide(index) {
                 const slides = $('.swiper-slide');
                 slides.removeClass('active');
@@ -275,32 +287,6 @@
         $('.price_min').click(function(e) {
             e.preventDefault();
             sortProducts('desc');
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.product__memory__item').forEach(function(memoryItem) {
-                memoryItem.addEventListener('click', function() {
-                    const productElement = this.closest('.product');
-                    console.log(productElement);
-                    const newPrice = this.getAttribute('data-price');
-                    const offerPrice = this.getAttribute('data-offer-price');
-                    const variantId = this.getAttribute('data-variant-id');
-
-                    this.closest('.js-select').querySelectorAll('.product__memory__item').forEach(
-                        function(item) {
-                            item.classList.remove('active');
-                        });
-                    this.classList.add('active');
-                    productElement.querySelector('.price').textContent = (newPrice - offerPrice)
-                        .toLocaleString('vi-VN') + 'đ';
-                    productElement.querySelector('.text-promo').textContent = parseInt(newPrice)
-                        .toLocaleString('vi-VN') + 'đ';
-
-                    const detailLink = productElement.querySelector('.product__detail a');
-                    const url = new URL(detailLink.href);
-                    url.searchParams.set('variant', variantId);
-                    detailLink.href = url.toString();
-                });
-            });
         });
     </script>
 @endpush

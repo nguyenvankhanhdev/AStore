@@ -6740,7 +6740,7 @@ hr {
 }
 
 .fst__address .address-info {
-    max-width: 327px;
+    /* max-width: 327px; */
     width: 1005
 }
 
@@ -7117,7 +7117,7 @@ hr {
 .product__memory {
     display: flex;
     margin-bottom: 16px;
-    background-color: #edeeef;
+
     border-radius: 4px
 }
 
@@ -8093,7 +8093,7 @@ main {
     border: solid 1px #edeeef;
     border-top: none;
     border-left: none;
-    width: 380px;
+    width: 370px;
 
 }
 
@@ -8183,10 +8183,9 @@ main {
 .category .product__price {
     display: flex;
     gap: 8px;
-    align-items: flex-end;
-    justify-content: center
+    align-items: center;
+    justify-content: center;
 }
-
 .category .product__price .text {
     font-size: 16px;
     line-height: 24px;

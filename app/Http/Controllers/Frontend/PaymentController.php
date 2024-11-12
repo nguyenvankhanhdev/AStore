@@ -1,16 +1,21 @@
 <?php
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carts;
 use App\Models\OrderDetails;
 use App\Models\PaypalSettings;
+use App\Models\UserAddress;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use App\Models\VariantColors;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Mail;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PaymentController extends Controller
@@ -42,18 +47,23 @@ class PaymentController extends Controller
     public function payWithPaypal(Request $request)
     {
         $config = $this->paypalConfig();
-        $paypalSetting = PaypalSettings::first();
         $provider = new PayPalClient($config);
         $provider->getAccessToken();
+        $request->validate([
+            'info' => 'required|array',
+            'address' => 'required|array',
+            'total_amount' => 'required|numeric',
+            'productIds' => 'required|array|min:1',
+        ]);
 
         session([
+            'order_point' => $request->point,
             'order_info' => $request->info,
-            'order_address' => $request->address,
+            'address' => $request->address,
             'order_product_ids' => $request->productIds,
             'order_total_amount' => $request->total_amount,
         ]);
 
-        // Create the order
         $amountValue = round($request->total_amount / 25000, 2);
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
@@ -78,14 +88,13 @@ class PaymentController extends Controller
                     return response()->json(
                         [
                             'status' => 'success',
+                            'message' => 'Xin chờ 1 chút !!!.',
                             'redirect' => $link['href'],
                         ]
                     );
                 }
             }
         } else {
-            // Log the error and redirect to cancel
-
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Failed to create PayPal order.'
@@ -104,12 +113,49 @@ class PaymentController extends Controller
         $response = $provider->capturePaymentOrder($orderId);
 
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
-            $this->storeOrder('PayPal', 'pending');
+            $info = Session::get('order_info');
+            $address = Session::get('address');
+
+            if (!$info || !$address) {
+                return redirect()->route('user.paypal.cancel')->with('error', 'Required information missing.');
+            }
+            $userAddress = $this->getOrCreateUserAddress($info, $address);
+
+            session(['user_address' => $userAddress->toJson()]);
+
+            $updatePoint = User::find(auth()->id());
+            $updatePoint->point += session('order_point');
+            $updatePoint->save();
+            $this->storeOrder('Paypal', 'pending', session('user_address'));
+
+            session()->forget('user_address');
             $this->clearSession();
+
+
             return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
         }
 
         return redirect()->route('user.paypal.cancel')->with('error', 'Payment was not successful.');
+    }
+    private function getOrCreateUserAddress($info, $address)
+    {
+        if (isset($address[0]) && $address[0] != null) {
+            $userAddress = UserAddress::find($address[0]);
+            if (!$userAddress) {
+                $userAddress = new UserAddress();
+                $userAddress->user_id = auth()->id();
+                $userAddress->address = $address[3];
+                $userAddress->name = $info[0];
+                $userAddress->phone = $info[1];
+                $userAddress->email = $info[2];
+                $userAddress->province = $address[0];
+                $userAddress->district = $address[1];
+                $userAddress->ward = $address[2];
+                $userAddress->save();
+            }
+            return $userAddress;
+        }
+        return null;
     }
     public function paypalCancel()
     {
@@ -117,10 +163,12 @@ class PaymentController extends Controller
     }
     public function clearSession()
     {
-        session()->forget('order_info');
-        session()->forget('order_address');
-        session()->forget('order_product_ids');
-        session()->forget('order_total_amount');
+        Session::forget('order_info');
+        Session::forget('order_product_ids');
+        Session::forget('order_total_amount');
+        Session::forget('user_address');
+        Session::forget('order_point');
+        Session::forget('user_address');
     }
     public function payWithCOD(Request $request)
     {
@@ -130,43 +178,79 @@ class PaymentController extends Controller
             'total_amount' => 'required|numeric',
             'productIds' => 'required|array|min:1',
         ]);
-        $user = auth()->user();
-        $currentDateTime = Carbon::now()->format('Y-m-d H:i:s');
-        if (empty($request->productIds) || !is_array($request->productIds)) {
-            return response()->json(['status' => 'error', 'message' => 'Không có sản phẩm được chọn'], 400);
-        }
-        $order = new Orders();
-        $order->total_amount = $request->total_amount;
-        $order->user_id = $user->id;
-        $order->name = $request->info[1];
-        $order->status = 'pending';
-        $order->order_date = $currentDateTime;
-        $order->address = $request->address[1];
-        $order->payment_method = 'COD';
-        $order->save();
-        foreach ($request->productIds as $productId) {
-            $cartItem = Carts::where('user_id', $user->id)->where('variant_color_id', $productId)->first();
-            if ($cartItem) {
-                $quantity = $cartItem->quantity;
-                $variant = VariantColors::find($productId);
-                if ($variant) {
-                    $orderDetail = new OrderDetails();
-                    $orderDetail->order_id = $order->id;
-                    $orderDetail->variant_color_id = $productId;
-                    $orderDetail->quantity = $quantity;
-                    $orderDetail->total_price = $variant->price * $quantity;
-                    $orderDetail->save();
-                }
-                $cartItem->delete();
-            }
-        }
+
+        session([
+            'order_point' => $request->point,
+            'order_product_ids' => $request->productIds,
+            'order_total_amount' => $request->total_amount,
+        ]);
+
+        $info = $request->info;
+        $address = $request->address;
+
+        $userAddress =  $this->getOrCreateUserAddress($info, $address);
+
+        $updatePoint = User::find(auth()->id());
+        $updatePoint->point += $request->point;
+        $updatePoint->save();
+
+        session(['user_address' => $userAddress->toJson()]);
+
+        $this->storeOrder('COD', 'pending', session('user_address'));
+
+        $this->clearSession();
+
         $returnData = [
-            'variant' => $request->productIds,
             'status' => 'success',
             'message' => 'Đặt hàng thành công',
             'redirect' => route('booking.success')
         ];
         return response()->json($returnData);
+    }
+    public function storeOrder($payment_method, $paymentStatus, $addressJson)
+    {
+        $order = new Orders();
+        $order->total_amount = session('order_total_amount');
+        $order->user_id = auth()->id();
+        $order->status = $paymentStatus;
+        $order->order_date = Carbon::now()->format('Y-m-d H:i:s');
+        $order->address = $addressJson; // Save the address JSON in the address column
+        $order->payment_method = $payment_method;
+        $order->save();
+        $orderDetails = [];
+
+        foreach (session('order_product_ids') as $productId) {
+            $cartItem = Carts::where('user_id', auth()->id())
+                ->where('variant_color_id', $productId)
+                ->first();
+            $quantity = $cartItem->quantity;
+            $variant = VariantColors::find($productId);
+            if ($variant) {
+                $orderDetail = new OrderDetails();
+                $variant->quantity -= $quantity;
+                $variant->save();
+
+                $orderDetail->order_id = $order->id;
+                $orderDetail->variant_color_id = $productId;
+                $orderDetail->quantity = $quantity;
+                $orderDetail->total_price = $variant->price * $quantity;
+                $orderDetail->save();
+                $orderDetails[] = $orderDetail;
+            }
+
+            $cartItem->delete();
+        }
+
+        $address = json_decode($order->address);
+        $user = auth()->user();
+        Mail::send('frontend.emails.order_confirmation', [
+            'user' => $user,
+            'orders' => $order,
+            'address' => $address,
+            'orderDetails' => $orderDetails
+        ], function ($message) use ($address) {
+            $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
+        });
     }
     public function payWithVNPAY(Request $request)
     {
@@ -177,15 +261,16 @@ class PaymentController extends Controller
             'productIds' => 'required|array|min:1',
         ]);
         session([
+            'order_point' => $request->point,
             'order_info' => $request->info,
-            'order_address' => $request->address,
+            'address' => $request->address,
             'order_product_ids' => $request->productIds,
             'order_total_amount' => $request->total_amount,
         ]);
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('vnpay.return');
-        $vnp_TmnCode = "2GFOARF6";
-        $vnp_HashSecret = "01EKYM991EWOIUI4F1AL2V52R7KJE5TK";
+        $vnp_TmnCode = env('VNPAY_TMN_CODE');
+        $vnp_HashSecret = env('VNPAY_HASH_SECRET');
         $vnp_TxnRef = rand(1, 1000000);
         $vnp_OrderInfo = 'Thanh toán hóa đơn';
         $vnp_OrderType = 'AStore';
@@ -234,81 +319,72 @@ class PaymentController extends Controller
         }
         return response()->json([
             'status' => 'success',
+            'message' => 'Xin chờ 1 chút !!!.',
             'redirect' => $vnp_Url,
         ]);
     }
-    public function storeOrder($payment_method, $paymentStatus)
-    {
-        $order = new Orders();
-        $order->total_amount = session('order_total_amount');
-        $order->user_id = auth()->id();
-        $order->name = json_encode(session('order_info'), JSON_UNESCAPED_UNICODE); // Prevent Unicode escaping
-        $order->status = $paymentStatus;
-        $order->order_date = Carbon::now()->format('Y-m-d H:i:s'); // Correct datetime format for MySQL
-        $order->address = json_encode(session('order_address'), JSON_UNESCAPED_UNICODE); // Prevent Unicode escaping
-        $order->payment_method = $payment_method;
-        $order->save();
-
-        foreach (session('order_product_ids') as $productId) {
-            $cartItem = Carts::where('user_id', auth()->id())
-                ->where('variant_color_id', $productId)
-                ->first();
-            $quantity = $cartItem->quantity;
-            $variant = VariantColors::find($productId);
-            if ($variant) {
-                $orderDetail = new OrderDetails();
-                $orderDetail->order_id = $order->id;
-                $orderDetail->variant_color_id = $productId;
-                $orderDetail->quantity = $quantity;
-                $orderDetail->total_price = $variant->price * $quantity;
-                $orderDetail->save();
-            }
-            $cartItem->delete();
-        }
-    }
     public function vnpay_return(Request $request)
     {
-        $vnp_HashSecret = "01EKYM991EWOIUI4F1AL2V52R7KJE5TK";
-        $vnp_SecureHash = $request->vnp_SecureHash;
-
-        $inputData = $request->except('vnp_SecureHash');
-        ksort($inputData);
-        $hashData = '';
-        foreach ($inputData as $key => $value) {
-            $hashData .= '&' . urlencode($key) . "=" . urlencode($value);
-        }
-        $generatedSecureHash = hash_hmac('sha512', ltrim($hashData, '&'), $vnp_HashSecret);
-        if ($generatedSecureHash === $vnp_SecureHash) {
-            if ($request->vnp_ResponseCode == '00') {
-                DB::beginTransaction();
-                try {
-
-                    $this->storeOrder('VNPAY', 'pending');
-                    DB::commit();
-                    $this->clearSession();
-
-                    session()->forget('checkbox-' . $request->productIds);
-                    return redirect()->route('booking.success')->with('success', 'Đặt hàng thành công');
-                } catch (\Exception $e) {
-                    DB::rollBack();
-                    return response()->json(['status' => 'failed', 'message' => 'Xử lý đơn hàng không thành công.' . $e->getMessage()]);
-                }
-            } elseif ($request->vnp_ResponseCode == '10') {
-                return redirect()->route('cart.index')->with('message', 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần');
-            } elseif ($request->vnp_ResponseCode == '11') {
-                return redirect()->route('cart.index')->with('message', 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch');
-            } elseif ($request->vnp_ResponseCode == '12') {
-                return redirect()->route('cart.index')->with('message', 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.');
-            } elseif ($request->vnp_ResponseCode == '13') {
-                return redirect()->route('cart.index')->with('message', 'Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.');
-            } elseif ($request->vnp_ResponseCode == '24') {
-                return redirect()->route('cart.index')->with('message', 'Thanh toán bị hủy');
-            } else {
-                return response()->json(['status' => 'error', 'message' => 'Thanh toán không thành công']);
-            }
-        } else {
+        $vnp_HashSecret = env('VNPAY_HASH_SECRET');
+        if (!$this->verifySecureHash($request->all(), $vnp_HashSecret, $request->vnp_SecureHash)) {
             return response()->json(['status' => 'error', 'message' => 'Sai chữ ký']);
         }
+
+        if ($request->vnp_ResponseCode == '00') {
+            DB::beginTransaction();
+            try {
+                $info = Session::get('order_info');
+                $address = Session::get('address');
+
+                $updatePoint = User::find(auth()->id());
+                $updatePoint->point += session('order_point');
+                $updatePoint->save();
+
+                $userAddress = $this->getOrCreateUserAddress($info, $address);
+                session(['user_address' => $userAddress->toJson()]);
+
+                $this->storeOrder('VNPAY', 'pending', session('user_address'));
+
+                DB::commit();
+                $this->clearSession();
+                session()->forget('user_address');
+
+                session()->forget('checkbox-' . $request->productIds);
+
+                return redirect()->route('booking.success')->withSuccess('Đặt hàng thành công');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Order processing failed: ' . $e->getMessage());
+                return response()->json(['status' => 'failed', 'message' => 'Xử lý đơn hàng không thành công. ' . $e->getMessage()]);
+            }
+        } else {
+            return $this->handleVnpResponseCode($request->vnp_ResponseCode);
+        }
+    }
+    private function verifySecureHash($inputData, $vnp_HashSecret, $vnp_SecureHash)
+    {
+        $inputData = collect($inputData)->except('vnp_SecureHash')->toArray();
+        ksort($inputData);
+        $hashData = http_build_query($inputData, '', '&');
+        $generatedSecureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+        return $generatedSecureHash === $vnp_SecureHash;
+    }
+    private function handleVnpResponseCode($code)
+    {
+        $messages = [
+            '10' => 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần',
+            '11' => 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch',
+            '12' => 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.',
+            '13' => 'Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.',
+            '24' => 'Thanh toán bị hủy',
+        ];
+
+        $message = $messages[$code] ?? 'Thanh toán không thành công';
+        if ($code === '24') {
+            return redirect()->route('cart.index')->with('message', $message);
+        }
+
+        return response()->json(['status' => 'error', 'message' => $message]);
     }
     public function execPostRequest($url, $data)
     {
@@ -334,15 +410,23 @@ class PaymentController extends Controller
     }
     public function payWithMOMO_ATM(Request $request)
     {
+        session([
+            'order_point' => $request->point,
+            'order_info' => $request->info,
+            'address' => $request->address,
+            'order_product_ids' => $request->productIds,
+            'order_total_amount' => $request->total_amount
+        ]);
+
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
         $partnerCode = 'MOMOBKUN20180529';
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua ATM MoMo";
-        $amount = "10000";
+        $amount = $request->total_amount;
         $orderId = time() . "";
-        $redirectUrl = "http://127.0.0.1:8000/bookingSuccess";
-        $ipnUrl = route('cart.index');
+        $redirectUrl = route('momo.return');
+        $ipnUrl = route('momo.return');
         $extraData = "";
         $requestId = time() . "";
         $requestType = "payWithATM";
@@ -364,20 +448,77 @@ class PaymentController extends Controller
             'signature' => $signature
         );
         $result = $this->execPostRequest($endpoint, json_encode($data));
-        $jsonResult = json_decode($result, true);  // decode json
-        return redirect()->to($jsonResult['payUrl']);
+        $jsonResult = json_decode($result, true);
+        if (isset($jsonResult['payUrl'])) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Xin chờ 1 chút !!!.',
+                'redirect' => $jsonResult['payUrl'],
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'redirect' => route('cart.index'),
+                'message' => 'Failed to create MoMo order.'
+            ]);
+        }
     }
+    public function momo_return(Request $request)
+    {
+        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+        $resultCode = $request->resultCode;
+        $signature = $request->signature;
+
+        $rawHash = "amount=" . $request->amount . "&extraData=" . $request->extraData . "&message=" . $request->message . "&orderId=" . $request->orderId . "&orderInfo=" . $request->orderInfo . "&orderType=" . $request->orderType . "&partnerCode=" . $request->partnerCode . "&payType=" . $request->payType . "&requestId=" . $request->requestId . "&responseTime=" . $request->responseTime . "&resultCode=" . $resultCode . "&transId=" . $request->transId;
+        $generatedSignature = hash_hmac("sha256", $rawHash, $secretKey);
+
+        if ($generatedSignature === $signature && $resultCode == '0') {
+            DB::beginTransaction();
+            try {
+                $info = Session::get('order_info');
+                $address = Session::get('address');
+
+                $updatePoint = User::find(auth()->id());
+                $updatePoint->point += session('order_point');
+                $updatePoint->save();
+
+                $userAddress = $this->getOrCreateUserAddress($info, $address);
+
+                session(['user_address' => $userAddress->toJson()]);
+                $this->storeOrder('MoMo', 'pending', session('user_address'));
+
+                DB::commit();
+                $this->clearSession();
+                return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('MoMo payment handling failed: ' . $e->getMessage());
+                return redirect()->route('cart.index')->withErrors('Order processing failed.');
+            }
+        } else {
+            return redirect()->route('cart.index')->withErrors('Payment verification failed or payment was not successful.');
+        }
+    }
+
     public function payWithMOMO_QR(Request $request)
     {
+        session([
+            'order_point' => $request->point,
+            'order_info' => $request->info,
+            'address' => $request->address,
+            'order_product_ids' => $request->productIds,
+            'order_total_amount' => $request->total_amount
+        ]);
+
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
         $partnerCode = 'MOMOBKUN20180529';
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
-        $amount = "100000";
+        $amount = $request->total_amount;
         $orderId = time() . "";
-        $redirectUrl = route('booking.success');
-        $ipnUrl = route('booking.success');
+        $redirectUrl = route('momo.return');
+        $ipnUrl = route('momo.return');
         $extraData = "";
         $requestId = time() . "";
         $requestType = "captureWallet";
@@ -400,49 +541,48 @@ class PaymentController extends Controller
         );
         $result = $this->execPostRequest($endpoint, json_encode($data));
         $jsonResult = json_decode($result, true);
-        return redirect()->to($jsonResult['payUrl']);
+        if (isset($jsonResult['payUrl'])) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Xin chờ 1 chút !!!.',
+                'redirect' => $jsonResult['payUrl'],
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'redirect' => route('cart.index'),
+                'message' => 'Failed to create MoMo order.'
+            ]);
+        }
     }
+
     public function callbackZALOPAY(Request $request)
     {
-        $result = [];
-        $key2 = "Iyz2habzyr7AG8SgvoBCbKwKi3UzlLi3"; // Callback Key
+        $info = Session::get('order_info');
+        $address = Session::get('address');
 
-        try {
+        $updatePoint = User::find(auth()->id());
+        $updatePoint->point += session('order_point');
+        $updatePoint->save();
 
-            $postdata = file_get_contents('php://input');
-            $postdatajson = json_decode($postdata, true);
-            Log::info("Raw callback data: " . $postdata);
-            if (!isset($postdatajson["data"]) || !isset($postdatajson["mac"])) {
-                throw new \Exception("Thiếu dữ liệu callback");
-            }
-            $mac = hash_hmac("sha256", $postdatajson["data"], $key2);
-            $requestmac = $postdatajson["mac"];
+        $userAddress = $this->getOrCreateUserAddress($info, $address);
 
-            // Kiểm tra callback hợp lệ
-            if (strcmp($mac, $requestmac) != 0) {
-
-                Log::error("Callback không hợp lệ: mac không khớp.");
-                $result["return_code"] = -1;
-                $result["return_message"] = "mac không khớp";
-            } else {
-
-                $datajson = json_decode($postdatajson["data"], true);
-                Log::info("Thanh toán thành công: " . json_encode($datajson));
-
-
-                $result["return_code"] = 1;
-                $result["return_message"] = "success";
-            }
-        } catch (\Exception $e) {
-            Log::error("Lỗi trong quá trình xử lý callback: " . $e->getMessage());
-            $result["return_code"] = 0; // ZaloPay sẽ callback lại (tối đa 3 lần)
-            $result["return_message"] = $e->getMessage();
-        }
-
-        return redirect()->route('booking.success');
+        session(['user_address' => $userAddress->toJson()]);
+        $this->storeOrder('ZALOPAY', 'pending', session('user_address'));
+        DB::commit();
+        $this->clearSession();
+        return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
     }
+
     public function payWithZALOPAY(Request $request)
     {
+        session([
+            'order_point' => $request->point,
+            'order_info' => $request->info,
+            'address' => $request->address,
+            'order_product_ids' => $request->productIds,
+            'order_total_amount' => $request->total_amount
+        ]);
         $config = [
             "app_id" => 553,
             "key1" => "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
@@ -451,11 +591,11 @@ class PaymentController extends Controller
         ];
 
         $embeddata = json_encode([
-            "callback_url" => "https://afe6-2402-800-63b9-8670-70c2-7109-1100-4832.ngrok-free.app/user/zalo-pay-callback",
+            "redirecturl" => route('zalopay.callback'),
         ]);
 
         $items = '[]';
-        $transID = rand(0, 1000000);
+        $transID = rand(0, 10000000);
         $order = [
             "app_id" => $config["app_id"],
             "app_time" => round(microtime(true) * 1000),
@@ -463,12 +603,12 @@ class PaymentController extends Controller
             "app_user" => "user123",
             "item" => $items,
             "embed_data" => $embeddata,
-            "amount" => 10000,
+            "amount" => $request->total_amount,
             "description" => "Thanh toán qua ZALO PAY #$transID",
-            "bank_code" => "",
-
+            "bank_code" => ""
         ];
 
+        // Generate MAC
         $data = implode("|", [
             $order["app_id"],
             $order["app_trans_id"],
@@ -480,7 +620,7 @@ class PaymentController extends Controller
         ]);
         $order["mac"] = hash_hmac("sha256", $data, $config["key1"]);
 
-
+        // Send request to ZaloPay
         $context = stream_context_create([
             "http" => [
                 "header" => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -492,18 +632,36 @@ class PaymentController extends Controller
         $resp = file_get_contents($config["endpoint"], false, $context);
         $result = json_decode($resp, true);
 
-        Log::info("Callback received " . $order['mac']);
-
         if ($result['return_code'] == 1) {
-            return redirect()->to($result['order_url']);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Xin đợi 1 lát',
+                'redirect' => $result['order_url']
+            ]);
         }
 
-        foreach ($result as $key => $value) {
-            echo "$key: $value<br>";
-        }
+        return response()->json([
+            'status' => 'error',
+            'message' => $result['return_message'] ?? 'Something went wrong',
+        ]);
     }
+
     public function booking_success()
     {
         return view('frontend.user.home.booking_success');
+    }
+
+    public function sendMail(Request $request)
+    {
+
+        $orders = Orders::find(81);
+        $data = [
+            'name' => 'Nguyễn Văn Khánh',
+            'orders' => $orders
+        ];
+        Mail::send('frontend.mail.test', $data, function ($message) {
+            $message->to('nguyenkhanh13082003@gmail.com') // Địa chỉ email người nhận
+                ->subject('Thông báo đơn hàng mới');
+        });
     }
 }

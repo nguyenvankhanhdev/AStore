@@ -1,27 +1,30 @@
 @extends('backend.admin.layouts.master')
 
 @section('content')
-        <section class="section">
-          <div class="section-body">
+    <section class="section">
+        <div class="section-header">
+            <h1>All Categories</h1>
+        </div>
+        <div class="section-body">
             <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h3>All Categories</h3>
-                    <div class="card-header-action">
-                        <a href="{{route('admin.categories.create')}}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4></h4>
+                            <div class="card-header-action">
+                                <a href="{{ route('admin.categories.create') }}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {{ $dataTable->table() }}
+                        </div>
                     </div>
-                  </div>
-                  <div class="card-body">
-                    {{ $dataTable->table()}}
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </section>
+        </div>
+    </section>
 @endsection
 
 @push('scripts')
-    {{$dataTable->scripts()}}
+    {{ $dataTable->scripts() }}
 @endpush

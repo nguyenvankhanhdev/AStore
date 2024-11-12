@@ -57,7 +57,8 @@
                         </div>
                         <div class="col-6">
                             <div class="wrapper">
-                                <h1 class="h1 name">{{ $product->name }}</h1>
+                                <h1 class="h1 name product_name" data-initial-name="{{ $product->name }}">
+                                    {{ $product->name }}</h1>
                                 <div class="npi-special">
                                     <div class="product-price-left npi-special-price js-control-item active">
                                         <div class="npi-special-inner">
@@ -71,26 +72,33 @@
                                 </div>
                                 <div class="npi-border">
                                     <div class="price">
-                                        <div class="boxprice"><span class="text text-primary price-sale"></span>
+                                        <div class="boxprice"><span class="text text-primary price-sale"
+                                                style="color: #ae172b"></span>
                                             <strike class="text-promo p-l-8 f-s-p-24 f-w-400"></strike>
                                             <span class="txtpricemarketPhanTram badge badge-danger persent-special"
                                                 style="">-12%</span>
                                         </div>
                                     </div>
                                     <div id="variant-selector" class="types js-select">
-                                        @foreach ($product->variants as $index => $variant)
-                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}" data-id="{{ $variant->id }}">
-                                                <div class="radio">
-                                                    <input type="radio" {{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
+                                        @foreach ($product->variants as $variant)
+                                            <a class="item {{ $variant->id == $selectedVariantId ? 'active' : '' }}"
+                                                data-id="{{ $variant->id }}">
+                                                <div class="radio" name="variant">
+                                                    <input type="radio" name="storage" value="{{ $variant->id }}"
+                                                        {{ $variant->id == $selectedVariantId ? 'checked' : '' }}>
                                                     <label>{{ $variant->storage->GB }}</label>
                                                 </div>
+
                                                 @if ($variant->variantColors->first())
-                                                    <p class="price-variant">{{ number_format($variant->variantColors->first()->price - $variant->variantColors->first()->offer_price, 0, ',', '.') }}₫</p>
+                                                    <p class="price-variant">
+                                                        {{ number_format($variant->variantColors->first()->price - $variant->variantColors->first()->offer_price, 0, ',', '.') }}₫
+                                                    </p>
                                                 @else
                                                     <p>Không có giá</p>
                                                 @endif
                                             </a>
                                         @endforeach
+
                                     </div>
 
                                     <div class="colors js-select">
@@ -257,39 +265,13 @@
                                         </div>
                                     </div>
                                     <div class="action action-npi">
-
-                                        @php
-                                            $variant = App\Models\VariantColors::where('variant_id', $selectedVariantId)
-                                                ->where('color_id', $selectedColorId)
-                                                ->first();
-
-                                        @endphp
-
-                                        <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form"
-                                            style="width: 100%">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="quantity" value="1" min="1">
-                                            <input type="hidden" name="variant_id" value="{{ $selectedVariantId }}">
-                                            <input type="hidden" name="selected_color_id" id="selected_color_id"
-                                                value="{{ $selectedColorId }}">
+                                        <form id="add-to-cart-form" style="width: 100%">
                                             <button type="submit" class="btn btn-link btn-xl btn-line-1">
                                                 <div class="btn-text">MUA NGAY</div>
                                                 <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
                                             </button>
                                         </form>
-                                        {{-- <a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
-                                            <div class="btn-text">TRẢ GÓP 0%</div><span class="btn-sub-text">Duyệt nhanh
-                                                qua đện
-                                                thoại</span>
-                                        </a><a class="btn btn-outline-grayscale btn-xl btn-line-2" href="#">
-                                            <div class="btn-text">TRẢ GÓP QUA THẺ</div><span class="btn-sub-text">Visa,
-                                                Master Card,
-                                                JCB</span>
-                                        </a> --}}
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -1146,7 +1128,6 @@
                                                 <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                     <strong>{{ $user->username }}</strong>
                                                 </div>
-
                                             @else
                                                 {
                                                 <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
@@ -1160,7 +1141,7 @@
                                         </div>
                                         <div class="form-group">
                                             <textarea name="content" class="form-input form-input-lg" rows="3"
-                                            placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
+                                                placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
                                             <button type="submit" class="btn btn-lg btn-primary"
                                                 aria-controls="comment-info">GỬI BÌNH LUẬN</button>
                                         </div>
@@ -1174,7 +1155,8 @@
 
                                 <div class="user-content">
                                     <div class="result">
-                                        <div class="text" style="color: #444b52;"><strong>1.000 hỏi đáp về</strong>“Samsung Galaxy S22 Ultra 5G
+                                        <div class="text" style="color: #444b52;"><strong>1.000 hỏi đáp
+                                                về</strong>“Samsung Galaxy S22 Ultra 5G
                                             128GB”</div>
                                         <div class="auto">
                                             <div class="text">Sắp xếp theo</div>
@@ -1215,14 +1197,14 @@
                                                                 <div class="text text-grayscale">
                                                                     {{ $cm->created_at->diffForHumans() }}</div><i
                                                                     class="ic-circle-sm"></i>
-                                                                    @php
-                                                                        $userId = Auth::id(); // Lấy ID của người dùng hiện tại
-                                                                    @endphp
+                                                                @php
+                                                                    $userId = Auth::id(); // Lấy ID của người dùng hiện tại
+                                                                @endphp
                                                                 <div data-comment-id="{{ $cm->id }}"
                                                                     class="link link-xs like-button {{ $cm->isLikedByUser($userId) ? 'liked' : '' }}">
-                                                                   ({{ $cm->cmt_likes }})
-                                                                   {{ $cm->isLikedByUser($userId) ? 'Bỏ Thích' : 'Thích' }}
-                                                               </div>
+                                                                    ({{ $cm->cmt_likes }})
+                                                                    {{ $cm->isLikedByUser($userId) ? 'Bỏ Thích' : 'Thích' }}
+                                                                </div>
                                                                 <i class="ic-circle-sm"></i>
                                                                 <div data-comment-id="{{ $cm->id }}"
                                                                     class="link active_repcm link-xs">Trả lời</div>
@@ -1245,7 +1227,8 @@
 
 
                                                     </div>
-                                                    <div  id="commentForm_{{ $cm->id }}"  style="display:none;"  class="avatar-form form-groupcm">
+                                                    <div id="commentForm_{{ $cm->id }}" style="display:none;"
+                                                        class="avatar-form form-groupcm">
                                                         <div class="form-group ">
 
                                                             <textarea name="editcm" class="form-input form-input-lg" rows="3"
@@ -1256,13 +1239,14 @@
                                                         </div>
                                                         @if ($errors->has('editcm'))
                                                             <span id="contentError"
-                                                            class="text-danger">{{ $errors->first('content') }}</span>
+                                                                class="text-danger">{{ $errors->first('content') }}</span>
                                                         @endif
                                                     </div>
-                                                    <div id="repcommentForm_{{ $cm->id }}" style="display:none;" class="avatar-form form-groupcm">
+                                                    <div id="repcommentForm_{{ $cm->id }}" style="display:none;"
+                                                        class="avatar-form form-groupcm">
                                                         <div class="form-group">
-                                                            <input data-cmt-id="{{ $cm->id }}" type="hidden" name="cmt_id"
-                                                                value="{{ $cm->id }}">
+                                                            <input data-cmt-id="{{ $cm->id }}" type="hidden"
+                                                                name="cmt_id" value="{{ $cm->id }}">
                                                             <input type="hidden" name="pro_id"
                                                                 value="{{ $product->id }}">
                                                             <textarea name="repcm" class="form-input form-input-lg" rows="3"
@@ -1272,9 +1256,9 @@
                                                                 aria-controls="comment-info">GỬI BÌNH LUẬN</a>
                                                         </div>
                                                         @if ($errors->has('repcm'))
-                                                        <span id="contentError"
-                                                            class="text-danger">{{ $errors->first('content') }}</span>
-                                                            @endif
+                                                            <span id="contentError"
+                                                                class="text-danger">{{ $errors->first('content') }}</span>
+                                                        @endif
                                                     </div>
                                                     <!-- Hiển thị các trả lời -->
                                                     @foreach ($cm->replies as $reply)
@@ -1297,8 +1281,8 @@
                                                                         @php
                                                                             $userId = Auth::id(); // Lấy ID của người dùng hiện tại
                                                                         @endphp
-                                                                       <div data-comment-id="{{ $reply->id }}"
-                                                                                class="link link-xs like-button {{ $reply->isLikedByUser($userId) ? 'liked' : '' }}">
+                                                                        <div data-comment-id="{{ $reply->id }}"
+                                                                            class="link link-xs like-button {{ $reply->isLikedByUser($userId) ? 'liked' : '' }}">
                                                                             ({{ $reply->cmt_likes }})
                                                                             {{ $reply->isLikedByUser($userId) ? 'Bỏ Thích' : 'Thích' }}
                                                                         </div>
@@ -1322,7 +1306,9 @@
 
                                                                 </div>
 
-                                                                <div  style="display:none;" id="commentForm_{{ $reply->id }}"  class="avatar-form form-groupcm">
+                                                                <div style="display:none;"
+                                                                    id="commentForm_{{ $reply->id }}"
+                                                                    class="avatar-form form-groupcm">
                                                                     <div class="form-group ">
                                                                         <textarea name="editcm" class="form-input form-input-lg" rows="3"
                                                                             placeholder="Nhập nội dung bình luận (tiếng Việt có dấu)..."></textarea>
@@ -1331,10 +1317,12 @@
                                                                             aria-controls="comment-info">SỬA BÌNH LUẬN</a>
                                                                     </div>
                                                                 </div>
-                                                                <div style="display:none;" id="repcommentForm_{{ $reply->id }}" class="avatar-form form-groupcm">
+                                                                <div style="display:none;"
+                                                                    id="repcommentForm_{{ $reply->id }}"
+                                                                    class="avatar-form form-groupcm">
                                                                     <div class="form-group ">
-                                                                        <input data-cmt-id="{{ $cm->id }}" type="hidden"
-                                                                            value="{{ $cm->id }}">
+                                                                        <input data-cmt-id="{{ $cm->id }}"
+                                                                            type="hidden" value="{{ $cm->id }}">
                                                                         <input type="hidden" name="pro_id"
                                                                             value="{{ $product->id }}">
                                                                         <textarea name="repcm" class="form-input form-input-lg" rows="3"
@@ -1365,31 +1353,105 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
 
 @push('scripts')
     <script>
         var selectedColorId = @json($selectedColorId);
-
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const variantSelector = document.getElementById('variant-selector');
-
-            variantSelector.addEventListener('click', function(event) {
-                const clickedElement = event.target.closest('.item');
-                if (clickedElement) {
-                    const variantId = clickedElement.getAttribute('data-id');
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('variant', variantId);
-                    window.location.href = url.toString();
-
-                }
+        $(document).ready(function() {
+            $('#variant-selector').on('click', '.item', function(event) {
+                event.preventDefault();
+                const variantId = $(this).data('id');
+                const url = new URL(window.location.href);
+                url.searchParams.set('variant', variantId);
+                window.location.href = url.toString();
             });
+
+            function fetchPrice(colorId, variantId) {
+                $.ajax({
+                    url: "{{ route('getByColor') }}",
+                    method: 'GET',
+                    data: {
+                        color_id: colorId,
+                        variant_id: variantId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const originalPrice = response.price.price;
+                            const storage = response.storage.GB;
+                            const offerPrice = response.price.offer_price;
+                            const discount = originalPrice - offerPrice;
+                            const discountPercentage = (offerPrice / originalPrice) * 100;
+                            const productName = $('.product_name').data('initial-name');
+                            $('.product_name').text(`${productName} - ${storage}`);
+                            $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
+                            $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                            $('.txtpricemarketPhanTram').text(
+                                `Giảm -${Math.round(discountPercentage)}%`);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+
+
+
+
+
+            let activeColorItem = $('.colors .item.active');
+            let colorId = activeColorItem.data('color-id');
+            const variantId = $('#variant-selector .item.active').data('id');
+
+
+            $('#add-to-cart-form').on('click', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{ route('cart.add') }}",
+                    method: 'POST',
+                    data: {
+                        color_id: colorId,
+                        variant_id: variantId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            toastr.success(response.message);
+                        }
+                    },
+                    error: function(response) {
+                        if (response.status === 'error') {
+                            toastr.error(response.message);
+                        }
+                    }
+                });
+
+            });
+
+            if (colorId && variantId) {
+                fetchPrice(colorId, variantId);
+            }
+            $('.colors .item').on('click', function() {
+                $('.colors .item.active').removeClass('active');
+                $(this).addClass('active');
+                colorId = $(this).data('color-id');
+                fetchPrice(colorId, variantId);
+            });
+
+
+
+
+
         });
     </script>
+
+
+
+
 
 
 
@@ -1491,7 +1553,7 @@
                             },
                             success: function(data) {
                                 // Reload để áp dụng các thay đổi và giữ vị trí cuộn
-                                 reloadPage1(page);
+                                reloadPage1(page);
 
                                 // if (response.status === 'success') {
                                 //     alert(response.message);
@@ -1593,12 +1655,12 @@
             }
 
             // Hàm để reload trang và giữ vị trí cuộn
-        function reloadPage() {
-            var scrollPosition = $(window).scrollTop();
+            function reloadPage() {
+                var scrollPosition = $(window).scrollTop();
 
-            location.reload();
+                location.reload();
 
-        }
+            }
 
             // Lưu giá trị biến vào sessionStorage
             function saveShouldMoveToUserContent(value) {
@@ -1619,7 +1681,8 @@
 
             // Hàm để lấy giá trị currentPage từ sessionStorage
             function getCurrentPage() {
-                return sessionStorage.getItem('currentPage') || 1; // Mặc định là trang 1 nếu không có giá trị lưu trữ
+                return sessionStorage.getItem('currentPage') ||
+                    1; // Mặc định là trang 1 nếu không có giá trị lưu trữ
             }
 
 
@@ -1695,14 +1758,16 @@
                         url: url,
                         method: 'GET',
                         success: function(response) {
-                            $('#comments-container').html($(response).find('#comments-container').html());
-                            $('#pagination-container').html($(response).find('#pagination-container').html());
+                            $('#comments-container').html($(response).find(
+                                '#comments-container').html());
+                            $('#pagination-container').html($(response).find(
+                                '#pagination-container').html());
 
-                             // Cập nhật giá trị currentPage trong input ẩn
+                            // Cập nhật giá trị currentPage trong input ẩn
                             $('#currentPage').val(page);
 
 
-                             // Lưu giá trị currentPage vào sessionStorage
+                            // Lưu giá trị currentPage vào sessionStorage
                             sessionStorage.setItem('currentPage', page);
                             // Khởi tạo lại các sự kiện tương tác với bình luận sau khi tải nội dung mới
                             khoiTaoSuKienBinhLuan();
@@ -1719,8 +1784,8 @@
             });
 
             // // Bắt sự kiện gửi bình luận và reload tại vị trí cũ
-             // Scroll to the saved position after reload
-             if (sessionStorage.getItem('scrollPosition') !== null) {
+            // Scroll to the saved position after reload
+            if (sessionStorage.getItem('scrollPosition') !== null) {
                 $(window).scrollTop(sessionStorage.getItem('scrollPosition'));
                 sessionStorage.removeItem('scrollPosition');
             }
@@ -1744,7 +1809,7 @@
 
                 } else {
                     // Nếu không cần di chuyển, kiểm tra trang hiện tại
-                    if (  (pageInput === '1' && currentPage !== '1' && currentPage !== null) ) {
+                    if ((pageInput === '1' && currentPage !== '1' && currentPage !== null)) {
                         sessionStorage.setItem('scrollToUserContent', 'true');
                         // Nếu không phải trang 1 và không phải do chuyển trang, cập nhật URL và tải lại trang
                         url.searchParams.set('page', 1);
@@ -1760,7 +1825,4 @@
             khoiTaoSuKienBinhLuan();
         });
     </script>
-
-
-
 @endpush
