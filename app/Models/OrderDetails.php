@@ -22,7 +22,7 @@ class OrderDetails extends Model
     {
         return $this->belongsTo(
             VariantColors::class,
-            'variant_id',
+            'variant_color_id',
             'id'
         );
     }

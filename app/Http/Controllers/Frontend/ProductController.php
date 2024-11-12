@@ -124,9 +124,5 @@ class ProductController extends Controller
             'id' => $variant
         ])->first();
         return response()->json(['price' => $price, 'storage' => $storage]);
-
-
-
-
     }
 }

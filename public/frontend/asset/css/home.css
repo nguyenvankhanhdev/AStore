@@ -6109,7 +6109,7 @@ hr {
 }
 
 .section__cate {
-    
+
     background: #212529;
     padding-top: 45px;
     padding-bottom: 45px;
@@ -6339,3 +6339,41 @@ hr {
 .home .social-media img {
     max-width: 48px
 }
+
+/* css for section menu product in main page */
+.choose-product{
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 36px;
+    line-height: 36px;
+    font-weight: 500;
+    color: white;
+
+}
+.product-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.product-selection .btn {
+    color: white;
+    background-color: dimgray; /* Màu nền của nút */
+    border: none;
+    margin: 0 5px;
+
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.product-selection .btn:hover {
+    background-color: red; /* Màu nền khi hover */
+}
+
+
+/* end css for section menu product in main page */

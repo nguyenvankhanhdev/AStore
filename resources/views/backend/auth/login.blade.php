@@ -51,7 +51,7 @@
                 <div class="card border-0 shadow rounded-3 my-5">
                     <div class="card-body p-4 p-sm-5">
                         <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
-                        <form method="POST" action="{{ route('auth.login') }}">
+                        <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="email" placeholder="name@example.com"
@@ -82,7 +82,7 @@
                                     </div>
                                     <div>
                                         <label class="form-check-label" for="register">
-                                            <a href="{{ route('auth.register') }}">Register</a>
+                                            <a href="{{ route('register') }}">Register</a>
                                         </label>
                                     </div>
                                 </div>

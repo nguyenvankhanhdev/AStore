@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message', function (Blueprint $table) {
-            $table->id();
-            $table->string('message');
-            $table->integer('seen');
-            $table->integer('sender_id');
-            $table->integer('received_id');
-            $table->timestamps();
+        Schema::table('variant_colors', function (Blueprint $table) {
+            $table->decimal('warehouse_price', 15, 2)->nullable()->after('offer_price');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message');
+        Schema::table('variant_colors', function (Blueprint $table) {
+            $table->dropColumn('warehouse_price');
+        });
     }
 };

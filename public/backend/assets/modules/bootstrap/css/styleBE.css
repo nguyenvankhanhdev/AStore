@@ -1,0 +1,140 @@
+/* Styles cho danh sách và chi tiết tin nhắn */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+tr {
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+td {
+    padding: 15px;
+    vertical-align: middle;
+}
+.user-name {
+    font-weight: bold;
+}
+.unread .user-name, .unread .message-preview {
+    font-weight: bold;
+}
+.message-preview {
+    color: #888;
+    font-size: 14px;
+}
+.unread .message-preview {
+    color: #000;
+}
+.time {
+    color: #888;
+    font-size: 12px;
+}
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 10px;
+    position: absolute;
+    margin-top: 3px;
+}
+.status-dot.red {
+    background-color: red;
+}
+
+/* Styles cho chi tiết tin nhắn */
+.chat-boxinside {
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    max-height: 480px; /* Thay đổi giá trị này theo nhu cầu */
+    overflow-y: auto; /* Thêm thanh cuộn khi nội dung vượt quá chiều cao tối đa */
+}
+.chat-header {
+    display: flex;
+    width: 80%;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+
+    background: #f9f9f9;
+    height: 23px;
+    top: 95px;
+}
+.back-button {
+    color: blue;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.chat-content {
+    display: flex;
+    flex-direction: column; /* Sắp xếp các tin nhắn theo cột */
+    gap: 10px; /* Khoảng cách giữa các tin nhắn */
+    margin-bottom: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Styles cho tin nhắn */
+.message {
+    display: inline-block;
+    max-width: 60%;
+    padding: 10px;
+    border-radius: 15px;
+    color: white;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Tin nhắn của khách */
+.message.other {
+    background-color: #333;
+    border-top-left-radius: 0;
+    align-self: flex-start; /* Căn trái */
+}
+
+/* Tin nhắn của bạn */
+.message.you {
+    background-color: deepskyblue;
+    align-self: flex-end; /* Căn phải */
+    text-align: right;
+    border-top-right-radius: 0;
+}
+
+/* Input và nút gửi */
+.chat-input {
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    gap: 10px;
+}
+.chat-input input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.chat-input button {
+    padding: 8px 15px;
+    background-color: deepskyblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.message-time {
+    color: white;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: right;
+}
+
