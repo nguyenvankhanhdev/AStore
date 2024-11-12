@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserAddress;
 use App\Models\VariantColors;
 use App\Models\Carts;
 use App\Models\Districts;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Provinces;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Coupon;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
@@ -35,42 +37,58 @@ class CartController extends Controller
             $userId = Auth::user()->id;
             $carts = Carts::with(['product', 'variant_color', 'user'])->where('user_id', $userId)->get();
             $provinces = Provinces::all();
-            return view('frontend.user.home.cart-details', compact('provinces', 'carts'));
+            $user_address = UserAddress::with(['user'])->where('user_id', $userId)->get();
+            return view('frontend.user.home.cart-details', compact('provinces', 'carts', 'user_address'));
         }
     }
 
     public function addToCart(Request $request)
     {
+
+        // Ensure the user is authenticated
         if (!auth()->check()) {
             return response()->json(['message' => 'Bạn cần đăng nhập để thực hiện chức năng này.'], 401);
         }
-        $productId = $request->input('product_id');
+        // Retrieve the request data
         $quantity = $request->input('quantity', 1);
-        $variantId = $request->input('variant_id');
-        $colorId = $request->input('selected_color_id');
+        $variantId = $request->variant_id;
+        $colorId = $request->color_id;
+        $variantColor = VariantColors::where('variant_id', $variantId)
+                                       ->where('color_id', $colorId)
+                                       ->first();
+        if (!$variantColor) {
+            return response()->json(['message' => 'Phiên bản sản phẩm không tồn tại.'], 404);
+        }
+        $proVar = ProductVariant::find($variantId);
 
-        $variant_color_id = VariantColors::where('variant_id', $variantId)->where('color_id', $colorId)->first()->id;
-        $product = Products::find($productId);
-        if (!$product) {
-            return response()->json(['error' => 'Sản phẩm không tồn tại.'], 404);
+        if (!$proVar) {
+            return response()->json(['message' => 'Sản phẩm không tồn tại.'], 404);
         }
 
-        $cartItem = Carts::where('user_id', auth()->id())->where('pro_id', $productId)->where('variant_color_id', $variant_color_id)->first();
+        $cartItem = Carts::where('user_id', auth()->id())
+                         ->where('variant_color_id', $variantColor->id)
+                         ->first();
 
         if ($cartItem) {
+            // Update quantity if item exists
             $cartItem->quantity += $quantity;
             $cartItem->save();
         } else {
-            Carts::create(attributes: [
+            // Create new cart item if it doesn't exist
+            Carts::create([
                 'quantity' => $quantity,
-                'variant_color_id' => $variant_color_id,
+                'variant_color_id' => $variantColor->id,
                 'user_id' => auth()->id(),
-                'pro_id' => $productId,
+                'pro_id' => $proVar->pro_id,
             ]);
         }
 
-        return redirect()->route('cart.index')->withSuccess('Thêm sản phẩm vào giỏ hàng thành công.');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Thêm sản phẩm vào giỏ hàng thành công!',
+        ]);
     }
+
 
     public function destroy()
     {

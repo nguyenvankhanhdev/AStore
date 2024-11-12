@@ -170,14 +170,11 @@
                     <li><a href="{{ route('products.category', ['categories' => 'ipad']) }}">iPad</a></li>
                     <li><a href="{{ route('products.category', ['categories' => 'macbook']) }}">Mac</a></li>
                     <li><a>Apple Watch</a></li>
-                    <li><a>Phụ kiện</a></li>
-                    <li><a>Tin tức - Thủ thuật</a></li>
-                    <li><a>Workshop</a></li>
+                    {{-- <li><a>Phụ kiện</a></li>
+                    <li><a>Tin tức - Thủ thuật</a></li> --}}
+                    <li><a>Linh Kiện</a></li>
                     <li><a>Khuyến mãi</a></li>
                 </ul>
-                <div class="header-btn"><a class="btn btn-link btn-icon btn-sm"><i
-                            class="ic-call btn-icon-call m-r-4"></i><span class="f-s-ui-14">Gọi 1800 6601</span></a>
-                </div>
             </div>
         </div>
     </div>

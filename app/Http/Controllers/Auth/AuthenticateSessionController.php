@@ -18,7 +18,6 @@ class AuthenticateSessionController extends Controller
 
     public function store(LoginRequest $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
 
         $request->session()->regenerateToken();
 
@@ -29,9 +28,7 @@ class AuthenticateSessionController extends Controller
         if($request->user()->role === 'admin') {
 
             return redirect()->route('admin.dashboard.index')->withSuccess('Đăng nhập thành công');
-
         }
-
         return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');
     }
 

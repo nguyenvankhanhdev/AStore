@@ -19,12 +19,13 @@
 
 
     @foreach ($users as $user )
+
     @php
         $messageCountUnread=\App\Models\Message::countSeenMessagesBySender($user->id);
         $latestMessage=\App\Models\Message::getLatestMessageByUserId($user->id);
-        // Gọi hàm lấy tin nhắn cho từng user
         $messages = \App\Models\Message::getMessagesByUserId($user->id);
     @endphp
+
     <div id="message-list" class="message-list">
     <table class="table-message">
 
@@ -364,12 +365,6 @@ function sendMessage(userId) {
 
 // Thiết lập setInterval để chạy hàm sortMessages mỗi giây
 setInterval(sortMessages, 500);
-
-
-
-
-
-
 
 
 // test đến count unread và gắn vào

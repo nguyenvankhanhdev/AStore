@@ -18,7 +18,6 @@ class MessageController extends Controller
        // Lấy tất cả các sender_id từ bảng messages
         $senderIds = Message::pluck('sender_id')->unique(); // Lấy danh sách sender_id duy nhất
 
-        // Lấy các user mà sender_id có trong danh sách, ngoại trừ Auth::id()
         $users = User::whereIn('id', $senderIds)
                     ->where('id', '<>', Auth::id()) // Ngoại trừ user hiện tại
                     ->get();
@@ -62,10 +61,7 @@ class MessageController extends Controller
         $senderId = $request->sender_id;
         $receiverId = Auth::id();
         $lastId = $request->last_id;
-
-        // Lấy các tin nhắn mới hơn tin nhắn đã cho
         $messages = Message::getMessagesAfterlastId($senderId, $receiverId, $lastId);
-
         return response()->json(['messages' => $messages]);
     }
     /**
@@ -94,8 +90,6 @@ class MessageController extends Controller
             $message->created_at=now();
             $message->updated_at=now();
             $message->save();
-
-            // return response()->json(['success' => true, 'message' => 'Bình luận thành công']);
             return redirect()->back();
 
         } catch (\Exception $e) {

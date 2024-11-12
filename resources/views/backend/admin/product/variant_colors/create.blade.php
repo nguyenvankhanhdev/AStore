@@ -18,7 +18,7 @@
                                     <select id="inputState" class="form-control main-category" name="colors">
                                         <option value="">Select</option>
                                         @foreach ($colors as $color)
-                                            <option value="{{ $color->id }}">{{ $color->color }}</option>
+                                            <option value="{{ $color->id }}">{{ $color->name }}</option>
                                         @endforeach
                                     </select>
                                     <span class="text-danger" id="colorError"></span>

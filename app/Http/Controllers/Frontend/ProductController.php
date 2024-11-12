@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\VariantColors;
 use App\Models\Comments;
+use App\Models\Ratings;
 use function App\Helper\getTotal;
 
 class ProductController extends Controller
@@ -66,6 +67,7 @@ class ProductController extends Controller
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
         if (Auth::id() > 0) {
+            $userID=Auth::id();
             $user = User::find(Auth::id());
             $comment = Comments::with('user')
                 ->where([
@@ -76,7 +78,11 @@ class ProductController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
             //->get();
-            return view('frontend.user.home.product_details', compact('product', 'user', 'comment', 'selectedVariantId', 'colors'));
+            $infoRating = Ratings::where('pro_id', $product->id)
+                     ->where('user_id', $userID)
+                     ->first();
+            $ratingsCount = Ratings::getCountByStar($product->id);
+            return view('frontend.user.home.product_details', compact('infoRating','product', 'user', 'comment', 'selectedVariantId', 'colors','ratingsCount'));
         } else {
             $comment = Comments::with('user')
                 ->where([
@@ -88,7 +94,9 @@ class ProductController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
             //->get();
-            return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors'));
+            $ratingsCount = Ratings::getCountByStar($product->id);
+
+            return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors','ratingsCount'));
         }
     }
 
@@ -125,4 +133,107 @@ class ProductController extends Controller
         ])->first();
         return response()->json(['price' => $price, 'storage' => $storage]);
     }
+
+    // public function rating(Request $request)
+    // {
+    //     try {
+    //         if (!Auth::check()) {
+    //             return redirect()->route('auth.admin')->with('error','Vui lòng đăng nhập');
+    //         }
+
+    //         $userId = Auth::id();
+    //         $productId = $request->pro_id;
+
+    //         // $hasPurchased = Products::hasUserPurchasedProduct($userId, $productId);
+
+    //         // if (!$hasPurchased) {
+    //         //     return response()->json(['message' => 'Bạn chưa mua sản phẩm này'], 403);
+    //         // }
+
+    //         $existingRating = Ratings::where('user_id', $userId)
+    //                                 ->where('pro_id', $productId)
+    //                                 ->first();
+
+    //         if ($existingRating) {
+    //             $existingRating->point = $request->point;
+    //             $existingRating->save();
+    //             return response()->json(['message' => 'Bạn đã sửa đánh giá sản phẩm thành công'], 200);
+    //         }
+
+    //         $rating = new Ratings();
+    //         $rating->point = $request->point;
+    //         $rating->user_id = $userId;
+    //         $rating->pro_id = $productId;
+    //         $rating->save();
+
+
+
+    //         return response()->json(['message' => 'Đánh giá của bạn đã được lưu'], 200);
+    //     } catch (\Exception $e) {
+    //         \Log::error($e->getMessage()); // Ghi lại lỗi vào log
+    //         return response()->json(['message' => 'Đã xảy ra lỗi hệ thống.'], 500);
+    //     }
+    // }
+
+    public function rating(Request $request)
+    {
+
+        try {
+            // Kiểm tra xem người dùng đã đăng nhập chưa
+            if (!Auth::check()) {
+                return response()->json(['message' => 'Vui lòng đăng nhập'], 401);
+            }
+
+            $userId = Auth::id();
+            $productId = $request->pro_id;
+
+            $hasPurchased = Products::hasUserPurchasedProduct($userId, $productId);
+
+            if (!$hasPurchased) {
+                return response()->json(['message' => 'Bạn chưa mua sản phẩm này'], 403);
+            }
+
+            // Kiểm tra xem người dùng đã đánh giá sản phẩm chưa
+            $existingRating = Ratings::where('user_id', $userId)
+                                    ->where('pro_id', $productId)
+                                    ->first();
+
+            // Nếu người dùng đã đánh giá, cập nhật lại điểm
+            if ($existingRating) {
+                $existingRating->point = $request->point;
+                $existingRating->save();
+                $message = 'Bạn đã sửa đánh giá sản phẩm thành công';
+            } else {
+                // Nếu chưa có đánh giá, tạo đánh giá mới
+                $rating = new Ratings();
+                $rating->point = $request->point;
+                $rating->user_id = $userId;
+                $rating->pro_id = $productId;
+                $rating->save();
+                $message = 'Đánh giá của bạn đã được lưu';
+            }
+
+            // Tính điểm trung bình của sản phẩm
+            $averageRating = Ratings::getAverageRating($productId);
+
+            // Cập nhật lại điểm trung bình của sản phẩm
+            $product = Products::find($productId);
+            if ($product) {
+                $product->point = $averageRating; // Cập nhật lại thuộc tính point
+                $product->save();
+            }
+            $ratingsCount = Ratings::getCountByStar($product->id);
+            $infoRating = Ratings::where('pro_id', $product->id)
+                     ->where('user_id', $userId)
+                     ->first();
+            // Trả về thông báo thành công
+            return response()->json(['infoRating'=>$infoRating,'message' => $message, 'averageRating' => $averageRating,'ratingsCount'=>$ratingsCount], 200);
+
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage()); // Ghi lại lỗi vào log
+            return response()->json(['message' => 'Đã xảy ra lỗi hệ thống.'], 500);
+        }
+    }
+
+
 }

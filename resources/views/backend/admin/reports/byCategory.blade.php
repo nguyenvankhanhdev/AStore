@@ -14,12 +14,12 @@
         <!-- Form chọn ngày -->
         <form method="GET" action="{{ route('admin.reports.byCategory') }}" class="row justify-content-center align-items-center mb-4 g-3">
             <div class="col-md-3">
-                <label for="from_date" class="form-label">Từ ngày:</label>
+                <label for="from_date" class="form-label fw-bold text-primary">Từ ngày:</label>
                 <input type="date" id="from_date" name="from_date" class="form-control" required value="{{ Carbon::parse($fromDate)->format('Y-m-d') }}">
             </div>
 
             <div class="col-md-3">
-                <label for="to_date" class="form-label">Đến ngày:</label>
+                <label for="to_date" class="form-label fw-bold text-primary">Đến ngày:</label>
                 <input type="date" id="to_date" name="to_date" class="form-control" required value="{{ Carbon::parse($toDate)->format('Y-m-d') }}">
             </div>
 
@@ -43,17 +43,17 @@
                 <div class="card-body">
                     <h5 class="text-center mb-4" style="font-weight: bold; color: #34495e;">Báo Cáo Theo Danh Mục</h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover text-center align-middle">
                             <thead class="table-primary text-center">
                                 <tr>
-                                    <th>Tên danh mục</th>
-                                    <th>Số lượng nhập</th>
-                                    <th>Số lượng đã bán</th>
-                                    <th>Tổng doanh thu</th>
-                                    <th>Lợi nhuận</th>
+                                    <th class="fw-bold">Tên danh mục</th>
+                                    <th class="fw-bold">Số lượng nhập</th>
+                                    <th class="fw-bold">Số lượng đã bán</th>
+                                    <th class="fw-bold">Tổng doanh thu (đ)</th>
+                                    <th class="fw-bold">Lợi nhuận (đ)</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody>
                                 @foreach($report as $data)
                                     <tr>
                                         <td>{{ $data['category_name'] }}</td>
@@ -67,16 +67,17 @@
                         </table>
                     </div>
 
-                    <table class="table table-bordered table-striped text-center" style="width: 60%; margin: 0;"">
-                        <thead class="table-secondary text-center">
+                    <!-- Bảng tổng kết -->
+                    <table class="table table-bordered table-striped text-center" style="width: 60%; margin: 0;">
+                        <thead class="table-secondary">
                             <tr>
-                                <th>Tổng số lượng nhập</th>
-                                <th>Tổng số lượng đã bán</th>
-                                <th>Tổng doanh thu</th>
-                                <th>Tổng lợi nhuận</th>
+                                <th class="fw-bold">Tổng số lượng nhập</th>
+                                <th class="fw-bold">Tổng số lượng đã bán</th>
+                                <th class="fw-bold">Tổng doanh thu (đ)</th>
+                                <th class="fw-bold">Tổng lợi nhuận (đ)</th>
                             </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody>
                             <tr>
                                 <td>{{ $totalQuantityImported }}</td>
                                 <td>{{ $totalSold }}</td>
@@ -93,4 +94,4 @@
             <p class="text-center text-muted my-4">Không có dữ liệu bán hàng trong khoảng thời gian này.</p>
         @endif
     </div>
-@endsection
+@endsection 

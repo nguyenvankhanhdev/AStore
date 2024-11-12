@@ -49,7 +49,7 @@ class VariantColorController extends Controller
         $color->offer_price = $request->offer_price;
         $color->quantity = $request->quantity;
         $color->save();
-        return redirect()->route('admin.variant-colors.index', ['variants' => $request->variants])->with('success', 'Color added successfully');
+        return redirect()->route('admin.variant-colors.index', ['variants' => $request->variants])->withSuccess('Thêm thành công');
     }
 
     /**
@@ -87,7 +87,7 @@ class VariantColorController extends Controller
         $color->offer_price = $request->offer_price;
         $color->quantity = $request->quantity;
         $color->save();
-        return redirect()->route('admin.variant-colors.index', ['variants' => $color->variant_id])->with('success', 'Color updated successfully');
+        return redirect()->route('admin.variant-colors.index', ['variants' => $color->variant_id])->withSuccess('Cập nhật thành công');
 
     }
 

@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('user_address', function (Blueprint $table) {
             $table->id();
             $table->text('address');
-            $table->string('name_address')->nullable();
             $table->integer('user_id');
+            $table->string('name');
+            $table->string('phone');
+            $table->string('email');
+            $table->string('province');
+            $table->string('district');
+            $table->string('ward');
             $table->timestamps();
         });
     }
