@@ -27,18 +27,18 @@ $address = json_decode($order->address, true);
                                     <strong>Billed To:</strong><br>
                                     <b>Name:</b> {{ $address['name'] ?? 'N/A' }}<br>
                                     <b>Email:</b> {{ $address['email'] ?? 'N/A' }}<br>
-                                    <b>Phone:</b> {{ $address['phone'] ?? 'N/A' }}<br>
+                                    {{-- <b>Phone:</b> {{ $address['phone'] ?? 'N/A' }}<br>
                                     <b>Address:</b> {{ $address['address'] ?? 'N/A' }}<br>
-                                    {{ $address['province'] ?? 'N/A' }}, {{ $address['district'] ?? 'N/A' }}, {{ $address['ward'] ?? 'N/A' }}
+                                    {{ $address['province'] ?? 'N/A' }}, {{ $address['district'] ?? 'N/A' }}, {{ $address['ward'] ?? 'N/A' }} --}}
                                 </address>
                             </div>
 
                             <div class="col-md-6 text-md-right">
                                 <address>
                                     <strong>Shipped To:</strong><br>
-                                    <b>Name:</b> {{ $address->name ?? 'N/A' }}<br>
+                                    <b>Name:</b> {{ $address['name'] ?? 'N/A' }}<br>
                                     <b>Email:</b> {{ $order->user->email ?? 'N/A' }}<br>
-                                    <b>Phone:</b> {{ $address->phone ?? 'N/A' }}<br>
+                                    <b>Phone:</b> {{ $address['phone'] ?? 'N/A' }}<br>
                                     <b>Address:</b> {{ $address['address'] ?? 'N/A' }}<br>
                                     {{ $address['province'] ?? 'N/A' }}, {{ $address['district'] ?? 'N/A' }}, {{ $address['ward'] ?? 'N/A' }}
                                 </address>
