@@ -45,7 +45,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserCoupons::class, 'user_id', 'id');
 
-
+    }
     public function userAddress()
     {
         return $this->hasOne(UserAddress::class, 'user_id', 'id');

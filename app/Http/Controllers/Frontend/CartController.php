@@ -37,7 +37,7 @@ class CartController extends Controller
             $userId = Auth::user()->id;
             $carts = Carts::with(['product', 'variant_color', 'user'])->where('user_id', $userId)->get();
             $provinces = Provinces::all();
-            $user_address = UserAddress::with(['users'])->where('user_id', $userId)->get();
+            $user_address = UserAddress::with(['user'])->where('user_id', $userId)->get();
             return view('frontend.user.home.cart-details', compact('provinces', 'carts', 'user_address'));
         }
     }
