@@ -1107,15 +1107,103 @@
                 <div class="fpt-comment">
                     <div class="container">
                         <div class="card card-md user-feedback">
+                            <div class="review-container">
+                                <h3>
+                                    Đánh giá sản phẩm: {{ $product->name }}
+                                    @if($product->point == 0 || $product->point < 0.1)
+                                        <span class="inline-stars">
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                        </span>
+                                        <span class="rating-score">(0.0/5.0)</span>
+                                    @else
+                                        <span class="inline-stars">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($product->point >= $i)
+                                                    <span class="star full">★</span> <!-- Sao sáng đầy đủ -->
+                                                @elseif($product->point >= $i - 0.5)
+                                                    <span class="star half">★</span> <!-- Sao sáng nửa -->
+                                                @else
+                                                    <span class="star empty">★</span> <!-- Sao chưa sáng -->
+                                                @endif
+                                            @endfor
+                                        </span>
+                                        <span class="rating-score">({{ number_format($product->point, 1) }}/5.0)</span>
+                                    @endif
+                                </h3>
+                                <div class="user-rating-info">
+                                    @if(Auth::id()>0)
+                                        @if($infoRating)
+                                            <h5>
+                                                Bạn đã đánh giá sản phẩm này {{ $infoRating->point }} <span class="count-star">★</span>
+                                            </h5>
+                                        @else
+                                            <h5>
+                                                Bạn chưa đánh giá sản phẩm này
+                                            </h5>
+                                        @endif
+                                    @endif
+                                </div>
+
+
+
+                                <div class="review-content">
+                                    <!-- Phần bên trái: Đánh giá bằng sao -->
+                                    <div class="star-rating">
+                                        <div class="custom-ratingstar">
+                                            <div class="stars">
+                                                <span class="star" data-rating="1">★</span>
+                                                <span class="star" data-rating="2">★</span>
+                                                <span class="star" data-rating="3">★</span>
+                                                <span class="star" data-rating="4">★</span>
+                                                <span class="star" data-rating="5">★</span>
+                                            </div>
+                                            <div class="rating-label"></div>
+                                        </div>
+                                        <button class="rate-button">
+                                            @if(Auth::id()>0)
+                                                @if($infoRating)
+                                                    Đánh giá lại
+                                                @else
+                                                    Đánh giá
+                                                @endif
+                                            @else
+                                                Đánh giá
+                                            @endif
+                                        </button>
+
+
+
+                                    </div>
+
+                                    <!-- Dấu gạch thẳng đứng phân cách -->
+                                    <div class="divider"></div>
+
+                                    <!-- Phần bên phải: Đánh giá theo số lượng -->
+                                    <div class="rating-count">
+                                        @foreach ([5, 4, 3, 2, 1] as $star)
+                                            <p>Đánh giá {{ $star }} <span class="count-star">★</span>
+                                               (<span class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
+                                            </p>
+                                        @endforeach
+                                    </div>
+
+                                </div>
+                            </div>
+
+
                             <div class="card-title">
-                                <h3 class="h5 heading">Hỏi & Đáp</h3>
-                                <div class="form-group">
+                                <h3 class="h5 heading">Bình luận</h3>
+                                {{-- <div class="form-group">
                                     <div class="form-search form-search-md"><span class="form-search-icon m-r-4"><i
                                                 class="ic-search ic-sm"></i></span><input class="form-search-input m-r-8"
                                             type="text" placeholder="Tìm theo nội dung, người gửi..."><span
                                             class="form-search-icon form-search-clear"><i
                                                 class="ic-close ic-md"></i></span></div>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="card-body">
                                 <form id="commentForm" method="POST" action="{{ route('comments.store') }}">
@@ -1155,25 +1243,10 @@
 
                                 <div class="user-content">
                                     <div class="result">
-                                        <div class="text" style="color: #444b52;"><strong>1.000 hỏi đáp
-                                                về</strong>“Samsung Galaxy S22 Ultra 5G
-                                            128GB”</div>
-                                        <div class="auto">
-                                            <div class="text">Sắp xếp theo</div>
-                                            <div class="dropdown js-dropdown dropdown-xs">
-                                                <div class="dropdown-button"><span>Mới nhất</span><i
-                                                        class="ic-arrow-select ic-sm"></i>
-                                                </div>
-                                                <div class="dropdown-menu">
-                                                    <div class="dropdown-menu-wrapper"><a><span>Chọn...</span><i
-                                                                class="ic-check ic-sm m-l-8"></i></a><a class="active"
-                                                            href=""> <span>Mới
-                                                                nhất</span><i class="ic-check ic-sm m-l-8"> </i></a><a
-                                                            href=""><span>Cũ
-                                                                nhất</span><i class="ic-check ic-sm m-l-8"></i></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="text" style="color: #444b52;"><strong>Những bình luận về </strong>“{{ $product->name }}”</div>
+
+
+
                                     </div>
                                     <div id="comments-container" class="user-wrapper">
                                         <div class="user-block">
@@ -1181,7 +1254,7 @@
                                                 <h2>Sản phẩm chưa có bình luận</h2>
                                             @else
                                                 @foreach ($comment as $cm)
-                                                    <div class="avatar avatar-md avatar-text avatar-circle">
+                                                    <div data-timestamp="{{ strtotime($cm->created_at) }}" class="avatar avatar-md avatar-text avatar-circle">
 
                                                         <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span>
                                                         </div>
@@ -1824,5 +1897,132 @@
             // Khởi tạo các sự kiện tương tác với bình luận khi trang load
             khoiTaoSuKienBinhLuan();
         });
+
+
+
+
+        $(document).ready(function () {
+            const stars = $('.star-rating .star');
+            const ratingLabel = $('.star-rating .rating-label');
+            let selectedRating = 0; // Lưu trữ số sao được chọn
+
+            const ratingTexts = [
+                "Rất Tệ",
+                "Tệ",
+                "Ổn",
+                "Tốt",
+                "Rất Tốt"
+            ];
+
+            stars.each(function (index) {
+                // Sự kiện hover vào sao
+                $(this).on('mouseover', function () {
+                    ratingLabel.text(ratingTexts[index]);
+
+                    // Làm sáng các ngôi sao từ đầu đến ngôi sao hover
+                    stars.each(function (i) {
+                        $(this).toggleClass('active', i <= index);
+                    });
+                });
+
+                // Sự kiện khi chuột rời khỏi sao
+                $(this).on('mouseout', function () {
+                    // Làm sáng các ngôi sao đã chọn trước đó
+                    stars.each(function (i) {
+                        $(this).toggleClass('active', i < selectedRating);
+                    });
+                    ratingLabel.text(selectedRating ? ratingTexts[selectedRating - 1] : '');
+                });
+
+                // Sự kiện click vào sao để chọn số sao
+                $(this).on('click', function () {
+                    selectedRating = index + 1;
+                    ratingLabel.text(ratingTexts[index]);
+                });
+            });
+
+            // Sự kiện click vào nút "Đánh giá"
+            $('.rate-button').on('click', function (e) {
+                e.preventDefault();
+
+                if (selectedRating === 0) {
+                    alert("Vui lòng chọn số sao để đánh giá!");
+                    return;
+                }
+
+                var productId = {{ $product->id }}; // Thêm ID sản phẩm từ Blade
+
+                // In ra giá trị của productId và selectedRating (point)
+                console.log("Product ID: " + productId);
+                console.log("Selected Rating (Point): " + selectedRating);
+
+                if (confirm('Bạn có muốn gửi đánh giá không?')) {
+                    $.ajax({
+                        url: "{{ route('product.rating') }}",
+                        method: 'POST',
+                        data: {
+                            pro_id: productId,
+                            point: selectedRating,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+                            toastr.success(response.message);
+                            // Cập nhật điểm trung bình sau khi thành công
+                            var averageRating = response.averageRating;
+
+                            // Cập nhật hiển thị sao
+                            var starHtml = '';
+                            for (var i = 1; i <= 5; i++) {
+                                if (averageRating >= i) {
+                                    starHtml += '<span class="star full">★</span>';
+                                } else if (averageRating >= i - 0.5) {
+                                    starHtml += '<span class="star half">★</span>';
+                                } else {
+                                    starHtml += '<span class="star empty">★</span>';
+                                }
+                            }
+                            $('.inline-stars').html(starHtml);
+
+                            // Cập nhật điểm trung bình hiển thị
+                            $('.rating-score').text('(' + parseFloat(averageRating).toFixed(1) + '/5.0)');
+                            // Cập nhật số lượng đánh giá cho từng mức sao
+                            [5, 4, 3, 2, 1].forEach(function(star) {
+                                $('.rating-count').find(`.count-star-${star}`).text(response.ratingsCount[star] || 0);
+                            });
+
+                            if (response.infoRating) {
+                                $('.user-rating-info').html(
+                                    '<h5>Bạn đã đánh giá sản phẩm này ' + response.infoRating.point + ' <span class="count-star">★</span></h5>'
+                                );
+                                $('.rate-button').text('Đánh giá lại');
+                            } else {
+                                $('.user-rating-info').html('<h5>Bạn chưa đánh giá sản phẩm này</h5>');
+                                $('.rate-button').text('Đánh giá');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 401) {
+                                alert(xhr.responseJSON.message); // Hiển thị thông báo chưa đăng nhập
+                                window.location.href = "{{ route('auth.admin') }}"; // Chuyển hướng đến trang đăng nhập
+                            } else if (xhr.status === 403) {
+                                alert(xhr.responseJSON.message); // Hiển thị thông báo từ server
+                            } else {
+                                alert('Đã xảy ra lỗi: ' + error);
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+
+
+
+
+
+
+
     </script>
 @endpush

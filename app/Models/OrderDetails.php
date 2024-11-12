@@ -27,4 +27,17 @@ class OrderDetails extends Model
             'id'
         );
     }
+
+    public static function getProductIdsByOrderIds($orderIds)
+    {
+        return self::whereIn('order_id', $orderIds)
+            ->with('variantColors.variant.product')
+            ->get()
+            ->map(function ($orderDetail) {
+                return $orderDetail->variantColors->variant->product->id ?? null;
+            })
+            ->filter() // Loại bỏ các giá trị null
+            ->unique() // Loại bỏ các product_id trùng lặp
+            ->values();
+    }
 }

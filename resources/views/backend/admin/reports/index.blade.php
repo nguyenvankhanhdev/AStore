@@ -48,13 +48,12 @@
                             <thead class="table-primary text-center">
                                 <tr>
                                     <th class="fw-bold">Tên sản phẩm</th>
-                                    <th class="fw-bold">Số lượng nhập</th>
-                                    <th class="fw-bold">Số lượng đã bán</th>
-                                    <th class="fw-bold">Giá nhập</th>
-                                    <th class="fw-bold">Giá gốc</th>
-                                    <th class="fw-bold">Giá sau giảm</th>
-                                    <th class="fw-bold">Giá hàng tồn kho</th>
-                                    <th class="fw-bold">Tồn kho</th>
+                                    <th class="fw-bold">SL nhập</th>
+                                    <th class="fw-bold">SL bán</th>
+                                    <th class="fw-bold">SL Tồn</th>
+                                    <th class="fw-bold">Giá nhập (FIFO)</th>
+                                    <th class="fw-bold">Giá bán</th>
+                                    <th class="fw-bold">Tiền nhập (FIFO)</th>
                                     <th class="fw-bold">Tổng doanh thu</th>
                                     <th class="fw-bold">Lợi nhuận</th>
                                 </tr>
@@ -83,31 +82,25 @@
 
                                         <td>{{ $data['quantity_imported'] }}</td>
                                         <td>{{ $data['total_sold'] }}</td>
-                                        <td>{{ number_format($data['warehouse_price'], 0, '', ',') }}₫</td>
-                                        <td>{{ number_format($data['price'], 0, '', ',') }}₫</td>
-                                        <td>{{ number_format($data['price'] - $data['offer_price'], 0, '', ',') }}₫</td>
-                                        <td>{{ number_format($data['inventory_value'], 0, '', ',') }}₫</td>
                                         <td>{{ $data['stock'] }}</td>
-                                        <td>{{ number_format($data['revenue'], 0, '', ',') }}₫</td>
-                                        <td>{{ number_format($data['profit'], 0, '', ',') }}₫</td>
+                                        <td>{{ number_format($data['warehouse_price'], 0, '', ',') }}₫</td> <!-- Giá nhập theo FIFO -->
+                                        <td>{{ number_format($data['price'] - $data['offer_price'], 0, '', ',') }}₫</td> <!-- Giá bán -->
+                                        <td>{{ number_format($data['fifo_cost'], 0, '', ',') }}₫</td> <!-- Tổng chi phí nhập theo FIFO -->
+                                        <td>{{ number_format($data['revenue'], 0, '', ',') }}₫</td> <!-- Tổng doanh thu -->
+                                        <td>{{ number_format($data['profit'], 0, '', ',') }}₫</td> <!-- Lợi nhuận -->
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
 
-            <!-- Summary Table -->
-            <div class="card shadow mt-4">
-                <div class="card-body">
-                    <h5 class="text-center mb-4" style="font-weight: bold; color: #34495e;">Tổng Quan</h5>
-                    <table class="table table-bordered table-striped text-center">
+                    <!-- Summary Table with Total Import Cost -->
+                    <table class="table table-bordered table-striped text-center" style="width: 60%; margin: 0;">
                         <thead class="table-secondary">
                             <tr>
-                                <th class="fw-bold">Tổng số lượng nhập</th>
-                                <th class="fw-bold">Tổng số lượng đã bán</th>
-                                <th class="fw-bold">Tổng giá trị hàng tồn kho</th>
+                                <th class="fw-bold">Tổng SL nhập</th>
+                                <th class="fw-bold">Tổng SL bán</th>
+                                <th class="fw-bold">Tổng tiền nhập (FIFO)</th>
                                 <th class="fw-bold">Tổng doanh thu</th>
                                 <th class="fw-bold">Tổng lợi nhuận</th>
                             </tr>
@@ -116,14 +109,15 @@
                             <tr>
                                 <td>{{ $totalQuantityImported }}</td>
                                 <td>{{ $totalSold }}</td>
-                                <td>{{ number_format($totalInventoryValue, 0, '', ',') }}₫</td>
-                                <td>{{ number_format($totalRevenue, 0, '', ',') }}₫</td>
-                                <td>{{ number_format($totalProfit, 0, '', ',') }}₫</td>
+                                <td>{{ number_format($totalFifoCost, 0, '', ',') }}₫</td> <!-- Tổng tiền nhập theo FIFO -->
+                                <td>{{ number_format($totalRevenue, 0, '', ',') }}₫</td> <!-- Tổng doanh thu -->
+                                <td>{{ number_format($totalProfit, 0, '', ',') }}₫</td> <!-- Tổng lợi nhuận -->
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         @else
             <!-- No Data Message -->
             <p class="text-center text-muted my-4">Không có dữ liệu bán hàng trong khoảng thời gian này.</p>

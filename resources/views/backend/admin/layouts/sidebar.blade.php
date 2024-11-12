@@ -69,38 +69,28 @@
 
             <li
                 class="dropdown {{ setActive([
-                    'admin.order.*',
-                    'admin.pending-orders',
-                    'admin.processed-orders',
-                    'admin.dropped-off-orders',
-                    'admin.shipped-orders',
-                    'admin.out-for-delivery-orders',
-                    'admin.delivered-orders',
-                    'admin.canceled-orders',
+                    'admin.orders.index*',
+                    'admin.orders.pending',
+                    'admin.orders.delivered',
+                    'admin.orders.canceled',
+                    'admin.orders.processed',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-cart-plus"></i>
                     <span>Orders</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ setActive(['admin.order.*']) }}"><a class="nav-link"
-                            href="">All Orders</a></li>
-                    <li class="{{ setActive(['admin.pending-orders']) }}"><a class="nav-link"
-                            href="">All Pending Orders</a></li>
-                    <li class="{{ setActive(['admin.processed-orders']) }}"><a class="nav-link"
-                            href="">All processed Orders</a></li>
-                    <li class="{{ setActive(['admin.dropped-off']) }}"><a class="nav-link"
-                            href="">All Dropped Off Orders</a></li>
+                    <li class="{{ setActive(['admin.orders']) }}"><a class="nav-link"
+                            href="{{ route('admin.orders') }}">All Orders</a></li>
+                    <li class="{{ setActive(['admin.orders.pending']) }}">
+                        <a class="nav-link"
+                            href="{{ route('admin.orders.pending') }}">All Pending Orders</a>
+                        </li>
+                    <li class="{{ setActive(['admin.orders.processed']) }}"><a class="nav-link"
+                            href="{{ route('admin.orders.processed') }}">All processed Orders</a></li>
+                    <li class="{{ setActive(['admin.orders.delivered']) }}"><a class="nav-link"
+                            href="{{ route('admin.orders.delivered') }}">All Delivered Orders</a></li>
 
-                    <li class="{{ setActive(['admin.shipped-orders']) }}"><a class="nav-link"
-                            href="">All Shipped Orders</a></li>
-                    <li class="{{ setActive(['admin.out-for-delivery-orders']) }}"><a class="nav-link"
-                            href="">All Out For Delivery Orders</a></li>
-
-
-                    <li class="{{ setActive(['admin.delivered-orders']) }}"><a class="nav-link"
-                            href="">All Delivered Orders</a></li>
-
-                    <li class="{{ setActive(['admin.canceled-orders']) }}"><a class="nav-link"
-                            href="">All Canceled Orders</a></li>
+                    <li class="{{ setActive(['admin.orders.canceled']) }}"><a class="nav-link"
+                            href="{{ route('admin.orders.canceled') }}">All Canceled Orders</a></li>
 
                 </ul>
             </li>
@@ -148,15 +138,16 @@
                 </ul>
             </li>
 
-            <li class="dropdown {{ setActive(['admin.withdraw-method.*', 'admin.withdraw.index']) }}">
+            <li class="dropdown {{ setActive(['admin.reports.index*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
                     <span>Statistics</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ setActive(['admin.withdraw-method.*']) }}">
+                    <li class="{{ setActive(['admin.reports']) }}">
                         <a class="nav-link" href="{{ route('admin.reports') }}">Revenue Statistics</a>
                     </li>
                 </ul>
             </li>
+
             <li
                 class="dropdown {{ setActive([
                     'admin.slider.*',
