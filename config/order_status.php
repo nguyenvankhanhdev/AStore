@@ -6,5 +6,6 @@ return [
         'processed' => ['status' => 'Processed'],
         'canceled' => ['status' => 'Canceled'],
         'delivered' => ['status' => 'Delivered'],
+        'completed' => ['status' => 'Completed'],
     ],
 ];

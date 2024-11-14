@@ -31,17 +31,24 @@
                             <div class="content">
                                 <div class="text">Sắp xếp theo:</div>
                                 <div class="dropdown js-dropdown">
-                                    <div class="dropdown-button"><span>Mới nhất</span><i class="ic-arrow-select ic-sm"></i>
+                                    <div class="dropdown-button">
+                                        <span>Mới nhất</span>
+                                        <i class="ic-arrow-select ic-sm"></i>
                                     </div>
                                     <div class="dropdown-menu">
                                         <div class="dropdown-menu-wrapper scrollbar">
-                                            <a class="price_max"><span>Giá thấp đến giá cao</span></a>
-                                            <a class="price_min"><span>Giá cao đến giá thấp</span></a>
+                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_min']) }}" class="price_min">
+                                                <span>Giá thấp đến giá cao</span>
+                                            </a>
+                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_max']) }}" class="price_max">
+                                                <span>Giá cao đến giá thấp</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="tab-pane active" id="block-1">
                         <div class="product-list" id="product-list">

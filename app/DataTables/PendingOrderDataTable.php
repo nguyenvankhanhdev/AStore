@@ -41,6 +41,8 @@ class PendingOrderDataTable extends DataTable
                         return "<span class='badge bg-info'>Processed</span>";
                     case 'canceled':
                         return "<span class='badge bg-danger'>Canceled</span>";
+                    case 'completed':
+                        return "<span class='badge' style='background-color: #28a745; color: white;'>Completed</span>";
                     default:
                         return "<span class='badge bg-secondary'>Unknown</span>";
                 }

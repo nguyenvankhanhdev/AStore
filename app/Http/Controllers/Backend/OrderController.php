@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\DataTables\CanceledOrderDataTable;
+use App\DataTables\CompletedOrderDataTable;
 use App\DataTables\DeliveredOrderDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -37,6 +38,10 @@ class OrderController extends Controller
     public function canceledOrders(CanceledOrderDataTable $dataTable)
     {
         return $dataTable->render('backend.admin.orders.canceled-order');
+    }
+    public function completedOrders(CompletedOrderDataTable $dataTable)
+    {
+        return $dataTable->render('backend.admin.orders.completed-order');
     }
 
 

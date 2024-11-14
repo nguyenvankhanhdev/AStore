@@ -10,21 +10,13 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class ProcessedOrderDataTable extends DataTable
+class CompletedOrderDataTable extends DataTable
 {
-    /**
-     * Build the DataTable class.
-     *
-     * @param QueryBuilder $query Results from query() method.
-     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $showBtn = "<a href='" . route('admin.orders.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
-                // $deleteBtn = "<button data-id='" . $query->id . "' class='btn btn-danger ml-2 mr-2 delete-item'><i class='far fa-trash-alt'></i></button>";
-
-                // return $showBtn . $deleteBtn;
                 return $showBtn;
             })
             ->addColumn('customer_name', function ($query) {
@@ -69,19 +61,13 @@ class ProcessedOrderDataTable extends DataTable
             ->setRowId('id');
     }
 
-    /**
-     * Get the query source of dataTable.
-     */
     public function query(Orders $model): QueryBuilder
     {
         return $model->newQuery()
-            ->where('status', 'processed')
+            ->where('status', 'completed') // Filter for completed orders
             ->with(['user.userAddress']);
     }
 
-    /**
-     * Optional method if you want to use the HTML builder.
-     */
     public function html(): HtmlBuilder
     {
         return $this->builder()
@@ -99,9 +85,6 @@ class ProcessedOrderDataTable extends DataTable
             ]);
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
         return [
@@ -112,6 +95,7 @@ class ProcessedOrderDataTable extends DataTable
             Column::make('order_status')->title('Trạng thái đơn hàng'),
             Column::make('payment_method')->title('Phương thức thanh toán'),
             Column::make('payment_status')->title('Trạng thái thanh toán'),
+
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -120,11 +104,8 @@ class ProcessedOrderDataTable extends DataTable
         ];
     }
 
-    /**
-     * Get the filename for export.
-     */
     protected function filename(): string
     {
-        return 'Order_' . date('YmdHis');
+        return 'CompletedOrder_' . date('YmdHis');
     }
 }
