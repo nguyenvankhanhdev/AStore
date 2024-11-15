@@ -112,188 +112,87 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-
-            function getPriceByVariantId(productElement) {
-                var variantId = productElement.find('.product__memory__item.active').data('variant-id');
-                console.log(variantId);
-                $.ajax({
-                    url: '{{ route('getByVariant') }}',
-                    method: 'GET',
-                    data: {
-                        variantId: variantId
-                    },
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            const price = response.variantColors.price;
-                            const discount = response.variantColors.offer_price;
-                            const endPrice = price - discount;
-                            productElement.find('.product__price .price').text(endPrice.toLocaleString(
-                                'vi-VN') + ' ₫');
-                            productElement.find('.product__price .text-promo').text(price
-                                .toLocaleString('vi-VN') + ' ₫');
-                        }
-                    },
-                    error: function(error) {
-                        console.error("Error fetching price:", error);
-                    }
-                });
-            }
-
-            $('.product').each(function() {
-                getPriceByVariantId($(this));
-            });
-
-            $('.product__memory__item').on('click', function() {
-                const productElement = $(this).closest('.product');
-                $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
-                $(this).addClass('active');
-
-                const variantId = $(this).data('variant-id');
-                const detailLink = productElement.find('.product__detail a');
-                const url = new URL(detailLink.attr('href'));
-                url.searchParams.set('variant', variantId);
-                detailLink.attr('href', url.toString());
-
-                getPriceByVariantId(productElement);
-            });
-
-
-
-            function setActiveSlide(index) {
-                const slides = $('.swiper-slide');
-                slides.removeClass('active');
-                if (index >= slides.length) {
-                    index = 0;
-                } else if (index < 0) {
-                    index = slides.length - 1;
-                }
-                slides.eq(index).addClass('active');
-                // Lưu trạng thái active vào localStorage
-                localStorage.setItem('activeSlideIndex', index);
-            }
-
-            $('.swiper-slide').click(function() {
-                const clickedSlide = $(this);
-                if (!clickedSlide.hasClass('active')) {
-                    $('.swiper-slide').removeClass('active');
-                    clickedSlide.addClass('active');
-                    setActiveSlide($('.swiper-slide').index(clickedSlide));
-                }
-            });
-
-            $('.swiper-button-next').click(function() {
-                const activeSlide = $('.swiper-slide.active');
-                let nextIndex = $('.swiper-slide').index(activeSlide) + 1;
-                if (nextIndex >= $('.swiper-slide').length) {
-                    nextIndex = 0; // Quay lại slide đầu tiên nếu đang ở cuối danh sách
-                }
-                setActiveSlide(nextIndex);
-                const nextSlide = $('.swiper-slide').eq(nextIndex);
-                const nextHref = nextSlide.attr('href');
-                if (nextHref) {
-                    window.location.href = nextHref;
-                }
-            });
-
-            $('.swiper-button-prev').click(function() {
-                const activeSlide = $('.swiper-slide.active');
-                let prevIndex = $('.swiper-slide').index(activeSlide) - 1;
-                if (prevIndex < 0) {
-                    prevIndex = $('.swiper-slide').length -
-                        1; // Quay lại slide cuối cùng nếu đang ở slide đầu tiên
-                }
-                setActiveSlide(prevIndex);
-                const prevSlide = $('.swiper-slide').eq(prevIndex);
-                const prevHref = prevSlide.attr('href');
-                if (prevHref) {
-                    window.location.href = prevHref;
-                }
-            });
-            const storedIndex = localStorage.getItem('activeSlideIndex');
-            if (storedIndex !== null) {
-                setActiveSlide(parseInt(storedIndex));
-            } else {
-                // Nếu chưa có slide active được lưu, thì chọn slide đầu tiên làm active
-                if (!$('.swiper-slide').hasClass('active')) {
-                    $('.swiper-slide').first().addClass('active');
-                    setActiveSlide(0);
-                }
-            }
-
-            function setActiveSlideByUrl() {
-                const currentUrl = window.location.href;
-
-                $('.swiper-slide').each(function(index) {
-                    const slideHref = $(this).attr('href');
-                    if (slideHref && currentUrl.includes(slideHref)) {
-                        $('.swiper-slide').removeClass('active');
-                        $(this).addClass('active');
-                        setActiveSlide(index);
-                        return false; // Dừng vòng lặp khi đã tìm thấy slide tương ứng
-                    }
-                });
-            }
-            setActiveSlideByUrl();
-        });
-        $(document).ready(function() {
-            $('.dropdown').cDropdown();
-        })
-        jQuery.fn.extend({
-            cDropdown: function() {
-                return this.each(function() {
-                    var containermenu = $(this);
-                    var button = containermenu.find(".dropdown-button");
-                    var menu = containermenu.find(".dropdown-menu");
-                    var list = containermenu.find(".dropdown-menu-wrapper");
-                    var item = list.children();
-                    var option = button.find("span");
-                    button.click(function(e) {
-                        menu.addClass("open");
-                    });
-                    item.click(function(e) {
-                        e.preventDefault();
-                        $(this).siblings().removeClass("active");
-                        $(this).addClass("active");
-                        var txt = $(this).find("span").text();
-                        option.text(txt);
-                        menu.removeClass("open");
-                    });
-                    $(document).click(function(e) {
-                        e.stopPropagation();
-                        var container = containermenu;
-                        if (container.has(e.target).length === 0) {
-                            menu.removeClass("open");
-                        }
-                    });
-                });
+<script>
+    $(document).ready(function () {
+    function getPriceByVariantId(productElement) {
+        var variantId = productElement.find('.product__memory__item.active').data('variant-id');
+        $.ajax({
+            url: '{{ route('getByVariant') }}',
+            method: 'GET',
+            data: {
+                variantId: variantId
             },
-        });
+            success: function (response) {
+                if (response.status === 'success') {
+                    const price = response.variantColors.price;
+                    const discount = response.variantColors.offer_price;
+                    const endPrice = price - discount;
 
-        function sortProducts(order) {
-            var products = $('.product');
-            products.sort(function(a, b) {
-                var priceA = parseInt($(a).data('discounted-price'));
-                var priceB = parseInt($(b).data('discounted-price'));
-                if (order === 'asc') {
-                    return priceA - priceB;
+                    productElement.find('.product__price .price').text(endPrice.toLocaleString('vi-VN') + ' ₫');
+                    productElement.find('.product__price .text-promo').text(price.toLocaleString('vi-VN') + ' ₫');
+
+                    productElement.attr('data-price', price);
+                    productElement.attr('data-discounted-price', endPrice);
+
+                    if (!productElement.attr('data-initial-discounted-price')) {
+                        productElement.attr('data-initial-discounted-price', endPrice);
+                    }
                 } else {
-                    return priceB - priceA;
+                    console.error("Error: API không trả về trạng thái thành công.");
                 }
-            });
+            },
+            error: function (error) {
+                console.error("Error fetching price:", error);
+            }
+        });
+    }
 
-            $('#product-list').html(products);
-        }
+    function sortProducts(order) {
+        var products = $('.product');
 
-        $('.price_max').click(function(e) {
-            e.preventDefault();
-            sortProducts('asc');
+        products.sort(function (a, b) {
+            var priceA = parseInt($(a).attr('data-initial-discounted-price'));
+            var priceB = parseInt($(b).attr('data-initial-discounted-price'));
+
+            if (order === 'asc') {
+                return priceA - priceB;
+            } else {
+                return priceB - priceA;
+            }
         });
 
-        $('.price_min').click(function(e) {
-            e.preventDefault();
-            sortProducts('desc');
+        $('#product-list').html(products);
+
+        setupVariantClickEvents();
+    }
+
+    $('.price_max').click(function (e) {
+        e.preventDefault();
+        sortProducts('desc');
+    });
+
+    $('.price_min').click(function (e) {
+        e.preventDefault();
+        sortProducts('asc');
+    });
+
+    function setupVariantClickEvents() {
+        $('.product__memory__item').off('click').on('click', function () {
+            const productElement = $(this).closest('.product');
+
+            $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
+            $(this).addClass('active');
+
+            getPriceByVariantId(productElement);
         });
-    </script>
+    }
+
+    $('.product').each(function () {
+        getPriceByVariantId($(this));
+    });
+
+    setupVariantClickEvents();
+});
+
+</script>
 @endpush

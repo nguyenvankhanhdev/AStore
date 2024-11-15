@@ -77,23 +77,13 @@ class ProductController extends Controller
         if ($request->has('categories')) {
             $categories = Categories::where('slug', $request->categories)->firstOrFail();
             $subcategories = SubCategories::where('cate_id', $categories->id)->get();
-            $query = Products::where([
+            $products = Products::where([
                 'cate_id' => $categories->id,
                 'status' => 1,
-            ]);
+            ])->get();
         }
-        if ($request->has('sort')) {
-            if ($request->sort === 'price_min') {
-                $query = $query->orderBy('offer_price', 'asc');
-            } elseif ($request->sort === 'price_max') {
-                $query = $query->orderBy('offer_price', 'desc');
-            }
-        }
-
-        $products = $query->get();
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
     }
-
     public function showProduct(string $slug, Request $request)
     {
         $product = Products::with(relations: ['productImages', 'variants.variantColors', 'ratings', 'category', 'subcategory'])->where(column: [
