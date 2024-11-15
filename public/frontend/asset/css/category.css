@@ -8186,6 +8186,7 @@ main {
     align-items: center;
     justify-content: center;
 }
+
 .category .product__price .text {
     font-size: 16px;
     line-height: 24px;
@@ -8210,7 +8211,6 @@ main {
     width: 176px;
     border: solid 2px;
     border-radius: 6px
-
 }
 
 .category .product__detail .btn:hover {
@@ -8328,4 +8328,167 @@ main {
 .category .sw-button:focus {
     background: #0664f9;
     color: #fff
+}
+
+
+
+
+
+
+
+
+
+
+/* Flex container for filter and sort sections */
+.filter-sort-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+/* Adjust filter container styles */
+.custom-filter-container {
+    position: relative;
+    display: inline-block;
+    min-width: 200px;
+}
+
+/* Dropdown toggle button for filter */
+.custom-dropdown-toggle {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    min-width: 120px;
+}
+
+/* Sort container on the right */
+.custom-sort-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Text next to sort dropdown */
+.custom-sort-text {
+    font-size: 14px;
+    color: #ddd;
+}
+
+/* Dropdown button for sort */
+.custom-sort-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Dropdown content styling (same as filter dropdown) */
+.custom-dropdown-content,
+.custom-sort-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.custom-filter-container:hover .custom-dropdown-content,
+.custom-filter-container:focus-within .custom-dropdown-content,
+.custom-sort-container:hover .custom-sort-menu,
+.custom-sort-container:focus-within .custom-sort-menu {
+    display: block;
+}
+
+/* Label for checkbox in filter dropdown */
+.custom-dropdown-content label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Checkbox */
+.custom-price-range {
+    margin-right: 8px;
+}
+
+/* Horizontal separator line */
+.custom-dropdown-content hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* Custom price range input group */
+.custom-price-input label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.custom-input-group input[type="number"] {
+    width: 45%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Separator between price input fields */
+.custom-input-group span {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Filter button */
+#custom-filter-price-range {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#custom-filter-price-range:hover {
+    background-color: #0056b3;
+}
+
+/* Sort menu items */
+.custom-sort-menu-wrapper a {
+    display: block;
+    padding: 5px 0;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+}
+
+.custom-sort-menu-wrapper a:hover {
+    color: #007bff;
 }

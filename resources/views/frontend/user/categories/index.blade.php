@@ -1,5 +1,6 @@
 @extends('frontend.user.layouts.master')
 
+
 @section('content')
     <div class="category">
         <div class="container">
@@ -27,20 +28,42 @@
                             <div class="swiper-button-next sw-button"><i class="ic-angle-right"></i></div>
                             <div class="swiper-button-prev sw-button"><i class="ic-angle-left"></i></div>
                         </div>
-                        <div class="sort">
-                            <div class="content">
-                                <div class="text">Sắp xếp theo:</div>
-                                <div class="dropdown js-dropdown">
-                                    <div class="dropdown-button">
+                        <div class="filter-sort-wrapper">
+                            <div class="custom-filter-container">
+                                <div class="custom-dropdown">
+                                    <button class="custom-dropdown-toggle">Mức giá</button>
+                                    <div class="custom-dropdown-content">
+                                        <label><input type="checkbox" class="custom-price-range" data-min="7000000" data-max="13000000"> Từ 7 - 13 triệu</label>
+                                        <label><input type="checkbox" class="custom-price-range" data-min="13000000" data-max="20000000"> Từ 13 - 20 triệu</label>
+                                        <label><input type="checkbox" class="custom-price-range" data-min="20000000" data-max="30000000"> Từ 20 - 30 triệu</label>
+                                        <label><input type="checkbox" class="custom-price-range" data-min="30000000"> Trên 30 triệu</label>
+                                        <hr>
+                                        <div class="custom-price-input">
+                                            <label>Hoặc nhập khoảng giá phù hợp với bạn:</label>
+                                            <div class="custom-input-group">
+                                                <input type="number" id="min-price" placeholder="Giá thấp nhất">
+                                                <span>~</span>
+                                                <input type="number" id="max-price" placeholder="Giá cao nhất">
+                                            </div>
+                                            <button id="custom-filter-price-range">Lọc</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="custom-sort-container">
+                                <div class="custom-sort-text">Sắp xếp theo:</div>
+                                <div class="custom-sort-dropdown">
+                                    <div class="custom-sort-button">
                                         <span>Mới nhất</span>
                                         <i class="ic-arrow-select ic-sm"></i>
                                     </div>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-menu-wrapper scrollbar">
-                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_min']) }}" class="price_min">
+                                    <div class="custom-sort-menu">
+                                        <div class="custom-sort-menu-wrapper">
+                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_min']) }}" class="custom-price-min">
                                                 <span>Giá thấp đến giá cao</span>
                                             </a>
-                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_max']) }}" class="price_max">
+                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_max']) }}" class="custom-price-max">
                                                 <span>Giá cao đến giá thấp</span>
                                             </a>
                                         </div>
@@ -49,6 +72,7 @@
                             </div>
                         </div>
                         
+
                     </div>
                     <div class="tab-pane active" id="block-1">
                         <div class="product-list" id="product-list">
@@ -192,6 +216,53 @@
     });
 
     setupVariantClickEvents();
+});
+// Function to filter products by price range
+function filterProductsByPrice(minPrice, maxPrice) {
+    $('.product').each(function () {
+        var productPrice = parseInt($(this).attr('data-initial-discounted-price'));
+
+        if ((minPrice === null || productPrice >= minPrice) && (maxPrice === null || productPrice <= maxPrice)) {
+            $(this).show(); // Show product if within the price range
+        } else {
+            $(this).hide(); // Hide product if outside the price range
+        }
+    });
+}
+
+// Event for selecting predefined price ranges
+$('.custom-price-range').on('change', function () {
+    var selectedRanges = [];
+
+    $('.custom-price-range:checked').each(function () {
+        var min = $(this).data('min') || null;
+        var max = $(this).data('max') || null;
+        selectedRanges.push({ min, max });
+    });
+
+    if (selectedRanges.length > 0) {
+        $('.product').hide(); // Hide all products initially
+        selectedRanges.forEach(function (range) {
+            filterProductsByPrice(range.min, range.max);
+        });
+    } else {
+        $('.product').show(); // Show all products if no range is selected
+    }
+    
+    // Clear custom input fields when a predefined range is selected
+    $('#min-price').val('');
+    $('#max-price').val('');
+});
+
+// Event for applying custom price range
+$('#custom-filter-price-range').on('click', function () {
+    var minPrice = $('#min-price').val() ? parseInt($('#min-price').val()) : null;
+    var maxPrice = $('#max-price').val() ? parseInt($('#max-price').val()) : null;
+
+    // Clear predefined checkboxes when custom range is applied
+    $('.custom-price-range').prop('checked', false);
+
+    filterProductsByPrice(minPrice, maxPrice);
 });
 
 </script>
