@@ -40,16 +40,18 @@
                                         <hr>
                                         <div class="custom-price-input">
                                             <label>Hoặc nhập khoảng giá phù hợp với bạn:</label>
+                                            <div id="price-slider" style="margin: 15px 0;"></div>
                                             <div class="custom-input-group">
-                                                <input type="number" id="min-price" placeholder="Giá thấp nhất">
+                                                <input type="number" id="slider-min-price" placeholder="Giá thấp nhất">
                                                 <span>~</span>
-                                                <input type="number" id="max-price" placeholder="Giá cao nhất">
+                                                <input type="number" id="slider-max-price" placeholder="Giá cao nhất">
                                             </div>
-                                            <button id="custom-filter-price-range">Lọc</button>
+                                            <button id="custom-filter-price-range">Xem kết quả</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                             
                             <div class="custom-sort-container">
                                 <div class="custom-sort-text">Sắp xếp theo:</div>
@@ -139,14 +141,23 @@
 <script>
     $(document).ready(function () {
     function getPriceByVariantId(productElement) {
-        var variantId = productElement.find('.product__memory__item.active').data('variant-id');
+        const variantId = productElement.find('.product__memory__item.active').data('variant-id');
+
+        if (!variantId) {
+            console.error("Variant ID không hợp lệ.");
+            return;
+        }
+
         $.ajax({
             url: '{{ route('getByVariant') }}',
             method: 'GET',
-            data: {
-                variantId: variantId
+            data: { variantId },
+            beforeSend: function () {
+                setLoading(true);
             },
             success: function (response) {
+                setLoading(false);
+
                 if (response.status === 'success') {
                     const price = response.variantColors.price;
                     const discount = response.variantColors.offer_price;
@@ -166,39 +177,50 @@
                 }
             },
             error: function (error) {
+                setLoading(false);
                 console.error("Error fetching price:", error);
             }
         });
     }
 
+    function setLoading(isLoading) {
+        if (isLoading) {
+            $('#product-list').addClass('loading');
+        } else {
+            $('#product-list').removeClass('loading');
+        }
+    }
+
+    // Hàm sắp xếp sản phẩm theo giá
     function sortProducts(order) {
-        var products = $('.product');
+        const products = $('.product');
 
         products.sort(function (a, b) {
-            var priceA = parseInt($(a).attr('data-initial-discounted-price'));
-            var priceB = parseInt($(b).attr('data-initial-discounted-price'));
+            const priceA = parseInt($(a).attr('data-initial-discounted-price'));
+            const priceB = parseInt($(b).attr('data-initial-discounted-price'));
 
-            if (order === 'asc') {
-                return priceA - priceB;
-            } else {
-                return priceB - priceA;
-            }
+            return order === 'asc' ? priceA - priceB : priceB - priceA;
         });
 
         $('#product-list').html(products);
-
         setupVariantClickEvents();
     }
+    // Hàm lọc sản phẩm theo khoảng giá
+    function filterProductsByPrice(minPrice, maxPrice) {
+    $('.product').each(function () {
+        const productPrice = parseInt($(this).attr('data-initial-discounted-price')) || 0;
 
-    $('.price_max').click(function (e) {
-        e.preventDefault();
-        sortProducts('desc');
+        console.log("Product Price:", productPrice); // Debug
+        if ((minPrice === null || productPrice >= minPrice) &&
+            (maxPrice === null || productPrice <= maxPrice)) {
+            $(this).show();
+            console.log("Showing Product:", $(this).text());
+        } else {
+            $(this).hide();
+            console.log("Hiding Product:", $(this).text());
+        }
     });
-
-    $('.price_min').click(function (e) {
-        e.preventDefault();
-        sortProducts('asc');
-    });
+}
 
     function setupVariantClickEvents() {
         $('.product__memory__item').off('click').on('click', function () {
@@ -211,59 +233,110 @@
         });
     }
 
+   // Khởi tạo noUiSlider
+const slider = document.getElementById('price-slider');
+noUiSlider.create(slider, {
+    start: [7000000, 30000000],
+    connect: true,
+    range: {
+        'min': 7000000,
+        'max': 50000000
+    },
+    step: 1000000,
+    tooltips: [false, false],
+    format: {
+        to: function (value) {
+            return Math.round(value).toLocaleString('vi-VN') + ' ₫';
+        },
+        from: function (value) {
+            return Number(value.replace(/[^0-9.-]+/g, ''));
+        }
+    }
+});
+
+
+// Cập nhật giá trị input khi kéo thanh trượt
+slider.noUiSlider.on('update', function (values) {
+    $('#slider-min-price').val(values[0].replace(/[^0-9]/g, ''));
+    $('#slider-max-price').val(values[1].replace(/[^0-9]/g, ''));
+});
+
+
+// Lọc tự động khi kéo
+slider.noUiSlider.on('slide', function (values) {
+    const minPrice = parseInt(values[0].replace(/[^0-9.-]+/g, ''));
+    const maxPrice = parseInt(values[1].replace(/[^0-9.-]+/g, ''));
+    console.log("Slider Min Price:", minPrice);
+    console.log("Slider Max Price:", maxPrice);
+
+    // filterProductsByPrice(minPrice, maxPrice);
+});
+
+
+
+// Lọc sản phẩm khi nhấn nút "Lọc"
+$('#custom-filter-price-range').on('click', function () {
+    // const minPrice = $('#slider-min-price').val() ? parseInt($('#slider-min-price').val()) : null;
+    // const maxPrice = $('#slider-max-price').val() ? parseInt($('#slider-max-price').val()) : null;
+
+    // if (minPrice !== null && maxPrice !== null && minPrice > maxPrice) {
+    //     alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
+    //     return;
+    // }
+
+    // filterProductsByPrice(minPrice, maxPrice);
+
+    const minPrice = parseInt($('#slider-min-price').val()) || 0;
+    const maxPrice = parseInt($('#slider-max-price').val()) || Infinity;
+
+    if (minPrice > maxPrice) {
+        alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
+        return;
+    }
+
+    filterProductsByPrice(minPrice, maxPrice);
+});
+
+    // Lọc sản phẩm khi chọn checkbox khoảng giá
+    $('.custom-price-range').on('change', function () {
+        const selectedRanges = [];
+
+        $('.custom-price-range:checked').each(function () {
+            const min = $(this).data('min') || null;
+            const max = $(this).data('max') || null;
+            selectedRanges.push({ min, max });
+        });
+
+        if (selectedRanges.length > 0) {
+            $('.product').hide();
+            selectedRanges.forEach(function (range) {
+                filterProductsByPrice(range.min, range.max);
+            });
+        } else {
+            $('.product').show();
+        }
+
+        $('#slider-min-price').val('');
+        $('#slider-max-price').val('');
+    });
+
+    $('.custom-price-min').click(function (e) {
+        e.preventDefault();
+        sortProducts('asc');
+    });
+
+    $('.custom-price-max').click(function (e) {
+        e.preventDefault();
+        sortProducts('desc');
+    });
+
     $('.product').each(function () {
         getPriceByVariantId($(this));
     });
 
     setupVariantClickEvents();
 });
-// Function to filter products by price range
-function filterProductsByPrice(minPrice, maxPrice) {
-    $('.product').each(function () {
-        var productPrice = parseInt($(this).attr('data-initial-discounted-price'));
-
-        if ((minPrice === null || productPrice >= minPrice) && (maxPrice === null || productPrice <= maxPrice)) {
-            $(this).show(); // Show product if within the price range
-        } else {
-            $(this).hide(); // Hide product if outside the price range
-        }
-    });
-}
-
-// Event for selecting predefined price ranges
-$('.custom-price-range').on('change', function () {
-    var selectedRanges = [];
-
-    $('.custom-price-range:checked').each(function () {
-        var min = $(this).data('min') || null;
-        var max = $(this).data('max') || null;
-        selectedRanges.push({ min, max });
-    });
-
-    if (selectedRanges.length > 0) {
-        $('.product').hide(); // Hide all products initially
-        selectedRanges.forEach(function (range) {
-            filterProductsByPrice(range.min, range.max);
-        });
-    } else {
-        $('.product').show(); // Show all products if no range is selected
-    }
-    
-    // Clear custom input fields when a predefined range is selected
-    $('#min-price').val('');
-    $('#max-price').val('');
-});
-
-// Event for applying custom price range
-$('#custom-filter-price-range').on('click', function () {
-    var minPrice = $('#min-price').val() ? parseInt($('#min-price').val()) : null;
-    var maxPrice = $('#max-price').val() ? parseInt($('#max-price').val()) : null;
-
-    // Clear predefined checkboxes when custom range is applied
-    $('.custom-price-range').prop('checked', false);
-
-    filterProductsByPrice(minPrice, maxPrice);
-});
 
 </script>
+
 @endpush
