@@ -51,8 +51,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            
                             <div class="custom-sort-container">
                                 <div class="custom-sort-text">Sắp xếp theo:</div>
                                 <div class="custom-sort-dropdown">
@@ -140,203 +138,232 @@
 @push('scripts')
 <script>
     $(document).ready(function () {
-    function getPriceByVariantId(productElement) {
-        const variantId = productElement.find('.product__memory__item.active').data('variant-id');
+        function getPriceByVariantId(productElement) {
+            const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
-        if (!variantId) {
-            console.error("Variant ID không hợp lệ.");
-            return;
+            if (!variantId) {
+                console.error("Variant ID không hợp lệ.");
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('getByVariant') }}',
+                method: 'GET',
+                data: { variantId },
+                beforeSend: function () {
+                    setLoading(true);
+                },
+                success: function (response) {
+                    setLoading(false);
+
+                    if (response.status === 'success') {
+                        const price = response.variantColors.price;
+                        const discount = response.variantColors.offer_price;
+                        const endPrice = price - discount;
+
+                        productElement.find('.product__price .price').text(endPrice.toLocaleString('vi-VN') + ' ₫');
+                        productElement.find('.product__price .text-promo').text(price.toLocaleString('vi-VN') + ' ₫');
+
+                        productElement.attr('data-price', price);
+                        productElement.attr('data-discounted-price', endPrice);
+
+                        if (!productElement.attr('data-initial-discounted-price')) {
+                            productElement.attr('data-initial-discounted-price', endPrice);
+                        }
+                    } else {
+                        console.error("Error: API không trả về trạng thái thành công.");
+                    }
+                },
+                error: function (error) {
+                    setLoading(false);
+                    console.error("Error fetching price:", error);
+                }
+            });
         }
 
-        $.ajax({
-            url: '{{ route('getByVariant') }}',
-            method: 'GET',
-            data: { variantId },
-            beforeSend: function () {
-                setLoading(true);
-            },
-            success: function (response) {
-                setLoading(false);
+        function setLoading(isLoading) {
+            if (isLoading) {
+                $('#product-list').addClass('loading');
+            } else {
+                $('#product-list').removeClass('loading');
+            }
+        }
 
-                if (response.status === 'success') {
-                    const price = response.variantColors.price;
-                    const discount = response.variantColors.offer_price;
-                    const endPrice = price - discount;
+        function sortProducts(order) {
+            const products = $('.product');
 
-                    productElement.find('.product__price .price').text(endPrice.toLocaleString('vi-VN') + ' ₫');
-                    productElement.find('.product__price .text-promo').text(price.toLocaleString('vi-VN') + ' ₫');
+            products.sort(function (a, b) {
+                const priceA = parseInt($(a).attr('data-initial-discounted-price'));
+                const priceB = parseInt($(b).attr('data-initial-discounted-price'));
 
-                    productElement.attr('data-price', price);
-                    productElement.attr('data-discounted-price', endPrice);
+                return order === 'asc' ? priceA - priceB : priceB - priceA;
+            });
 
-                    if (!productElement.attr('data-initial-discounted-price')) {
-                        productElement.attr('data-initial-discounted-price', endPrice);
-                    }
+            $('#product-list').html(products);
+            setupVariantClickEvents();
+        }
+
+        function filterProductsByPrice(minPrice, maxPrice) {
+            $('.product').each(function () {
+                const productPrice = parseInt($(this).attr('data-initial-discounted-price')) || 0;
+
+                if ((minPrice === null || productPrice >= minPrice) &&
+                    (maxPrice === null || productPrice <= maxPrice)) {
+                    $(this).show();
                 } else {
-                    console.error("Error: API không trả về trạng thái thành công.");
+                    $(this).hide();
                 }
+            });
+        }
+
+        function setupVariantClickEvents() {
+            $('.product__memory__item').off('click').on('click', function () {
+                const productElement = $(this).closest('.product');
+
+                $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
+                $(this).addClass('active');
+
+                getPriceByVariantId(productElement);
+            });
+        }
+
+        const slider = document.getElementById('price-slider');
+        noUiSlider.create(slider, {
+            start: [7000000, 30000000],
+            connect: true,
+            range: {
+                'min': 7000000,
+                'max': 50000000
             },
-            error: function (error) {
-                setLoading(false);
-                console.error("Error fetching price:", error);
+            step: 1000000,
+            tooltips: [false, false],
+            format: {
+                to: function (value) {
+                    return Math.round(value).toLocaleString('vi-VN') + ' ₫';
+                },
+                from: function (value) {
+                    return Number(value.replace(/[^0-9.-]+/g, ''));
+                }
             }
         });
-    }
 
-    function setLoading(isLoading) {
-        if (isLoading) {
-            $('#product-list').addClass('loading');
-        } else {
-            $('#product-list').removeClass('loading');
-        }
-    }
-
-    // Hàm sắp xếp sản phẩm theo giá
-    function sortProducts(order) {
-        const products = $('.product');
-
-        products.sort(function (a, b) {
-            const priceA = parseInt($(a).attr('data-initial-discounted-price'));
-            const priceB = parseInt($(b).attr('data-initial-discounted-price'));
-
-            return order === 'asc' ? priceA - priceB : priceB - priceA;
+        slider.noUiSlider.on('update', function (values) {
+            $('#slider-min-price').val(values[0].replace(/[^0-9]/g, ''));
+            $('#slider-max-price').val(values[1].replace(/[^0-9]/g, ''));
         });
 
-        $('#product-list').html(products);
-        setupVariantClickEvents();
-    }
-    // Hàm lọc sản phẩm theo khoảng giá
-    function filterProductsByPrice(minPrice, maxPrice) {
-    $('.product').each(function () {
-        const productPrice = parseInt($(this).attr('data-initial-discounted-price')) || 0;
+        $('#custom-filter-price-range').on('click', function () {
+            const minPrice = parseInt($('#slider-min-price').val()) || 0;
+            const maxPrice = parseInt($('#slider-max-price').val()) || Infinity;
 
-        console.log("Product Price:", productPrice); // Debug
-        if ((minPrice === null || productPrice >= minPrice) &&
-            (maxPrice === null || productPrice <= maxPrice)) {
-            $(this).show();
-            console.log("Showing Product:", $(this).text());
-        } else {
-            $(this).hide();
-            console.log("Hiding Product:", $(this).text());
-        }
-    });
-}
+            if (minPrice > maxPrice) {
+                alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
+                return;
+            }
 
-    function setupVariantClickEvents() {
-        $('.product__memory__item').off('click').on('click', function () {
-            const productElement = $(this).closest('.product');
-
-            $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
-            $(this).addClass('active');
-
-            getPriceByVariantId(productElement);
-        });
-    }
-
-   // Khởi tạo noUiSlider
-const slider = document.getElementById('price-slider');
-noUiSlider.create(slider, {
-    start: [7000000, 30000000],
-    connect: true,
-    range: {
-        'min': 7000000,
-        'max': 50000000
-    },
-    step: 1000000,
-    tooltips: [false, false],
-    format: {
-        to: function (value) {
-            return Math.round(value).toLocaleString('vi-VN') + ' ₫';
-        },
-        from: function (value) {
-            return Number(value.replace(/[^0-9.-]+/g, ''));
-        }
-    }
-});
-
-
-// Cập nhật giá trị input khi kéo thanh trượt
-slider.noUiSlider.on('update', function (values) {
-    $('#slider-min-price').val(values[0].replace(/[^0-9]/g, ''));
-    $('#slider-max-price').val(values[1].replace(/[^0-9]/g, ''));
-});
-
-
-// Lọc tự động khi kéo
-slider.noUiSlider.on('slide', function (values) {
-    const minPrice = parseInt(values[0].replace(/[^0-9.-]+/g, ''));
-    const maxPrice = parseInt(values[1].replace(/[^0-9.-]+/g, ''));
-    console.log("Slider Min Price:", minPrice);
-    console.log("Slider Max Price:", maxPrice);
-
-    // filterProductsByPrice(minPrice, maxPrice);
-});
-
-
-
-// Lọc sản phẩm khi nhấn nút "Lọc"
-$('#custom-filter-price-range').on('click', function () {
-    // const minPrice = $('#slider-min-price').val() ? parseInt($('#slider-min-price').val()) : null;
-    // const maxPrice = $('#slider-max-price').val() ? parseInt($('#slider-max-price').val()) : null;
-
-    // if (minPrice !== null && maxPrice !== null && minPrice > maxPrice) {
-    //     alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
-    //     return;
-    // }
-
-    // filterProductsByPrice(minPrice, maxPrice);
-
-    const minPrice = parseInt($('#slider-min-price').val()) || 0;
-    const maxPrice = parseInt($('#slider-max-price').val()) || Infinity;
-
-    if (minPrice > maxPrice) {
-        alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
-        return;
-    }
-
-    filterProductsByPrice(minPrice, maxPrice);
-});
-
-    // Lọc sản phẩm khi chọn checkbox khoảng giá
-    $('.custom-price-range').on('change', function () {
-        const selectedRanges = [];
-
-        $('.custom-price-range:checked').each(function () {
-            const min = $(this).data('min') || null;
-            const max = $(this).data('max') || null;
-            selectedRanges.push({ min, max });
+            filterProductsByPrice(minPrice, maxPrice);
         });
 
-        if (selectedRanges.length > 0) {
-            $('.product').hide();
-            selectedRanges.forEach(function (range) {
-                filterProductsByPrice(range.min, range.max);
+        $('.custom-price-range').on('change', function () {
+            const selectedRanges = [];
+
+            $('.custom-price-range:checked').each(function () {
+                const min = $(this).data('min') || null;
+                const max = $(this).data('max') || null;
+                selectedRanges.push({ min, max });
             });
-        } else {
-            $('.product').show();
+
+            if (selectedRanges.length > 0) {
+                $('.product').hide();
+                selectedRanges.forEach(function (range) {
+                    filterProductsByPrice(range.min, range.max);
+                });
+            } else {
+                $('.product').show();
+            }
+
+            $('#slider-min-price').val('');
+            $('#slider-max-price').val('');
+        });
+
+        $('.custom-price-min').click(function (e) {
+            e.preventDefault();
+            sortProducts('asc');
+        });
+
+        $('.custom-price-max').click(function (e) {
+            e.preventDefault();
+            sortProducts('desc');
+        });
+
+        $('.product').each(function () {
+            getPriceByVariantId($(this));
+        });
+
+        setupVariantClickEvents();
+
+        function setActiveSlide(index) {
+            const slides = $('.swiper-slide');
+            slides.removeClass('active');
+            if (index >= slides.length) {
+                index = 0;
+            } else if (index < 0) {
+                index = slides.length - 1;
+            }
+            slides.eq(index).addClass('active');
+            localStorage.setItem('activeSlideIndex', index);
         }
 
-        $('#slider-min-price').val('');
-        $('#slider-max-price').val('');
+        $('.swiper-slide').click(function () {
+            const clickedSlide = $(this);
+            if (!clickedSlide.hasClass('active')) {
+                $('.swiper-slide').removeClass('active');
+                clickedSlide.addClass('active');
+                setActiveSlide($('.swiper-slide').index(clickedSlide));
+            }
+        });
+
+        $('.swiper-button-next').click(function () {
+            const activeSlide = $('.swiper-slide.active');
+            let nextIndex = $('.swiper-slide').index(activeSlide) + 1;
+            if (nextIndex >= $('.swiper-slide').length) {
+                nextIndex = 0;
+            }
+            setActiveSlide(nextIndex);
+        });
+
+        $('.swiper-button-prev').click(function () {
+            const activeSlide = $('.swiper-slide.active');
+            let prevIndex = $('.swiper-slide').index(activeSlide) - 1;
+            if (prevIndex < 0) {
+                prevIndex = $('.swiper-slide').length - 1;
+            }
+            setActiveSlide(prevIndex);
+        });
+
+        const storedIndex = localStorage.getItem('activeSlideIndex');
+        if (storedIndex !== null) {
+            setActiveSlide(parseInt(storedIndex));
+        } else if (!$('.swiper-slide').hasClass('active')) {
+            $('.swiper-slide').first().addClass('active');
+            setActiveSlide(0);
+        }
+
+        function setActiveSlideByUrl() {
+            const currentUrl = window.location.href;
+            $('.swiper-slide').each(function (index) {
+                const slideHref = $(this).attr('href');
+                if (slideHref && currentUrl.includes(slideHref)) {
+                    $('.swiper-slide').removeClass('active');
+                    $(this).addClass('active');
+                    setActiveSlide(index);
+                    return false;
+                }
+            });
+        }
+        setActiveSlideByUrl();
     });
-
-    $('.custom-price-min').click(function (e) {
-        e.preventDefault();
-        sortProducts('asc');
-    });
-
-    $('.custom-price-max').click(function (e) {
-        e.preventDefault();
-        sortProducts('desc');
-    });
-
-    $('.product').each(function () {
-        getPriceByVariantId($(this));
-    });
-
-    setupVariantClickEvents();
-});
-
 </script>
+
 
 @endpush

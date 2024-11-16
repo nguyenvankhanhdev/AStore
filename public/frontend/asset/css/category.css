@@ -8510,3 +8510,33 @@ main {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+
+.noUi-connect {
+    background: #4a5568 !important;
+    /* Màu thanh kết nối */
+    border-radius: 5px !important;
+}
+
+.noUi-target {
+    background: #2d3748 !important;
+    /* Màu nền thanh trượt */
+    border-radius: 5px !important;
+    /* Góc bo tròn */
+    height: 8px !important;
+    /* Độ cao của thanh trượt */
+    position: relative !important;
+}
+
+.noUi-handle {
+    background: #fff !important;
+    /* Màu nền tay cầm */
+    border: 2px solid #4a5568 !important;
+    /* Màu viền tay cầm */
+    border-radius: 50% !important;
+    /* Tay cầm tròn */
+    height: 20px !important;
+    /* Chiều cao tay cầm */
+    width: 20px !important;
+    /* Chiều rộng tay cầm */
+    cursor: pointer !important;
+}
