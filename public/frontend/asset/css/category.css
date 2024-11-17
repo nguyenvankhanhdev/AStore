@@ -8026,7 +8026,7 @@ main {
 .category .actions {
     padding: 24px 24px 8px;
     background-color: #212529;
-    padding-bottom: 20px;
+    padding-bottom: 5px;
 }
 
 .category .actions .tab {
@@ -8369,9 +8369,8 @@ main {
 
 /* Sort container on the right */
 .custom-sort-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    position: relative;
+    /* Định vị cho nút cha của dropdown */
 }
 
 /* Text next to sort dropdown */
@@ -8396,22 +8395,35 @@ main {
 }
 
 /* Dropdown content styling (same as filter dropdown) */
-.custom-dropdown-content,
-.custom-sort-menu {
+.custom-dropdown-content {
     display: none;
     position: absolute;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 15px;
+    padding: 20px;
+    width: 416px;
+    margin-top: 5px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    display: none;
 }
 
-.custom-filter-container:hover .custom-dropdown-content,
-.custom-filter-container:focus-within .custom-dropdown-content,
-.custom-sort-container:hover .custom-sort-menu,
-.custom-sort-container:focus-within .custom-sort-menu {
+.custom-sort-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 200px;
+    margin-top: 8px;
+    display: none;
+}
+
+
+.custom-filter-container.active .custom-dropdown-content,
+.custom-sort-container.active .custom-sort-menu {
     display: block;
 }
 
@@ -8420,7 +8432,7 @@ main {
     display: flex;
     align-items: center;
     font-size: 14px;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     color: #333;
 }
 
@@ -8483,15 +8495,31 @@ main {
 /* Sort menu items */
 .custom-sort-menu-wrapper a {
     display: block;
-    padding: 5px 0;
-    font-size: 14px;
+    padding: 10px 15px;
     color: #333;
+    font-size: 14px;
     text-decoration: none;
+    background-color: #fff;
+    transition: all 0.3s ease;
 }
 
 .custom-sort-menu-wrapper a:hover {
+    background-color: #f5f5f5;
+    color: #000;
+    cursor: pointer;
+}
+
+.custom-sort-menu-wrapper a:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.custom-sort-menu-wrapper a.custom-price-min.active,
+.custom-sort-menu-wrapper a.custom-price-max.active {
+    background-color: #f0f8ff;
+    font-weight: bold;
     color: #007bff;
 }
+
 
 #price-slider {
     width: 100%;

@@ -42,9 +42,9 @@
                                             <label>Hoặc nhập khoảng giá phù hợp với bạn:</label>
                                             <div id="price-slider" style="margin: 15px 0;"></div>
                                             <div class="custom-input-group">
-                                                <input type="number" id="slider-min-price" placeholder="Giá thấp nhất">
+                                                <input type="text" id="slider-min-price" placeholder="Giá thấp nhất">
                                                 <span>~</span>
-                                                <input type="number" id="slider-max-price" placeholder="Giá cao nhất">
+                                                <input type="text" id="slider-max-price" placeholder="Giá cao nhất">
                                             </div>
                                             <button id="custom-filter-price-range">Xem kết quả</button>
                                         </div>
@@ -52,10 +52,9 @@
                                 </div>
                             </div>
                             <div class="custom-sort-container">
-                                <div class="custom-sort-text">Sắp xếp theo:</div>
                                 <div class="custom-sort-dropdown">
                                     <div class="custom-sort-button">
-                                        <span>Mới nhất</span>
+                                        <span>Sắp xếp</span>
                                         <i class="ic-arrow-select ic-sm"></i>
                                     </div>
                                     <div class="custom-sort-menu">
@@ -71,7 +70,6 @@
                                 </div>
                             </div>
                         </div>
-                        
 
                     </div>
                     <div class="tab-pane active" id="block-1">
@@ -193,8 +191,8 @@
             const products = $('.product');
 
             products.sort(function (a, b) {
-                const priceA = parseInt($(a).attr('data-initial-discounted-price'));
-                const priceB = parseInt($(b).attr('data-initial-discounted-price'));
+                const priceA = parseInt($(a).attr('data-initial-discounted-price'))||0;
+                const priceB = parseInt($(b).attr('data-initial-discounted-price'))||0;
 
                 return order === 'asc' ? priceA - priceB : priceB - priceA;
             });
@@ -227,7 +225,22 @@
             });
         }
 
+        function formatCurrencyInput(inputElement) {
+    let value = inputElement.value.replace(/[^0-9]/g, '');
+
+    if (value) {
+        value = parseInt(value, 10).toLocaleString('vi-VN') + ' ₫';
+    }
+
+    inputElement.value = value;
+}
+
+function parseCurrency(value) {
+    return parseInt(value.replace(/[^0-9]/g, ''), 10) || 0;
+}
+
         const slider = document.getElementById('price-slider');
+        let minSliderPrice, maxSliderPrice;
         noUiSlider.create(slider, {
             start: [7000000, 30000000],
             connect: true,
@@ -248,53 +261,67 @@
         });
 
         slider.noUiSlider.on('update', function (values) {
-            $('#slider-min-price').val(values[0].replace(/[^0-9]/g, ''));
-            $('#slider-max-price').val(values[1].replace(/[^0-9]/g, ''));
+            const minPrice = parseCurrency(values[0]);
+    const maxPrice = parseCurrency(values[1]);
+
+    $('#slider-min-price').val(minPrice.toLocaleString('vi-VN') + ' ₫');
+    $('#slider-max-price').val(maxPrice.toLocaleString('vi-VN') + ' ₫');
+});
+
+
+$('#slider-min-price, #slider-max-price').on('input', function () {
+    formatCurrencyInput(this);
+});
+
+
+$('#custom-filter-price-range').on('click', function () {
+    const minPrice = parseCurrency($('#slider-min-price').val());
+    const maxPrice = parseCurrency($('#slider-max-price').val());
+
+    if (minPrice > maxPrice) {
+        alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
+        return;
+    }
+
+    console.log('Khoảng giá được chọn:', minPrice, maxPrice);
+    filterProductsByPrice(minPrice, maxPrice);
+});
+
+$('.custom-price-range').on('change', function () {
+    const selectedRanges = [];
+
+    $('.custom-price-range:checked').each(function () {
+        const min = parseFloat($(this).data('min')) || null;
+        const max = parseFloat($(this).data('max')) || null;
+        selectedRanges.push({ min, max });
+    });
+
+    if (selectedRanges.length > 0) {
+        $('.product').hide();
+        selectedRanges.forEach(function (range) {
+            filterProductsByPrice(range.min, range.max);
         });
+    } else {
+        $('.product').show();
+    }
 
-        $('#custom-filter-price-range').on('click', function () {
-            const minPrice = parseInt($('#slider-min-price').val()) || 0;
-            const maxPrice = parseInt($('#slider-max-price').val()) || Infinity;
+    $('#slider-min-price').val('');
+    $('#slider-max-price').val('');
+});
 
-            if (minPrice > maxPrice) {
-                alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
-                return;
-            }
 
-            filterProductsByPrice(minPrice, maxPrice);
-        });
+$('.custom-price-min, .custom-price-max').on('click', function (e) {
+    e.preventDefault();
+    const selectedText = $(this).find('span').text();
+    $('.custom-sort-button span').text(selectedText);
 
-        $('.custom-price-range').on('change', function () {
-            const selectedRanges = [];
+    const order = $(this).hasClass('custom-price-min') ? 'asc' : 'desc';
+    sortProducts(order);
 
-            $('.custom-price-range:checked').each(function () {
-                const min = $(this).data('min') || null;
-                const max = $(this).data('max') || null;
-                selectedRanges.push({ min, max });
-            });
+    $('.custom-sort-dropdown').removeClass('active');
+});
 
-            if (selectedRanges.length > 0) {
-                $('.product').hide();
-                selectedRanges.forEach(function (range) {
-                    filterProductsByPrice(range.min, range.max);
-                });
-            } else {
-                $('.product').show();
-            }
 
-            $('#slider-min-price').val('');
-            $('#slider-max-price').val('');
-        });
-
-        $('.custom-price-min').click(function (e) {
-            e.preventDefault();
-            sortProducts('asc');
-        });
-
-        $('.custom-price-max').click(function (e) {
-            e.preventDefault();
-            sortProducts('desc');
-        });
 
         $('.product').each(function () {
             getPriceByVariantId($(this));
@@ -363,6 +390,36 @@
         }
         setActiveSlideByUrl();
     });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const filterDropdown = document.querySelector(".custom-filter-container");
+    const sortDropdown = document.querySelector(".custom-sort-container");
+
+    filterDropdown.querySelector(".custom-dropdown-toggle").addEventListener("click", function (e) {
+        e.stopPropagation();
+        filterDropdown.classList.toggle("active");
+        sortDropdown.classList.remove("active");
+    });
+
+    sortDropdown.querySelector(".custom-sort-button").addEventListener("click", function (e) {
+        e.stopPropagation();
+        sortDropdown.classList.toggle("active");
+        filterDropdown.classList.remove("active");
+    });
+
+    filterDropdown.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
+
+
+    document.addEventListener("click", function () {
+        filterDropdown.classList.remove("active");
+        sortDropdown.classList.remove("active");
+    });
+});
+
+
 </script>
 
 

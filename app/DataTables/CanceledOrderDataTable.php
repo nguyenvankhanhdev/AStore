@@ -31,7 +31,7 @@ class CanceledOrderDataTable extends DataTable
                 return optional($query->user->userAddress)->name ?? 'N/A';
             })
             ->addColumn('amount', function ($query) {
-                return '$' . number_format($query->total_amount, 2);
+                return number_format($query->total_amount, 0, '.', ',') . 'đ';
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->order_date));
