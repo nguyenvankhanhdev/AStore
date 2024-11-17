@@ -50,15 +50,32 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        // Tải sẵn các quan hệ liên quan đến sản phẩm, màu sắc, và dung lượng (storage)
         $order = Orders::with([
             'orderDetails.variantColors.variant.product',
             'orderDetails.variantColors.color',
-            'orderDetails.variantColors.variant.storage'
+            'orderDetails.variantColors.variant.storage',
+            'coupon'
         ])->findOrFail($id);
-        // Truyền dữ liệu $order cho view
-        return view('backend.admin.orders.show', compact('order'));
+
+        // Tổng tiền trước giảm giá
+        $subTotal = $order->orderDetails->sum('total_price');
+
+        // Tính tổng tiền giảm
+        $totalDiscount = 0;
+        if ($order->coupon) {
+            if ($order->coupon->discount_type === 'percent') {
+                $totalDiscount = $subTotal * ($order->coupon->discount / 100);
+            } elseif ($order->coupon->discount_type === 'amount') {
+                $totalDiscount = $order->coupon->discount;
+            }
+        }
+
+        // Tổng tiền sau giảm giá
+        $totalAfterDiscount = max($subTotal - $totalDiscount, 0); // Đảm bảo không âm
+
+        return view('backend.admin.orders.show', compact('order', 'subTotal', 'totalDiscount', 'totalAfterDiscount'));
     }
+
 
 
 
@@ -86,9 +103,7 @@ class OrderController extends Controller
     {
         $order = Orders::findOrFail($id);
 
-        // delete order products
         $order->orderProducts()->delete();
-        // delete transaction
         $order->transaction()->delete();
 
         $order->delete();
