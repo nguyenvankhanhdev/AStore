@@ -42,7 +42,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="cate__item"><a href="{{route('products.category', ['categories' => 'phu-kien']) }}">
+                    <div class="cate__item"><a href="{{route('products.category', ['categories' => 'phu-kien-linh-kien']) }}">
                             <div class="cate__item-title">Phụ kiện</div>
                             <div class="cate__item-img"><img src="frontend/asset/img/airtag.png" alt="Phụ kiện"></div>
                             <div class="cate__item-btn">

@@ -22,16 +22,19 @@ class UserCouponsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('name',function($query){
+            ->addColumn('name', function ($query) {
                 return $query->coupons->name;
             })
-            ->addColumn('code', function($query){
+            ->addColumn('code', function ($query) {
                 return $query->coupons->code;
             })
-            ->addColumn('start_date', function($query){
+            ->addColumn('quantity', function ($query) {
+                return $query->quantity;
+            })
+            ->addColumn('start_date', function ($query) {
                 return date('d-m-Y', strtotime($query->coupons->start_date));
             })
-            ->addColumn('end_date', function($query){
+            ->addColumn('end_date', function ($query) {
                 return date('d-m-Y', strtotime($query->coupons->end_date));
             })
             ->setRowId('id');
@@ -42,8 +45,19 @@ class UserCouponsDataTable extends DataTable
      */
     public function query(UserCoupons $model): QueryBuilder
     {
-        return $model->newQuery()->with(['coupons','user']);
+        $userId = auth()->id();
+
+        // Nếu không có người dùng đăng nhập, trả về truy vấn trống
+        if (!$userId) {
+            return $model->newQuery()->whereRaw('1=0');
+        }
+
+        // Truy vấn UserCoupons của người dùng hiện tại
+        return $model->newQuery()
+            ->with(['coupons', 'user'])
+            ->where('user_id', $userId);
     }
+
 
     /**
      * Optional method if you want to use the html builder.
@@ -51,20 +65,20 @@ class UserCouponsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('usercoupons-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('usercoupons-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
     /**
@@ -73,9 +87,9 @@ class UserCouponsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
             Column::make('code')->title('Tên mã giảm giá'),
             Column::make('name')->title('Giá trị'),
+            Column::make('quantity')->title('Số lượng'),
             Column::make('start_date')->title('Ngày bắt đầu'),
             Column::make('end_date')->title('Ngày kết thúc'),
             // Column::computed('action')

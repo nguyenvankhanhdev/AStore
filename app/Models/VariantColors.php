@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class VariantColors extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'variant_id',
+        'color_id',
+        'quantity',
+        'price',
+        'offer_price',
+    ];
 
     public function variant()
     {

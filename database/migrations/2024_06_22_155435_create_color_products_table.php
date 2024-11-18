@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('variant_colors', function (Blueprint $table) {
-            $table->integer('quantity')->nullable()->after('some_column'); // Thêm cột sau một cột nào đó, thay 'some_column' với tên cột
+        Schema::create('color_products', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('variant_colors', function (Blueprint $table) {
-            $table->dropColumn('quantity');
-        });
+        Schema::dropIfExists('color_products');
     }
 };

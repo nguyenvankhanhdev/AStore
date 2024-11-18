@@ -179,6 +179,7 @@
                                         <span style="font-size: 18px; font-weight:600;">
                                             Mua ngay hoặc yêu thích
                                         </span>
+
                                     </div>
                                     <div class="pre-order">
                                         <div class="btn btn-link btn-xl" id="add-to-cart-form">
@@ -209,70 +210,36 @@
                                         <div class="h4">Phụ kiện tương thích</div>
                                     </div>
                                 </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
+                                @if ($sameProducts->isNotEmpty())
+                                    @foreach ($sameProducts as $sameProduct)
+                                        <div class="col-3 col-sm-6">
+                                            <div class="item">
+                                                <a class="item__img" href="{{ route('product.details', $sameProduct->slug) }}">
+                                                    <img src="{{ asset($sameProduct->image) }}" alt="">
+                                                </a>
+                                                <div class="item__info">
+                                                    <a href="{{ route('product.details', $sameProduct->slug) }}">
+                                                        <div class="item__name">{{ $sameProduct->name }}</div>
+                                                    </a>
+                                                    <div class="item__price">
+                                                        <div class="text text-primary" style="color: #ae172b">
+                                                            @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
+                                                                Giá {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }} ₫
+                                                            @else
+                                                                Giá không có sẵn
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    @endforeach
+                                @else
+                                    <p>Không có sản phẩm tương tự.</p>
+                                @endif
+
+
+
                             </div>
                         </div>
                     </div>
@@ -1120,6 +1087,18 @@
                                             <!-- Các đánh giá khác... -->
                                         </div>
 
+                                        <button class="rate-button">
+                                            @if (Auth::id() > 0)
+                                                @if ($infoRating)
+                                                    Đánh giá lại
+                                                @else
+                                                    Đánh giá
+                                                @endif
+                                            @else
+                                                Đánh giá
+                                            @endif
+                                        </button>
+
                                         <div class="modal-footer-review">
                                             <button class="close-btn" onclick="closeModal()">Đóng</button>
                                         </div>
@@ -1249,6 +1228,7 @@
                                                             <a data-comment-id="{{ $cm->id }}"
                                                                 class='btn editcm btn-dark'><i
                                                                     class='far fa-edit'></i></a>
+
                                                             <a data-comment-id="{{ $cm->id }}"
                                                                 href="" class='btn deletecm btn-dark'><i
                                                                     class='far fa-trash-alt'></i></a>

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
+            $table->timestamp('import_dae')->useCurrentOnUpdate();
+            $table->integer('total_quantity');
             $table->timestamps();
         });
     }

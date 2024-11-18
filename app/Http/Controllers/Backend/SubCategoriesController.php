@@ -22,8 +22,9 @@ class SubCategoriesController extends Controller
     }
     public function store(Request $request)
     {
+
         $request->validate([
-           'name' => ['required', 'max:200', 'unique:sub_categories,name'],
+            'name' => ['required', 'max:200', 'unique:sub_categories,name'],
             'category' => ['required'],
 
         ]);
@@ -33,7 +34,6 @@ class SubCategoriesController extends Controller
         $subCategory->cate_id = $request->category;
         $subCategory->save();
         return redirect()->route('admin.sub-categories.index')->with('success', 'Create successfully');
-
     }
     public function show(string $id)
     {
@@ -47,15 +47,16 @@ class SubCategoriesController extends Controller
     }
     public function update(Request $request, string $id)
     {
+        //dd($request->all());
         $request->validate([
-            'name'=>['require','max:200','unique:sub_categories,name'],
+            'name' => ['required', 'max:200', 'unique:sub_categories,name'],
             'category' => ['required'],
 
         ]);
         $subCategory = SubCategories::findOrFail($id);
         $subCategory->name = $request->name;
         $subCategory->slug = Str::slug($request->name);
-        $subCategory->category_id = $request->category;
+        $subCategory->cate_id = $request->category;
         $subCategory->save();
         return redirect()->route('admin.sub-categories.index')->with('success', 'Update successfully');
     }
@@ -63,6 +64,6 @@ class SubCategoriesController extends Controller
     {
         $subCategory = SubCategories::findOrFail($id);
         $subCategory->delete();
-        return response(['status' => 'success','message'=>'Deleted Successfully!']);
+        return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
     }
 }

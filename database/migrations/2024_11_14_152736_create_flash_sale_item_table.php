@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product_variants', function (Blueprint $table) {
-            $table->dropColumn('price');
-            $table->dropColumn('offer_price');
-            $table->dropColumn('color_id');
-            $table->dropColumn('quantity');
+        Schema::create('flash_sale_item', function (Blueprint $table) {
+            $table->id();
+            $table->integer('flash_sale_id');
+            $table->integer('sub_category_id');
+            $table->integer('offer_price');
+            $table->boolean('status');
+            $table->timestamps();
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('flash_sale_item');
     }
 };

@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carts;
+use App\Models\Coupon;
 use App\Models\OrderDetails;
 use App\Models\PaypalSettings;
 use App\Models\UserAddress;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Orders;
+use App\Models\UserCoupons;
 use App\Models\VariantColors;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mail;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -57,6 +60,7 @@ class PaymentController extends Controller
         ]);
 
         session([
+            'coupon_id' => $request->coupon_id,
             'order_point' => $request->point,
             'order_info' => $request->info,
             'address' => $request->address,
@@ -126,7 +130,7 @@ class PaymentController extends Controller
             $updatePoint = User::find(auth()->id());
             $updatePoint->point += session('order_point');
             $updatePoint->save();
-            $this->storeOrder('Paypal', 'pending', session('user_address'));
+            $this->storeOrder('Paypal', 'pending', 'completed', session('user_address'));
 
             session()->forget('user_address');
             $this->clearSession();
@@ -169,6 +173,7 @@ class PaymentController extends Controller
         Session::forget('user_address');
         Session::forget('order_point');
         Session::forget('user_address');
+        Session::forget('coupon_id');
     }
     public function payWithCOD(Request $request)
     {
@@ -180,6 +185,7 @@ class PaymentController extends Controller
         ]);
 
         session([
+            'coupon_id' => $request->coupon_id,
             'order_point' => $request->point,
             'order_product_ids' => $request->productIds,
             'order_total_amount' => $request->total_amount,
@@ -196,7 +202,8 @@ class PaymentController extends Controller
 
         session(['user_address' => $userAddress->toJson()]);
 
-        $this->storeOrder('COD', 'pending', session('user_address'));
+        $this->storeOrder('COD', 'pending', 'pending', session('user_address'));
+
 
         $this->clearSession();
 
@@ -207,15 +214,33 @@ class PaymentController extends Controller
         ];
         return response()->json($returnData);
     }
-    public function storeOrder($payment_method, $paymentStatus, $addressJson)
+    public function storeOrder($payment_method, $status, $payment_status, $addressJson)
     {
         $order = new Orders();
         $order->total_amount = session('order_total_amount');
         $order->user_id = auth()->id();
-        $order->status = $paymentStatus;
+        $order->status = $status;
         $order->order_date = Carbon::now()->format('Y-m-d H:i:s');
-        $order->address = $addressJson; // Save the address JSON in the address column
+        $order->address = $addressJson;
+        $order->payment_status = $payment_status;
         $order->payment_method = $payment_method;
+        $coupon_id = session('coupon_id');
+        $counpon = Coupon::find($coupon_id);
+        if ($counpon) {
+            $counpon->quantity -= 1;
+            $counpon->total_used += 1;
+            $counpon->save();
+        }
+        $usercoupon = UserCoupons::where(['user_id' => Auth::id(), 'coupon_id' =>$coupon_id])->first();
+        if ($usercoupon) {
+            $usercoupon->quantity -= 1;
+            $usercoupon->save();
+        }
+        if ($coupon_id != null) {
+            $order->coupon_id = session('coupon_id');
+        } else {
+            $order->coupon_id = null;
+        }
         $order->save();
         $orderDetails = [];
 
@@ -233,7 +258,7 @@ class PaymentController extends Controller
                 $orderDetail->order_id = $order->id;
                 $orderDetail->variant_color_id = $productId;
                 $orderDetail->quantity = $quantity;
-                $orderDetail->total_price = $variant->price * $quantity;
+                $orderDetail->total_price = ($variant->price - $variant->offer_price) * $quantity;
                 $orderDetail->save();
                 $orderDetails[] = $orderDetail;
             }
@@ -261,6 +286,7 @@ class PaymentController extends Controller
             'productIds' => 'required|array|min:1',
         ]);
         session([
+            'coupon_id' => $request->coupon_id,
             'order_point' => $request->point,
             'order_info' => $request->info,
             'address' => $request->address,
@@ -343,7 +369,7 @@ class PaymentController extends Controller
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
                 session(['user_address' => $userAddress->toJson()]);
 
-                $this->storeOrder('VNPAY', 'pending', session('user_address'));
+                $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
                 $this->clearSession();
@@ -485,7 +511,7 @@ class PaymentController extends Controller
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
 
                 session(['user_address' => $userAddress->toJson()]);
-                $this->storeOrder('MoMo', 'pending', session('user_address'));
+                $this->storeOrder('MoMo', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
                 $this->clearSession();
@@ -503,6 +529,7 @@ class PaymentController extends Controller
     public function payWithMOMO_QR(Request $request)
     {
         session([
+            'coupon_id' => $request->coupon_id,
             'order_point' => $request->point,
             'order_info' => $request->info,
             'address' => $request->address,
@@ -568,7 +595,7 @@ class PaymentController extends Controller
         $userAddress = $this->getOrCreateUserAddress($info, $address);
 
         session(['user_address' => $userAddress->toJson()]);
-        $this->storeOrder('ZALOPAY', 'pending', session('user_address'));
+        $this->storeOrder('ZALOPAY', 'pending', 'completed', session('user_address'));
         DB::commit();
         $this->clearSession();
         return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
@@ -577,6 +604,7 @@ class PaymentController extends Controller
     public function payWithZALOPAY(Request $request)
     {
         session([
+            'coupon_id' => $request->coupon_id,
             'order_point' => $request->point,
             'order_info' => $request->info,
             'address' => $request->address,
