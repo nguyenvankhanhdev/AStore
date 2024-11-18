@@ -49,20 +49,20 @@ class User extends Authenticatable
 
     public function userRatings()
     {
-        return $this->hasMany(Ratings::class,'user_id','id');
+        return $this->hasMany(Ratings::class, 'user_id', 'id');
     }
     public function userAddress()
     {
         return $this->hasOne(UserAddress::class, 'user_id', 'id');
     }
 
-    public static function getPoint(){
-        return User::where('id', Auth::user()->id)->first()->point;
-
+    public static function getPoint()
+    {
+        $user = User::find(Auth::id());
+        return $user->point;
     }
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class, 'user_id');
-
     }
 }

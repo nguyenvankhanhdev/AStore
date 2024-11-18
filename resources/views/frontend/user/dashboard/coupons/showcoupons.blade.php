@@ -22,7 +22,7 @@
                         <h3><i class="far fa-user"></i>Đổi Mã giảm giá</h3>
                         <br>
                         <div class="mb-3">
-                            <h4 class="btn btn-primary"> Điểm của bạn: {{ App\Models\User::getPoint() ? 0 : 0 }} đ </h4>
+                            <h4 class="btn btn-primary"> Điểm của bạn: {{ App\Models\User::getPoint()}} đ </h4>
                         </div>
                         <div class="wsus__dashboard_profile">
                             <div class="wsus__dash_pro_area">
