@@ -73,6 +73,7 @@ Route::get('momo-payment-return', [PaymentController::class, 'momo_return'])->na
 
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
 
+    Route::post('rating', [UserOrderController::class, 'rating'])->name('rating');
     Route::post('message/sentmessage', [MessageController::class, 'store'])->name('message.store');
     Route::get('message/getNewMessages', [MessageController::class, 'getNewMessages'])->name('message.getNewMessages');
     Route::get('paypal/payment', [CheckOutController::class, 'checkOutPayPal'])->name('paypal.payment');

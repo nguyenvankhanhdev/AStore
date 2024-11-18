@@ -1102,13 +1102,18 @@
                 </div>
             </div>
         </div>
+
+
+
+
+
         <div class="detail__bottom">
             <div class="detail__comments">
                 <div class="fpt-comment">
                     <div class="container">
                         <div class="card card-md user-feedback">
                             <div class="review-container">
-                                <h3>
+                                <h3 cla>
                                     Đánh giá sản phẩm: {{ $product->name }}
                                     @if($product->point == 0 || $product->point < 0.1)
                                         <span class="inline-stars">
@@ -1132,20 +1137,71 @@
                                             @endfor
                                         </span>
                                         <span class="rating-score">({{ number_format($product->point, 1) }}/5.0)</span>
+                                        <button class="btn view-reviews-btn">
+                                            Xem các đánh giá
+                                        </button>
                                     @endif
+
                                 </h3>
-                                <div class="user-rating-info">
-                                    @if(Auth::id()>0)
-                                        @if($infoRating)
-                                            <h5>
-                                                Bạn đã đánh giá sản phẩm này {{ $infoRating->point }} <span class="count-star">★</span>
-                                            </h5>
-                                        @else
-                                            <h5>
-                                                Bạn chưa đánh giá sản phẩm này
-                                            </h5>
-                                        @endif
-                                    @endif
+                                <!-- Modal -->
+                                <div class="modal-review" id="reviewsModal">
+                                    <div class="modal-content-review">
+                                        <div class="modal-header-review">
+                                            <h3>Đánh giá sản phẩm</h3>
+                                        </div>
+                                        <div class="modal-body-review">
+                                            @foreach ($ratingOfProduct as $rating )
+                                                <div class="modal-line-review">
+                                                    <div class="info-user">
+                                                        <div class="user-image">
+                                                            @if ($rating->user->image==null)
+                                                                <img src="{{asset('uploads/anhdaidien.png')}}" alt="Review Image" />
+                                                            @else
+                                                                <img src="{{asset( $rating->user->image )}}" alt="Review Image" />
+                                                            @endif
+
+                                                        </div>
+                                                        <div class="user-rating">
+                                                            <div class="rating-user">
+                                                                <strong>{{ $rating->user->name }}</strong>
+                                                            </div>
+                                                            <div class="rating-thoughts">
+                                                                <p>{{ $rating->content }}</p>
+                                                            </div>
+                                                            <div class="rating-stars review">
+                                                                <span class="inline-stars">
+                                                                    @for($i = 1; $i <= 5; $i++)
+                                                                        @if($rating->point >= $i)
+                                                                            <span class="star full">★</span> <!-- Sao sáng đầy đủ -->
+                                                                        @elseif($product->point >= $i - 0.5)
+                                                                            <span class="star half">★</span> <!-- Sao sáng nửa -->
+                                                                        @else
+                                                                            <span class="star empty">★</span> <!-- Sao chưa sáng -->
+                                                                        @endif
+                                                                    @endfor
+                                                                </span>
+                                                                <span class="rating-score-review">({{ number_format($rating->point, 1) }}/5.0)</span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="image-gallery">
+                                                        @foreach ($rating->ratingImages as $image)
+                                                            <img src="{{asset( $image->image )}}" alt="Review Image" />
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                            <!-- Dòng đánh giá 1 -->
+
+                                            <!-- Các đánh giá khác... -->
+                                        </div>
+                                        <div class="modal-footer-review">
+                                            <button class="close-btn" onclick="closeModal()">Đóng</button>
+                                        </div>
+                                    </div>
                                 </div>
 
 
@@ -1153,30 +1209,9 @@
                                 <div class="review-content">
                                     <!-- Phần bên trái: Đánh giá bằng sao -->
                                     <div class="star-rating">
-                                        <div class="custom-ratingstar">
-                                            <div class="stars">
-                                                <span class="star" data-rating="1">★</span>
-                                                <span class="star" data-rating="2">★</span>
-                                                <span class="star" data-rating="3">★</span>
-                                                <span class="star" data-rating="4">★</span>
-                                                <span class="star" data-rating="5">★</span>
-                                            </div>
-                                            <div class="rating-label"></div>
-                                        </div>
-                                        <button class="rate-button">
-                                            @if(Auth::id()>0)
-                                                @if($infoRating)
-                                                    Đánh giá lại
-                                                @else
-                                                    Đánh giá
-                                                @endif
-                                            @else
-                                                Đánh giá
-                                            @endif
-                                        </button>
-
-
-
+                                       <h4>
+                                        Tổng số đánh giá của sản phẩm ( {{ $countRatingProduct }} )
+                                       </h4>
                                     </div>
 
                                     <!-- Dấu gạch thẳng đứng phân cách -->
@@ -1548,7 +1583,29 @@
         });
     </script>
     <script>
+
+
         $(document).ready(function() {
+
+             // Khi nhấn nút "Xem các đánh giá", modal sẽ được hiển thị
+            document.querySelector('.view-reviews-btn').addEventListener('click', function() {
+                // Hiển thị modal
+                document.getElementById('reviewsModal').style.display = 'flex';
+            });
+
+            // Hàm đóng modal khi nhấn "Đóng"
+            function closeModal() {
+                // Ẩn modal
+                document.getElementById('reviewsModal').style.display = 'none';
+            }
+
+            // Đóng modal khi nhấp ra ngoài modal
+            window.addEventListener('click', function(event) {
+                // Kiểm tra nếu người dùng nhấp vào vùng nền ngoài modal
+                if (event.target === document.getElementById('reviewsModal')) {
+                    closeModal();  // Đóng modal
+                }
+            });
 
 
             // Hàm để khởi tạo các sự kiện tương tác với bình luận
@@ -2015,6 +2072,7 @@
             });
 
         });
+
 
 
 
