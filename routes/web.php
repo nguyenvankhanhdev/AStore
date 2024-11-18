@@ -13,7 +13,6 @@ use App\Http\Controllers\Frontend\UserOrderController;
 use App\Http\Controllers\Frontend\UserProfileController;
 use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Auth\AuthenticateSessionController;
-use App\Http\Controllers\Frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\UserCouponsController;
 use App\Http\Controllers\Frontend\OpenAIController;
 use App\Http\Controllers\Frontend\VariantColorsController;
@@ -100,8 +99,10 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
         Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
     });
 });
-Route::get('get-price-by-variant', [FrontendProductController::class, 'getPriceByVariant'])->name('getByVariant');
-Route::get('getByColor', [FrontendProductController::class, 'getPriceByVariantAndColor'])->name('getByColor');
+
+Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
+Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');
 Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
 Route::get('callbackzalopay', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');

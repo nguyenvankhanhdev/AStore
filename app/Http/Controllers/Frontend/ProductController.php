@@ -160,46 +160,6 @@ class ProductController extends Controller
         return response()->json(['price' => $price, 'storage' => $storage]);
     }
 
-    // public function rating(Request $request)
-    // {
-    //     try {
-    //         if (!Auth::check()) {
-    //             return redirect()->route('auth.admin')->with('error','Vui lòng đăng nhập');
-    //         }
-
-    //         $userId = Auth::id();
-    //         $productId = $request->pro_id;
-
-    //         // $hasPurchased = Products::hasUserPurchasedProduct($userId, $productId);
-
-    //         // if (!$hasPurchased) {
-    //         //     return response()->json(['message' => 'Bạn chưa mua sản phẩm này'], 403);
-    //         // }
-
-    //         $existingRating = Ratings::where('user_id', $userId)
-    //                                 ->where('pro_id', $productId)
-    //                                 ->first();
-
-    //         if ($existingRating) {
-    //             $existingRating->point = $request->point;
-    //             $existingRating->save();
-    //             return response()->json(['message' => 'Bạn đã sửa đánh giá sản phẩm thành công'], 200);
-    //         }
-
-    //         $rating = new Ratings();
-    //         $rating->point = $request->point;
-    //         $rating->user_id = $userId;
-    //         $rating->pro_id = $productId;
-    //         $rating->save();
-
-
-
-    //         return response()->json(['message' => 'Đánh giá của bạn đã được lưu'], 200);
-    //     } catch (\Exception $e) {
-    //         \Log::error($e->getMessage()); // Ghi lại lỗi vào log
-    //         return response()->json(['message' => 'Đã xảy ra lỗi hệ thống.'], 500);
-    //     }
-    // }
 
     public function rating(Request $request)
     {
@@ -259,4 +219,33 @@ class ProductController extends Controller
             return response()->json(['message' => 'Đã xảy ra lỗi hệ thống.'], 500);
         }
     }
+    public function getPriceByVariantAndColor(Request $request)
+    {
+        $request->validate([
+            'variant_id' => 'required',
+            'color_id' => 'required',
+        ]);
+        $variantColors = VariantColors::where([
+            'variant_id' => $request->variant_id,
+            'color_id' => $request->color_id,
+        ])->firstOrFail();
+
+        return response()->json([
+            'status' => 'success',
+            'price' => $variantColors,
+            'storage' => $variantColors->variant->storage,
+        ]);
+    }
+    public function getPriceByVariant(Request $request)
+    {
+        $variant = ProductVariant::find($request->variantId);
+        $firstPrice = $variant->variantColors->first();
+        return response()->json([
+            'status' => 'success',
+            'variantColors' => $firstPrice,
+        ]);
+    }
+
+
+
 }
