@@ -65,6 +65,8 @@
                                                 <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
                                             @elseif ($product->product_type == 'best_product')
                                                 <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
+                                            @elseif ($product->product_type == 'sale_product')
+                                                <span class="badge badge-xs badge-primary badge-link">Giảm giá</span>
                                             @endif
                                         </h3>
                                         <div class="product__memory js-select">
@@ -110,7 +112,7 @@
 
             function getPriceByVariantId(productElement) {
                 var variantId = productElement.find('.product__memory__item.active').data('variant-id');
-                console.log(variantId);
+
                 $.ajax({
                     url: '{{ route('getByVariant') }}',
                     method: 'GET',
@@ -134,10 +136,13 @@
                 });
             }
 
+            // Initial load for each product
             $('.product').each(function() {
                 getPriceByVariantId($(this));
+                checkAndHideEmptyGB($(this));
             });
 
+            // Click event handler for selecting memory variant
             $('.product__memory__item').on('click', function() {
                 const productElement = $(this).closest('.product');
                 $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
@@ -149,8 +154,24 @@
                 url.searchParams.set('variant', variantId);
                 detailLink.attr('href', url.toString());
 
+                // Update price and check if variant is 0GB
                 getPriceByVariantId(productElement);
+                checkAndHideEmptyGB(productElement);
             });
+
+            function checkAndHideEmptyGB(productElement) {
+                var GB = productElement.find('.product__memory__item.active strong');
+                var GBText = parseInt(GB.text().replace('GB', '').trim());
+
+                if (isNaN(GBText) || GBText === 0) {
+                    productElement.find('.product__memory__item.active').hide();
+                } else {
+                    productElement.find('.product__memory__item.active').show(); // Ensure item is visible if GB > 0
+                }
+            }
+
+
+
 
 
 

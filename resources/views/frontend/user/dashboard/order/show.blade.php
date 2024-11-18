@@ -6,14 +6,14 @@
 
 @extends('frontend.user.dashboard.layouts.master')
 @section('title')
-FPT || Chi tiết đơn hàng
+    FPT || Chi tiết đơn hàng
 @endsection
 
 
 @section('content')
     <!--=============================
-                DASHBOARD START
-              ==============================-->
+                        DASHBOARD START
+                      ==============================-->
     <section id="wsus__dashboard">
         <div class="container-fluid">
             @include('frontend.user.dashboard.layouts.sidebar')
@@ -25,8 +25,8 @@ FPT || Chi tiết đơn hàng
                         <div class="wsus__dashboard_profile">
 
                             <!--============================
-                                    INVOICE PAGE START
-                                ==============================-->
+                                            INVOICE PAGE START
+                                        ==============================-->
                             <section id="" class="invoice-print">
                                 <div class="">
                                     <div class="wsus__invoice_area">
@@ -62,10 +62,9 @@ FPT || Chi tiết đơn hàng
                                                                 @if ($order->status == 'pending')
                                                                     <span class="badge bg-warning text-dark"> Đang chờ xử lí
                                                                     </span>
-
                                                                 @endif
                                                             </h6>
-                                                            <p>Phương thức thanh toán:
+                                                            <p style = "font-size: 18px;">Phương thức thanh toán:
                                                                 @if ($order->payment_method == 'cod')
                                                                     <span class="badge bg-warning text-dark">Thanh toán khi
                                                                         nhận hàng</span>
@@ -75,7 +74,23 @@ FPT || Chi tiết đơn hàng
                                                                 @endif
                                                             </p>
                                                             </p>
-                                                            <p>Trạng thái: {{ $order->payment_status }}</p>
+                                                            <p style = "font-size: 18px;">Trạng thái:
+                                                                @if ($order->status == 'pending')
+                                                                    <span class="badge bg-warning text-dark">Đang chờ xử
+                                                                        lí</span>
+                                                                @elseif($order->status == 'processed')
+                                                                    <span class="badge bg-warning text-dark">Đã xử lí</span>
+                                                                @elseif($order->status == 'delivered')
+                                                                    <span class="badge bg-warning text-dark">Đã giao
+                                                                        hàng</span>
+                                                                @elseif($order->status == 'canceled')
+                                                                    <span class="badge bg-danger text-white">Đã hủy đơn
+                                                                        hàng</span>
+                                                                @elseif($order->status == 'complete')
+                                                                        <span class="badge bg-success text-white">Đã hủy đơn
+                                                                            hàng</span>
+                                                                @endif
+                                                            </p>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -92,15 +107,8 @@ FPT || Chi tiết đơn hàng
                                                                 giá
                                                             </th>
 
-                                                            <th class="offer_price">
-                                                                giá đã giảm
-                                                            </th>
                                                             <th class="quantity">
                                                                 số lượng
-                                                            </th>
-
-                                                            <th class="total">
-                                                                Tiền thanh toán
                                                             </th>
                                                         </tr>
                                                         @foreach ($order->orderDetails as $orderDetail)
@@ -113,20 +121,12 @@ FPT || Chi tiết đơn hàng
 
                                                                 </td>
                                                                 <td class="amount">
-                                                                    {{ number_format($orderDetail->variantColors->price, '0', '.') }}
+                                                                    {{ number_format($order->total_amount / $orderDetail->quantity, '0', '.') }}
                                                                     đ
                                                                 </td>
 
-                                                                <td class="offer_price">
-                                                                    {{ number_format($orderDetail->variantColors->offer_price, '0', '.') }}
-                                                                    đ
-                                                                </td>
                                                                 <td class="quantity" style="margin-left: 40px;">
                                                                     {{ $orderDetail->quantity }}
-                                                                </td>
-                                                                <td class="total" style="    margin-left: 35px;">
-                                                                    {{ number_format($order->total_amount, '0', '.') }} đ
-
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -136,8 +136,8 @@ FPT || Chi tiết đơn hàng
                                         </div>
                                         <div class="wsus__invoice_footer">
                                             {{-- <p><span>Sub Total:</span>{{@$order->sub_total}}</p> --}}
-                                            {{-- <p><span>Shipping Fee(+):</span>{{ @$settings->currency_icon }} {{@$shipping->cost}} </p>
-                                            <p><span>Coupon(-):</span>{{ @$settings->currency_icon }} {{@$coupon->discount ? $coupon->discount : 0}}</p> --}}
+                                            {{-- <p><span>Shipping Fee(+):</span>{{ @$settings->currency_icon }} {{@$shipping->cost}} </p> --}}
+                                            </span></p>
                                             <p><span>Tổng tiền cẩn thanh toán
                                                     :</span>{{ number_format($order->total_amount, '0', '.') }}đ</p>
                                         </div>
@@ -145,8 +145,8 @@ FPT || Chi tiết đơn hàng
                                 </div>
                             </section>
                             <!--============================
-                                    INVOICE PAGE END
-                                ==============================-->
+                                            INVOICE PAGE END
+                                        ==============================-->
                             <div class="col">
                                 <div class="mt-2 float-end">
                                     <button class="btn btn-warning print_invoice">print</button>
@@ -160,8 +160,8 @@ FPT || Chi tiết đơn hàng
         </div>
     </section>
     <!--=============================
-                DASHBOARD START
-              ==============================-->
+                        DASHBOARD START
+                      ==============================-->
 @endsection
 
 @push('scripts')

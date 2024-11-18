@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('variant_colors', function (Blueprint $table) {
-            $table->bigInteger('warehouse_price')->change();
+        Schema::create('order_details', function (Blueprint $table) {
+            $table->id();
+            $table->integer('quantity');
+            $table->double('total_price',15,0);
+            $table->integer('variant_color_id');
+            $table->integer('order_id');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('variant_colors', function (Blueprint $table) {
-            $table->decimal('warehouse_price', 15, 2)->change(); // Revert back to the original type if it was decimal or any other
-        });
+        Schema::dropIfExists('order_details');
     }
 };

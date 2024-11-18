@@ -16,4 +16,6 @@ class Districts extends Model
     {
         return $this->belongsTo(Provinces::class, 'province_id',);
     }
+    
+
 }

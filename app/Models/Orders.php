@@ -25,4 +25,8 @@ class Orders extends Model
     {
         return self::where('user_id', $userId)->pluck('id');
     }
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class, 'coupon_id');
+    }
 }

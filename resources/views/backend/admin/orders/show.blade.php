@@ -74,6 +74,7 @@ $address = json_decode($order->address, true);
                                     <th class="text-center">Price</th>
                                     <th class="text-center">Quantity</th>
                                     <th class="text-right">Totals</th>
+                                    <th class="text-right">Discount</th>
                                 </tr>
                                 @foreach ($order->orderDetails as $detail)
                                 <tr>
@@ -84,11 +85,22 @@ $address = json_decode($order->address, true);
                                         {{ optional($detail->variantColors->variant->storage)->GB ?? 'N/A' }}
                                     </td>
                                     <td class="text-center">
-                                        {{ number_format($detail->total_price / $detail->quantity, 2) }} {{ $settings->currency_icon ?? 'đ' }}
+                                        {{ number_format($detail->total_price / $detail->quantity, 0, '.', ',') . 'đ' }} {{ $settings->currency_icon ?? 'đ' }}
                                     </td>
                                     <td class="text-center">{{ $detail->quantity ?? 0 }}</td>
                                     <td class="text-right">
-                                        {{ number_format($detail->total_price, 2) }} {{ $settings->currency_icon ?? 'đ' }}
+                                        {{ number_format($detail->total_price, 0, '.', ',') . 'đ' }}
+                                    </td>
+                                    <td class="text-right">
+                                        @if ($order->coupon)
+                                            @if ($order->coupon->discount_type === 'percent')
+                                                {{ number_format($detail->total_price * ($order->coupon->discount / 100), 0, '.', ',') . 'đ' }}
+                                            @elseif ($order->coupon->discount_type === 'amount')
+                                                {{ number_format($order->coupon->discount, 0, '.', ',') . 'đ' }}
+                                            @endif
+                                        @else
+                                            0 đ
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -120,31 +132,24 @@ $address = json_decode($order->address, true);
                                 <div class="invoice-detail-item">
                                     <div class="invoice-detail-name">Subtotal</div>
                                     <div class="invoice-detail-value">
-                                        {{ number_format($order->sub_total ?? $order->orderDetails->sum('total_price'), 2) }} {{ $settings->currency_icon ?? 'đ' }}
-                                    </div>
-                                </div>
-                                <div class="invoice-detail-item">
-                                    <div class="invoice-detail-name">Shipping (+)</div>
-                                    <div class="invoice-detail-value">
-                                        {{ number_format(0, 2) }} {{ $settings->currency_icon ?? 'đ' }}
+                                        {{ number_format($subTotal, 0, '.', ',') . ' đ' }}
                                     </div>
                                 </div>
                                 <div class="invoice-detail-item">
                                     <div class="invoice-detail-name">Coupon (-)</div>
                                     <div class="invoice-detail-value">
-                                        {{ number_format(0, 2) }} {{ $settings->currency_icon ?? 'đ' }}
+                                        {{ number_format($totalDiscount, 0, '.', ',') . ' đ' }}
                                     </div>
                                 </div>
                                 <hr class="mt-2 mb-2">
                                 <div class="invoice-detail-item">
                                     <div class="invoice-detail-name">Total</div>
                                     <div class="invoice-detail-value invoice-detail-value-lg">
-                                        {{ number_format(($order->sub_total ?? $order->orderDetails->sum('total_price')), 2) }} {{ $settings->currency_icon ?? 'đ' }}
+                                        {{ number_format($totalAfterDiscount, 0, '.', ',') . ' đ' }}
                                     </div>
                                 </div>
                             </div>
-                            
-                            </div>
+
                         </div>
                     </div>
                 </div>

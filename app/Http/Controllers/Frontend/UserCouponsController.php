@@ -34,10 +34,17 @@ class UserCouponsController extends Controller
         if ($user->point >= $coupon->required_points) {
             $user->point -= $coupon->required_points;
             $user->save();
-            UserCoupons::create([
-                'user_id' => $user->id,
-                'coupon_id' => $couponId,
-            ]);
+            $userCoupon = UserCoupons::where('user_id', $user->id)->where('coupon_id', $couponId)->first();
+            if($userCoupon == null) {
+                $userCoupon = UserCoupons::create([
+                    'user_id' => $user->id,
+                    'coupon_id' => $couponId,
+                    'quantity' => 1
+                ]);
+            } else {
+                $userCoupon->quantity += 1;
+                $userCoupon->save();
+            }
 
             return response()->json(['status' => 'success', 'message' => 'Đổi thành công']);
         }

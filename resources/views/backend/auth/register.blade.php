@@ -25,11 +25,6 @@
             color: white !important;
             background-color: #ea4335;
         }
-
-        .btn-facebook {
-            color: white !important;
-            background-color: #3b5998;
-        }
     </style>
 
     </head>
@@ -43,18 +38,17 @@
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card border-0 shadow rounded-3 my-5">
                     <div class="card-body p-4 p-sm-5">
-                        <h5 class="card-title text-center mb-5 fw-light fs-5">Create Account</h5>
+                        <h5 class="card-title text-center mb-5 fw-light fs-5">Tạo Tài Khoản</h5>
 
                         <form method="POST" action="{{ route('register.store') }}">
                             @csrf
-
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="username" placeholder="Username"
-                                    value="{{ old('username') }}">
-                                @if ($errors->has('username'))
-                                    <span class="text-danger">{{ $errors->first('username') }}</span>
+                                <input type="text" class="form-control" name="name" placeholder="Họ Và Tên"
+                                    value="{{ old('name') }}">
+                                @if ($errors->has('name'))
+                                    <span class="text-danger">{{ $errors->first('name') }}</span>
                                 @endif
-                                <label for="floatingInput">User Name</label>
+                                <label for="floatingInput">Họ Và Tên</label>
                             </div>
 
                             <div class="form-floating mb-3">
@@ -63,31 +57,30 @@
                                 @if ($errors->has('email'))
                                     <span class="text-danger">{{ $errors->first('email') }}</span>
                                 @endif
-                                <label for="floatingInput">Email address</label>
+                                <label for="floatingInput">Địa chỉ Email</label>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
                                 @if ($errors->has('password'))
                                     <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
-                                <label for="floatingPassword">Password</label>
+                                <label for="floatingPassword">Mật Khẩu</label>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" name="password_confirmation" class="form-control" id="floatingPasswordConfirmation" placeholder="Confirm Password">
                                 @if ($errors->has('password_confirmation'))
                                     <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
                                 @endif
-                                <label for="floatingPasswordConfirmation">Confirm Password</label>
+                                <label for="floatingPasswordConfirmation">Xác nhận mật khẩu</label>
                             </div>
 
                             <div class="form-check mb-3">
                                 <label class="form-check-label" for="register">
-                                    <a href="{{ route('admin.login') }}">Login</a>
+                                    <a href="{{ route('login') }}" class="text-">Đăng nhập</a>
                                 </label>
-
                             </div>
                             <div class="d-grid">
-                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Create</button>
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Đăng kí</button>
                             </div>
                             <hr class="my-4">
                         </form>
