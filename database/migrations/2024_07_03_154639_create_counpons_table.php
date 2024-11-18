@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('max_use');
             $table->date('start_date');
+            $table->integer('required_points');
             $table->date('end_date');
             $table->string('discount_type');
             $table->double('discount');

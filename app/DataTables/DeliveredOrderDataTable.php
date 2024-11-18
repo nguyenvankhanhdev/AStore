@@ -22,9 +22,6 @@ class DeliveredOrderDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $showBtn = "<a href='" . route('admin.orders.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
-                // $deleteBtn = "<button data-id='" . $query->id . "' class='btn btn-danger ml-2 mr-2 delete-item'><i class='far fa-trash-alt'></i></button>";
-
-                // return $showBtn . $deleteBtn;
                 return $showBtn;
             })
             ->addColumn('customer_name', function ($query) {

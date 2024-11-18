@@ -82,19 +82,19 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', [UserProfileController::class, 'index'])->name('dashboard.profile');
     Route::put('profile', [UserProfileController::class, 'updateProfile'])->name('profile.update');
-    Route::get('order',[UserOrderController::class,'index'])->name('order.index');
-    Route::get('order/show/{id}',[UserOrderController::class,'show'])->name('order.show');
+    Route::get('order', [UserOrderController::class, 'index'])->name('order.index');
+    Route::get('order/show/{id}', [UserOrderController::class, 'show'])->name('order.show');
     Route::resource('address', UserAddressController::class);
     Route::post('profile', [UserProfileController::class, 'updatePassword'])->name('profile.update.password');
-    Route::resource('user-coupons',UserCouponsController::class);
-    Route::get('showcoupons',[UserCouponsController::class,'showcoupons'])->name('user-coupons.showcoupons');
+    Route::resource('user-coupons', UserCouponsController::class);
+    Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
+    Route::put('cancelOrder', [UserOrderController::class, 'cancelOrder'])->name('order.cancel');
+
 
 });
-Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
-Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+Route::get('get-price-by-variant', [ProductController::class, 'getPriceByVariant'])->name('getByVariant');
+Route::get('getByColor', [ProductController::class, 'getPriceByVariantAndColor'])->name('getByColor');
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');
 Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
 Route::get('callbackzalopay', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');
 Route::get('send-email', [PaymentController::class, 'sendMail'])->name('send-email');
-Route::post('/chatbot-response', [OpenAIController::class, 'getChatbotResponse'])->name('chatbot-response');
-Route::get('get-chat', [OpenAIController::class, 'getChat'])->name('get-chat');

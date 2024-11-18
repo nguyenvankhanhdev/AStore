@@ -159,6 +159,8 @@ namespace App\Models{
  * @property int $total_used
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Orders> $orders
+ * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCoupons> $usercoupons
  * @property-read int|null $usercoupons_count
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
@@ -200,6 +202,58 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Districts whereProvinceId($value)
  */
 	class Districts extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $flash_sale_id
+ * @property int $sub_categories_id
+ * @property int $offer_price
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\FlashSales|null $flashsales
+ * @property-read \App\Models\SubCategories|null $subcategories
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereFlashSaleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereOfferPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereSubCategoriesId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereUpdatedAt($value)
+ */
+	class FlashSaleItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $start_date
+ * @property string $end_date
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlashSaleItem> $flashsateitems
+ * @property-read int|null $flashsateitems_count
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSales whereUpdatedAt($value)
+ */
+	class FlashSales extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -275,11 +329,14 @@ namespace App\Models{
  * @property float $total_amount
  * @property string $address
  * @property string $status
+ * @property string|null $payment_status
  * @property string $order_date
  * @property string $payment_method
  * @property int $user_id
+ * @property int|null $coupon_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Coupon|null $coupon
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderDetails> $orderDetails
  * @property-read int|null $order_details_count
  * @property-read \App\Models\User|null $user
@@ -287,10 +344,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Orders query()
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereOrderDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePaymentStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereUpdatedAt($value)
@@ -513,6 +572,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Categories|null $category
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlashSaleItem> $flashsaleitem
+ * @property-read int|null $flashsaleitem_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Products> $products
  * @property-read int|null $products_count
  * @method static \Illuminate\Database\Eloquent\Builder|SubCategories newModelQuery()
@@ -534,14 +595,16 @@ namespace App\Models{
  *
  * @property int $id
  * @property string|null $name
- * @property string $username
+ * @property string|null $username
  * @property string $email
  * @property string|null $phone
  * @property string|null $image
  * @property int|null $point
  * @property string $role
+ * @property string|null $google_id
+ * @property string|null $github_id
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
+ * @property string|null $password
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -559,6 +622,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGithubId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
@@ -614,6 +679,7 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property int $coupon_id
+ * @property int $quantity
  * @property-read \App\Models\Coupon|null $coupons
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons newModelQuery()
@@ -621,6 +687,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons query()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereUserId($value)
  */
 	class UserCoupons extends \Eloquent {}

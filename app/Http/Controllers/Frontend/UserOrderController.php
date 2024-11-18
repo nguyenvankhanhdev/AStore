@@ -18,4 +18,18 @@ class UserOrderController extends Controller
         $order = Orders::find($id);
         return view('frontend.user.dashboard.order.show', compact('order'));
     }
+    public function cancelOrder(Request $request)
+{
+    $order = Orders::find($request->id);
+
+    if ($order) {
+        $order->status = 'canceled';
+        $order->save();
+
+        return response()->json(['message' => 'Đơn hàng đã được hủy']);
+    }
+
+    return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
+}
+
 }

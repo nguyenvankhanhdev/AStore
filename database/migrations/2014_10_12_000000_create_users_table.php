@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('image')->nullable();
+            $table->integer('point')->nullable();
+            $table->string('google_id')->nullable();
+            $table->string('github_id')->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

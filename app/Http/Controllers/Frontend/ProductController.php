@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accessories;
 use App\Models\Categories;
 use App\Models\Products;
 use App\Models\ProductVariant;
@@ -66,8 +67,34 @@ class ProductController extends Controller
         ])->first();
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
+
+        $accessories = Accessories::with(['product', 'subCategory'])
+            ->where('pro_id', $product->id)
+            ->get();
+
+        if ($accessories->isNotEmpty()) {
+            $subCateIds = $accessories->pluck('sub_cate_id')->unique(); // Lấy danh sách sub_cate_id không trùng lặp
+
+            $sameProducts = collect();
+
+            // Lấy 1 sản phẩm từ mỗi sub_cate_id
+            foreach ($subCateIds as $subCateId) {
+                $products = Products::with(['variants.variantColors'])
+                    ->where('sub_cate_id', $subCateId)
+                    ->limit(1) // Lấy 1 sản phẩm từ mỗi sub_cate_id
+                    ->get();
+                $sameProducts = $sameProducts->merge($products); // Gộp các sản phẩm vào collection
+            }
+
+            // Giới hạn tổng cộng chỉ 4 sản phẩm
+            $sameProducts = $sameProducts->take(4);
+        } else {
+            $sameProducts = collect();
+        }
+
+
         if (Auth::id() > 0) {
-            $userID=Auth::id();
+            $userID = Auth::id();
             $user = User::find(Auth::id());
             $comment = Comments::with('user')
                 ->where([
@@ -79,10 +106,10 @@ class ProductController extends Controller
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
             //->get();
             $infoRating = Ratings::where('pro_id', $product->id)
-                     ->where('user_id', $userID)
-                     ->first();
+                ->where('user_id', $userID)
+                ->first();
             $ratingsCount = Ratings::getCountByStar($product->id);
-            return view('frontend.user.home.product_details', compact('infoRating','product', 'user', 'comment', 'selectedVariantId', 'colors','ratingsCount'));
+            return view('frontend.user.home.product_details', compact('infoRating', 'product', 'user', 'comment', 'selectedVariantId', 'colors', 'ratingsCount', 'sameProducts'));
         } else {
             $comment = Comments::with('user')
                 ->where([
@@ -96,7 +123,7 @@ class ProductController extends Controller
             //->get();
             $ratingsCount = Ratings::getCountByStar($product->id);
 
-            return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors','ratingsCount'));
+            return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors', 'ratingsCount', 'sameProducts'));
         }
     }
 
@@ -155,8 +182,8 @@ class ProductController extends Controller
 
             // Kiểm tra xem người dùng đã đánh giá sản phẩm chưa
             $existingRating = Ratings::where('user_id', $userId)
-                                    ->where('pro_id', $productId)
-                                    ->first();
+                ->where('pro_id', $productId)
+                ->first();
 
             // Nếu người dùng đã đánh giá, cập nhật lại điểm
             if ($existingRating) {
@@ -184,11 +211,10 @@ class ProductController extends Controller
             }
             $ratingsCount = Ratings::getCountByStar($product->id);
             $infoRating = Ratings::where('pro_id', $product->id)
-                     ->where('user_id', $userId)
-                     ->first();
+                ->where('user_id', $userId)
+                ->first();
             // Trả về thông báo thành công
-            return response()->json(['infoRating'=>$infoRating,'message' => $message, 'averageRating' => $averageRating,'ratingsCount'=>$ratingsCount], 200);
-
+            return response()->json(['infoRating' => $infoRating, 'message' => $message, 'averageRating' => $averageRating, 'ratingsCount' => $ratingsCount], 200);
         } catch (\Exception $e) {
             \Log::error($e->getMessage()); // Ghi lại lỗi vào log
             return response()->json(['message' => 'Đã xảy ra lỗi hệ thống.'], 500);
@@ -220,6 +246,4 @@ class ProductController extends Controller
             'variantColors' => $firstPrice,
         ]);
     }
-
-
 }

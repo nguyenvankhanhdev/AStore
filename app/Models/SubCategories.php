@@ -13,9 +13,17 @@ class SubCategories extends Model
     {
         return $this->belongsTo(Categories::class, 'cate_id');
     }
+    public function flashsaleitem()
+    {
+        return $this->hasMany(FlashSaleItem::class, 'sub_categories_id');
+    }
 
     public function products()
     {
         return $this->hasMany(Products::class, 'sub_cate_id');
+    }
+    public function accessories()
+    {
+        return $this->hasMany(Accessories::class, 'sub_cate_id');
     }
 }
