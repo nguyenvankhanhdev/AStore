@@ -27,10 +27,6 @@ class OrderDataTable extends DataTable
             })
             ->addColumn('amount', function ($query) {
                 return number_format($query->total_amount, 0,',','.') . 'đ';
-<<<<<<< HEAD
-=======
-
->>>>>>> 9f7d49cb4fd1ea2a5746bfb9a49d036689bc19cc
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->order_date));
