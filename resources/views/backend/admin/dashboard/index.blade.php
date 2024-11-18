@@ -14,10 +14,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Todays Orders</h4>
+                                <a href="{{ route('admin.orders') }}"><h4>Todays Orders</h4></a>
                             </div>
                             <div class="card-body">
-                                {{ $todaysOrders }}
+                             {{$todaysOrders}}
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 <h4>Todays Peding Orders</h4>
                             </div>
                             <div class="card-body">
-
+{{$todayPendingOrderCount}}
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Orders</h4>
+                                <a href="{{ route('admin.orders') }}"> <h4>Total Orders</h4></a>
                             </div>
                             <div class="card-body">
 
@@ -70,10 +70,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Pending Orders</h4>
+                                <a href="{{ route('admin.orders.pending') }}"> <h4>Total Peding Orders</h4></a>
                             </div>
                             <div class="card-body">
-
+                                {{$pendingOrderCount }}
                             </div>
                         </div>
                     </div>
@@ -88,9 +88,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Canceled Orders</h4>
+                                <a href="{{ route('admin.orders.canceled') }}"> <h4>Total Canceled Orders</h4></a>
                             </div>
                             <div class="card-body">
+                                {{ $canceledOrderCount }}
                             </div>
                         </div>
                     </div>
@@ -105,10 +106,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Complelte Orders</h4>
+                                <a href="{{ route('admin.orders.completed') }}"> <h4>Total Complelte Orders</h4></a>
                             </div>
                             <div class="card-body">
-
+{{$completedOrderCount}}
                             </div>
                         </div>
                     </div>
@@ -188,25 +189,6 @@
                 </a>
             </div>
 
-
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-info">
-                            <i class="fas fa-copyright"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Brands</h4>
-                            </div>
-                            <div class="card-body">
-
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <a href="">
                     <div class="card card-statistic-1">
@@ -215,7 +197,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Categories</h4>
+                                <a href="{{ route('admin.categories.index') }}"><h4>Total Categories</h4></a>
                             </div>
                             <div class="card-body">
                              {{$categoryCount ?? 0 }}
@@ -227,78 +209,22 @@
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-               <a href="">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-warning">
-                        <i class="far fa-file"></i>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-                            <h4>Total Blogs</h4>
+                <a href="">
+                    <div class="card card-statistic-1">
+                        <div class="card-icon bg-info">
+                            <i class="fas fa-copyright"></i>
                         </div>
-                        <div class="card-body">
-                            {{-- {{$totalBlogs}} --}}
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                <h4>Total Users</h4>
+                            </div>
+                            <div class="card-body">
+                              {{ $userCount ?? 0  }}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
             </div>
-
-
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                 <div class="card card-statistic-1">
-                     <div class="card-icon bg-warning">
-                         <i class="far fa-file"></i>
-                     </div>
-                     <div class="card-wrap">
-                         <div class="card-header">
-                             <h4>Total Subscribers</h4>
-                         </div>
-                         <div class="card-body">
-                             {{-- {{$totalSubscriber}} --}}
-                         </div>
-                     </div>
-                 </div>
-             </a>
-             </div>
-
-             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                 <div class="card card-statistic-1">
-                     <div class="card-icon bg-warning">
-                         <i class="far fa-file"></i>
-                     </div>
-                     <div class="card-wrap">
-                         <div class="card-header">
-                             <h4>Total Vendors</h4>
-                         </div>
-                         <div class="card-body">
-                             {{-- {{$totalVendors}} --}}
-                         </div>
-                     </div>
-                 </div>
-             </a>
-             </div>
-
-             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                 <div class="card card-statistic-1">
-                     <div class="card-icon bg-warning">
-                         <i class="far fa-file"></i>
-                     </div>
-                     <div class="card-wrap">
-                         <div class="card-header">
-                             <h4>Total Users</h4>
-                         </div>
-                         <div class="card-body">
-                           {{ $userCount ?? 0  }}
-                         </div>
-                     </div>
-                 </div>
-             </a>
-             </div>
-
         </div>
 
     </section>

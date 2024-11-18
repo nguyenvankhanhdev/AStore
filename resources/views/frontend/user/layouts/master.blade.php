@@ -27,106 +27,10 @@
     <link rel="stylesheet" href="/frontend/asset/css/header-footer-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/home-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/fCare.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js"></script>
 
-    <style>
-        .toast-container {
-            background: rgb(50, 130, 11);
-        }
-
-        .toast-message {}
-
-        .toast-success {
-            background: rgb(50, 130, 11);
-        }
-
-        .swal2-icon.swal2-warning {
-            border-radius: 50%;
-            /* Tạo viền tròn */
-            border: 2px solid #f8bb86;
-            /* Màu viền */
-            padding: 10px;
-            /* Khoảng cách bên trong biểu tượng */
-            box-sizing: content-box;
-            /* Đảm bảo padding không ảnh hưởng đến kích thước */
-            margin-left: 200px;
-            /* Khoảng cách với nội dung */
-            margin-top: 10px
-        }
-
-        .containerr {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            width: 100%;
-            max-width: 1200px;
-
-            padding-left: 12px;
-            margin-right: auto;
-            margin-left: auto;
-        }
-
-        .swal2-icon.swal2-warning .swal2-icon-content {
-            font-size: 30px;
-            /* Kích thước biểu tượng */
-        }
-
-        .swal2-icon.swal2-success {
-            border: 2px solid #26ef33;
-            /* Màu viền */
-            padding: 10px;
-            /* Khoảng cách bên trong biểu tượng */
-            box-sizing: content-box;
-            /* Đảm bảo padding không ảnh hưởng đến kích thước */
-            margin-left: 200px;
-            /* Khoảng cách với nội dung */
-            margin-top: 10px
-        }
-
-        .swal2-icon.swal2-success .swal2-icon-content {
-            font-size: 30px;
-            /* Kích thước biểu tượng */
-        }
-
-        .text-section {
-            margin: 20px;
-            flex: 1;
-            margin-top: 111px;
-        }
-
-        .text-section h1 {
-            font-size: 21px;
-            color: #333333;
-            margin: 0;
-        }
-
-        .text-section p {
-            color: #666666;
-            margin: 10px 0 20px;
-        }
-
-        .text-section button {
-            background-color: #d32f2f;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .image-section {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .image-section img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
 </head>
 <body id="page-top">
     @include('frontend.user.layouts.header')
@@ -172,8 +76,6 @@
     <script src="/frontend/asset/js/jquery-3.6.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
-    <!--bootstrap js-->
     <script>
         $(document).ready(function() {
             $.ajaxSetup({

@@ -31,7 +31,7 @@ class DeliveredOrderDataTable extends DataTable
                 return optional($query->user->userAddress)->name ?? 'N/A';
             })
             ->addColumn('amount', function ($query) {
-                return '$' . number_format($query->total_amount, 2);
+                return number_format($query->total_amount, 0, '.', ',') . 'đ';
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->order_date));
@@ -46,6 +46,8 @@ class DeliveredOrderDataTable extends DataTable
                         return "<span class='badge bg-info'>Processed</span>";
                     case 'canceled':
                         return "<span class='badge bg-danger'>Canceled</span>";
+                    case 'completed':
+                        return "<span class='badge' style='background-color: #28a745; color: white;'>Completed</span>";
                     default:
                         return "<span class='badge bg-secondary'>Unknown</span>";
                 }
