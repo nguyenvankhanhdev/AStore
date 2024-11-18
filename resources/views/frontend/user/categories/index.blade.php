@@ -1,5 +1,6 @@
 @extends('frontend.user.layouts.master')
 
+
 @section('content')
     <div class="category">
         <div class="container">
@@ -27,21 +28,49 @@
                             <div class="swiper-button-next sw-button"><i class="ic-angle-right"></i></div>
                             <div class="swiper-button-prev sw-button"><i class="ic-angle-left"></i></div>
                         </div>
-                        <div class="sort">
-                            <div class="content">
-                                <div class="text">Sắp xếp theo:</div>
-                                <div class="dropdown js-dropdown">
-                                    <div class="dropdown-button"><span>Mới nhất</span><i class="ic-arrow-select ic-sm"></i>
+                        <div class="filter-sort-wrapper">
+                            <div class="custom-filter-container">
+                                <div class="custom-dropdown">
+                                    <button class="custom-dropdown-toggle">Mức giá</button>
+                                    <div class="custom-dropdown-content">
+                                        <label><input type="checkbox" class="custom-price-range" data-min="7000000" data-max="13000000"> Từ 7 - 13 triệu</label>
+                                        <label><input type="checkbox" class="custom-price-range" data-min="13000000" data-max="20000000"> Từ 13 - 20 triệu</label>
+                                        <label><input type="checkbox" class="custom-price-range" data-min="20000000" data-max="30000000"> Từ 20 - 30 triệu</label>
+                                        <label><input type="checkbox" class="custom-price-range" data-min="30000000"> Trên 30 triệu</label>
+                                        <hr>
+                                        <div class="custom-price-input">
+                                            <label>Hoặc nhập khoảng giá phù hợp với bạn:</label>
+                                            <div id="price-slider" style="margin: 15px 0;"></div>
+                                            <div class="custom-input-group">
+                                                <input type="text" id="slider-min-price" placeholder="Giá thấp nhất">
+                                                <span>~</span>
+                                                <input type="text" id="slider-max-price" placeholder="Giá cao nhất">
+                                            </div>
+                                            <button id="custom-filter-price-range">Xem kết quả</button>
+                                        </div>
                                     </div>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-menu-wrapper scrollbar">
-                                            <a class="price_max"><span>Giá thấp đến giá cao</span></a>
-                                            <a class="price_min"><span>Giá cao đến giá thấp</span></a>
+                                </div>
+                            </div>
+                            <div class="custom-sort-container">
+                                <div class="custom-sort-dropdown">
+                                    <div class="custom-sort-button">
+                                        <span>Sắp xếp</span>
+                                        <i class="ic-arrow-select ic-sm"></i>
+                                    </div>
+                                    <div class="custom-sort-menu">
+                                        <div class="custom-sort-menu-wrapper">
+                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_min']) }}" class="custom-price-min">
+                                                <span>Giá thấp đến giá cao</span>
+                                            </a>
+                                            <a href="{{ route('products.category', ['categories' => request()->categories, 'sort' => 'price_max']) }}" class="custom-price-max">
+                                                <span>Giá cao đến giá thấp</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="tab-pane active" id="block-1">
                         <div class="product-list" id="product-list">
@@ -65,8 +94,6 @@
                                                 <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
                                             @elseif ($product->product_type == 'best_product')
                                                 <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
-                                            @elseif ($product->product_type == 'sale_product')
-                                                <span class="badge badge-xs badge-primary badge-link">Giảm giá</span>
                                             @endif
                                         </h3>
                                         <div class="product__memory js-select">
@@ -107,207 +134,293 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function () {
+        function getPriceByVariantId(productElement) {
+            const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
-            function getPriceByVariantId(productElement) {
-                var variantId = productElement.find('.product__memory__item.active').data('variant-id');
+            if (!variantId) {
+                console.error("Variant ID không hợp lệ.");
+                return;
+            }
 
-                $.ajax({
-                    url: '{{ route('getByVariant') }}',
-                    method: 'GET',
-                    data: {
-                        variantId: variantId
-                    },
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            const price = response.variantColors.price;
-                            const discount = response.variantColors.offer_price;
-                            const endPrice = price - discount;
-                            productElement.find('.product__price .price').text(endPrice.toLocaleString(
-                                'vi-VN') + ' ₫');
-                            productElement.find('.product__price .text-promo').text(price
-                                .toLocaleString('vi-VN') + ' ₫');
+            $.ajax({
+                url: '{{ route('getByVariant') }}',
+                method: 'GET',
+                data: { variantId },
+                beforeSend: function () {
+                    setLoading(true);
+                },
+                success: function (response) {
+                    setLoading(false);
+
+                    if (response.status === 'success') {
+                        const price = response.variantColors.price;
+                        const discount = response.variantColors.offer_price;
+                        const endPrice = price - discount;
+
+                        productElement.find('.product__price .price').text(endPrice.toLocaleString('vi-VN') + ' ₫');
+                        productElement.find('.product__price .text-promo').text(price.toLocaleString('vi-VN') + ' ₫');
+
+                        productElement.attr('data-price', price);
+                        productElement.attr('data-discounted-price', endPrice);
+
+                        if (!productElement.attr('data-initial-discounted-price')) {
+                            productElement.attr('data-initial-discounted-price', endPrice);
                         }
-                    },
-                    error: function(error) {
-                        console.error("Error fetching price:", error);
+                    } else {
+                        console.error("Error: API không trả về trạng thái thành công.");
                     }
-                });
-            }
-
-            // Initial load for each product
-            $('.product').each(function() {
-                getPriceByVariantId($(this));
-                checkAndHideEmptyGB($(this));
-            });
-
-            // Click event handler for selecting memory variant
-            $('.product__memory__item').on('click', function() {
-                const productElement = $(this).closest('.product');
-                $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
-                $(this).addClass('active');
-
-                const variantId = $(this).data('variant-id');
-                const detailLink = productElement.find('.product__detail a');
-                const url = new URL(detailLink.attr('href'));
-                url.searchParams.set('variant', variantId);
-                detailLink.attr('href', url.toString());
-
-                // Update price and check if variant is 0GB
-                getPriceByVariantId(productElement);
-                checkAndHideEmptyGB(productElement);
-            });
-
-            function checkAndHideEmptyGB(productElement) {
-                var GB = productElement.find('.product__memory__item.active strong');
-                var GBText = parseInt(GB.text().replace('GB', '').trim());
-
-                if (isNaN(GBText) || GBText === 0) {
-                    productElement.find('.product__memory__item.active').hide();
-                } else {
-                    productElement.find('.product__memory__item.active').show(); // Ensure item is visible if GB > 0
-                }
-            }
-
-
-
-
-
-
-            function setActiveSlide(index) {
-                const slides = $('.swiper-slide');
-                slides.removeClass('active');
-                if (index >= slides.length) {
-                    index = 0;
-                } else if (index < 0) {
-                    index = slides.length - 1;
-                }
-                slides.eq(index).addClass('active');
-                // Lưu trạng thái active vào localStorage
-                localStorage.setItem('activeSlideIndex', index);
-            }
-
-            $('.swiper-slide').click(function() {
-                const clickedSlide = $(this);
-                if (!clickedSlide.hasClass('active')) {
-                    $('.swiper-slide').removeClass('active');
-                    clickedSlide.addClass('active');
-                    setActiveSlide($('.swiper-slide').index(clickedSlide));
+                },
+                error: function (error) {
+                    setLoading(false);
+                    console.error("Error fetching price:", error);
                 }
             });
+        }
 
-            $('.swiper-button-next').click(function() {
-                const activeSlide = $('.swiper-slide.active');
-                let nextIndex = $('.swiper-slide').index(activeSlide) + 1;
-                if (nextIndex >= $('.swiper-slide').length) {
-                    nextIndex = 0; // Quay lại slide đầu tiên nếu đang ở cuối danh sách
-                }
-                setActiveSlide(nextIndex);
-                const nextSlide = $('.swiper-slide').eq(nextIndex);
-                const nextHref = nextSlide.attr('href');
-                if (nextHref) {
-                    window.location.href = nextHref;
-                }
-            });
-
-            $('.swiper-button-prev').click(function() {
-                const activeSlide = $('.swiper-slide.active');
-                let prevIndex = $('.swiper-slide').index(activeSlide) - 1;
-                if (prevIndex < 0) {
-                    prevIndex = $('.swiper-slide').length -
-                        1; // Quay lại slide cuối cùng nếu đang ở slide đầu tiên
-                }
-                setActiveSlide(prevIndex);
-                const prevSlide = $('.swiper-slide').eq(prevIndex);
-                const prevHref = prevSlide.attr('href');
-                if (prevHref) {
-                    window.location.href = prevHref;
-                }
-            });
-            const storedIndex = localStorage.getItem('activeSlideIndex');
-            if (storedIndex !== null) {
-                setActiveSlide(parseInt(storedIndex));
+        function setLoading(isLoading) {
+            if (isLoading) {
+                $('#product-list').addClass('loading');
             } else {
-                // Nếu chưa có slide active được lưu, thì chọn slide đầu tiên làm active
-                if (!$('.swiper-slide').hasClass('active')) {
-                    $('.swiper-slide').first().addClass('active');
-                    setActiveSlide(0);
-                }
+                $('#product-list').removeClass('loading');
             }
-
-            function setActiveSlideByUrl() {
-                const currentUrl = window.location.href;
-
-                $('.swiper-slide').each(function(index) {
-                    const slideHref = $(this).attr('href');
-                    if (slideHref && currentUrl.includes(slideHref)) {
-                        $('.swiper-slide').removeClass('active');
-                        $(this).addClass('active');
-                        setActiveSlide(index);
-                        return false; // Dừng vòng lặp khi đã tìm thấy slide tương ứng
-                    }
-                });
-            }
-            setActiveSlideByUrl();
-        });
-        $(document).ready(function() {
-            $('.dropdown').cDropdown();
-        })
-        jQuery.fn.extend({
-            cDropdown: function() {
-                return this.each(function() {
-                    var containermenu = $(this);
-                    var button = containermenu.find(".dropdown-button");
-                    var menu = containermenu.find(".dropdown-menu");
-                    var list = containermenu.find(".dropdown-menu-wrapper");
-                    var item = list.children();
-                    var option = button.find("span");
-                    button.click(function(e) {
-                        menu.addClass("open");
-                    });
-                    item.click(function(e) {
-                        e.preventDefault();
-                        $(this).siblings().removeClass("active");
-                        $(this).addClass("active");
-                        var txt = $(this).find("span").text();
-                        option.text(txt);
-                        menu.removeClass("open");
-                    });
-                    $(document).click(function(e) {
-                        e.stopPropagation();
-                        var container = containermenu;
-                        if (container.has(e.target).length === 0) {
-                            menu.removeClass("open");
-                        }
-                    });
-                });
-            },
-        });
+        }
 
         function sortProducts(order) {
-            var products = $('.product');
-            products.sort(function(a, b) {
-                var priceA = parseInt($(a).data('discounted-price'));
-                var priceB = parseInt($(b).data('discounted-price'));
-                if (order === 'asc') {
-                    return priceA - priceB;
-                } else {
-                    return priceB - priceA;
-                }
+            const products = $('.product');
+
+            products.sort(function (a, b) {
+                const priceA = parseInt($(a).attr('data-initial-discounted-price'))||0;
+                const priceB = parseInt($(b).attr('data-initial-discounted-price'))||0;
+
+                return order === 'asc' ? priceA - priceB : priceB - priceA;
             });
 
             $('#product-list').html(products);
+            setupVariantClickEvents();
         }
 
-        $('.price_max').click(function(e) {
-            e.preventDefault();
-            sortProducts('asc');
+        function filterProductsByPrice(minPrice, maxPrice) {
+            $('.product').each(function () {
+                const productPrice = parseInt($(this).attr('data-initial-discounted-price')) || 0;
+
+                if ((minPrice === null || productPrice >= minPrice) &&
+                    (maxPrice === null || productPrice <= maxPrice)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        function setupVariantClickEvents() {
+            $('.product__memory__item').off('click').on('click', function () {
+                const productElement = $(this).closest('.product');
+
+                $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
+                $(this).addClass('active');
+
+                getPriceByVariantId(productElement);
+            });
+        }
+
+        function formatCurrencyInput(inputElement) {
+    let value = inputElement.value.replace(/[^0-9]/g, '');
+
+    if (value) {
+        value = parseInt(value, 10).toLocaleString('vi-VN') + ' ₫';
+    }
+
+    inputElement.value = value;
+}
+
+function parseCurrency(value) {
+    return parseInt(value.replace(/[^0-9]/g, ''), 10) || 0;
+}
+
+        const slider = document.getElementById('price-slider');
+        let minSliderPrice, maxSliderPrice;
+        noUiSlider.create(slider, {
+            start: [7000000, 30000000],
+            connect: true,
+            range: {
+                'min': 7000000,
+                'max': 50000000
+            },
+            step: 1000000,
+            tooltips: [false, false],
+            format: {
+                to: function (value) {
+                    return Math.round(value).toLocaleString('vi-VN') + ' ₫';
+                },
+                from: function (value) {
+                    return Number(value.replace(/[^0-9.-]+/g, ''));
+                }
+            }
         });
 
-        $('.price_min').click(function(e) {
-            e.preventDefault();
-            sortProducts('desc');
+        slider.noUiSlider.on('update', function (values) {
+            const minPrice = parseCurrency(values[0]);
+    const maxPrice = parseCurrency(values[1]);
+
+    $('#slider-min-price').val(minPrice.toLocaleString('vi-VN') + ' ₫');
+    $('#slider-max-price').val(maxPrice.toLocaleString('vi-VN') + ' ₫');
+});
+
+
+$('#slider-min-price, #slider-max-price').on('input', function () {
+    formatCurrencyInput(this);
+});
+
+
+$('#custom-filter-price-range').on('click', function () {
+    const minPrice = parseCurrency($('#slider-min-price').val());
+    const maxPrice = parseCurrency($('#slider-max-price').val());
+
+    if (minPrice > maxPrice) {
+        alert("Giá thấp nhất không thể lớn hơn giá cao nhất.");
+        return;
+    }
+
+    console.log('Khoảng giá được chọn:', minPrice, maxPrice);
+    filterProductsByPrice(minPrice, maxPrice);
+});
+
+$('.custom-price-range').on('change', function () {
+    const selectedRanges = [];
+
+    $('.custom-price-range:checked').each(function () {
+        const min = parseFloat($(this).data('min')) || null;
+        const max = parseFloat($(this).data('max')) || null;
+        selectedRanges.push({ min, max });
+    });
+
+    if (selectedRanges.length > 0) {
+        $('.product').hide();
+        selectedRanges.forEach(function (range) {
+            filterProductsByPrice(range.min, range.max);
         });
-    </script>
+    } else {
+        $('.product').show();
+    }
+
+    $('#slider-min-price').val('');
+    $('#slider-max-price').val('');
+});
+
+
+$('.custom-price-min, .custom-price-max').on('click', function (e) {
+    e.preventDefault();
+    const selectedText = $(this).find('span').text();
+    $('.custom-sort-button span').text(selectedText);
+
+    const order = $(this).hasClass('custom-price-min') ? 'asc' : 'desc';
+    sortProducts(order);
+
+    $('.custom-sort-dropdown').removeClass('active');
+});
+
+
+
+        $('.product').each(function () {
+            getPriceByVariantId($(this));
+        });
+
+        setupVariantClickEvents();
+
+        function setActiveSlide(index) {
+            const slides = $('.swiper-slide');
+            slides.removeClass('active');
+            if (index >= slides.length) {
+                index = 0;
+            } else if (index < 0) {
+                index = slides.length - 1;
+            }
+            slides.eq(index).addClass('active');
+            localStorage.setItem('activeSlideIndex', index);
+        }
+
+        $('.swiper-slide').click(function () {
+            const clickedSlide = $(this);
+            if (!clickedSlide.hasClass('active')) {
+                $('.swiper-slide').removeClass('active');
+                clickedSlide.addClass('active');
+                setActiveSlide($('.swiper-slide').index(clickedSlide));
+            }
+        });
+
+        $('.swiper-button-next').click(function () {
+            const activeSlide = $('.swiper-slide.active');
+            let nextIndex = $('.swiper-slide').index(activeSlide) + 1;
+            if (nextIndex >= $('.swiper-slide').length) {
+                nextIndex = 0;
+            }
+            setActiveSlide(nextIndex);
+        });
+
+        $('.swiper-button-prev').click(function () {
+            const activeSlide = $('.swiper-slide.active');
+            let prevIndex = $('.swiper-slide').index(activeSlide) - 1;
+            if (prevIndex < 0) {
+                prevIndex = $('.swiper-slide').length - 1;
+            }
+            setActiveSlide(prevIndex);
+        });
+
+        const storedIndex = localStorage.getItem('activeSlideIndex');
+        if (storedIndex !== null) {
+            setActiveSlide(parseInt(storedIndex));
+        } else if (!$('.swiper-slide').hasClass('active')) {
+            $('.swiper-slide').first().addClass('active');
+            setActiveSlide(0);
+        }
+
+        function setActiveSlideByUrl() {
+            const currentUrl = window.location.href;
+            $('.swiper-slide').each(function (index) {
+                const slideHref = $(this).attr('href');
+                if (slideHref && currentUrl.includes(slideHref)) {
+                    $('.swiper-slide').removeClass('active');
+                    $(this).addClass('active');
+                    setActiveSlide(index);
+                    return false;
+                }
+            });
+        }
+        setActiveSlideByUrl();
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const filterDropdown = document.querySelector(".custom-filter-container");
+    const sortDropdown = document.querySelector(".custom-sort-container");
+
+    filterDropdown.querySelector(".custom-dropdown-toggle").addEventListener("click", function (e) {
+        e.stopPropagation();
+        filterDropdown.classList.toggle("active");
+        sortDropdown.classList.remove("active");
+    });
+
+    sortDropdown.querySelector(".custom-sort-button").addEventListener("click", function (e) {
+        e.stopPropagation();
+        sortDropdown.classList.toggle("active");
+        filterDropdown.classList.remove("active");
+    });
+
+    filterDropdown.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
+
+
+    document.addEventListener("click", function () {
+        filterDropdown.classList.remove("active");
+        sortDropdown.classList.remove("active");
+    });
+});
+
+
+</script>
+
+
 @endpush
