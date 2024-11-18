@@ -69,6 +69,7 @@
                     'admin.orders.delivered',
                     'admin.orders.canceled',
                     'admin.orders.processed',
+                    'admin.orders.completed',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-cart-plus"></i>
                     <span>Orders</span></a>
@@ -86,6 +87,8 @@
 
                     <li class="{{ setActive(['admin.orders.canceled']) }}"><a class="nav-link"
                             href="{{ route('admin.orders.canceled') }}">All Canceled Orders</a></li>
+                            <li class="{{ setActive(['admin.orders.completed']) }}"><a class="nav-link"
+                                href="{{ route('admin.orders.completed') }}">All completed Orders</a></li>
 
                 </ul>
             </li>

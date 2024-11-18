@@ -445,6 +445,7 @@ namespace App\Models{
  * @property string $slug
  * @property string $image
  * @property int|null $quantity
+ * @property float $point
  * @property float|null $offer_price
  * @property string|null $short_description
  * @property string|null $long_description
@@ -476,6 +477,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereLongDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereOfferPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Products wherePoint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereProductType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereShortDescription($value)
@@ -509,18 +511,47 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property float $point
- * @property int $pro_id
- * @property int $user_id
+ * @property string $image
+ * @property int $rating_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Ratings|null $rating
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereRatingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereUpdatedAt($value)
+ */
+	class RatingImages extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property float $point
+ * @property string $content
+ * @property int $pro_id
+ * @property int $user_id
+ * @property int $orderdetail_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\OrderDetails|null $orderDetail
  * @property-read \App\Models\Products|null $product
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RatingImages> $ratingImages
+ * @property-read int|null $rating_images_count
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereOrderdetailId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings wherePoint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereProId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereUpdatedAt($value)
@@ -613,6 +644,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @property-read \App\Models\UserAddress|null $userAddress
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ratings> $userRatings
+ * @property-read int|null $user_ratings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCoupons> $usercoupons
  * @property-read int|null $usercoupons_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])

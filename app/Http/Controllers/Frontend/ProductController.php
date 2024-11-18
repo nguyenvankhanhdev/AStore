@@ -21,26 +21,53 @@ class ProductController extends Controller
 {
     public function productsIndex(Request $request)
     {
+        $search = $request->input('search');
+
         $productsNewArrival = Products::where('status', 1)
             ->where('product_type', 'new_arrival')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
         $productsFeatured = Products::where('status', 1)
             ->where('product_type', 'featured_product')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
         $productsTop = Products::where('status', 1)
             ->where('product_type', 'top_product')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
         $productsBest = Products::where('status', 1)
             ->where('product_type', 'best_product')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
-        return view('frontend.user.layouts.section_cate', compact('productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest'));
+
+        return view('frontend.user.layouts.section_cate', compact('productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest', 'search'));
     }
 
     public function productCategories(Request $request)
@@ -58,7 +85,6 @@ class ProductController extends Controller
         }
         return view('frontend.user.categories.index', compact('products', 'categories', 'subcategories'));
     }
-
     public function showProduct(string $slug, Request $request)
     {
         $product = Products::with(relations: ['productImages', 'variants.variantColors', 'ratings', 'category', 'subcategory'])->where(column: [
@@ -105,11 +131,20 @@ class ProductController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
             //->get();
-            $infoRating = Ratings::where('pro_id', $product->id)
-                ->where('user_id', $userID)
-                ->first();
+
+
+            $averageRating = Ratings::getAverageRating($product->id);
+
+            // Cập nhật lại điểm trung bình của sản phẩm
+            $product = Products::find($product->id);
+            if ($product) {
+                $product->point = $averageRating; // Cập nhật lại thuộc tính point
+                $product->save();
+            }
+            $ratingOfProduct=Ratings::where('pro_id',$product->id)->get();
             $ratingsCount = Ratings::getCountByStar($product->id);
-            return view('frontend.user.home.product_details', compact('infoRating', 'product', 'user', 'comment', 'selectedVariantId', 'colors', 'ratingsCount', 'sameProducts'));
+            $countRatingProduct=Ratings::countRatingsByProduct($product->id);
+            return view('frontend.user.home.product_details', compact('ratingOfProduct','countRatingProduct','product', 'user', 'comment', 'selectedVariantId', 'colors','ratingsCount','sameProducts'));
         } else {
             $comment = Comments::with('user')
                 ->where([
@@ -121,9 +156,20 @@ class ProductController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(6); // Phân trang với 6 bình luận mỗi trang
             //->get();
-            $ratingsCount = Ratings::getCountByStar($product->id);
+            $averageRating = Ratings::getAverageRating($product->id);
 
-            return view('frontend.user.home.product_details', compact('product',  'comment', 'selectedVariantId', 'colors', 'ratingsCount', 'sameProducts'));
+            // Cập nhật lại điểm trung bình của sản phẩm
+            $product = Products::find($product->id);
+            if ($product) {
+                $product->point = $averageRating; // Cập nhật lại thuộc tính point
+                $product->save();
+            }
+            $ratingOfProduct=Ratings::where('pro_id',$product->id)->get();
+            $ratingsCount = Ratings::getCountByStar($product->id);
+            $countRatingProduct=Ratings::countRatingsByProduct($product->id);
+
+
+            return view('frontend.user.home.product_details', compact('ratingOfProduct','countRatingProduct','product',  'comment', 'selectedVariantId', 'colors','ratingsCount','sameProducts'));
         }
     }
 

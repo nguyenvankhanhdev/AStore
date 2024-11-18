@@ -18,6 +18,16 @@ class Ratings extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+    public function orderDetail()
+    {
+        return $this->belongsTo(OrderDetails::class,'orderdetail_id');
+    }
+
+    public function ratingImages()
+    {
+        return $this->hasMany(RatingImages::class,'rating_id');
+    }
+
     public static function getCountByStar($pro_id)
     {
         $counts = [];
@@ -32,8 +42,20 @@ class Ratings extends Model
         return $counts;
     }
 
+    public static function countRatingsByProduct($pro_id)
+    {
+        // Đếm tổng số đánh giá cho sản phẩm theo pro_id
+        return self::where('pro_id', $pro_id)->count();
+    }
     public static function getAverageRating($pro_id)
     {
         return self::where('pro_id', $pro_id)->avg('point') ?? 0;
+    }
+
+    public static function filterExistingOrderDetails(array $orderDetailIds)
+    {
+        return self::whereIn('orderdetail_id', $orderDetailIds)
+                    ->pluck('orderdetail_id')
+                    ->toArray();
     }
 }

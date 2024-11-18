@@ -10,24 +10,20 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class OrderDataTable extends DataTable
+class CompletedOrderDataTable extends DataTable
 {
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $showBtn = "<a href='" . route('admin.orders.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
-                // $deleteBtn = "<button data-id='" . $query->id . "' class='btn btn-danger ml-2 mr-2 delete-item'><i class='far fa-trash-alt'></i></button>";
-
-                // return $showBtn . $deleteBtn;
                 return $showBtn;
             })
             ->addColumn('customer_name', function ($query) {
                 return optional($query->user->userAddress)->name ?? 'N/A';
             })
             ->addColumn('amount', function ($query) {
-                return number_format($query->total_amount, 0,',','.') . 'đ';
-
+                return number_format($query->total_amount, 0, '.', ',') . 'đ';
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->order_date));
@@ -67,7 +63,9 @@ class OrderDataTable extends DataTable
 
     public function query(Orders $model): QueryBuilder
     {
-        return $model->newQuery()->with(['user.userAddress']);
+        return $model->newQuery()
+            ->where('status', 'completed') // Filter for completed orders
+            ->with(['user.userAddress']);
     }
 
     public function html(): HtmlBuilder
@@ -97,6 +95,7 @@ class OrderDataTable extends DataTable
             Column::make('order_status')->title('Trạng thái đơn hàng'),
             Column::make('payment_method')->title('Phương thức thanh toán'),
             Column::make('payment_status')->title('Trạng thái thanh toán'),
+
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -107,6 +106,6 @@ class OrderDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'Order_' . date('YmdHis');
+        return 'CompletedOrder_' . date('YmdHis');
     }
 }

@@ -45,13 +45,24 @@ class User extends Authenticatable
     public function usercoupons()
     {
         return $this->hasMany(UserCoupons::class, 'user_id', 'id');
+    }
 
+    public function userRatings()
+    {
+        return $this->hasMany(Ratings::class,'user_id','id');
     }
     public function userAddress()
     {
         return $this->hasOne(UserAddress::class, 'user_id', 'id');
     }
+
     public static function getPoint(){
         return User::where('id', Auth::user()->id)->first()->point;
+
+    }
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'user_id');
+
     }
 }
