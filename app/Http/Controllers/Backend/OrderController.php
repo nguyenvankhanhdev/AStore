@@ -39,10 +39,6 @@ class OrderController extends Controller
     {
         return $dataTable->render('backend.admin.orders.canceled-order');
     }
-    public function completedOrders(CompletedOrderDataTable $dataTable)
-    {
-        return $dataTable->render('backend.admin.orders.completed-order');
-    }
 
 
     /**
@@ -66,11 +62,7 @@ class OrderController extends Controller
             if ($order->coupon->discount_type === 'percent') {
                 $totalDiscount = $subTotal * ($order->coupon->discount / 100);
             } elseif ($order->coupon->discount_type === 'amount') {
-<<<<<<< HEAD
                 $totalDiscount = $order->coupon->discount * 1000;
-=======
-                $totalDiscount = $order->coupon->discount;
->>>>>>> 9f7d49cb4fd1ea2a5746bfb9a49d036689bc19cc
             }
         }
 

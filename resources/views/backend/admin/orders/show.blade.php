@@ -149,11 +149,7 @@ $address = json_decode($order->address, true);
                                     </div>
                                 </div>
                             </div>
-<<<<<<< HEAD
 
-=======
-                            
->>>>>>> 9f7d49cb4fd1ea2a5746bfb9a49d036689bc19cc
                         </div>
                     </div>
                 </div>

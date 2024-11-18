@@ -107,8 +107,6 @@
                                         </span>
                                     </div>
 
-
-
                                     <div class="colors js-select">
                                         @foreach ($colors as $index => $color)
                                             @php
@@ -181,15 +179,19 @@
                                         <span style="font-size: 18px; font-weight:600;">
                                             Mua ngay hoặc yêu thích
                                         </span>
+
                                     </div>
                                     <div class="pre-order">
                                         <div class="btn btn-link btn-xl" id="add-to-cart-form">
-                                            <div>MUA NGAY</div>
+                                          <div>MUA NGAY</div>
                                         </div>
-                                        <div class="btn btn-link btn-danger btn-xl">
-                                            <div>YÊU THÍCH</div>
-                                        </div>
+                                        <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
+                                        data-product-id="{{ $product->id }}"
+                                        data-variant-id=""
+                                        data-color-id="">
+                                        <div>YÊU THÍCH</div>
                                     </div>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -208,36 +210,6 @@
                                         <div class="h4">Phụ kiện tương thích</div>
                                     </div>
                                 </div>
-                                @if ($sameProducts->isNotEmpty())
-                                    @foreach ($sameProducts as $sameProduct)
-                                        <div class="col-3 col-sm-6">
-                                            <div class="item">
-                                                <a class="item__img" href="{{ route('product.details', $sameProduct->slug) }}">
-                                                    <img src="{{ asset($sameProduct->image) }}" alt="">
-                                                </a>
-                                                <div class="item__info">
-                                                    <a href="{{ route('product.details', $sameProduct->slug) }}">
-                                                        <div class="item__name">{{ $sameProduct->name }}</div>
-                                                    </a>
-                                                    <div class="item__price">
-                                                        <div class="text text-primary" style="color: #ae172b">
-                                                            @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
-                                                                Giá {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }} ₫
-                                                            @else
-                                                                Giá không có sẵn
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <p>Không có sản phẩm tương tự.</p>
-                                @endif
-
-
-
                                 @if ($sameProducts->isNotEmpty())
                                     @foreach ($sameProducts as $sameProduct)
                                         <div class="col-3 col-sm-6">
@@ -1030,7 +1002,6 @@
                                 <h3 cla>
                                     Đánh giá sản phẩm: {{ $product->name }}
                                     @if ($product->point == 0 || $product->point < 0.1)
-                                    @if ($product->point == 0 || $product->point < 0.1)
                                         <span class="inline-stars">
                                             <span class="star">☆</span>
                                             <span class="star">☆</span>
@@ -1041,8 +1012,6 @@
                                         <span class="rating-score">(0.0/5.0)</span>
                                     @else
                                         <span class="inline-stars">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                @if ($product->point >= $i)
                                             @for ($i = 1; $i <= 5; $i++)
                                                 @if ($product->point >= $i)
                                                     <span class="star full">★</span> <!-- Sao sáng đầy đủ -->
@@ -1060,20 +1029,47 @@
                                     @endif
 
                                 </h3>
-                                <div class="user-rating-info">
-                                    @if (Auth::id() > 0)
-                                        @if ($infoRating)
-                                            <h5>
-                                                Bạn đã đánh giá sản phẩm này {{ $infoRating->point }} <span
-                                                    class="count-star">★</span>
-                                            </h5>
-                                        @else
-                                            <h5>
-                                                Bạn chưa đánh giá sản phẩm này
-                                            </h5>
-                                        @endif
-                                    @endif
-                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal-review" id="reviewsModal">
+                                    <div class="modal-content-review">
+                                        <div class="modal-header-review">
+                                            <h3>Đánh giá sản phẩm</h3>
+                                        </div>
+                                        <div class="modal-body-review">
+                                            @foreach ($ratingOfProduct as $rating )
+                                                <div class="modal-line-review">
+                                                    <div class="info-user">
+                                                        <div class="user-image">
+                                                            @if ($rating->user->image==null)
+                                                                <img src="{{asset('uploads/anhdaidien.png')}}" alt="Review Image" />
+                                                            @else
+                                                                <img src="{{asset( $rating->user->image )}}" alt="Review Image" />
+                                                            @endif
+
+                                                        </div>
+                                                        <div class="user-rating">
+                                                            <div class="rating-user">
+                                                                <strong>{{ $rating->user->name }}</strong>
+                                                            </div>
+                                                            <div class="rating-thoughts">
+                                                                <p>{{ $rating->content }}</p>
+                                                            </div>
+                                                            <div class="rating-stars review">
+                                                                <span class="inline-stars">
+                                                                    @for($i = 1; $i <= 5; $i++)
+                                                                        @if($rating->point >= $i)
+                                                                            <span class="star full">★</span> <!-- Sao sáng đầy đủ -->
+                                                                        @elseif($product->point >= $i - 0.5)
+                                                                            <span class="star half">★</span> <!-- Sao sáng nửa -->
+                                                                        @else
+                                                                            <span class="star empty">★</span> <!-- Sao chưa sáng -->
+                                                                        @endif
+                                                                    @endfor
+                                                                </span>
+                                                                <span class="rating-score-review">({{ number_format($rating->point, 1) }}/5.0)</span>
+                                                            </div>
+                                                        </div>
 
 
                                                     </div>
@@ -1090,21 +1086,6 @@
 
                                             <!-- Các đánh giá khác... -->
                                         </div>
-
-                                        <button class="rate-button">
-                                            @if (Auth::id() > 0)
-                                                @if ($infoRating)
-                                            @if (Auth::id() > 0)
-                                                @if ($infoRating)
-                                                    Đánh giá lại
-                                                @else
-                                                    Đánh giá
-                                                @endif
-                                            @else
-                                                Đánh giá
-                                            @endif
-                                        </button>
-
                                         <div class="modal-footer-review">
                                             <button class="close-btn" onclick="closeModal()">Đóng</button>
                                         </div>
@@ -1129,8 +1110,6 @@
                                     <div class="rating-count">
                                         @foreach ([5, 4, 3, 2, 1] as $star)
                                             <p>Đánh giá {{ $star }} <span class="count-star">★</span>
-                                                (<span
-                                                    class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
                                                 (<span
                                                     class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
                                             </p>
@@ -1191,8 +1170,6 @@
                                     <div class="result">
                                         <div class="text" style="color: #444b52;"><strong>Những bình luận về
                                             </strong>“{{ $product->name }}”</div>
-                                        <div class="text" style="color: #444b52;"><strong>Những bình luận về
-                                            </strong>“{{ $product->name }}”</div>
 
 
 
@@ -1203,8 +1180,6 @@
                                                 <h2>Sản phẩm chưa có bình luận</h2>
                                             @else
                                                 @foreach ($comment as $cm)
-                                                    <div data-timestamp="{{ strtotime($cm->created_at) }}"
-                                                        class="avatar avatar-md avatar-text avatar-circle">
                                                     <div data-timestamp="{{ strtotime($cm->created_at) }}"
                                                         class="avatar avatar-md avatar-text avatar-circle">
 
@@ -1240,8 +1215,9 @@
                                                             <a data-comment-id="{{ $cm->id }}"
                                                                 class='btn editcm btn-dark'><i
                                                                     class='far fa-edit'></i></a>
-                                                            <a data-comment-id="{{ $cm->id }}" href=""
-                                                                class='btn deletecm btn-dark'><i
+
+                                                            <a data-comment-id="{{ $cm->id }}"
+                                                                href="" class='btn deletecm btn-dark'><i
                                                                     class='far fa-trash-alt'></i></a>
                                                         @else
                                                             <a data-comment-id="{{ $cm->id }}" name="cm_id"
@@ -1395,9 +1371,6 @@
             // Định nghĩa colorId và variantId là các biến toàn cục
             let colorId;
             let variantId;
-            // Định nghĩa colorId và variantId là các biến toàn cục
-            let colorId;
-            let variantId;
 
             function fetchPrice(colorId, variantId) {
                 $.ajax({
@@ -1416,17 +1389,6 @@
                             const discount = originalPrice - offerPrice;
                             const discountPercentage = (offerPrice / originalPrice) * 100;
                             const productName = $('.product_name').data('initial-name');
-                            if (storage === "0GB") {
-                                $('.product_name').text(`${productName}`);
-                                $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
-                                $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
-                                $('.txtpricemarketPhanTram').text(
-                                    `Giảm -${Math.round(discountPercentage)}%`);
-                                return;
-                            }
-                            $('#variant-selector .item.active .price-variant').text(discount
-                                .toLocaleString('vi-VN') + ' ₫');
-                            // Display with storage included
                             if (storage === "0GB") {
                                 $('.product_name').text(`${productName}`);
                                 $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
@@ -1481,36 +1443,6 @@
             }
 
             // Thêm vào giỏ hàng
-            function updateVariantAndFetchPrice() {
-                colorId = $('.colors .item.active').data('color-id');
-                variantId = $('#variant-selector .item.active').data('id');
-                if (colorId && variantId) {
-                    fetchPrice(colorId, variantId);
-                }
-            }
-
-            // Initial load
-            updateVariantAndFetchPrice();
-
-            // Event handler for color selection
-            $('.colors .item').on('click', function() {
-                $('.colors .item.active').removeClass('active');
-                $(this).addClass('active');
-                updateVariantAndFetchPrice();
-            });
-
-            // Event handler for variant selection
-            $('#variant-selector .item').on('click', function() {
-                $('#variant-selector .item.active').removeClass('active');
-                $(this).addClass('active');
-                updateVariantAndFetchPrice();
-            });
-
-            if ($('#variant-selector .item.active label').text().trim() === "0GB") {
-                $('#variant-selector .item.active').hide();
-            }
-
-            // Thêm vào giỏ hàng
             $('#add-to-cart-form').on('click', function(e) {
                 e.preventDefault();
 
@@ -1530,7 +1462,8 @@
                         success: function(response) {
                             if (response.status === 'success') {
                                 toastr.success(response.message);
-                            } else {
+                            }
+                            else{
                                 toastr.error(response.message);
                             }
                         },
@@ -1544,12 +1477,71 @@
                     console.error("Color ID hoặc Variant ID không hợp lệ.");
                 }
             });
-
-
-
-
-
         });
+
+        $('#add-to-wishlist').on('click', function (e) {
+    e.preventDefault();
+
+    const productId = $(this).data('product-id');
+    const variantId = $('#variant-selector .item.active').data('id'); // Lấy ID biến thể
+    const colorId = $('.colors .item.active').data('color-id'); // Lấy ID màu sắc
+
+    console.log("Product ID:", productId);
+    console.log("Variant ID:", variantId || "Chưa chọn");
+    console.log("Color ID:", colorId || "Chưa chọn");
+
+    // Kiểm tra nếu chưa chọn biến thể hoặc màu sắc
+    if (!variantId || !colorId) {
+        toastr.error("Vui lòng chọn màu sắc và biến thể sản phẩm!");
+        return;
+    }
+
+    // Gửi AJAX để lấy variantColorId
+
+
+    $.ajax({
+        url: "{{ route('user.get.variantColorId') }}", // Route tới backend
+        method: 'GET',
+        data: {
+            variant_id: variantId,
+            color_id: colorId,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+
+        success: function (response) {
+            if (response.status === 'success') {
+                const variantColorId = response.variant_color_id;
+
+                console.log("variantColorId:", variantColorId);
+                console.log("CSRF Token:", $('meta[name="csrf-token"]').attr('content'));
+                // Gửi thêm AJAX để thêm vào wishlist
+                $.ajax({
+    url: "{{ route('user.wishlist.add') }}", // Route thêm vào wishlist
+    method: 'POST',
+    data: {
+        pro_id: productId,
+        variant_color_id: variantColorId,
+        _token: $('meta[name="csrf-token"]').attr('content') // CSRF Token
+    },
+    success: function (response) {
+        console.log("Response:", response);
+        toastr.success(response.message);
+    },
+    error: function (error) {
+        console.error("Error:", error);
+        toastr.error(error.responseJSON.message || "Có lỗi xảy ra!");
+    }
+});
+
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function (xhr) {
+            toastr.error(xhr.responseJSON.message || "Không tìm thấy thông tin sản phẩm! Vui lòng thử lại.");
+        }
+    });
+});
     </script>
 
 
@@ -1954,7 +1946,6 @@
 
 
         $(document).ready(function() {
-        $(document).ready(function() {
             const stars = $('.star-rating .star');
             const ratingLabel = $('.star-rating .rating-label');
             let selectedRating = 0; // Lưu trữ số sao được chọn
@@ -1968,14 +1959,11 @@
             ];
 
             stars.each(function(index) {
-            stars.each(function(index) {
                 // Sự kiện hover vào sao
-                $(this).on('mouseover', function() {
                 $(this).on('mouseover', function() {
                     ratingLabel.text(ratingTexts[index]);
 
                     // Làm sáng các ngôi sao từ đầu đến ngôi sao hover
-                    stars.each(function(i) {
                     stars.each(function(i) {
                         $(this).toggleClass('active', i <= index);
                     });
@@ -1983,9 +1971,7 @@
 
                 // Sự kiện khi chuột rời khỏi sao
                 $(this).on('mouseout', function() {
-                $(this).on('mouseout', function() {
                     // Làm sáng các ngôi sao đã chọn trước đó
-                    stars.each(function(i) {
                     stars.each(function(i) {
                         $(this).toggleClass('active', i < selectedRating);
                     });
@@ -1994,14 +1980,12 @@
 
                 // Sự kiện click vào sao để chọn số sao
                 $(this).on('click', function() {
-                $(this).on('click', function() {
                     selectedRating = index + 1;
                     ratingLabel.text(ratingTexts[index]);
                 });
             });
 
             // Sự kiện click vào nút "Đánh giá"
-            $('.rate-button').on('click', function(e) {
             $('.rate-button').on('click', function(e) {
                 e.preventDefault();
 
@@ -2026,7 +2010,6 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                        success: function(response) {
                             toastr.success(response.message);
                             // Cập nhật điểm trung bình sau khi thành công
                             var averageRating = response.averageRating;
@@ -2047,12 +2030,8 @@
                             // Cập nhật điểm trung bình hiển thị
                             $('.rating-score').text('(' + parseFloat(averageRating).toFixed(1) +
                                 '/5.0)');
-                            $('.rating-score').text('(' + parseFloat(averageRating).toFixed(1) +
-                                '/5.0)');
                             // Cập nhật số lượng đánh giá cho từng mức sao
                             [5, 4, 3, 2, 1].forEach(function(star) {
-                                $('.rating-count').find(`.count-star-${star}`).text(
-                                    response.ratingsCount[star] || 0);
                                 $('.rating-count').find(`.count-star-${star}`).text(
                                     response.ratingsCount[star] || 0);
                             });
@@ -2062,14 +2041,9 @@
                                     '<h5>Bạn đã đánh giá sản phẩm này ' + response
                                     .infoRating.point +
                                     ' <span class="count-star">★</span></h5>'
-                                    '<h5>Bạn đã đánh giá sản phẩm này ' + response
-                                    .infoRating.point +
-                                    ' <span class="count-star">★</span></h5>'
                                 );
                                 $('.rate-button').text('Đánh giá lại');
                             } else {
-                                $('.user-rating-info').html(
-                                    '<h5>Bạn chưa đánh giá sản phẩm này</h5>');
                                 $('.user-rating-info').html(
                                     '<h5>Bạn chưa đánh giá sản phẩm này</h5>');
                                 $('.rate-button').text('Đánh giá');
@@ -2077,10 +2051,6 @@
                         },
                         error: function(xhr, status, error) {
                             if (xhr.status === 401) {
-                                alert(xhr.responseJSON
-                                    .message); // Hiển thị thông báo chưa đăng nhập
-                                window.location.href =
-                                    "{{ route('auth.admin') }}"; // Chuyển hướng đến trang đăng nhập
                                 alert(xhr.responseJSON
                                     .message); // Hiển thị thông báo chưa đăng nhập
                                 window.location.href =
@@ -2096,14 +2066,6 @@
             });
 
         });
-
-
-
-
-
-
-
-
 
     </script>
 @endpush

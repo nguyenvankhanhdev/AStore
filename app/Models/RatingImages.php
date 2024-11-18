@@ -9,6 +9,7 @@ class RatingImages extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     public function rating()
     {
         return $this->belongsTo(Ratings::class, 'rating_id');

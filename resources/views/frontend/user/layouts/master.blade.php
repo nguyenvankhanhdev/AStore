@@ -128,10 +128,7 @@
             height: auto;
         }
     </style>
-
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js"></script>
 
 
 </head>
@@ -164,7 +161,7 @@
     </main>
 
     @include('frontend.user.layouts.footer')
-    
+
     {{-- <script src="/frontend/asset/js/header-footer-mb.js" media="only screen and (max-width: 768px)"></script>
     <script src="/frontend/asset/js/home-mb.js" media="only screen and (max-width: 768px)"></script>
     <script src="/frontend/asset/js/detail-mb.js" media="only screen and (max-width: 768px)"></script>
@@ -186,6 +183,8 @@
     <script src="/frontend/asset/js/jquery-3.6.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $.ajaxSetup({

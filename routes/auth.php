@@ -18,7 +18,7 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/google/call-back', [AuthenticateSessionController::class, 'callBackGoogle'])->name('auth.google.call-back');
 
     Route::get('auth/github', [AuthenticateSessionController::class, 'redirectToGithub'])->name('auth.github');
-    Route::get('auth/github/callback', [AuthenticateSessionController::class, 'handleGithubCallback'])->name('auth.github.callback');
+    Route::get('auth/github/call-back', [AuthenticateSessionController::class, 'handleGithubCallback'])->name('auth.github.callback');
 });
 
 

@@ -86,9 +86,6 @@
                                                                 @elseif($order->status == 'canceled')
                                                                     <span class="badge bg-danger text-white">Đã hủy đơn
                                                                         hàng</span>
-                                                                @elseif($order->status == 'complete')
-                                                                        <span class="badge bg-success text-white">Đã hủy đơn
-                                                                            hàng</span>
                                                                 @endif
                                                             </p>
                                                             </p>
@@ -110,6 +107,17 @@
                                                             <th class="quantity">
                                                                 số lượng
                                                             </th>
+
+
+                                                            <th class="total">
+                                                                Tiền thanh toán
+                                                            </th>
+                                                            @if ($order->status=="completed")
+                                                                <th class="rating">
+                                                                    Đánh giá
+                                                                </th>
+                                                            @endif
+
                                                         </tr>
                                                         @foreach ($order->orderDetails as $orderDetail)
                                                             <tr>
@@ -128,6 +136,24 @@
                                                                 <td class="quantity" style="margin-left: 40px;">
                                                                     {{ $orderDetail->quantity }}
                                                                 </td>
+
+                                                                <td class="total" style="    margin-left: 35px;">
+                                                                    {{ number_format($order->total_amount, '0', '.') }} đ
+
+                                                                </td>
+                                                                @if ($order->status=="completed")
+                                                                    <td data-orderdetail-id="{{ $orderDetail->id }}" class="rating-button">
+                                                                        @if (in_array($orderDetail->id, $arrayOrderDetailIdInRating))
+                                                                            <!-- Nếu đã được đánh giá -->
+                                                                            <button class="rating-btn rated" disabled>Đã đánh giá</button>
+                                                                        @else
+                                                                            <!-- Nếu chưa được đánh giá -->
+                                                                            <button class="rating-btn">Đánh giá</button>
+                                                                        @endif
+                                                                    </td>
+                                                                @endif
+
+
                                                             </tr>
                                                             @if ($order->status=="completed")
                                                                 <!-- Modal -->
