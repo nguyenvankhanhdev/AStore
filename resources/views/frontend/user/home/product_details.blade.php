@@ -101,6 +101,12 @@
 
                                     </div>
 
+                                    <div style="margin: 10px 0;">
+                                        <span style="font-size: 18px; font-weight:600;">
+                                            Màu sắc
+                                        </span>
+                                    </div>
+
                                     <div class="colors js-select">
                                         @foreach ($colors as $index => $color)
                                             @php
@@ -169,109 +175,22 @@
                                         @endforeach
                                     </div>
 
-                                    <div class="payment-incentives">
-                                        <div class="block-head">
-                                            <div class="block-head-title">Ưu đãi thanh toán</div><span
-                                                class="link js--open-modal" aria-controls="modal-incentives">Xem tất
-                                                cả</span>
-                                        </div>
-                                        <div class="list-bank">
-                                            <div class="swiper-custom">
-                                                <div class="swiper slideIncentives">
-                                                    <div class="swiper-wrapper">
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-button-prev sw-control-prev"><i
-                                                        class="ic-angle-left"></i></div>
-                                                <div class="swiper-button-next sw-control-next"><i
-                                                        class="ic-angle-right"></i></div>
-                                            </div>
-                                        </div>
+                                    <div style="margin: 10px 0;">
+                                        <span style="font-size: 18px; font-weight:600;">
+                                            Mua ngay hoặc yêu thích
+                                        </span>
                                     </div>
-                                    <div class="action action-npi">
-                                        <form id="add-to-cart-form" style="width: 100%">
-                                            <button type="submit" class="btn btn-link btn-xl btn-line-1">
-                                                <div class="btn-text">MUA NGAY</div>
-                                                <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
-                                            </button>
-                                        </form>
+                                    <div class="pre-order">
+                                        <div class="btn btn-link btn-xl" id="add-to-cart-form">
+                                          <div>MUA NGAY</div>
+                                        </div>
+                                        <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist" 
+                                        data-product-id="{{ $product->id }}" 
+                                        data-variant-id="" 
+                                        data-color-id="">
+                                        <div>YÊU THÍCH</div>
                                     </div>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -1110,7 +1029,7 @@
                             <div class="review-container">
                                 <h3>
                                     Đánh giá sản phẩm: {{ $product->name }}
-                                    @if($product->point == 0 || $product->point < 0.1)
+                                    @if ($product->point == 0 || $product->point < 0.1)
                                         <span class="inline-stars">
                                             <span class="star">☆</span>
                                             <span class="star">☆</span>
@@ -1121,8 +1040,8 @@
                                         <span class="rating-score">(0.0/5.0)</span>
                                     @else
                                         <span class="inline-stars">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($product->point >= $i)
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($product->point >= $i)
                                                     <span class="star full">★</span> <!-- Sao sáng đầy đủ -->
                                                 @elseif($product->point >= $i - 0.5)
                                                     <span class="star half">★</span> <!-- Sao sáng nửa -->
@@ -1135,10 +1054,11 @@
                                     @endif
                                 </h3>
                                 <div class="user-rating-info">
-                                    @if(Auth::id()>0)
-                                        @if($infoRating)
+                                    @if (Auth::id() > 0)
+                                        @if ($infoRating)
                                             <h5>
-                                                Bạn đã đánh giá sản phẩm này {{ $infoRating->point }} <span class="count-star">★</span>
+                                                Bạn đã đánh giá sản phẩm này {{ $infoRating->point }} <span
+                                                    class="count-star">★</span>
                                             </h5>
                                         @else
                                             <h5>
@@ -1164,8 +1084,8 @@
                                             <div class="rating-label"></div>
                                         </div>
                                         <button class="rate-button">
-                                            @if(Auth::id()>0)
-                                                @if($infoRating)
+                                            @if (Auth::id() > 0)
+                                                @if ($infoRating)
                                                     Đánh giá lại
                                                 @else
                                                     Đánh giá
@@ -1186,7 +1106,8 @@
                                     <div class="rating-count">
                                         @foreach ([5, 4, 3, 2, 1] as $star)
                                             <p>Đánh giá {{ $star }} <span class="count-star">★</span>
-                                               (<span class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
+                                                (<span
+                                                    class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
                                             </p>
                                         @endforeach
                                     </div>
@@ -1243,7 +1164,8 @@
 
                                 <div class="user-content">
                                     <div class="result">
-                                        <div class="text" style="color: #444b52;"><strong>Những bình luận về </strong>“{{ $product->name }}”</div>
+                                        <div class="text" style="color: #444b52;"><strong>Những bình luận về
+                                            </strong>“{{ $product->name }}”</div>
 
 
 
@@ -1254,7 +1176,8 @@
                                                 <h2>Sản phẩm chưa có bình luận</h2>
                                             @else
                                                 @foreach ($comment as $cm)
-                                                    <div data-timestamp="{{ strtotime($cm->created_at) }}" class="avatar avatar-md avatar-text avatar-circle">
+                                                    <div data-timestamp="{{ strtotime($cm->created_at) }}"
+                                                        class="avatar avatar-md avatar-text avatar-circle">
 
                                                         <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span>
                                                         </div>
@@ -1289,7 +1212,7 @@
                                                                 class='btn editcm btn-dark'><i
                                                                     class='far fa-edit'></i></a>
                                                             <a data-comment-id="{{ $cm->id }}"
-                                                                class='btn deletecm btn-dark'><i
+                                                                href="" class='btn deletecm btn-dark'><i
                                                                     class='far fa-trash-alt'></i></a>
                                                         @else
                                                             <a data-comment-id="{{ $cm->id }}" name="cm_id"
@@ -1440,6 +1363,9 @@
                 url.searchParams.set('variant', variantId);
                 window.location.href = url.toString();
             });
+            // Định nghĩa colorId và variantId là các biến toàn cục
+            let colorId;
+            let variantId;
 
             function fetchPrice(colorId, variantId) {
                 $.ajax({
@@ -1458,6 +1384,17 @@
                             const discount = originalPrice - offerPrice;
                             const discountPercentage = (offerPrice / originalPrice) * 100;
                             const productName = $('.product_name').data('initial-name');
+                            if (storage === "0GB") {
+                                $('.product_name').text(`${productName}`);
+                                $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
+                                $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                                $('.txtpricemarketPhanTram').text(
+                                    `Giảm -${Math.round(discountPercentage)}%`);
+                                return;
+                            }
+                            $('#variant-selector .item.active .price-variant').text(discount
+                                .toLocaleString('vi-VN') + ' ₫');
+                            // Display with storage included
                             $('.product_name').text(`${productName} - ${storage}`);
                             $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
                             $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
@@ -1471,55 +1408,135 @@
                 });
             }
 
-
-
-
-
-
-            let activeColorItem = $('.colors .item.active');
-            let colorId = activeColorItem.data('color-id');
-            const variantId = $('#variant-selector .item.active').data('id');
-
-
-            $('#add-to-cart-form').on('click', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{ route('cart.add') }}",
-                    method: 'POST',
-                    data: {
-                        color_id: colorId,
-                        variant_id: variantId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            toastr.success(response.message);
-                        }
-                    },
-                    error: function(response) {
-                        if (response.status === 'error') {
-                            toastr.error(response.message);
-                        }
-                    }
-                });
-
-            });
-
-            if (colorId && variantId) {
-                fetchPrice(colorId, variantId);
+            function updateVariantAndFetchPrice() {
+                colorId = $('.colors .item.active').data('color-id');
+                variantId = $('#variant-selector .item.active').data('id');
+                if (colorId && variantId) {
+                    fetchPrice(colorId, variantId);
+                }
             }
+
+            // Initial load
+            updateVariantAndFetchPrice();
+
+            // Event handler for color selection
             $('.colors .item').on('click', function() {
                 $('.colors .item.active').removeClass('active');
                 $(this).addClass('active');
-                colorId = $(this).data('color-id');
-                fetchPrice(colorId, variantId);
+                updateVariantAndFetchPrice();
             });
 
+            // Event handler for variant selection
+            $('#variant-selector .item').on('click', function() {
+                $('#variant-selector .item.active').removeClass('active');
+                $(this).addClass('active');
+                updateVariantAndFetchPrice();
+            });
 
+            if ($('#variant-selector .item.active label').text().trim() === "0GB") {
+                $('#variant-selector .item.active').hide();
+            }
 
+            // Thêm vào giỏ hàng
+            $('#add-to-cart-form').on('click', function(e) {
+                e.preventDefault();
 
+                // Kiểm tra lại colorId và variantId khi nhấn vào giỏ hàng
+                colorId = $('.colors .item.active').data('color-id');
+                variantId = $('#variant-selector .item.active').data('id');
 
+                if (colorId && variantId) {
+                    $.ajax({
+                        url: "{{ route('cart.add') }}",
+                        method: 'POST',
+                        data: {
+                            color_id: colorId,
+                            variant_id: variantId,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                toastr.success(response.message);
+                            }
+                            else{
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(response) {
+                            if (response.status === 'error') {
+                                toastr.error(response.message);
+                            }
+                        }
+                    });
+                } else {
+                    console.error("Color ID hoặc Variant ID không hợp lệ.");
+                }
+            });
         });
+
+        $('#add-to-wishlist').on('click', function (e) {
+    e.preventDefault();
+
+    const productId = $(this).data('product-id');
+    const variantId = $('#variant-selector .item.active').data('id'); // Lấy ID biến thể
+    const colorId = $('.colors .item.active').data('color-id'); // Lấy ID màu sắc
+
+    console.log("Product ID:", productId);
+    console.log("Variant ID:", variantId || "Chưa chọn");
+    console.log("Color ID:", colorId || "Chưa chọn");
+
+    // Kiểm tra nếu chưa chọn biến thể hoặc màu sắc
+    if (!variantId || !colorId) {
+        toastr.error("Vui lòng chọn màu sắc và biến thể sản phẩm!");
+        return;
+    }
+
+    // Gửi AJAX để lấy variantColorId
+
+
+    $.ajax({
+        url: "{{ route('user.get.variantColorId') }}", // Route tới backend
+        method: 'GET',
+        data: {
+            variant_id: variantId,
+            color_id: colorId,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+
+        success: function (response) {
+            if (response.status === 'success') {
+                const variantColorId = response.variant_color_id;
+
+                console.log("variantColorId:", variantColorId);
+                console.log("CSRF Token:", $('meta[name="csrf-token"]').attr('content'));
+                // Gửi thêm AJAX để thêm vào wishlist
+                $.ajax({
+    url: "{{ route('user.wishlist.add') }}", // Route thêm vào wishlist
+    method: 'POST',
+    data: {
+        pro_id: productId,
+        variant_color_id: variantColorId,
+        _token: $('meta[name="csrf-token"]').attr('content') // CSRF Token
+    },
+    success: function (response) {
+        console.log("Response:", response);
+        toastr.success(response.message);
+    },
+    error: function (error) {
+        console.error("Error:", error);
+        toastr.error(error.responseJSON.message || "Có lỗi xảy ra!");
+    }
+});
+
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function (xhr) {
+            toastr.error(xhr.responseJSON.message || "Không tìm thấy thông tin sản phẩm! Vui lòng thử lại.");
+        }
+    });
+});
     </script>
 
 
@@ -1901,7 +1918,7 @@
 
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             const stars = $('.star-rating .star');
             const ratingLabel = $('.star-rating .rating-label');
             let selectedRating = 0; // Lưu trữ số sao được chọn
@@ -1914,35 +1931,35 @@
                 "Rất Tốt"
             ];
 
-            stars.each(function (index) {
+            stars.each(function(index) {
                 // Sự kiện hover vào sao
-                $(this).on('mouseover', function () {
+                $(this).on('mouseover', function() {
                     ratingLabel.text(ratingTexts[index]);
 
                     // Làm sáng các ngôi sao từ đầu đến ngôi sao hover
-                    stars.each(function (i) {
+                    stars.each(function(i) {
                         $(this).toggleClass('active', i <= index);
                     });
                 });
 
                 // Sự kiện khi chuột rời khỏi sao
-                $(this).on('mouseout', function () {
+                $(this).on('mouseout', function() {
                     // Làm sáng các ngôi sao đã chọn trước đó
-                    stars.each(function (i) {
+                    stars.each(function(i) {
                         $(this).toggleClass('active', i < selectedRating);
                     });
                     ratingLabel.text(selectedRating ? ratingTexts[selectedRating - 1] : '');
                 });
 
                 // Sự kiện click vào sao để chọn số sao
-                $(this).on('click', function () {
+                $(this).on('click', function() {
                     selectedRating = index + 1;
                     ratingLabel.text(ratingTexts[index]);
                 });
             });
 
             // Sự kiện click vào nút "Đánh giá"
-            $('.rate-button').on('click', function (e) {
+            $('.rate-button').on('click', function(e) {
                 e.preventDefault();
 
                 if (selectedRating === 0) {
@@ -1965,7 +1982,7 @@
                             point: selectedRating,
                             _token: '{{ csrf_token() }}'
                         },
-                        success: function (response) {
+                        success: function(response) {
                             toastr.success(response.message);
                             // Cập nhật điểm trung bình sau khi thành công
                             var averageRating = response.averageRating;
@@ -1984,26 +2001,33 @@
                             $('.inline-stars').html(starHtml);
 
                             // Cập nhật điểm trung bình hiển thị
-                            $('.rating-score').text('(' + parseFloat(averageRating).toFixed(1) + '/5.0)');
+                            $('.rating-score').text('(' + parseFloat(averageRating).toFixed(1) +
+                                '/5.0)');
                             // Cập nhật số lượng đánh giá cho từng mức sao
                             [5, 4, 3, 2, 1].forEach(function(star) {
-                                $('.rating-count').find(`.count-star-${star}`).text(response.ratingsCount[star] || 0);
+                                $('.rating-count').find(`.count-star-${star}`).text(
+                                    response.ratingsCount[star] || 0);
                             });
 
                             if (response.infoRating) {
                                 $('.user-rating-info').html(
-                                    '<h5>Bạn đã đánh giá sản phẩm này ' + response.infoRating.point + ' <span class="count-star">★</span></h5>'
+                                    '<h5>Bạn đã đánh giá sản phẩm này ' + response
+                                    .infoRating.point +
+                                    ' <span class="count-star">★</span></h5>'
                                 );
                                 $('.rate-button').text('Đánh giá lại');
                             } else {
-                                $('.user-rating-info').html('<h5>Bạn chưa đánh giá sản phẩm này</h5>');
+                                $('.user-rating-info').html(
+                                    '<h5>Bạn chưa đánh giá sản phẩm này</h5>');
                                 $('.rate-button').text('Đánh giá');
                             }
                         },
                         error: function(xhr, status, error) {
                             if (xhr.status === 401) {
-                                alert(xhr.responseJSON.message); // Hiển thị thông báo chưa đăng nhập
-                                window.location.href = "{{ route('auth.admin') }}"; // Chuyển hướng đến trang đăng nhập
+                                alert(xhr.responseJSON
+                                    .message); // Hiển thị thông báo chưa đăng nhập
+                                window.location.href =
+                                    "{{ route('auth.admin') }}"; // Chuyển hướng đến trang đăng nhập
                             } else if (xhr.status === 403) {
                                 alert(xhr.responseJSON.message); // Hiển thị thông báo từ server
                             } else {
@@ -2015,14 +2039,5 @@
             });
 
         });
-
-
-
-
-
-
-
-
-
     </script>
 @endpush

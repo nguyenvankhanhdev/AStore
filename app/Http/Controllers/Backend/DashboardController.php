@@ -22,17 +22,26 @@ class DashboardController extends Controller
         $totalOrders = Orders::count();
         $todaysOrders = Orders::whereDate('created_at', Carbon::today())->count();
 
-        // Lấy đơn hàng trong ngày
-        $todaysOrdersData = Orders::whereDate('created_at', Carbon::today())
+        $pendingOrderCount = Orders::where('status', 'pending')->count();
+
+        $canceledOrderCount = Orders::where('status', 'canceled')->count();
+        $completedOrderCount = Orders::where('status', 'completed')->count();
+
+        $todaysOrdersData = Orders::whereDate('created_at', Carbon::today())->get();
+        $todayPendingOrderCount = Orders::whereDate('created_at', Carbon::today())
+            ->where('status', 'pending')
+            ->count();
+
+
+        $dailyProfit = $todaysOrdersData
             ->where('status', 'delivered')
-            ->get();
+            ->sum(function ($order) {
+                return $order->total_amount - $order->cost_price;
+            });
 
-        // Tính lợi nhuận trong PHP
-        $dailyProfit = $todaysOrdersData->sum(function ($order) {
-            return $order->total_amount - $order->cost_price;
-        });
+        $todaysTotalQuantity = $todaysOrdersData->sum('quantity');
 
-        // Lấy đơn hàng trong tháng
+
         $monthlyOrdersData = Orders::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->where('status', 'delivered')
@@ -42,7 +51,6 @@ class DashboardController extends Controller
             return $order->total_amount - $order->cost_price;
         });
 
-        // Lấy đơn hàng trong năm
         $yearlyOrdersData = Orders::whereYear('created_at', Carbon::now()->year)
             ->where('status', 'delivered')
             ->get();
@@ -51,17 +59,23 @@ class DashboardController extends Controller
             return $order->total_amount - $order->cost_price;
         });
 
-        // Truyền dữ liệu vào view
         return view('backend.admin.dashboard.index', compact(
             'userCount',
             'categoryCount',
             'totalOrders',
             'todaysOrders',
             'dailyProfit',
+            'todaysTotalQuantity',
+            'pendingOrderCount',
+            'canceledOrderCount',
+            'completedOrderCount',
             'monthlyProfit',
-            'yearlyProfit'
+            'yearlyProfit',
+            'todayPendingOrderCount'
         ));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -110,7 +124,8 @@ class DashboardController extends Controller
     {
         //
     }
-    public function login(){
+    public function login()
+    {
         return view('backend.auth.login');
     }
 }

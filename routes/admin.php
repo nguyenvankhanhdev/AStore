@@ -61,6 +61,7 @@ Route::get('orders-pending', [OrderController::class, 'pendingOrder'])->name('or
 Route::get('orders-processed', [OrderController::class, 'processedOrders'])->name('orders.processed');
 Route::get('orders-delivered', [OrderController::class, 'deliveredOrders'])->name('orders.delivered');
 Route::get('orders-canceled', [OrderController::class, 'canceledOrders'])->name('orders.canceled');
+Route::get('orders-completed', [OrderController::class, 'completedOrders'])->name('orders.completed');
 
 Route::post('payment-status', [OrderController::class, 'changePaymentStatus'])->name('payment.status');
 

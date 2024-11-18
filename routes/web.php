@@ -15,6 +15,8 @@ use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Auth\AuthenticateSessionController;
 use App\Http\Controllers\Frontend\UserCouponsController;
 use App\Http\Controllers\Frontend\OpenAIController;
+use App\Http\Controllers\Frontend\VariantColorsController;
+use App\Http\Controllers\Frontend\WishlistController;
 
 // Auth
 Route::get('admin', [AuthenticateSessionController::class, 'index'])
@@ -82,16 +84,25 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', [UserProfileController::class, 'index'])->name('dashboard.profile');
     Route::put('profile', [UserProfileController::class, 'updateProfile'])->name('profile.update');
-    Route::get('order',[UserOrderController::class,'index'])->name('order.index');
-    Route::get('order/show/{id}',[UserOrderController::class,'show'])->name('order.show');
+    Route::get('order', [UserOrderController::class, 'index'])->name('order.index');
+    Route::get('order/show/{id}', [UserOrderController::class, 'show'])->name('order.show');
     Route::resource('address', UserAddressController::class);
     Route::post('profile', [UserProfileController::class, 'updatePassword'])->name('profile.update.password');
-    Route::resource('user-coupons',UserCouponsController::class);
-    Route::get('showcoupons',[UserCouponsController::class,'showcoupons'])->name('user-coupons.showcoupons');
+    Route::resource('user-coupons', UserCouponsController::class);
+    Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
 
+    Route::middleware('auth')->group(function () {
+        Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+        Route::get('/get-variant-color-id', [VariantColorsController::class, 'getVariantColorId'])->name('get.variantColorId');
+
+        Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+        Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    });
 });
+
 Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
 Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');
 Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
 Route::get('callbackzalopay', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');
