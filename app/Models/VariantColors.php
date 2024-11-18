@@ -22,14 +22,18 @@ class VariantColors extends Model
     }
     public function color()
     {
-        return $this->belongsTo(ColorProduct::class,'color_id');
+        return $this->belongsTo(ColorProduct::class, 'color_id');
     }
-    public function carts(){
-        return $this->hasMany(Carts::class,'variant_color_id');
+    public function carts()
+    {
+        return $this->hasMany(Carts::class, 'variant_color_id');
     }
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class,'variant_color_id');
+        return $this->hasMany(OrderDetails::class, 'variant_color_id');
     }
-
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'variant_color_id');
+    }
 }

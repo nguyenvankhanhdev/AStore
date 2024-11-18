@@ -15,6 +15,8 @@ use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Auth\AuthenticateSessionController;
 use App\Http\Controllers\Frontend\UserCouponsController;
 use App\Http\Controllers\Frontend\OpenAIController;
+use App\Http\Controllers\Frontend\VariantColorsController;
+use App\Http\Controllers\Frontend\WishlistController;
 
 // Auth
 Route::get('admin', [AuthenticateSessionController::class, 'index'])
@@ -72,6 +74,7 @@ Route::get('momo-payment-return', [PaymentController::class, 'momo_return'])->na
 
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
 
+    Route::post('rating', [UserOrderController::class, 'rating'])->name('rating');
     Route::post('message/sentmessage', [MessageController::class, 'store'])->name('message.store');
     Route::get('message/getNewMessages', [MessageController::class, 'getNewMessages'])->name('message.getNewMessages');
     Route::get('paypal/payment', [CheckOutController::class, 'checkOutPayPal'])->name('paypal.payment');
@@ -90,10 +93,20 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
     Route::put('cancelOrder', [UserOrderController::class, 'cancelOrder'])->name('order.cancel');
 
+    Route::middleware('auth')->group(function () {
+        Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+        Route::get('/get-variant-color-id', [VariantColorsController::class, 'getVariantColorId'])->name('get.variantColorId');
 
+        Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+        Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    });
 });
-Route::get('get-price-by-variant', [ProductController::class, 'getPriceByVariant'])->name('getByVariant');
-Route::get('getByColor', [ProductController::class, 'getPriceByVariantAndColor'])->name('getByColor');
+
+
+Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
+Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+
+
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');
 Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
 Route::get('callbackzalopay', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');

@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $pro_id
@@ -36,7 +36,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $quantity
@@ -64,7 +64,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -89,7 +89,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -110,7 +110,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $cmt_id
@@ -131,7 +131,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $content
@@ -166,7 +166,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -209,7 +209,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $province_id
@@ -233,24 +233,40 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
  *
+ *
+ * @property int $id
+ * @property int $flash_sale_id
+ * @property int $sub_categories_id
+ * @property int $offer_price
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\FlashSales|null $flashsales
  * @property-read \App\Models\SubCategories|null $subcategories
  * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereFlashSaleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereOfferPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereSubCategoriesId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlashSaleItem whereUpdatedAt($value)
  */
 	class FlashSaleItem extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
- * @property string $start_date
+ * @property string $start_date```php
+
  * @property string $end_date
+ * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlashSaleItem> $flashsateitems
@@ -269,7 +285,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralSetting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralSetting newQuery()
@@ -280,7 +296,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $message
@@ -307,7 +323,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $quantity
@@ -334,12 +350,13 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property float $total_amount
  * @property string $address
  * @property string $status
+ * @property string|null $payment_status
  * @property string $order_date
  * @property string $payment_method
  * @property string $payment_status
@@ -371,7 +388,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $status
@@ -402,7 +419,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $pro_id
@@ -424,7 +441,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $pro_id
@@ -449,7 +466,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -486,6 +503,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereLongDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Products whereOfferPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Products wherePoint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereProductType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereShortDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereSlug($value)
@@ -498,7 +517,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -519,21 +538,50 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
+ *
+ * @property int $id
+ * @property string $image
+ * @property int $rating_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Ratings|null $rating
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereRatingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereUpdatedAt($value)
+ */
+	class RatingImages extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ *
  *
  * @property int $id
  * @property float $point
+ * @property string $content
  * @property int $pro_id
  * @property int $user_id
+ * @property int $orderdetail_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\OrderDetails|null $orderDetail
  * @property-read \App\Models\Products|null $product
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RatingImages> $ratingImages
+ * @property-read int|null $rating_images_count
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereOrderdetailId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings wherePoint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereProId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereUpdatedAt($value)
@@ -544,7 +592,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Statistic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Statistic newQuery()
@@ -555,7 +603,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $GB
@@ -576,7 +624,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -606,7 +654,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $name
@@ -617,8 +665,10 @@ namespace App\Models{
  * @property string|null $google_id
  * @property string|null $github_id
  * @property string $role
+ * @property string|null $google_id
+ * @property string|null $github_id
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
+ * @property string|null $password
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -627,6 +677,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @property-read \App\Models\UserAddress|null $userAddress
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ratings> $userRatings
+ * @property-read int|null $user_ratings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCoupons> $usercoupons
  * @property-read int|null $usercoupons_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -653,7 +705,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $address
@@ -687,7 +739,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -712,7 +764,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $variant_id
@@ -745,7 +797,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $district_id
@@ -767,7 +819,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $import_dae
@@ -790,7 +842,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $warehouse_id

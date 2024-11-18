@@ -2,15 +2,22 @@
 
 namespace App\DataTables;
 
+<<<<<<< HEAD
 use App\Models\CompletedOrder;
+=======
+use App\Models\Orders;
+>>>>>>> 9f7d49cb4fd1ea2a5746bfb9a49d036689bc19cc
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+<<<<<<< HEAD
 use App\Models\Orders;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
+=======
+>>>>>>> 9f7d49cb4fd1ea2a5746bfb9a49d036689bc19cc
 use Yajra\DataTables\Services\DataTable;
 
 class CompletedOrderDataTable extends DataTable

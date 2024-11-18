@@ -27,6 +27,10 @@ class OrderDataTable extends DataTable
             })
             ->addColumn('amount', function ($query) {
                 return number_format($query->total_amount, 0,',','.') . 'đ';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9f7d49cb4fd1ea2a5746bfb9a49d036689bc19cc
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->order_date));
@@ -41,6 +45,8 @@ class OrderDataTable extends DataTable
                         return "<span class='badge bg-info'>Processed</span>";
                     case 'canceled':
                         return "<span class='badge bg-danger'>Canceled</span>";
+                    case 'completed':
+                        return "<span class='badge' style='background-color: #28a745; color: white;'>Completed</span>";
                     default:
                         return "<span class='badge bg-secondary'>Unknown</span>";
                 }
