@@ -25,7 +25,8 @@ class UserOrderDataTable extends DataTable
                 $showBtn = "<a  href='" . route('user.order.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
 
                 $cancelBtn = '';
-                if ($query->status !== 'delivered' && $query->status !== 'completed') {
+                if ($query->status !== 'delivered' && $query->status !== 'completed' && $query->status !== 'canceled') {
+
                     $cancelBtn = "<button style='margin-left: 6px;' data-id='" . $query->id . "' class='btn btn-danger ml-3 cancel-order'> Hủy Đơn</button>";
                 }
                 return $showBtn.$cancelBtn;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accessories;
 use App\Models\Categories;
 use App\Models\Products;
 use App\Models\ProductVariant;
@@ -92,6 +93,30 @@ class ProductController extends Controller
         ])->first();
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
+        $accessories = Accessories::with(['product', 'subCategory'])
+            ->where('pro_id', $product->id)
+            ->get();
+
+        if ($accessories->isNotEmpty()) {
+            $subCateIds = $accessories->pluck('sub_cate_id')->unique(); // Lấy danh sách sub_cate_id không trùng lặp
+
+            $sameProducts = collect();
+
+            // Lấy 1 sản phẩm từ mỗi sub_cate_id
+            foreach ($subCateIds as $subCateId) {
+                $products = Products::with(['variants.variantColors'])
+                    ->where('sub_cate_id', $subCateId)
+                    ->limit(1) // Lấy 1 sản phẩm từ mỗi sub_cate_id
+                    ->get();
+                $sameProducts = $sameProducts->merge($products); // Gộp các sản phẩm vào collection
+            }
+
+            // Giới hạn tổng cộng chỉ 4 sản phẩm
+            $sameProducts = $sameProducts->take(4);
+        } else {
+            $sameProducts = collect();
+        }
+
         if (Auth::id() > 0) {
             $userID = Auth::id();
             $user = User::find(Auth::id());
@@ -113,11 +138,10 @@ class ProductController extends Controller
                 $product->point = $averageRating; // Cập nhật lại thuộc tính point
                 $product->save();
             }
-            $ratingOfProduct=Ratings::where('pro_id',$product->id)->get();
+            $ratingOfProduct = Ratings::where('pro_id', $product->id)->get();
             $ratingsCount = Ratings::getCountByStar($product->id);
-            $countRatingProduct=Ratings::countRatingsByProduct($product->id);
-            return view('frontend.user.home.product_details', compact('ratingOfProduct','countRatingProduct','product', 'user', 'comment', 'selectedVariantId', 'colors','ratingsCount'));
-
+            $countRatingProduct = Ratings::countRatingsByProduct($product->id);
+            return view('frontend.user.home.product_details', compact('ratingOfProduct', 'countRatingProduct', 'product', 'user', 'comment', 'selectedVariantId', 'colors', 'ratingsCount', 'sameProducts'));
         } else {
             $comment = Comments::with('user')
                 ->where([
@@ -137,13 +161,12 @@ class ProductController extends Controller
                 $product->point = $averageRating; // Cập nhật lại thuộc tính point
                 $product->save();
             }
-            $ratingOfProduct=Ratings::where('pro_id',$product->id)->get();
+            $ratingOfProduct = Ratings::where('pro_id', $product->id)->get();
             $ratingsCount = Ratings::getCountByStar($product->id);
-            $countRatingProduct=Ratings::countRatingsByProduct($product->id);
+            $countRatingProduct = Ratings::countRatingsByProduct($product->id);
 
 
-            return view('frontend.user.home.product_details', compact('ratingOfProduct','countRatingProduct','product',  'comment', 'selectedVariantId', 'colors','ratingsCount'));
-
+            return view('frontend.user.home.product_details', compact('ratingOfProduct', 'countRatingProduct', 'product',  'comment', 'selectedVariantId', 'colors', 'ratingsCount', 'sameProducts'));
         }
     }
 
@@ -266,7 +289,4 @@ class ProductController extends Controller
             'variantColors' => $firstPrice,
         ]);
     }
-
-
-
 }

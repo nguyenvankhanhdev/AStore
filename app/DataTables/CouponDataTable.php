@@ -25,6 +25,13 @@ class CouponDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return '<button class="btn btn-primary redeem-coupon" data-id="' . $query->id . '">Đổi</button>';
             })
+            ->editColumn('discount', function ($query) {
+                if ($query->discount_type == 'percent') {
+                    return $query->discount . '%';
+                } else {
+                    return number_format($query->discount *1000, 0,',','.') . 'đ';
+                }
+            })
             ->editColumn('start_date', function ($query) {
                 return date('d-m-Y', strtotime($query->start_date));
             })
