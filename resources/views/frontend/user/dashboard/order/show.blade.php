@@ -136,7 +136,7 @@
                                                                 <td class="quantity" style="margin-left: 40px;">
                                                                     {{ $orderDetail->quantity }}
                                                                 </td>
-                                                                
+
                                                                 <td class="total" style="    margin-left: 35px;">
                                                                     {{ number_format($order->total_amount, '0', '.') }} đ
 
