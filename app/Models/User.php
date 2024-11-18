@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -45,13 +46,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserCoupons::class, 'user_id', 'id');
     }
+
+    public function userRatings()
+    {
+        return $this->hasMany(Ratings::class,'user_id','id');
+    }
     public function userAddress()
     {
         return $this->hasOne(UserAddress::class, 'user_id', 'id');
     }
 
+    public static function getPoint(){
+        return User::where('id', Auth::user()->id)->first()->point;
+
+    }
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class, 'user_id');
+
     }
 }

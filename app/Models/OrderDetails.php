@@ -28,6 +28,13 @@ class OrderDetails extends Model
         );
     }
 
+    public static function getIdsByOrderId($orderId)
+    {
+        return self::where('order_id', $orderId)
+                    ->pluck('id')
+                    ->toArray();
+    }
+
     public static function getProductIdsByOrderIds($orderIds)
     {
         return self::whereIn('order_id', $orderIds)

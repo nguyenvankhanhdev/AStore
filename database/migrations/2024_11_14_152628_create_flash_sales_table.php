@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('variant_colors', function (Blueprint $table) {
-            $table->decimal('warehouse_price', 15, 2)->nullable()->after('offer_price');
+        Schema::create('flash_sales', function (Blueprint $table) {
+            $table->id();
+            $table->datetime('start_date');
+            $table->datetime('end_date');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('variant_colors', function (Blueprint $table) {
-            $table->dropColumn('warehouse_price');
-        });
+        Schema::dropIfExists('flash_sales');
     }
 };

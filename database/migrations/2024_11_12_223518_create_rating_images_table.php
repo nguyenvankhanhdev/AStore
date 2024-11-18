@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product_variants', function (Blueprint $table) {
-            $table->dropColumn('price');
-            $table->dropColumn('offer_price');
-            $table->dropColumn('color_id');
-            $table->dropColumn('quantity');
+        Schema::create('rating_images', function (Blueprint $table) {
+            $table->id();
+            $table->string('image');
+            $table->integer('rating_id');
+            $table->timestamps();
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('rating_images');
     }
 };

@@ -74,6 +74,7 @@ Route::get('momo-payment-return', [PaymentController::class, 'momo_return'])->na
 
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function () {
 
+    Route::post('rating', [UserOrderController::class, 'rating'])->name('rating');
     Route::post('message/sentmessage', [MessageController::class, 'store'])->name('message.store');
     Route::get('message/getNewMessages', [MessageController::class, 'getNewMessages'])->name('message.getNewMessages');
     Route::get('paypal/payment', [CheckOutController::class, 'checkOutPayPal'])->name('paypal.payment');
@@ -90,6 +91,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::post('profile', [UserProfileController::class, 'updatePassword'])->name('profile.update.password');
     Route::resource('user-coupons', UserCouponsController::class);
     Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
+    Route::put('cancelOrder', [UserOrderController::class, 'cancelOrder'])->name('order.cancel');
 
     Route::middleware('auth')->group(function () {
         Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -100,12 +102,12 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     });
 });
 
+
 Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
 Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+
 
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');
 Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
 Route::get('callbackzalopay', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');
 Route::get('send-email', [PaymentController::class, 'sendMail'])->name('send-email');
-Route::post('/chatbot-response', [OpenAIController::class, 'getChatbotResponse'])->name('chatbot-response');
-Route::get('get-chat', [OpenAIController::class, 'getChat'])->name('get-chat');

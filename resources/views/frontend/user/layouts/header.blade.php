@@ -15,18 +15,16 @@
                     </div>
                 </form>
             </div>
-            <div class="header-user"><a href="{{ auth()->check() ? route('admin.dashboard.index') : route('login')}}">
+            <div class="header-user"><a
+                    href="{{ auth()->check() ? route('admin.dashboard.index') : route('login') }}">
                     <div class="user-info flex text-grayscale-300"><span class="form-cart-icon m-r-8"><i
                                 class="ic-user-2"></i></span>
                         <div class="f-s-ui-14">
                             @if (auth()->check())
                                 @if (auth()->user()->role === 'user')
-
                                     {{ auth()->user()->name }}
-
                                 @else
                                     {{ auth()->user()->name }}
-
                                 @endif
                             @else
                                 {{ 'Đăng nhập' }}
@@ -38,9 +36,14 @@
             <div class="header-cart">
                 <a href="{{ route('cart.index') }}">
                     <div class="c-cart"><span class="form-cart-icon m-r-8"><span class="count">
+                                @if (Auth::check())
+                                    {{ \App\Models\Carts::getCountCart(Auth::id()) }}
+                                @else
+                                    0
+                                @endif
 
-                    </span><i
-                                class="ic-cart"></i></span>
+
+                            </span><i class="ic-cart"></i></span>
                         <div class="f-s-ui-14">Giỏ hàng</div>
                     </div>
                 </a>
