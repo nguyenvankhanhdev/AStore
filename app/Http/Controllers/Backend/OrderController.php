@@ -57,10 +57,8 @@ class OrderController extends Controller
             'coupon'
         ])->findOrFail($id);
 
-        // Tổng tiền trước giảm giá
         $subTotal = $order->orderDetails->sum('total_price');
 
-        // Tính tổng tiền giảm
         $totalDiscount = 0;
         if ($order->coupon) {
             if ($order->coupon->discount_type === 'percent') {

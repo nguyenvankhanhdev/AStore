@@ -299,7 +299,14 @@ $('.custom-price-range').on('change', function () {
     if (selectedRanges.length > 0) {
         $('.product').hide();
         selectedRanges.forEach(function (range) {
-            filterProductsByPrice(range.min, range.max);
+             $('.product').each(function () {
+                const productPrice = parseInt($(this).attr('data-initial-discounted-price')) || 0;
+
+                if ((range.min === null || productPrice >= range.min) &&
+                    (range.max === null || productPrice <= range.max)) {
+                    $(this).show();
+                }
+            });
         });
     } else {
         $('.product').show();
