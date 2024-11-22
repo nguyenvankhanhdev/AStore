@@ -175,118 +175,23 @@
                                         @endforeach
                                     </div>
 
-                                    <div class="payment-incentives">
-                                        <div class="block-head">
-                                            <div class="block-head-title">Ưu đãi thanh toán</div><span
-                                                class="link js--open-modal" aria-controls="modal-incentives">Xem tất
-                                                cả</span>
-                                        </div>
-                                        <div class="list-bank">
-                                            <div class="swiper-custom">
-                                                <div class="swiper slideIncentives">
-                                                    <div class="swiper-wrapper">
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="prod-card">
-                                                                <div class="prod-card-img"><img src=""
-                                                                        alt=""></div>
-                                                                <div class="prod-card-info">
-                                                                    <p class="prod-card-desc">Giảm
-                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
-                                                                            class="link">Chi tiết</a></p>
-                                                                    <div class="prod-card-btn"><button
-                                                                            class="btn btn-rounded btn-icon"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Chọn</span></button><button
-                                                                            class="btn btn-rounded btn-icon btn-active"><span
-                                                                                class="ic-check"></span><span
-                                                                                class="btn-label">Đã Chọn</span></button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-button-prev sw-control-prev"><i
-                                                        class="ic-angle-left"></i></div>
-                                                <div class="swiper-button-next sw-control-next"><i
-                                                        class="ic-angle-right"></i></div>
-                                            </div>
-                                        </div>
-
-                                        <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
-                                        data-product-id="{{ $product->id }}"
-                                        data-variant-id=""
-                                        data-color-id="">
-                                        <div>YÊU THÍCH</div>
-
-                                    </div>
-                                    <div class="action action-npi">
-                                        <form id="add-to-cart-form" style="width: 100%">
-                                            <button type="submit" class="btn btn-link btn-xl btn-line-1">
-                                                <div class="btn-text">MUA NGAY</div>
-                                                <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <div style="margin: 10px 0;">
+                                        <span style="font-size: 18px; font-weight:600;">
+                                            Mua ngay hoặc yêu thích
+                                    </span>
                                 </div>
-                            </div>
+                                        <div class="pre-order">
+                                            <div class="btn btn-link btn-xl" id="add-to-cart-form">
+                                              <div>MUA NGAY</div>
+                                            </div>
+                                            <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
+                                            data-product-id="{{ $product->id }}"
+                                            data-variant-id=""
+                                            data-color-id="">
+                                            <div>YÊU THÍCH</div>
+                                        </div>
+                                </div>
+
                         </div>
                     </div>
                 </div>
