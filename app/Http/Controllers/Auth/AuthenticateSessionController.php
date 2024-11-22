@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
-use Laravel\Socialite\Facades\Socialite;
+use Socialite;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\View\View;
