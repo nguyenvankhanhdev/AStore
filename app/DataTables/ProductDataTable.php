@@ -54,6 +54,12 @@ class ProductDataTable extends DataTable
                     case 'best_product':
                         return '<i class="badge badge-danger">Best Product</i>';
                         break;
+                    case 'sale_product':
+                        return '<i class="badge badge-primary">Sale Product</i>';
+                        break;
+                    case 'accessory':
+                        return '<i class="badge badge-secondary">Accessory</i>';
+                        break;
                     default:
                         return '<i class="badge badge-dark">None</i>';
                         break;
