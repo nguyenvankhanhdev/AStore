@@ -75,7 +75,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($orders->orderDetails as $orderDetail)
+            @foreach ($orderDetails as $orderDetail)
                 <tr>
                     <td class="name" style="font-weight: 700; font-size:14px;">
                         {{ $orderDetail->variantColors->variant->product->name }} -
@@ -102,7 +102,7 @@
             @endforeach
         </tbody>
     </table>
-
+    <p style="font-weight:600">Tổng cộng: {{ number_format($orders->total_amount, 0, '.', ',') }} đ</p>
     <p style="font-weight:600">Tổng cộng: {{ number_format($orders->total_amount, 0, '.', ',') }} đ</p>
     <p style="font-weight:600">Phương thức thanh toán: {{ $orders->payment_method }}</p>
     <p style="font-weight:600">Trạng thái: {{ $orders->status }}</p>

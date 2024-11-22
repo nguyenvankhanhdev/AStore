@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('cmt_id');
             $table->integer('user_id');
             $table->timestamps();
-            $table->unique(['cmt_id', 'user_id']);
         });
     }
 

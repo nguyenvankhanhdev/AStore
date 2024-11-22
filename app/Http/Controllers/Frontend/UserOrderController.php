@@ -64,4 +64,18 @@ class UserOrderController extends Controller
             'message' => 'Đánh giá của bạn đã được gửi!'
         ]);
     }
+    public function cancelOrder(Request $request)
+{
+    $order = Orders::find($request->id);
+
+    if ($order) {
+        $order->status = 'canceled';
+        $order->save();
+
+        return response()->json(['message' => 'Đơn hàng đã được hủy']);
+    }
+
+    return response()->json(['message' => 'Không tìm thấy đơn hàng'], 404);
+}
+
 }

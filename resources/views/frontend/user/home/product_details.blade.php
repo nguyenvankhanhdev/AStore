@@ -101,6 +101,12 @@
 
                                     </div>
 
+                                    <div style="margin: 10px 0;">
+                                        <span style="font-size: 18px; font-weight:600;">
+                                            Màu sắc
+                                        </span>
+                                    </div>
+
                                     <div class="colors js-select">
                                         @foreach ($colors as $index => $color)
                                             @php
@@ -290,70 +296,36 @@
                                         <div class="h4">Phụ kiện tương thích</div>
                                     </div>
                                 </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
+                                @if ($sameProducts->isNotEmpty())
+                                    @foreach ($sameProducts as $sameProduct)
+                                        <div class="col-3 col-sm-6">
+                                            <div class="item">
+                                                <a class="item__img" href="{{ route('product.details', $sameProduct->slug) }}">
+                                                    <img src="{{ asset($sameProduct->image) }}" alt="">
+                                                </a>
+                                                <div class="item__info">
+                                                    <a href="{{ route('product.details', $sameProduct->slug) }}">
+                                                        <div class="item__name">{{ $sameProduct->name }}</div>
+                                                    </a>
+                                                    <div class="item__price">
+                                                        <div class="text text-primary" style="color: #ae172b">
+                                                            @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
+                                                                Giá {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }} ₫
+                                                            @else
+                                                                Giá không có sẵn
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3 col-sm-6">
-                                    <div class="item"><a class="item__img" href="#"><img
-                                                src="https://via.placeholder.com/210x210" alt=""></a>
-                                        <div class="item__info"><a href="#">
-                                                <div class="item__name">Những lý do nên lựa chọn laptop Asus TUF
-                                                    FA506II-AL012T để chiến
-                                                    game </div>
-                                            </a>
-                                            <div class="item__price">
-                                                <div class="text text-primary">28.999.000₫ </div>
-                                                <div class="text text-grayscale">33.999.000₫</div><strike
-                                                    class="text text-grayscale">34.999.000₫</strike>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    @endforeach
+                                @else
+                                    <p>Không có sản phẩm tương tự.</p>
+                                @endif
+
+
+
                             </div>
                         </div>
                     </div>
@@ -1115,7 +1087,7 @@
                             <div class="review-container">
                                 <h3 cla>
                                     Đánh giá sản phẩm: {{ $product->name }}
-                                    @if($product->point == 0 || $product->point < 0.1)
+                                    @if ($product->point == 0 || $product->point < 0.1)
                                         <span class="inline-stars">
                                             <span class="star">☆</span>
                                             <span class="star">☆</span>
@@ -1126,8 +1098,8 @@
                                         <span class="rating-score">(0.0/5.0)</span>
                                     @else
                                         <span class="inline-stars">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($product->point >= $i)
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($product->point >= $i)
                                                     <span class="star full">★</span> <!-- Sao sáng đầy đủ -->
                                                 @elseif($product->point >= $i - 0.5)
                                                     <span class="star half">★</span> <!-- Sao sáng nửa -->
@@ -1143,6 +1115,7 @@
                                     @endif
 
                                 </h3>
+
                                 <!-- Modal -->
                                 <div class="modal-review" id="reviewsModal">
                                     <div class="modal-content-review">
@@ -1184,6 +1157,7 @@
                                                             </div>
                                                         </div>
 
+
                                                     </div>
 
 
@@ -1206,6 +1180,7 @@
 
 
 
+
                                 <div class="review-content">
                                     <!-- Phần bên trái: Đánh giá bằng sao -->
                                     <div class="star-rating">
@@ -1221,7 +1196,8 @@
                                     <div class="rating-count">
                                         @foreach ([5, 4, 3, 2, 1] as $star)
                                             <p>Đánh giá {{ $star }} <span class="count-star">★</span>
-                                               (<span class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
+                                                (<span
+                                                    class="count-star-{{ $star }}">{{ $ratingsCount[$star] ?? 0 }}</span>)
                                             </p>
                                         @endforeach
                                     </div>
@@ -1278,7 +1254,8 @@
 
                                 <div class="user-content">
                                     <div class="result">
-                                        <div class="text" style="color: #444b52;"><strong>Những bình luận về </strong>“{{ $product->name }}”</div>
+                                        <div class="text" style="color: #444b52;"><strong>Những bình luận về
+                                            </strong>“{{ $product->name }}”</div>
 
 
 
@@ -1289,7 +1266,8 @@
                                                 <h2>Sản phẩm chưa có bình luận</h2>
                                             @else
                                                 @foreach ($comment as $cm)
-                                                    <div data-timestamp="{{ strtotime($cm->created_at) }}" class="avatar avatar-md avatar-text avatar-circle">
+                                                    <div data-timestamp="{{ strtotime($cm->created_at) }}"
+                                                        class="avatar avatar-md avatar-text avatar-circle">
 
                                                         <div class="avatar-shape"><span class="f-s-p-20 f-w-500">TT</span>
                                                         </div>
@@ -1323,8 +1301,9 @@
                                                             <a data-comment-id="{{ $cm->id }}"
                                                                 class='btn editcm btn-dark'><i
                                                                     class='far fa-edit'></i></a>
+
                                                             <a data-comment-id="{{ $cm->id }}"
-                                                                class='btn deletecm btn-dark'><i
+                                                                href="" class='btn deletecm btn-dark'><i
                                                                     class='far fa-trash-alt'></i></a>
                                                         @else
                                                             <a data-comment-id="{{ $cm->id }}" name="cm_id"
@@ -1475,6 +1454,9 @@
                 url.searchParams.set('variant', variantId);
                 window.location.href = url.toString();
             });
+            // Định nghĩa colorId và variantId là các biến toàn cục
+            let colorId;
+            let variantId;
 
             function fetchPrice(colorId, variantId) {
                 $.ajax({
@@ -1493,6 +1475,17 @@
                             const discount = originalPrice - offerPrice;
                             const discountPercentage = (offerPrice / originalPrice) * 100;
                             const productName = $('.product_name').data('initial-name');
+                            if (storage === "0GB") {
+                                $('.product_name').text(`${productName}`);
+                                $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
+                                $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                                $('.txtpricemarketPhanTram').text(
+                                    `Giảm -${Math.round(discountPercentage)}%`);
+                                return;
+                            }
+                            $('#variant-selector .item.active .price-variant').text(discount
+                                .toLocaleString('vi-VN') + ' ₫');
+                            // Display with storage included
                             $('.product_name').text(`${productName} - ${storage}`);
                             $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
                             $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
@@ -1506,55 +1499,135 @@
                 });
             }
 
-
-
-
-
-
-            let activeColorItem = $('.colors .item.active');
-            let colorId = activeColorItem.data('color-id');
-            const variantId = $('#variant-selector .item.active').data('id');
-
-
-            $('#add-to-cart-form').on('click', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{ route('cart.add') }}",
-                    method: 'POST',
-                    data: {
-                        color_id: colorId,
-                        variant_id: variantId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            toastr.success(response.message);
-                        }
-                    },
-                    error: function(response) {
-                        if (response.status === 'error') {
-                            toastr.error(response.message);
-                        }
-                    }
-                });
-
-            });
-
-            if (colorId && variantId) {
-                fetchPrice(colorId, variantId);
+            function updateVariantAndFetchPrice() {
+                colorId = $('.colors .item.active').data('color-id');
+                variantId = $('#variant-selector .item.active').data('id');
+                if (colorId && variantId) {
+                    fetchPrice(colorId, variantId);
+                }
             }
+
+            // Initial load
+            updateVariantAndFetchPrice();
+
+            // Event handler for color selection
             $('.colors .item').on('click', function() {
                 $('.colors .item.active').removeClass('active');
                 $(this).addClass('active');
-                colorId = $(this).data('color-id');
-                fetchPrice(colorId, variantId);
+                updateVariantAndFetchPrice();
             });
 
+            // Event handler for variant selection
+            $('#variant-selector .item').on('click', function() {
+                $('#variant-selector .item.active').removeClass('active');
+                $(this).addClass('active');
+                updateVariantAndFetchPrice();
+            });
 
+            if ($('#variant-selector .item.active label').text().trim() === "0GB") {
+                $('#variant-selector .item.active').hide();
+            }
 
+            // Thêm vào giỏ hàng
+            $('#add-to-cart-form').on('click', function(e) {
+                e.preventDefault();
 
+                // Kiểm tra lại colorId và variantId khi nhấn vào giỏ hàng
+                colorId = $('.colors .item.active').data('color-id');
+                variantId = $('#variant-selector .item.active').data('id');
 
+                if (colorId && variantId) {
+                    $.ajax({
+                        url: "{{ route('cart.add') }}",
+                        method: 'POST',
+                        data: {
+                            color_id: colorId,
+                            variant_id: variantId,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                toastr.success(response.message);
+                            }
+                            else{
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(response) {
+                            if (response.status === 'error') {
+                                toastr.error(response.message);
+                            }
+                        }
+                    });
+                } else {
+                    console.error("Color ID hoặc Variant ID không hợp lệ.");
+                }
+            });
         });
+
+        $('#add-to-wishlist').on('click', function (e) {
+    e.preventDefault();
+
+    const productId = $(this).data('product-id');
+    const variantId = $('#variant-selector .item.active').data('id'); // Lấy ID biến thể
+    const colorId = $('.colors .item.active').data('color-id'); // Lấy ID màu sắc
+
+    console.log("Product ID:", productId);
+    console.log("Variant ID:", variantId || "Chưa chọn");
+    console.log("Color ID:", colorId || "Chưa chọn");
+
+    // Kiểm tra nếu chưa chọn biến thể hoặc màu sắc
+    if (!variantId || !colorId) {
+        toastr.error("Vui lòng chọn màu sắc và biến thể sản phẩm!");
+        return;
+    }
+
+    // Gửi AJAX để lấy variantColorId
+
+
+    $.ajax({
+        url: "{{ route('user.get.variantColorId') }}", // Route tới backend
+        method: 'GET',
+        data: {
+            variant_id: variantId,
+            color_id: colorId,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+
+        success: function (response) {
+            if (response.status === 'success') {
+                const variantColorId = response.variant_color_id;
+
+                console.log("variantColorId:", variantColorId);
+                console.log("CSRF Token:", $('meta[name="csrf-token"]').attr('content'));
+                // Gửi thêm AJAX để thêm vào wishlist
+                $.ajax({
+    url: "{{ route('user.wishlist.add') }}", // Route thêm vào wishlist
+    method: 'POST',
+    data: {
+        pro_id: productId,
+        variant_color_id: variantColorId,
+        _token: $('meta[name="csrf-token"]').attr('content') // CSRF Token
+    },
+    success: function (response) {
+        console.log("Response:", response);
+        toastr.success(response.message);
+    },
+    error: function (error) {
+        console.error("Error:", error);
+        toastr.error(error.responseJSON.message || "Có lỗi xảy ra!");
+    }
+});
+
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function (xhr) {
+            toastr.error(xhr.responseJSON.message || "Không tìm thấy thông tin sản phẩm! Vui lòng thử lại.");
+        }
+    });
+});
     </script>
 
 
