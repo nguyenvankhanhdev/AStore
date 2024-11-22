@@ -165,6 +165,13 @@
                                                 href="{{ route('product.details', ['slug' => $product->slug, 'variant' => $firstVariant->id]) }}">XEM
                                                 CHI TIẾT</a>
                                         @endif
+                                    </h3>
+                                 
+                                    <div class="product__price">
+                                        <div class="text">Giá chỉ</div>
+                                        <div class="price">{{ $product->price }}đ</div><strike
+                                            class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
+
                                     </div>
                                 </div>
                                 @endforeach

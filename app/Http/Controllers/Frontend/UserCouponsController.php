@@ -26,7 +26,6 @@ class UserCouponsController extends Controller
      */
     public function redeem(Request $request)
     {
-
         $user = User::find(auth()->id());
         $couponId = $request->input('coupon_id');
         $coupon = Coupon::find($couponId);
