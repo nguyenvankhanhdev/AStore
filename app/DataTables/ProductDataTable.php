@@ -79,7 +79,10 @@ class ProductDataTable extends DataTable
                 }
                 return $button;
             })
-            ->rawColumns(['image','sub_cate_id', 'type', 'status', 'action'])
+            ->addColumn('name', function ($query) {
+                return $query->name;
+            })
+            ->rawColumns(['image','name','sub_cate_id', 'type', 'status', 'action'])
             ->setRowId('id');
     }
 

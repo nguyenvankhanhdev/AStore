@@ -22,7 +22,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Categories::all();
-        
+
         return view('backend.admin.product.create', compact('categories'));
     }
 

@@ -265,6 +265,7 @@ class PaymentController extends Controller
 
             $cartItem->delete();
         }
+        Session::forget('coupon');
 
         $address = json_decode($order->address);
         $user = auth()->user();

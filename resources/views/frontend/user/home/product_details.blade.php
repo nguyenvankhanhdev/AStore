@@ -269,6 +269,13 @@
                                                         class="ic-angle-right"></i></div>
                                             </div>
                                         </div>
+
+                                        <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
+                                        data-product-id="{{ $product->id }}"
+                                        data-variant-id=""
+                                        data-color-id="">
+                                        <div>YÊU THÍCH</div>
+
                                     </div>
                                     <div class="action action-npi">
                                         <form id="add-to-cart-form" style="width: 100%">

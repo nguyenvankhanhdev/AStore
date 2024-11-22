@@ -61,6 +61,8 @@ class User extends Authenticatable
         $user = User::find(Auth::id());
         return $user->point;
     }
+
+
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class, 'user_id');

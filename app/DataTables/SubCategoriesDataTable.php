@@ -32,7 +32,10 @@ class SubCategoriesDataTable extends DataTable
         ->addColumn('category', function ($query) {
             return $query->category->name ;
         })
-        ->rawColumns(['action'])
+        ->addColumn('name', function ($query) {
+            return $query->name;
+        })
+        ->rawColumns(['action','name'])
         ->setRowId('id');
     }
 
@@ -75,7 +78,6 @@ class SubCategoriesDataTable extends DataTable
 
             Column::make('id'),
             Column::make('name'),
-            Column::make('slug'),
             Column::make('category'),
             Column::computed('action')
             ->exportable(false)
