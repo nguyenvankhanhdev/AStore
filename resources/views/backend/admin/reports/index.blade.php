@@ -51,9 +51,9 @@
                                     <th class="fw-bold">SL nhập</th>
                                     <th class="fw-bold">SL bán</th>
                                     <th class="fw-bold">SL Tồn</th>
-                                    <th class="fw-bold">Giá nhập (FIFO)</th>
+                                    <th class="fw-bold">Giá nhập</th>
                                     <th class="fw-bold">Giá bán</th>
-                                    <th class="fw-bold">Tiền nhập (FIFO)</th>
+                                    <th class="fw-bold">Tiền nhập</th>
                                     <th class="fw-bold">Tổng doanh thu</th>
                                     <th class="fw-bold">Lợi nhuận</th>
                                 </tr>
@@ -94,7 +94,6 @@
                         </table>
                     </div>
 
-                    <!-- Summary Table with Total Import Cost -->
                     <table class="table table-bordered table-striped text-center" style="width: 60%; margin: 0;">
                         <thead class="table-secondary">
                             <tr>
