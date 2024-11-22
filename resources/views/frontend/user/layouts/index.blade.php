@@ -89,6 +89,7 @@
                                             <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
                                         @endif
                                     </h3>
+                                    
                                     <div class="product__price">
                                         <div class="text">Giá chỉ</div>
                                         <div class="price">{{ $product->price }}đ</div><strike

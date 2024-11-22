@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::resource('user-coupons', UserCouponsController::class);
     Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
     Route::put('cancelOrder', [UserOrderController::class, 'cancelOrder'])->name('order.cancel');
+    Route::get('reviews', [UserDashboardController::class, 'reviews'])->name('reviews');
 
     Route::middleware('auth')->group(function () {
         Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');

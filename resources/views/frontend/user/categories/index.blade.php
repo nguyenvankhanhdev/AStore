@@ -143,7 +143,6 @@
         $(document).ready(function() {
             function getPriceByVariantId(productElement) {
                 const variantId = productElement.find('.product__memory__item.active').data('variant-id');
-
                 if (!variantId) {
                     console.error("Variant ID không hợp lệ.");
                     return;
@@ -226,10 +225,8 @@
             function setupVariantClickEvents() {
                 $('.product__memory__item').off('click').on('click', function() {
                     const productElement = $(this).closest('.product');
-
                     $(this).closest('.js-select').find('.product__memory__item').removeClass('active');
                     $(this).addClass('active');
-
                     getPriceByVariantId(productElement);
                 });
             }
