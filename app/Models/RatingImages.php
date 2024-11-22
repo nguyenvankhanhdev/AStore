@@ -14,5 +14,4 @@ class RatingImages extends Model
     {
         return $this->belongsTo(Ratings::class, 'rating_id');
     }
-
 }
