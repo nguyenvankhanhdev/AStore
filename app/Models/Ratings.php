@@ -10,7 +10,7 @@ class Ratings extends Model
     use HasFactory;
     public function product()
     {
-        return $this->belongsTo(Products::class,'pro_id');
+        return $this->belongsTo(Products::class,'pro_id','id');
     }
 
     public function user()
@@ -27,6 +27,7 @@ class Ratings extends Model
     {
         return $this->hasMany(RatingImages::class,'rating_id');
     }
+
 
     public static function getCountByStar($pro_id)
     {

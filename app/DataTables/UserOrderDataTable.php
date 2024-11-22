@@ -26,7 +26,6 @@ class UserOrderDataTable extends DataTable
 
                 $cancelBtn = '';
                 if ($query->status !== 'delivered' && $query->status !== 'completed' && $query->status !== 'canceled') {
-
                     $cancelBtn = "<button style='margin-left: 6px;' data-id='" . $query->id . "' class='btn btn-danger ml-3 cancel-order'> Hủy Đơn</button>";
                 }
                 return $showBtn.$cancelBtn;

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\DataTables\BestProductDataTable;
 use App\DataTables\ProductDataTable;
+use App\DataTables\TopProductDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Products;
@@ -22,7 +24,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Categories::all();
-        
+
         return view('backend.admin.product.create', compact('categories'));
     }
 
@@ -117,5 +119,14 @@ class ProductController extends Controller
         $subCategories = SubCategories::where('cate_id', $request->id)->get();
 
         return $subCategories;
+    }
+    public function bestProducts(BestProductDataTable $dataTable)
+    {
+        return $dataTable->render('backend.admin.product.best-product');
+    }
+
+    public function topProducts(TopProductDataTable $dataTable)
+    {
+        return $dataTable->render('backend.admin.product.top-product');
     }
 }

@@ -47,8 +47,8 @@ Route::resource('variant-colors', VariantColorController::class);
 Route::resource('comment', CommentController::class);
 
 Route::get('reports', [ReportController::class, 'index'])->name('reports');
-
-
+Route::get('best-products', [ProductController::class, 'bestProducts'])->name('best-products');
+Route::get('top-products', [ProductController::class, 'topProducts'])->name('top-products');
 
 Route::get('reports/byCategory', [ReportController::class, 'reportByCategory'])->name('reports.byCategory');
 

@@ -2,7 +2,8 @@
 
 namespace App\DataTables;
 
-use App\Models\SubCategory;
+use App\Models\Rating;
+use App\Models\Ratings;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -11,9 +12,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
-use App\Models\SubCategories;
 
-class SubCategoriesDataTable extends DataTable
+class RatingsDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,28 +23,22 @@ class SubCategoriesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->addColumn('action', function($query){
-            $editBtn = "<a href='".route('admin.sub-categories.edit', $query->id)."' class='btn btn-primary'><i class='far fa-edit'></i></a>";
-            $deleteBtn = "<a href='".route('admin.sub-categories.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-
-            return $editBtn.$deleteBtn;
-        })
-        ->addColumn('category', function ($query) {
-            return $query->category->name ;
-        })
-        ->addColumn('name', function ($query) {
-            return $query->name;
-        })
-        ->rawColumns(['action','name'])
-        ->setRowId('id');
+            ->addColumn('product', function ($query) {
+                return "<a href='".route('product.details', ['slug'=>$query->product->slug])."' > ".$query->product->name."</a>";
+            })
+            ->addColumn('user',function($query){
+                return $query->user->name;
+            } )
+            ->rawColumns(['action', 'product', 'user'])
+            ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(SubCategories $model): QueryBuilder
+    public function query(Ratings $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('user','product');
     }
 
     /**
@@ -53,11 +47,11 @@ class SubCategoriesDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('subcategories-table')
+                    ->setTableId('ratings-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)
+                    ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -75,15 +69,11 @@ class SubCategoriesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('product'),
+            Column::make('user'),
+            Column::make('point'),
+            Column::make('content'),
 
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('category'),
-            Column::computed('action')
-            ->exportable(false)
-            ->printable(false)
-            ->width(200)
-            ->addClass('text-center'),
         ];
     }
 
@@ -92,6 +82,6 @@ class SubCategoriesDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'SubCategories_' . date('YmdHis');
+        return 'Ratings_' . date('YmdHis');
     }
 }

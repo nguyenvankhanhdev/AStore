@@ -16,6 +16,29 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $pro_id
+ * @property int $sub_cate_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Products|null $product
+ * @property-read \App\Models\SubCategories|null $subCategory
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories whereProId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories whereSubCateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Accessories whereUpdatedAt($value)
+ */
+	class Accessories extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property int $quantity
  * @property int $variant_color_id
  * @property int $pro_id
@@ -445,7 +468,6 @@ namespace App\Models{
  * @property string $slug
  * @property string $image
  * @property int|null $quantity
- * @property float $point
  * @property float|null $offer_price
  * @property string|null $short_description
  * @property string|null $long_description
@@ -455,11 +477,12 @@ namespace App\Models{
  * @property int $cate_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property float|null $point
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Accessories> $accessories
+ * @property-read int|null $accessories_count
  * @property-read \App\Models\Categories|null $category
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comments> $comments
  * @property-read int|null $comments_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderDetails> $orderDetails
- * @property-read int|null $order_details_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImages> $productImages
  * @property-read int|null $product_images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ratings> $ratings
@@ -513,17 +536,13 @@ namespace App\Models{
  * @property int $id
  * @property string $image
  * @property int $rating_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Ratings|null $rating
  * @method static \Illuminate\Database\Eloquent\Builder|RatingImages newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|RatingImages newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|RatingImages query()
- * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereRatingId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RatingImages whereUpdatedAt($value)
  */
 	class RatingImages extends \Eloquent {}
 }
@@ -534,12 +553,12 @@ namespace App\Models{
  *
  * @property int $id
  * @property float $point
- * @property string $content
  * @property int $pro_id
  * @property int $user_id
- * @property int $orderdetail_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $orderdetail_id
+ * @property string $content
  * @property-read \App\Models\OrderDetails|null $orderDetail
  * @property-read \App\Models\Products|null $product
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RatingImages> $ratingImages
@@ -602,6 +621,8 @@ namespace App\Models{
  * @property int $cate_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Accessories> $accessories
+ * @property-read int|null $accessories_count
  * @property-read \App\Models\Categories|null $category
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlashSaleItem> $flashsaleitem
  * @property-read int|null $flashsaleitem_count
@@ -648,6 +669,8 @@ namespace App\Models{
  * @property-read int|null $user_ratings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserCoupons> $usercoupons
  * @property-read int|null $usercoupons_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Wishlist> $wishlists
+ * @property-read int|null $wishlists_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -744,6 +767,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderDetails> $orderDetails
  * @property-read int|null $order_details_count
  * @property-read \App\Models\ProductVariant|null $variant
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Wishlist> $wishlists
+ * @property-read int|null $wishlists_count
  * @method static \Illuminate\Database\Eloquent\Builder|VariantColors newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VariantColors newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VariantColors query()
@@ -825,5 +850,31 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereWarehousePrice($value)
  */
 	class WarehouseDetails extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $pro_id
+ * @property int|null $variant_color_id
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Products|null $product
+ * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\VariantColors|null $variantColor
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereProId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereVariantColorId($value)
+ */
+	class Wishlist extends \Eloquent {}
 }
 

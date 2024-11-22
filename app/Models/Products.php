@@ -9,12 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
     use HasFactory;
+    protected $table = 'products';
     protected $fillable = [
         'name',
         'slug',
         'image',
-        'quantity',
-        'offer_price',
         'short_description',
         'long_description',
         'status',
@@ -57,15 +56,10 @@ class Products extends Model
         return $this->hasMany(Comments::class, 'pro_id');
     }
 
-    public function orderDetails()
-    {
-        return $this->hasMany(OrderDetails::class, 'pro_id');
-    }
     public function accessories()
     {
         return $this->hasMany(Accessories::class,'pro_id');
     }
-
 
 
     public static function hasUserPurchasedProduct($userId, $productId)

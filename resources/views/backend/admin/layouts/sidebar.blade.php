@@ -35,6 +35,8 @@
                     'admin.product-variant-item.*',
                     'admin.seller-products.*',
                     'admin.seller-pending-products.*',
+                    'admin.best-products',
+                    'admin.top-products',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
                     <span>Manage Products</span></a>
@@ -49,10 +51,11 @@
                         ]) }}">
                         <a class="nav-link" href="{{ route('admin.product.index') }}">Products</a>
                     </li>
-                    <li class="{{ setActive(['admin.seller-products.*']) }}"><a class="nav-link"
-                            href="">Seller Products</a></li>
-                    <li class="{{ setActive(['admin.seller-pending-products.*']) }}"><a class="nav-link"
-                            href="">Seller Pending Products</a></li>
+                    <li class="{{ setActive(['admin.seller-products.*',
+                    'admin.best-products',]) }}"><a class="nav-link"
+                            href="{{ route('admin.best-products') }}">Best Products</a></li>
+                    <li class="{{ setActive(['admin.seller-pending-products.*','admin.top-products',]) }}"><a class="nav-link"
+                            href="{{ route('admin.top-products') }}">Top Products</a></li>
 
                     <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link"
                             href="">Product Reviews</a></li>
@@ -92,12 +95,6 @@
 
                 </ul>
             </li>
-
-            <li class="{{ setActive(['admin.transaction']) }}"><a class="nav-link"
-                    href=""><i class="fas fa-money-bill-alt"></i>
-                    <span>Transactions</span></a>
-            </li>
-
             <li
                 class="dropdown {{ setActive([
                     'admin.vendor-profile.*',

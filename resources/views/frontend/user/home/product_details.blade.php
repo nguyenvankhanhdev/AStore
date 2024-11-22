@@ -175,23 +175,116 @@
                                         @endforeach
                                     </div>
 
-                                    <div style="margin: 10px 0;">
-                                        <span style="font-size: 18px; font-weight:600;">
-                                            Mua ngay hoặc yêu thích
-                                        </span>
-
-                                    </div>
-                                    <div class="pre-order">
-                                        <div class="btn btn-link btn-xl" id="add-to-cart-form">
-                                          <div>MUA NGAY</div>
+                                    <div class="payment-incentives">
+                                        <div class="block-head">
+                                            <div class="block-head-title">Ưu đãi thanh toán</div><span
+                                                class="link js--open-modal" aria-controls="modal-incentives">Xem tất
+                                                cả</span>
                                         </div>
-                                        <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist" 
-                                        data-product-id="{{ $product->id }}" 
-                                        data-variant-id="" 
+                                        <div class="list-bank">
+                                            <div class="swiper-custom">
+                                                <div class="swiper slideIncentives">
+                                                    <div class="swiper-wrapper">
+                                                        <div class="swiper-slide">
+                                                            <div class="prod-card">
+                                                                <div class="prod-card-img"><img src=""
+                                                                        alt=""></div>
+                                                                <div class="prod-card-info">
+                                                                    <p class="prod-card-desc">Giảm
+                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
+                                                                            class="link">Chi tiết</a></p>
+                                                                    <div class="prod-card-btn"><button
+                                                                            class="btn btn-rounded btn-icon"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Chọn</span></button><button
+                                                                            class="btn btn-rounded btn-icon btn-active"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Đã Chọn</span></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="swiper-slide">
+                                                            <div class="prod-card">
+                                                                <div class="prod-card-img"><img src=""
+                                                                        alt=""></div>
+                                                                <div class="prod-card-info">
+                                                                    <p class="prod-card-desc">Giảm
+                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
+                                                                            class="link">Chi tiết</a></p>
+                                                                    <div class="prod-card-btn"><button
+                                                                            class="btn btn-rounded btn-icon"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Chọn</span></button><button
+                                                                            class="btn btn-rounded btn-icon btn-active"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Đã Chọn</span></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="swiper-slide">
+                                                            <div class="prod-card">
+                                                                <div class="prod-card-img"><img src=""
+                                                                        alt=""></div>
+                                                                <div class="prod-card-info">
+                                                                    <p class="prod-card-desc">Giảm
+                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
+                                                                            class="link">Chi tiết</a></p>
+                                                                    <div class="prod-card-btn"><button
+                                                                            class="btn btn-rounded btn-icon"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Chọn</span></button><button
+                                                                            class="btn btn-rounded btn-icon btn-active"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Đã Chọn</span></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="swiper-slide">
+                                                            <div class="prod-card">
+                                                                <div class="prod-card-img"><img src=""
+                                                                        alt=""></div>
+                                                                <div class="prod-card-info">
+                                                                    <p class="prod-card-desc">Giảm
+                                                                        thêm<strong>1.500.000đ</strong> cho 150 suất <a
+                                                                            class="link">Chi tiết</a></p>
+                                                                    <div class="prod-card-btn"><button
+                                                                            class="btn btn-rounded btn-icon"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Chọn</span></button><button
+                                                                            class="btn btn-rounded btn-icon btn-active"><span
+                                                                                class="ic-check"></span><span
+                                                                                class="btn-label">Đã Chọn</span></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-button-prev sw-control-prev"><i
+                                                        class="ic-angle-left"></i></div>
+                                                <div class="swiper-button-next sw-control-next"><i
+                                                        class="ic-angle-right"></i></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
+                                        data-product-id="{{ $product->id }}"
+                                        data-variant-id=""
                                         data-color-id="">
                                         <div>YÊU THÍCH</div>
+
                                     </div>
-                                      </div>
+                                    <div class="action action-npi">
+                                        <form id="add-to-cart-form" style="width: 100%">
+                                            <button type="submit" class="btn btn-link btn-xl btn-line-1">
+                                                <div class="btn-text">MUA NGAY</div>
+                                                <span class="btn-sub-text">Phiên bản 1 ĐỔI 1 + Combo Siêu Phẩm</span>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1546,10 +1639,6 @@
 
 
 
-
-
-
-
     <script>
         $(document).ready(function() {
             // Bắt sự kiện click vào nút chỉnh sửa (editcm)
@@ -1942,130 +2031,6 @@
             khoiTaoSuKienBinhLuan();
         });
 
-
-
-
-        $(document).ready(function() {
-            const stars = $('.star-rating .star');
-            const ratingLabel = $('.star-rating .rating-label');
-            let selectedRating = 0; // Lưu trữ số sao được chọn
-
-            const ratingTexts = [
-                "Rất Tệ",
-                "Tệ",
-                "Ổn",
-                "Tốt",
-                "Rất Tốt"
-            ];
-
-            stars.each(function(index) {
-                // Sự kiện hover vào sao
-                $(this).on('mouseover', function() {
-                    ratingLabel.text(ratingTexts[index]);
-
-                    // Làm sáng các ngôi sao từ đầu đến ngôi sao hover
-                    stars.each(function(i) {
-                        $(this).toggleClass('active', i <= index);
-                    });
-                });
-
-                // Sự kiện khi chuột rời khỏi sao
-                $(this).on('mouseout', function() {
-                    // Làm sáng các ngôi sao đã chọn trước đó
-                    stars.each(function(i) {
-                        $(this).toggleClass('active', i < selectedRating);
-                    });
-                    ratingLabel.text(selectedRating ? ratingTexts[selectedRating - 1] : '');
-                });
-
-                // Sự kiện click vào sao để chọn số sao
-                $(this).on('click', function() {
-                    selectedRating = index + 1;
-                    ratingLabel.text(ratingTexts[index]);
-                });
-            });
-
-            // Sự kiện click vào nút "Đánh giá"
-            $('.rate-button').on('click', function(e) {
-                e.preventDefault();
-
-                if (selectedRating === 0) {
-                    alert("Vui lòng chọn số sao để đánh giá!");
-                    return;
-                }
-
-                var productId = {{ $product->id }}; // Thêm ID sản phẩm từ Blade
-
-                // In ra giá trị của productId và selectedRating (point)
-                console.log("Product ID: " + productId);
-                console.log("Selected Rating (Point): " + selectedRating);
-
-                if (confirm('Bạn có muốn gửi đánh giá không?')) {
-                    $.ajax({
-                        url: "{{ route('product.rating') }}",
-                        method: 'POST',
-                        data: {
-                            pro_id: productId,
-                            point: selectedRating,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            toastr.success(response.message);
-                            // Cập nhật điểm trung bình sau khi thành công
-                            var averageRating = response.averageRating;
-
-                            // Cập nhật hiển thị sao
-                            var starHtml = '';
-                            for (var i = 1; i <= 5; i++) {
-                                if (averageRating >= i) {
-                                    starHtml += '<span class="star full">★</span>';
-                                } else if (averageRating >= i - 0.5) {
-                                    starHtml += '<span class="star half">★</span>';
-                                } else {
-                                    starHtml += '<span class="star empty">★</span>';
-                                }
-                            }
-                            $('.inline-stars').html(starHtml);
-
-                            // Cập nhật điểm trung bình hiển thị
-                            $('.rating-score').text('(' + parseFloat(averageRating).toFixed(1) +
-                                '/5.0)');
-                            // Cập nhật số lượng đánh giá cho từng mức sao
-                            [5, 4, 3, 2, 1].forEach(function(star) {
-                                $('.rating-count').find(`.count-star-${star}`).text(
-                                    response.ratingsCount[star] || 0);
-                            });
-
-                            if (response.infoRating) {
-                                $('.user-rating-info').html(
-                                    '<h5>Bạn đã đánh giá sản phẩm này ' + response
-                                    .infoRating.point +
-                                    ' <span class="count-star">★</span></h5>'
-                                );
-                                $('.rate-button').text('Đánh giá lại');
-                            } else {
-                                $('.user-rating-info').html(
-                                    '<h5>Bạn chưa đánh giá sản phẩm này</h5>');
-                                $('.rate-button').text('Đánh giá');
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            if (xhr.status === 401) {
-                                alert(xhr.responseJSON
-                                    .message); // Hiển thị thông báo chưa đăng nhập
-                                window.location.href =
-                                    "{{ route('auth.admin') }}"; // Chuyển hướng đến trang đăng nhập
-                            } else if (xhr.status === 403) {
-                                alert(xhr.responseJSON.message); // Hiển thị thông báo từ server
-                            } else {
-                                alert('Đã xảy ra lỗi: ' + error);
-                            }
-                        }
-                    });
-                }
-            });
-
-        });
 
     </script>
 @endpush

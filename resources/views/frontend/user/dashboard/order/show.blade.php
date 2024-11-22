@@ -12,8 +12,8 @@
 
 @section('content')
     <!--=============================
-                        DASHBOARD START
-                      ==============================-->
+                            DASHBOARD START
+    ==============================-->
     <section id="wsus__dashboard">
         <div class="container-fluid">
             @include('frontend.user.dashboard.layouts.sidebar')
@@ -25,8 +25,8 @@
                         <div class="wsus__dashboard_profile">
 
                             <!--============================
-                                            INVOICE PAGE START
-                                        ==============================-->
+                                                INVOICE PAGE START
+                                            ==============================-->
                             <section id="" class="invoice-print">
                                 <div class="">
                                     <div class="wsus__invoice_area">
@@ -58,13 +58,25 @@
                                                     <div class="col-xl-4 col-md-4">
                                                         <div class="wsus__invoice_single text-md-end">
                                                             <h6>Trạng thái đơn hàng:
-
                                                                 @if ($order->status == 'pending')
                                                                     <span class="badge bg-warning text-dark"> Đang chờ xử lí
                                                                     </span>
+                                                                @elseif($order->status == 'processed')
+                                                                    <span class="badge bg-warning text-dark"> Đã xử lí
+                                                                    </span>
+                                                                @elseif($order->status == 'delivered')
+                                                                    <span class="badge bg-warning text-dark"> Đã giao hàng
+                                                                    </span>
+                                                                @elseif($order->status == 'canceled')
+                                                                    <span class="badge bg-danger text-white"> Đã hủy đơn
+                                                                        hàng
+                                                                    </span>
+                                                                @elseif($order->status == 'completed')
+                                                                    <span class="badge bg-success text-white"> Đã hoàn thành
+                                                                    </span>
                                                                 @endif
                                                             </h6>
-                                                            <p style = "font-size: 18px;">Phương thức thanh toán:
+                                                            <h6 style = "font-size: 16px;">Phương thức thanh toán:
                                                                 @if ($order->payment_method == 'cod')
                                                                     <span class="badge bg-warning text-dark">Thanh toán khi
                                                                         nhận hàng</span>
@@ -72,22 +84,9 @@
                                                                     <span class="badge bg-warning text-dark">Thanh toán qua
                                                                         thẻ</span>
                                                                 @endif
+                                                                    </h6>
                                                             </p>
-                                                            </p>
-                                                            <p style = "font-size: 18px;">Trạng thái:
-                                                                @if ($order->status == 'pending')
-                                                                    <span class="badge bg-warning text-dark">Đang chờ xử
-                                                                        lí</span>
-                                                                @elseif($order->status == 'processed')
-                                                                    <span class="badge bg-warning text-dark">Đã xử lí</span>
-                                                                @elseif($order->status == 'delivered')
-                                                                    <span class="badge bg-warning text-dark">Đã giao
-                                                                        hàng</span>
-                                                                @elseif($order->status == 'canceled')
-                                                                    <span class="badge bg-danger text-white">Đã hủy đơn
-                                                                        hàng</span>
-                                                                @endif
-                                                            </p>
+
                                                             </p>
                                                         </div>
                                                     </div>
@@ -112,7 +111,7 @@
                                                             <th class="total">
                                                                 Tiền thanh toán
                                                             </th>
-                                                            @if ($order->status=="completed")
+                                                            @if ($order->status == 'completed')
                                                                 <th class="rating">
                                                                     Đánh giá
                                                                 </th>
@@ -125,6 +124,8 @@
                                                                     <p>{{ $orderDetail->variantColors->variant->product->name }}
                                                                         -
                                                                         {{ $orderDetail->variantColors->variant->storage->GB }}
+                                                                        -
+                                                                        {{ $orderDetail->variantColors->color->name }}
                                                                     </p>
 
                                                                 </td>
@@ -136,16 +137,18 @@
                                                                 <td class="quantity" style="margin-left: 40px;">
                                                                     {{ $orderDetail->quantity }}
                                                                 </td>
-                                                                
+
                                                                 <td class="total" style="    margin-left: 35px;">
                                                                     {{ number_format($order->total_amount, '0', '.') }} đ
 
                                                                 </td>
-                                                                @if ($order->status=="completed")
-                                                                    <td data-orderdetail-id="{{ $orderDetail->id }}" class="rating-button">
+                                                                @if ($order->status == 'completed')
+                                                                    <td data-orderdetail-id="{{ $orderDetail->id }}"
+                                                                        class="rating-button">
                                                                         @if (in_array($orderDetail->id, $arrayOrderDetailIdInRating))
                                                                             <!-- Nếu đã được đánh giá -->
-                                                                            <button class="rating-btn rated" disabled>Đã đánh giá</button>
+                                                                            <button class="rating-btn rated" disabled>Đã
+                                                                                đánh giá</button>
                                                                         @else
                                                                             <!-- Nếu chưa được đánh giá -->
                                                                             <button class="rating-btn">Đánh giá</button>
@@ -155,16 +158,21 @@
 
 
                                                             </tr>
-                                                            @if ($order->status=="completed")
+                                                            @if ($order->status == 'completed')
                                                                 <!-- Modal -->
-                                                                <div data-orderdetail-id="{{ $orderDetail->id }}" id="rating-modal" class="rating-modal">
+                                                                <div data-orderdetail-id="{{ $orderDetail->id }}"
+                                                                    id="rating-modal" class="rating-modal">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                                                                             <div class="product-info">
-                                                                                <img src="{{asset($orderDetail->variantColors->variant->product->image)}}" alt="Product" class="product-img">
-                                                                                <span class="product-name">{{ $orderDetail->variantColors->variant->product->name }}
-                                                                                    - {{ $orderDetail->variantColors->variant->storage->GB }}
-                                                                                    - {{ $orderDetail->variantColors->color->name }}
+                                                                                <img src="{{ asset($orderDetail->variantColors->variant->product->image) }}"
+                                                                                    alt="Product" class="product-img">
+                                                                                <span
+                                                                                    class="product-name">{{ $orderDetail->variantColors->variant->product->name }}
+                                                                                    -
+                                                                                    {{ $orderDetail->variantColors->variant->storage->GB }}
+                                                                                    -
+                                                                                    {{ $orderDetail->variantColors->color->name }}
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -173,11 +181,16 @@
                                                                                 <div class="custom-ratingstar">
                                                                                     <div>Đánh giá: </div>
                                                                                     <div class="stars">
-                                                                                        <span class="star" data-rating="1">★</span>
-                                                                                        <span class="star" data-rating="2">★</span>
-                                                                                        <span class="star" data-rating="3">★</span>
-                                                                                        <span class="star" data-rating="4">★</span>
-                                                                                        <span class="star" data-rating="5">★</span>
+                                                                                        <span class="star"
+                                                                                            data-rating="1">★</span>
+                                                                                        <span class="star"
+                                                                                            data-rating="2">★</span>
+                                                                                        <span class="star"
+                                                                                            data-rating="3">★</span>
+                                                                                        <span class="star"
+                                                                                            data-rating="4">★</span>
+                                                                                        <span class="star"
+                                                                                            data-rating="5">★</span>
                                                                                     </div>
                                                                                     <div class="rating-label"></div>
                                                                                 </div>
@@ -185,22 +198,27 @@
 
                                                                             <textarea id="review-text" placeholder="Nhập nội dung đánh giá..."></textarea>
                                                                             <div class="upload-btn">
-                                                                                <input type="file" id="file-upload{{ $orderDetail->id }}" multiple>
-                                                                                <label for="file-upload{{ $orderDetail->id }}">Tải ảnh lên</label>
-                                                                                <div id="uploaded-images" class="uploaded-images"></div>
+                                                                                <input type="file"
+                                                                                    id="file-upload{{ $orderDetail->id }}"
+                                                                                    multiple>
+                                                                                <label
+                                                                                    for="file-upload{{ $orderDetail->id }}">Tải
+                                                                                    ảnh lên</label>
+                                                                                <div id="uploaded-images"
+                                                                                    class="uploaded-images"></div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="modal-footer">
-                                                                            <button class="btn cancel-btn" onclick="closeModal()">Hủy</button>
-                                                                            <button data-orderdetail-id="{{ $orderDetail->id }}"
-                                                                                    data-product-id="{{ $orderDetail->variantColors->variant->product->id }}"
+                                                                            <button class="btn cancel-btn"
+                                                                                onclick="closeModal()">Hủy</button>
+                                                                            <button
+                                                                                data-orderdetail-id="{{ $orderDetail->id }}"
+                                                                                data-product-id="{{ $orderDetail->variantColors->variant->product->id }}"
                                                                                 class="btn submit-btn">Đánh giá</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             @endif
-
-
                                                         @endforeach
                                                     </table>
                                                 </div>
@@ -217,8 +235,8 @@
                                 </div>
                             </section>
                             <!--============================
-                                            INVOICE PAGE END
-                                        ==============================-->
+                                                INVOICE PAGE END
+                                            ==============================-->
                             <div class="col">
                                 <div class="mt-2 float-end">
                                     <button class="btn btn-warning print_invoice">print</button>
@@ -232,8 +250,8 @@
         </div>
     </section>
     <!--=============================
-                        DASHBOARD START
-                      ==============================-->
+                            DASHBOARD START
+                          ==============================-->
 @endsection
 
 @push('scripts')
@@ -251,62 +269,65 @@
         })
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             const stars = $('.star-rating .star');
             const ratingTexts = ["Rất Tệ", "Tệ", "Ổn", "Tốt", "Rất Tốt"];
             let selectedRating = 0;
 
             // Đặt sự kiện khi nhấn vào nút "Đánh giá" mở modal
-            $('.rating-btn').on('click', function () {
+            $('.rating-btn').on('click', function() {
                 const orderDetailId = $(this).closest('td').data('orderdetail-id');
                 $(`div[data-orderdetail-id="${orderDetailId}"].rating-modal`).css('display', 'flex');
             });
 
             // Đóng modal khi nhấn nút Hủy hoặc bên ngoài modal
-            $('.cancel-btn').on('click', function () {
+            $('.cancel-btn').on('click', function() {
                 $(this).closest('.rating-modal').css('display', 'none');
             });
 
-            $(window).on('click', function (event) {
+            $(window).on('click', function(event) {
                 if ($(event.target).hasClass('rating-modal')) {
                     $(event.target).css('display', 'none');
                 }
             });
 
-             // Xử lý sự kiện hover trên ngôi sao
-            $(document).on('mouseover', '.stars .star', function () {
+            // Xử lý sự kiện hover trên ngôi sao
+            $(document).on('mouseover', '.stars .star', function() {
                 const index = $(this).data('rating') - 1;
                 const stars = $(this).parent().children('.star'); // Chọn các ngôi sao trong cùng modal
                 $(this).parent().next('.rating-label').text(ratingTexts[index]);
 
-                stars.each(function (i) {
+                stars.each(function(i) {
                     $(this).toggleClass('active', i <= index);
                 });
             });
 
             // Xử lý sự kiện mouseout khi chuột ra khỏi các ngôi sao
-            $(document).on('mouseout', '.stars .star', function () {
+            $(document).on('mouseout', '.stars .star', function() {
                 const stars = $(this).parent().children('.star');
-                stars.each(function (i) {
+                stars.each(function(i) {
                     $(this).toggleClass('active', i < selectedRating);
                 });
-                $(this).parent().next('.rating-label').text(selectedRating ? ratingTexts[selectedRating - 1] : '');
+                $(this).parent().next('.rating-label').text(selectedRating ? ratingTexts[selectedRating -
+                    1] : '');
             });
 
             // Xử lý sự kiện click để chọn mức sao đánh giá
-            $(document).on('click', '.stars .star', function () {
+            $(document).on('click', '.stars .star', function() {
                 selectedRating = $(this).data('rating');
                 const stars = $(this).parent().children('.star');
                 $(this).parent().next('.rating-label').text(ratingTexts[selectedRating - 1]);
 
-                stars.each(function (i) {
+                stars.each(function(i) {
                     $(this).toggleClass('selected', i < selectedRating);
                 });
             });
-           // Xử lý sự kiện upload ảnh
-           $(document).on('change', '[id^="file-upload"]', function (e) {
-                const orderDetailId = $(this).attr('id').replace('file-upload', '');  // Lấy orderdetail-id từ id của file-upload
-                const uploadedImagesContainer = $('#rating-modal[data-orderdetail-id="' + orderDetailId + '"] .uploaded-images');  // Tìm đúng modal theo orderdetail-id
+            // Xử lý sự kiện upload ảnh
+            $(document).on('change', '[id^="file-upload"]', function(e) {
+                const orderDetailId = $(this).attr('id').replace('file-upload',
+                ''); // Lấy orderdetail-id từ id của file-upload
+                const uploadedImagesContainer = $('#rating-modal[data-orderdetail-id="' + orderDetailId +
+                    '"] .uploaded-images'); // Tìm đúng modal theo orderdetail-id
 
                 uploadedImagesContainer.empty(); // Xóa các ảnh cũ
 
@@ -314,7 +335,7 @@
 
                 Array.from(files).forEach(file => {
                     const reader = new FileReader();
-                    reader.onload = function (event) {
+                    reader.onload = function(event) {
                         const image = $('<img>').attr('src', event.target.result);
                         uploadedImagesContainer.append(image); // Thêm ảnh vào đúng modal
                     };
@@ -332,9 +353,11 @@
             let content = $('#rating-modal[data-orderdetail-id="' + orderDetailId + '"] #review-text').val();
 
             // Lấy số sao đánh giá
-            let point = $('#rating-modal[data-orderdetail-id="' + orderDetailId + '"] .stars .star.selected').length;
+            let point = $('#rating-modal[data-orderdetail-id="' + orderDetailId + '"] .stars .star.selected')
+            .length;
 
-            let ratingImages = $('#rating-modal[data-orderdetail-id="' + orderDetailId + '"] #file-upload' + orderDetailId)[0].files;
+            let ratingImages = $('#rating-modal[data-orderdetail-id="' + orderDetailId + '"] #file-upload' +
+                orderDetailId)[0].files;
 
 
             Swal.fire({
@@ -360,7 +383,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route("user.rating") }}',
+                        url: '{{ route('user.rating') }}',
                         data: formData,
                         processData: false,
                         contentType: false,
@@ -393,8 +416,5 @@
             $(this).siblings().removeClass('selected');
             $(this).prevAll().addBack().addClass('selected');
         });
-
-
-
     </script>
 @endpush

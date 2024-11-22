@@ -25,12 +25,9 @@
             color: white !important;
             background-color: #ea4335;
         }
-
-
     </style>
 
     </head>
-
 <body>
     <div class="container">
         <div style="margin-top: 20px">
@@ -44,7 +41,6 @@
 
                         <form method="POST" action="{{ route('register.store') }}">
                             @csrf
-
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="name" placeholder="Họ Và Tên"
                                     value="{{ old('name') }}">

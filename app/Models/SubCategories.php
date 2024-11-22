@@ -9,6 +9,12 @@ class SubCategories extends Model
 {
     use HasFactory;
 
+    protected $table = 'sub_categories';
+    protected $fillable = [
+        'name',
+        'cate_id',
+        'slug',
+    ];
     public function category()
     {
         return $this->belongsTo(Categories::class, 'cate_id');
