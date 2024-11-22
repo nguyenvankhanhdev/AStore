@@ -9,7 +9,6 @@
                 <li class="breadcrumb-item">{{ $categories->name }}</li>
             </ol>
             <h1 class="h1">{{ $categories->name }}</h1>
-
             <div class="card card-md category__container">
                 <div class="card-body">
                     <div class="actions">
