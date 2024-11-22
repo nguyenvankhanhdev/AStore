@@ -530,7 +530,16 @@ $('.custom-price-range').on('change', function () {
     if (selectedRanges.length > 0) {
         $('.product').hide();
         selectedRanges.forEach(function (range) {
-            filterProductsByPrice(range.min, range.max);
+            // Lọc sản phẩm cho từng khoảng giá
+            $('.product').each(function () {
+                const productPrice = parseInt($(this).attr('data-initial-discounted-price')) || 0;
+
+                // Hiển thị sản phẩm nếu giá nằm trong bất kỳ khoảng giá nào
+                if ((range.min === null || productPrice >= range.min) &&
+                    (range.max === null || productPrice <= range.max)) {
+                    $(this).show();
+                }
+            });
         });
     } else {
         $('.product').show();

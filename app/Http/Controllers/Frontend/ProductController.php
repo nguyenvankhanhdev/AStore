@@ -23,6 +23,17 @@ class ProductController extends Controller
     {
         $search = $request->input('search');
 
+        $productsSale = Products::where('status', 1)
+        ->where('product_type', 'sale_product')
+        ->when($search, function ($query, $search) {
+            return $query->where('name', 'LIKE', "%{$search}%")
+                ->orWhereHas('category', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+        })
+        ->orderBy('id', 'DESC')
+        ->paginate(6);
+
         $productsNewArrival = Products::where('status', 1)
             ->where('product_type', 'new_arrival')
             ->when($search, function ($query, $search) {
@@ -67,7 +78,7 @@ class ProductController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
-        return view('frontend.user.layouts.section_cate', compact('productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest', 'search'));
+        return view('frontend.user.layouts.section_cate', compact('productsSale','productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest', 'search'));
     }
 
     public function productCategories(Request $request)

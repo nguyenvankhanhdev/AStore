@@ -78,7 +78,7 @@ class ReportController extends Controller
                     $query->whereBetween('import_date', [$fromDate, $toDate]);
                 })
                 ->sum('quantity');
-
+            // dd($newImports);
             // Tổng số lượng cần xuất kho (tổng số lượng đã bán)
             $totalSold = $product->total_sold;
 
