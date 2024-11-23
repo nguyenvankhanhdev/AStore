@@ -4,8 +4,9 @@
             <div class="header-logo"><a href="{{ route('products.index') }}"><img
                         src="/frontend/asset/img/logo-fstu-aar.png" alt="logo"></a>
             </div>
+
             <div class="header-search">
-                <form method="GET" action="{{ route('products.index') }}">
+                <form method="GET" action="{{ route('products.search') }}">
                     <div class="form-group">
                         <div class="form-search form-search-sm">
                             <span class="form-search-icon m-r-4"><i class="ic-search ic-sm"></i></span>

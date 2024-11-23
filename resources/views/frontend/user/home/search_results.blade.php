@@ -6,27 +6,16 @@
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="link" href="{{ route('products.index') }}">Trang chủ</a></li>
-                <li class="breadcrumb-item">{{ $categories->name }}</li>
+                <li class="breadcrumb-item">Tìm kiếm</li>
             </ol>
-            <h1 class="h1">{{ $categories->name }}</h1>
+
+            <h1 class="h1">
+                Tìm thấy <strong>({{ $productCount }})</strong> kết quả với từ khóa: <strong>"{{ $search }}"</strong>
+            </h1>
+
             <div class="card card-md category__container">
                 <div class="card-body">
                     <div class="actions">
-                        <div class="menu js-category-menu">
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    <a class="item swiper-slide active" data-ref="#block-1"
-                                        href="{{ route('products.category', ['categories' => $categories->slug]) }}">Tất
-                                        cả</a>
-                                    @foreach ($subcategories as $subcategory)
-                                        <a class="item swiper-slide" data-ref="#block-2"
-                                            href="{{ route('products.subcategory', ['subcategories' => $subcategory->slug]) }}">{{ $subcategory->name }}</a>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="swiper-button-next sw-button"><i class="ic-angle-right"></i></div>
-                            <div class="swiper-button-prev sw-button"><i class="ic-angle-left"></i></div>
-                        </div>
                         <div class="filter-sort-wrapper">
                             <div class="custom-filter-container">
                                 <div class="custom-dropdown">
@@ -50,6 +39,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="custom-sort-container">
                                 <div class="custom-sort-dropdown">
                                     <div class="custom-sort-button">
@@ -69,62 +59,80 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+                    @if ($products->count() == 0)
+                    <div style="display: flex; justify-content: center; align-items: center; height: 60vh;text-align: center; background: #212529;padding: 20px;">
+                        <div style="max-width: 400px; text-align: center; color: #7a7a7a; font-family: Arial, sans-serif; padding: 30px;">
+                            <img src="/frontend/asset/img/empty_state.png" alt="No results" style="max-width: 100%; height: auto;  margin-bottom: 20px;">
+                            <p style="font-size: 18px; color: white; margin: 0;">
+                                Rất tiếc, chúng tôi không tìm thấy sản phẩm nào phù hợp với từ khóa
+                                của bạn</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    @else
                     <div class="tab-pane active" id="block-1">
                         <div class="product-list" id="product-list">
-                            @foreach ($products as $product)
-                                <div class="product" data-product-id="{{ $product->id }}">
-                                    <div class="product__img">
-                                        <a href="{{ route('product.details', $product->slug) }}"><img
-                                                src="{{ $product->image }}" alt=""></a>
-                                    </div>
-                                    <div class="product__info">
-                                        <div class="product__color">
+                                @foreach ($products as $product)
+                                    <div class="product" data-product-id="{{ $product->id }}">
+                                        <div class="product__img">
+                                            <a href="{{ route('product.details', $product->slug) }}">
+                                                <img src="{{ $product->image }}" alt="{{ $product->name }}">
+                                            </a>
                                         </div>
 
-                                        <h3 class="product__name">
-                                            <div class="text">{{ $product->name }}</div>
-                                            @if ($product->product_type == 'new_arrival')
-                                                <span class="badge badge-xs badge-success badge-link">Mới</span>
-                                            @elseif ($product->product_type == 'featured_product')
-                                                <span class="badge badge-xs badge-warning badge-link">Nổi bật</span>
-                                            @elseif ($product->product_type == 'top_product')
-                                                <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
-                                            @elseif ($product->product_type == 'best_product')
-                                                <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
+                                        <div class="product__info">
+                                            <h3 class="product__name">
+                                                <div class="text">{{ $product->name }}</div>
+                                                @if ($product->product_type == 'new_arrival')
+                                                    <span class="badge badge-xs badge-success badge-link">Mới</span>
+                                                @elseif ($product->product_type == 'featured_product')
+                                                    <span class="badge badge-xs badge-warning badge-link">Nổi bật</span>
+                                                @elseif ($product->product_type == 'top_product')
+                                                    <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
+                                                @elseif ($product->product_type == 'best_product')
+                                                    <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
                                                 @elseif ($product->product_type == 'sale_product')
-                                                <span class="badge badge-xs badge-primary badge-link">Giảm giá</span>
-                                            @endif
-                                        </h3>
-                                        <div class="product__memory js-select">
-                                            @foreach ($product->variants as $index => $variant)
-                                                <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
-                                                    data-variant-id="{{ $variant->id }}">
-                                                    <strong>{{ $variant->storage->GB }}</strong>
+                                                    <span class="badge badge-xs badge-primary badge-link">Giảm giá</span>
+                                                @endif
+                                            </h3>
+
+                                            <div class="product__memory js-select">
+                                                @foreach ($product->variants as $index => $variant)
+                                                    <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}" 
+                                                         data-variant-id="{{ $variant->id }}">
+                                                        <strong>{{ $variant->storage->GB }}</strong>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                            <div class="product__price">
+                                                <div class="text">Giá chỉ</div>
+                                                @php
+                                                    $firstVariant = $product->variants->first();
+                                                @endphp
+                                                <div class="price">
+                                                    {{ $firstVariant ? number_format($firstVariant->price) . '₫' : 'Liên hệ' }}
                                                 </div>
-                                            @endforeach
+                                                @if ($firstVariant && $firstVariant->discount_price)
+                                                    <strike class="text-promo p-l-6 f-s-p-16 f-w-400">
+                                                        {{ number_format($firstVariant->price) }}₫
+                                                    </strike>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="product__price">
-                                            <div class="text">Giá chỉ</div>
-                                            @php
-                                                $firstVariant = $product->variants->first();
-                                            @endphp
 
-                                            <div class="price"> </div>
-                                            <strike class="text-promo p-l-6 f-s-p-16 f-w-400"> </strike>
-
+                                        <div class="product__detail">
+                                            @if ($firstVariant)
+                                                <a class="btn btn-outline-grayscale btn-md"
+                                                   href="{{ route('product.details', ['slug' => $product->slug, 'variant' => $firstVariant->id]) }}">
+                                                    XEM CHI TIẾT
+                                                </a>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="product__detail">
-                                        @if ($firstVariant)
-                                            <a class="btn btn-outline-grayscale btn-md"
-                                                href="{{ route('product.details', ['slug' => $product->slug, 'variant' => $firstVariant->id]) }}">XEM
-                                                CHI TIẾT</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
                     </div>
 
@@ -138,8 +146,6 @@
 <script>
     $(document).ready(function () {
         function getPriceByVariantId(productElement) {
-
-        
             const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
             if (!variantId) {
@@ -181,11 +187,6 @@
                 }
             });
         }
-        // var gb = $('.product__memory__item.item.active').find('strong').text();
-        //     if (gb.replace('GB', '') == 0 ) {
-        //         $('.product__memory__item.item.active').hide();
-        //     }
-        //     console.log(gb);
         function setLoading(isLoading) {
             if (isLoading) {
                 $('#product-list').addClass('loading');
@@ -193,7 +194,6 @@
                 $('#product-list').removeClass('loading');
             }
         }
-        
 
         function sortProducts(order) {
             const products = $('.product');
