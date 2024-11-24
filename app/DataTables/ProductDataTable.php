@@ -30,6 +30,9 @@ class ProductDataTable extends DataTable
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
                    <a class="dropdown-item has-icon" href="'.route('admin.products-image-gallery.index', ['product' => $query->id]).'"><i class="far fa-heart"></i> Image Gallery</a>
                    <a class="dropdown-item has-icon" href="'.route('admin.products-variant.index', ['product' => $query->id]).'"><i class="far fa-file"></i> Variants</a>
+                    '.($query->product_type === 'accessory' ? '
+                        <a class="dropdown-item has-icon" href="'.route('admin.product-support.index', ['product' => $query->id]).'"><i class="fas fa-link"></i> Supports</a>
+                    ' : '').'
                 </div>
               </div>';
                 return $editBtn . $deleteBtn . $moreBtn;

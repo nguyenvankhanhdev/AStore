@@ -20,8 +20,12 @@ use App\Http\Controllers\Backend\MessageController;
 use App\Http\Controllers\Backend\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\FlashSaleController;
+
+use App\Http\Controllers\Backend\ProductSupportController;
+
 use App\Http\Controllers\Backend\WarehouseController;
 use App\Http\Controllers\Backend\WarehouseDetailController;
+
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -56,6 +60,13 @@ Route::resource('variant-colors', VariantColorController::class);
 
 
 Route::resource('comment', CommentController::class);
+
+Route::resource('comment', CommentController::class);
+
+// Điền use for product - support another sub_category route
+Route::get('product-support', [ProductSupportController::class, 'index'])->name('product-support.index');
+Route::post('product-support-create', [ProductSupportController::class, 'store'])->name('product-support.store');
+Route::post('product-support-destroy', [ProductSupportController::class, 'destroy'])->name('product-support.destroy');
 
 Route::get('reports', [ReportController::class, 'index'])->name('reports');
 Route::get('best-products', [ProductController::class, 'bestProducts'])->name('best-products');

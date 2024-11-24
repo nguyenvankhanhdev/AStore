@@ -23,7 +23,20 @@ class TopProductDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', '')
+            ->addColumn('action', function ($query) {
+                $editBtn = "<a href='" . route('admin.product.edit', $query->id) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
+                $deleteBtn = "<a href='" . route('admin.product.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
+                $moreBtn = '<div class="dropdown dropleft d-inline">
+                        <button class="btn btn-primary dropdown-toggle ml-1" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                        </button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item has-icon" href="' . route('admin.products-image-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
+                        <a class="dropdown-item has-icon" href="' . route('admin.products-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variants</a>
+                        </div>
+                    </div>';
+                return $editBtn . $deleteBtn . $moreBtn;
+            })
             ->addColumn('image', function ($query) {
                 return "<img width='70px' src='" . asset($query->image) . "' ></img>";
             })
@@ -72,7 +85,9 @@ class TopProductDataTable extends DataTable
             ->with(['variants.variantColors.orderDetails'])
             ->whereHas('variants.variantColors.orderDetails', function ($query) {
                 $query->selectRaw('SUM(quantity) as total_quantity')
-                    ->havingRaw('SUM(quantity) > ?', [5]);
+
+                    ->havingRaw('SUM(quantity) > ?', [1]);
+
             });
     }
 
@@ -109,11 +124,11 @@ class TopProductDataTable extends DataTable
             Column::make('name')->addClass('text-center')->title('Tên sản phẩm')->width(150),
             Column::make('image')->addClass('text-center')->title('Ảnh')->width(150),
             Column::make('type')->addClass('text-center')->title('Type')->width(150),
-            Column::make('soluongmua')->addClass('text-center')->title('Số lượng mua')->width(150),
+            Column::make('soluongmua')->addClass('text-center')->title('Số lượng mua')->width(80),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }
