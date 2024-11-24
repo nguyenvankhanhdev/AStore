@@ -3,7 +3,7 @@
       <!-- Main Content -->
         <section class="section">
           <div class="section-header">
-            <h1>Pending Orders</h1>
+            <h1>Đơn hàng hoàn thành</h1>
           </div>
 
           <div class="section-body">
@@ -12,16 +12,14 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>All Order</h4>
+                    <h4>Tât cả đơn hàng hoàn thành</h4>
                   </div>
                   <div class="card-body">
                     {{ $dataTable->table() }}
                   </div>
-
                 </div>
               </div>
             </div>
-
           </div>
         </section>
 

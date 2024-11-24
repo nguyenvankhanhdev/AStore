@@ -21,6 +21,15 @@ class ProductVariantController extends Controller
         return $dataTable->render('backend.admin.product.product_variant.index', compact('product'));
     }
 
+    public function getVariantsByProduct($productId)
+    {
+        $variants = ProductVariant::where('pro_id', $productId)->with('storage')->get();
+
+        logger('Variants:', $variants->toArray());
+        return response()->json($variants);
+    }
+
+
     public function create(Request $request)
     {
         $storages = StorageProduct::all();

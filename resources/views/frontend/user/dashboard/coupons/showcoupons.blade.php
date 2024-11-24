@@ -23,7 +23,7 @@
                         <h3 class="mb-4"><i class="far fa-user"></i> Đổi Mã Giảm Giá</h3>
 
                         <div class="mb-4">
-                            <h4 class="btn btn-info">Điểm của bạn: <strong>{{ App\Models\User::getPoint() }} đ</strong></h4>
+                            <h4 class="btn btn-primary">Điểm của bạn: <strong>{{ App\Models\User::getPoint() }} đ</strong></h4>
                         </div>
 
                         <div class="wsus__dashboard_profile">
@@ -51,6 +51,10 @@
     <script>
         $(document).on('click', '.redeem-coupon', function() {
             let couponId = $(this).data('id');
+            let button = $(this);
+
+            // Disable the button to prevent multiple clicks
+            button.prop('disabled', true);
 
             $.ajax({
                 url: '{{ route('coupons.redeem') }}',
@@ -61,17 +65,25 @@
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        window.location.reload();
                         toastr.success(response.message);
 
+                        // Reload the page after success
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000); // Delay before reload to show success message
                     } else {
                         toastr.error(response.message);
                     }
+                    // Re-enable the button after the operation is completed
+                    button.prop('disabled', false);
                 },
                 error: function() {
-                    alert('Error redeeming coupon.');
+                    toastr.error('Có lỗi xảy ra khi đổi mã giảm giá.');
+                    // Re-enable the button in case of error
+                    button.prop('disabled', false);
                 }
             });
         });
     </script>
+
 @endpush

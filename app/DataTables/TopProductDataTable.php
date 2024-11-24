@@ -72,7 +72,7 @@ class TopProductDataTable extends DataTable
                         break;
                 }
             })
-            ->rawColumns(['action', 'image','soluongmua','type'])
+            ->rawColumns(['action', 'image', 'soluongmua', 'type'])
             ->setRowId('id');
     }
 
@@ -85,9 +85,12 @@ class TopProductDataTable extends DataTable
             ->with(['variants.variantColors.orderDetails'])
             ->whereHas('variants.variantColors.orderDetails', function ($query) {
                 $query->selectRaw('SUM(quantity) as total_quantity')
+
                     ->havingRaw('SUM(quantity) > ?', [1]);
+
             });
     }
+
 
     /**
      * Optional method if you want to use the html builder.

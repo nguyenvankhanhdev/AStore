@@ -20,7 +20,12 @@ use App\Http\Controllers\Backend\MessageController;
 use App\Http\Controllers\Backend\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\FlashSaleController;
+
 use App\Http\Controllers\Backend\ProductSupportController;
+
+use App\Http\Controllers\Backend\WarehouseController;
+use App\Http\Controllers\Backend\WarehouseDetailController;
+
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -40,9 +45,19 @@ Route::resource('sub-categories', SubCategoriesController::class);
 
 Route::resource('users', UserController::class);
 
+Route::get('product-variants/{product}', [ProductVariantController::class, 'getVariantsByProduct'])->name('product.variants.get');
+
+Route::get('variant-colors-by-variant/{variant}', [VariantColorController::class, 'getColorsByVariant'])->name('variant.colors.get');
+
+Route::get('/api/get-variant-color/{variant_id}/{color_id}', [VariantColorController::class, 'getVariantColor'])->name('api.variant.color.get');
+
+
 Route::resource('products-variant', ProductVariantController::class);
 
 Route::resource('variant-colors', VariantColorController::class);
+
+
+
 
 Route::resource('comment', CommentController::class);
 
@@ -74,7 +89,11 @@ Route::get('orders-completed', [OrderController::class, 'completedOrders'])->nam
 
 Route::post('payment-status', [OrderController::class, 'changePaymentStatus'])->name('payment.status');
 
+Route::get('warehouse', [WarehouseController::class, 'index'])->name('warehouse');
+Route::get('warehouse/{id}', [WarehouseDetailController::class, 'index'])->name('warehouse.show');
 
+Route::get('warehouse-import', [WarehouseController::class, 'createImport'])->name('warehouse.create');
+Route::post('warehouse-import', [WarehouseController::class, 'storeImport'])->name('warehouse.store');
 
 
 Route::get('payment-settings', [PaymentSettingController::class, 'index'])->name('payment-settings.index');

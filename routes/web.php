@@ -37,6 +37,7 @@ Route::get('frontend/category', function () {
 Route::get('/', [ProductController::class, 'productsIndex'])->name('home');
 Route::get('index', [ProductController::class, 'productsIndex'])->name('products.index');
 Route::get('category', [ProductController::class, 'productCategories'])->name('products.category');
+Route::get('search', [ProductController::class, 'searchProducts'])->name('products.search');
 //details
 Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 Route::get('getPrice', [ProductController::class, 'getPrice'])->name('getPrice');
@@ -104,8 +105,8 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 });
 
 
-Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
-Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+Route::get('get-price-by-variant', [ProductController::class, 'getPriceByVariant'])->name('getByVariant');
+Route::get('getByColor', [ProductController::class, 'getPriceByVariantAndColor'])->name('getByColor');
 
 
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');

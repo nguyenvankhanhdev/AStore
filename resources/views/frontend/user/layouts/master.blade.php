@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta charset="UTF-8">
@@ -19,7 +20,7 @@
     <link rel="stylesheet" href="/frontend/asset/css/detail.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="/backend/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/main.css">
@@ -30,6 +31,38 @@
     <link rel="stylesheet" href="/frontend/asset/css/main-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/fCare.css">
     <style>
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .toast-container {
             background: rgb(50, 130, 11);
         }
@@ -132,31 +165,38 @@
 
 
 </head>
+
 <body id="page-top">
+    <div id="loading" style="display: none;">
+        <div class="spinner"></div>
+    </div>
     @include('frontend.user.layouts.header')
     <div class="over-suggestion"></div>
     <main class="main">
         @yield('content')
         <div class="wrap-section-chat"><a class="wrap-ic-chat" href="" aria-controls="chat-modal"><i
-            class="ic-chat"></i></a>
-        <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="chat-modal">
-          <div class="modal-wrapper" tabindex="-1">
-            <div class="modal-box">
-              <div class="modal-header modal-title">
-                <div class="label label-xl"> <span class="label-text">Hỗ trợ trực tuyến</span></div><span
-                  class="modal-close js-modal-close"><i class="ic-close-thin ic-md"></i></span>
-              </div>
-              <div class="modal-body">
-                <div class="list-ic-chat"><a class="item m-b-8" href="tel:18006616"><span class="img"> <img
-                        src="{{ asset('frontend/asset/img/ic-call.png') }}" alt=""></span><span class="cont"><span class="num">1800
-                        6616</span><span class="text">(8h00 - 22h00)</span></span></a><a class="item" href="{{ route('user.message.index') }}"><span
-                      class="img"> <img src={{ asset('uploads/mess.png') }} alt=""></span><span class="cont"><span
-                        class="num">Chat với Admin</span><span class="text">(8h00 - 22h00)</span></span></a></div>
-              </div>
+                    class="ic-chat"></i></a>
+            <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="chat-modal">
+                <div class="modal-wrapper" tabindex="-1">
+                    <div class="modal-box">
+                        <div class="modal-header modal-title">
+                            <div class="label label-xl"> <span class="label-text">Hỗ trợ trực tuyến</span></div><span
+                                class="modal-close js-modal-close"><i class="ic-close-thin ic-md"></i></span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="list-ic-chat"><a class="item m-b-8" href="tel:18006616"><span class="img">
+                                        <img src="{{ asset('frontend/asset/img/ic-call.png') }}"
+                                            alt=""></span><span class="cont"><span class="num">1800
+                                            6616</span><span class="text">(8h00 - 22h00)</span></span></a><a
+                                    class="item" href="{{ route('user.message.index') }}"><span class="img"> <img
+                                            src={{ asset('uploads/mess.png') }} alt=""></span><span
+                                        class="cont"><span class="num">Chat với Admin</span><span
+                                            class="text">(8h00 - 22h00)</span></span></a></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
 
     </main>
 
@@ -192,6 +232,19 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            let isPageLoading = false; // Trạng thái kiểm soát
+
+            // window.addEventListener("beforeunload", function () {
+            //     if (!isPageLoading) {
+            //         isPageLoading = true; // Đánh dấu trạng thái
+            //         document.getElementById("loading").style.display = "flex";
+            //     }
+            // });
+
+            // // Ẩn loading sau khi trang đã tải xong
+            // window.addEventListener("load", function() {
+            //     document.getElementById("loading").style.display = "none";
+            // });
 
             $('body').on('click', '.delete-item a', function(event) {
                 event.preventDefault();
@@ -245,3 +298,4 @@
 </body>
 
 </html>
+
