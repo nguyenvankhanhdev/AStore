@@ -14,13 +14,13 @@ class MessageController extends Controller
      */
     public function index()
     {
-        $user_id=Auth::id();
-        $messages = Message::where(function($query) use ($user_id) {
+        $user_id = Auth::id();
+        $messages = Message::where(function ($query) use ($user_id) {
             $query->where('sender_id', $user_id)
-                  ->orWhere('received_id', $user_id);
+                ->orWhere('received_id', $user_id);
         })
-        ->orderBy('created_at', 'asc')
-        ->get();
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         return view('frontend.user.dashboard.message', compact('messages'));
     }
@@ -30,8 +30,6 @@ class MessageController extends Controller
         $senderId = 1;
         $receiverId = Auth::id();
         $lastId = $request->last_id;
-
-        // Lấy các tin nhắn mới hơn tin nhắn đã cho
         $messages = Message::getMessagesAfterlastId($senderId, $receiverId, $lastId);
 
         return response()->json(['messages' => $messages]);
@@ -64,13 +62,10 @@ class MessageController extends Controller
 
             // return response()->json(['success' => true, 'message' => 'Bình luận thành công']);
             return redirect()->back();
-
         } catch (\Exception $e) {
             // return response()->json(['success' => false, 'error' => 'Có lỗi xảy ra.'], 500);
             return redirect()->back();
-
         }
-
     }
 
     /**

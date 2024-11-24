@@ -22,8 +22,12 @@ class UserCouponsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('name', function ($query) {
-                return $query->coupons->name;
+            ->addColumn('discount', function ($query) {
+                if ($query->coupons->discount_type == 'percent') {
+                    return $query->coupons->discount . '%';
+                } else {
+                    return number_format($query->coupons->discount * 1000, 0, ',', '.') . 'đ';
+                }
             })
             ->addColumn('code', function ($query) {
                 return $query->coupons->code;
@@ -87,9 +91,8 @@ class UserCouponsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('code')->title('Tên mã giảm giá'),
-            Column::make('name')->title('Giá trị'),
-            Column::make('quantity')->title('Số lượng'),
+            Column::make('unique_code')->title('Tên mã giảm giá'),
+            Column::make('discount')->title('Giá trị voucher cho đơn hàng')->width(300),
             Column::make('start_date')->title('Ngày bắt đầu'),
             Column::make('end_date')->title('Ngày kết thúc'),
             // Column::computed('action')

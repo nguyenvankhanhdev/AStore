@@ -39,6 +39,10 @@ class OrderController extends Controller
     {
         return $dataTable->render('backend.admin.orders.canceled-order');
     }
+    public function completedOrders(CompletedOrderDataTable $dataTable)
+    {
+        return $dataTable->render('backend.admin.orders.completed-order');
+    }
 
 
     /**

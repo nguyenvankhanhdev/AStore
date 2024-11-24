@@ -736,6 +736,7 @@ namespace App\Models{
  * @property int $user_id
  * @property int $coupon_id
  * @property int $quantity
+ * @property string $unique_code
  * @property-read \App\Models\Coupon|null $coupons
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons newModelQuery()
@@ -744,6 +745,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereUniqueCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereUserId($value)
  */
 	class UserCoupons extends \Eloquent {}
