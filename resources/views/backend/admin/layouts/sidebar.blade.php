@@ -115,7 +115,17 @@
                 </ul>
             </li>
 
-
+            <li class="dropdown {{ setActive(['admin.warehouse.index*']) }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Warehouse</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ setActive(['admin.warehouse']) }}">
+                        <a class="nav-link" href="{{ route('admin.warehouse') }}">Import Warehouse</a>
+                    </li>
+                </ul>
+            </li>
 
             <li class="dropdown {{ setActive(['admin.reports.index*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>

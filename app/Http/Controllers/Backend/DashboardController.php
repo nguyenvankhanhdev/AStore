@@ -45,6 +45,8 @@ class DashboardController extends Controller
         $monthlyOrdersData = Orders::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->where(['status'=> 'completed'])
+
+          
             ->get();
 
         $monthlyProfit = $monthlyOrdersData->sum(function ($order) {
@@ -52,6 +54,7 @@ class DashboardController extends Controller
         });
 
         $yearlyOrdersData = Orders::whereYear('created_at', Carbon::now()->year)
+
             ->where(['status'=> 'completed'])
             ->get();
 

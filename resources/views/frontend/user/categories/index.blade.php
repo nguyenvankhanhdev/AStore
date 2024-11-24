@@ -100,6 +100,7 @@
                                             @elseif ($product->product_type == 'best_product')
                                                 <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
                                             @elseif ($product->product_type == 'sale_product')
+
                                                 <span class="badge badge-xs badge-primary badge-link">Giảm giá</span>
                                             @endif
                                         </h3>
@@ -141,15 +142,29 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            function getPriceByVariantId(productElement) {
-                const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
-                if (!variantId) {
-                    console.error("Variant ID không hợp lệ.");
-                    return;
-                }
+<script>
+    $(document).ready(function () {
+        function getPriceByVariantId(productElement) {
+
+        
+            const variantId = productElement.find('.product__memory__item.active').data('variant-id');
+
+            if (!variantId) {
+                console.error("Variant ID không hợp lệ.");
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('getByVariant') }}',
+                method: 'GET',
+                data: { variantId },
+                beforeSend: function () {
+                    setLoading(true);
+                },
+                success: function (response) {
+                    setLoading(false);
+
 
                 $.ajax({
                     url: '{{ route('getByVariant') }}',
@@ -202,7 +217,22 @@
                 } else {
                     $('#product-list').removeClass('loading');
                 }
+
             }
+            });
+        }
+            var gb = $('.product__memory__item.item.active').find('strong').text();
+            if (gb.replace('GB', '') == 0) {
+                $('.product__memory__item.item.active').hide();
+            }
+        function setLoading(isLoading) {
+            if (isLoading) {
+                $('#product-list').addClass('loading');
+            } else {
+                $('#product-list').removeClass('loading');
+            }
+        }
+        
 
             function sortProducts(order) {
                 const products = $('.product');
