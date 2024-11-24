@@ -131,18 +131,18 @@ class ProductController extends Controller
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
         $accessories = Accessories::with(['product', 'subCategory'])
-            ->where('pro_id', $product->id)
+            ->where('sub_cate_id', $product->sub_cate_id)
             ->get();
 
         if ($accessories->isNotEmpty()) {
-            $subCateIds = $accessories->pluck('sub_cate_id')->unique(); // Lấy danh sách sub_cate_id không trùng lặp
+            $proIds = $accessories->pluck('pro_id')->unique(); // Lấy danh sách sub_cate_id không trùng lặp
 
             $sameProducts = collect();
 
             // Lấy 1 sản phẩm từ mỗi sub_cate_id
-            foreach ($subCateIds as $subCateId) {
+            foreach ($proIds as $subCateId) {
                 $products = Products::with(['variants.variantColors'])
-                    ->where('sub_cate_id', $subCateId)
+                    ->where('id', $subCateId)
                     ->limit(1) // Lấy 1 sản phẩm từ mỗi sub_cate_id
                     ->get();
                 $sameProducts = $sameProducts->merge($products); // Gộp các sản phẩm vào collection
