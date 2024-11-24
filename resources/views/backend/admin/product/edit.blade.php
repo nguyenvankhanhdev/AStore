@@ -1,7 +1,6 @@
 @extends('backend.admin.layouts.master')
 
 @section('content')
-    <!-- Main Content -->
     <section class="section">
         <div class="section-body">
             <div class="row">
@@ -53,26 +52,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Offer Start Date</label>
-                                            <input type="text" class="form-control datepicker" name="offer_start_date" value="{{ old('offer_start_date', $product->offer_start_date) }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Offer End Date</label>
-                                            <input type="text" class="form-control datepicker" name="offer_end_date" value="{{ old('offer_end_date', $product->offer_end_date) }}">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Stock Quantity</label>
-                                    <input type="number" min="0" class="form-control" name="quantity" value="{{ old('quantity', $product->quantity) }}">
-                                </div>
-
                                 <div class="form-group">
                                     <label>Short Description</label>
                                     <textarea name="short_description" class="form-control">{{ old('short_description', $product->short_description) }}</textarea>

@@ -12,7 +12,7 @@ class UserCoupons extends Model
     protected $fillable = [
         'user_id',
         'coupon_id',
-        'quantity'
+        'unique_code',
 
     ];
     public $timestamps = false;

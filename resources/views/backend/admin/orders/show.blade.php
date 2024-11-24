@@ -8,7 +8,7 @@ $address = json_decode($order->address, true);
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Order Details</h1>
+        <h1>Chi tiết hóa đơn</h1>
     </div>
 
     <div class="section-body">
@@ -24,9 +24,9 @@ $address = json_decode($order->address, true);
                         <div class="row">
                             <div class="col-md-6">
                                 <address>
-                                    <strong>Billed To:</strong><br>
-                                    <b>Name:</b> {{ $address['name'] ?? 'N/A' }}<br>
-                                    <b>Email:</b> {{ $address['email'] ?? 'N/A' }}<br>
+                                    <strong>Lập hóa đơn cho: </strong><br>
+                                    <b>Họ Tên :</b> {{ $address['name'] ?? 'N/A' }}<br>
+                                    <b>Địa chỉ Email:</b> {{ $address['email'] ?? 'N/A' }}<br>
                                     {{-- <b>Phone:</b> {{ $address['phone'] ?? 'N/A' }}<br>
                                     <b>Address:</b> {{ $address['address'] ?? 'N/A' }}<br>
                                     {{ $address['province'] ?? 'N/A' }}, {{ $address['district'] ?? 'N/A' }}, {{ $address['ward'] ?? 'N/A' }} --}}
@@ -35,11 +35,11 @@ $address = json_decode($order->address, true);
 
                             <div class="col-md-6 text-md-right">
                                 <address>
-                                    <strong>Shipped To:</strong><br>
-                                    <b>Name:</b> {{ $address['name'] ?? 'N/A' }}<br>
-                                    <b>Email:</b> {{ $order->user->email ?? 'N/A' }}<br>
-                                    <b>Phone:</b> {{ $address['phone'] ?? 'N/A' }}<br>
-                                    <b>Address:</b> {{ $address['address'] ?? 'N/A' }}<br>
+                                    <strong>Vận chuyển đến:</strong><br>
+                                    <b>Họ Tên:</b> {{ $address['name'] ?? 'N/A' }}<br>
+                                    <b>Địa chỉ Email:</b> {{ $order->user->email ?? 'N/A' }}<br>
+                                    <b>Số điện thoại:</b> {{ $address['phone'] ?? 'N/A' }}<br>
+                                    <b>Địa chỉ:</b> {{ $address['address'] ?? 'N/A' }}<br>
                                     {{ $address['province'] ?? 'N/A' }}, {{ $address['district'] ?? 'N/A' }}, {{ $address['ward'] ?? 'N/A' }}
                                 </address>
                             </div>
@@ -53,9 +53,9 @@ $address = json_decode($order->address, true);
                                     <b>Status:</b> {{ $order->payment_status === 1 ? 'Complete' : 'Pending' }}
                                 </address>
                             </div> --}}
-                            <div class="col-md-6 text-md-right">
+                            <div class="col-md-12 text-md-right">
                                 <address>
-                                    <strong>Order Date:</strong><br>
+                                    <strong>Ngày đặt hàng: </strong><br>
                                     {{ date('d F, Y', strtotime($order->created_at)) }}<br><br>
                                 </address>
                             </div>
@@ -70,11 +70,11 @@ $address = json_decode($order->address, true);
                             <table class="table table-striped table-hover table-md">
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th class="text-center">Price</th>
-                                    <th class="text-center">Quantity</th>
-                                    <th class="text-right">Totals</th>
-                                    <th class="text-right">Discount</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th class="text-center">Giá</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-right">Tổng</th>
+                                    <th class="text-right">Giảm giá</th>
                                 </tr>
                                 @foreach ($order->orderDetails as $detail)
                                 <tr>
@@ -130,20 +130,20 @@ $address = json_decode($order->address, true);
                             </div>
                             <div class="col-lg-4 text-right">
                                 <div class="invoice-detail-item">
-                                    <div class="invoice-detail-name">Subtotal</div>
+                                    <div class="invoice-detail-name">Tạm tính</div>
                                     <div class="invoice-detail-value">
                                         {{ number_format($subTotal, 0, '.', ',') . ' đ' }}
                                     </div>
                                 </div>
                                 <div class="invoice-detail-item">
-                                    <div class="invoice-detail-name">Coupon (-)</div>
+                                    <div class="invoice-detail-name">Giảm giá (-)</div>
                                     <div class="invoice-detail-value">
                                         {{ number_format($totalDiscount, 0, '.', ',') . ' đ' }}
                                     </div>
                                 </div>
                                 <hr class="mt-2 mb-2">
                                 <div class="invoice-detail-item">
-                                    <div class="invoice-detail-name">Total</div>
+                                    <div class="invoice-detail-name">Thanh toán</div>
                                     <div class="invoice-detail-value invoice-detail-value-lg">
                                         {{ number_format($totalAfterDiscount, 0, '.', ',') . ' đ' }}
                                     </div>

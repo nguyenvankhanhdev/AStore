@@ -224,21 +224,17 @@ class PaymentController extends Controller
         $order->address = $addressJson;
         $order->payment_status = $payment_status;
         $order->payment_method = $payment_method;
-        $coupon_id = session('coupon_id');
-        $counpon = Coupon::find($coupon_id);
-        if ($counpon) {
-            $counpon->quantity -= 1;
-            $counpon->total_used += 1;
-            $counpon->save();
+        $user_coupon_id = UserCoupons::where('unique_code',session('coupon_id'))->first();
+
+        if ($user_coupon_id) {
+            $coupon = Coupon::find($user_coupon_id->coupon_id);
+            $coupon->total_used += 1;
+            $coupon->quantity -= 1;
+            $order->coupon_id = $coupon->id;
+            $coupon->save();
+            $user_coupon_id->delete();
         }
-        $usercoupon = UserCoupons::where(['user_id' => Auth::id(), 'coupon_id' =>$coupon_id])->first();
-        if ($usercoupon) {
-            $usercoupon->quantity -= 1;
-            $usercoupon->save();
-        }
-        if ($coupon_id != null) {
-            $order->coupon_id = session('coupon_id');
-        } else {
+        else{
             $order->coupon_id = null;
         }
         $order->save();
@@ -584,23 +580,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function callbackZALOPAY(Request $request)
-    {
-        $info = Session::get('order_info');
-        $address = Session::get('address');
 
-        $updatePoint = User::find(auth()->id());
-        $updatePoint->point += session('order_point');
-        $updatePoint->save();
-
-        $userAddress = $this->getOrCreateUserAddress($info, $address);
-
-        session(['user_address' => $userAddress->toJson()]);
-        $this->storeOrder('ZALOPAY', 'pending', 'completed', session('user_address'));
-        DB::commit();
-        $this->clearSession();
-        return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
-    }
 
     public function payWithZALOPAY(Request $request)
     {
@@ -673,6 +653,23 @@ class PaymentController extends Controller
             'status' => 'error',
             'message' => $result['return_message'] ?? 'Something went wrong',
         ]);
+    }
+    public function callbackZALOPAY(Request $request)
+    {
+        $info = Session::get('order_info');
+        $address = Session::get('address');
+
+        $updatePoint = User::find(auth()->id());
+        $updatePoint->point += session('order_point');
+        $updatePoint->save();
+
+        $userAddress = $this->getOrCreateUserAddress($info, $address);
+
+        session(['user_address' => $userAddress->toJson()]);
+        $this->storeOrder('ZALOPAY', 'pending', 'completed', session('user_address'));
+        DB::commit();
+        $this->clearSession();
+        return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
     }
 
     public function booking_success()

@@ -50,8 +50,8 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                    <div class="view-gallery js-open-gallery" data-count="+12"><img
-                                            src="https://via.placeholder.com/96x96" alt=""></div>
+                                    {{-- <div class="view-gallery js-open-gallery" data-count="+12"><img
+                                            src="https://via.placeholder.com/96x96" alt=""></div> --}}
                                 </div>
                             </div>
                         </div>
@@ -162,6 +162,18 @@
                                                 @case('Xám')
                                                     <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#B2C5D6"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+                                                @case('Bạc')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#B2C5D6"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+                                                @case('Xanh dương')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#51b3f0"></span>
                                                         <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
