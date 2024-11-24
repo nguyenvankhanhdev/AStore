@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WarehouseDetails extends Model
 {
     use HasFactory;
-    protected $fillable = ['warehouse_id', 'variant_color_id', 'quantity', 'warehouse_price'];
+    protected $fillable = ['warehouse_id', 'variant_color_id', 'quantity', 'warehouse_price', 'total_price',];
 
     // Quan hệ với Warehouse
     public function warehouse()
