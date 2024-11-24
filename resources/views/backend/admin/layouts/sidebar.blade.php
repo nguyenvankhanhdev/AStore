@@ -53,9 +53,9 @@
                     </li>
                     <li class="{{ setActive(['admin.seller-products.*',
                     'admin.best-products',]) }}"><a class="nav-link"
-                            href="{{ route('admin.best-products') }}">Best Products</a></li>
+                            href="{{ route('admin.best-products') }}">Potential Best Products</a></li>
                     <li class="{{ setActive(['admin.seller-pending-products.*','admin.top-products',]) }}"><a class="nav-link"
-                            href="{{ route('admin.top-products') }}">Top Products</a></li>
+                            href="{{ route('admin.top-products') }}">Potential Top Products</a></li>
 
                     <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link"
                             href="">Product Reviews</a></li>
