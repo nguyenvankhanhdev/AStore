@@ -2,7 +2,7 @@
 
 
 @section('content')
-    <div class="category">
+    <div class="category" style="background: #fff">
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="link" href="{{ route('products.index') }}">Trang chủ</a></li>
@@ -15,7 +15,7 @@
 
             <div class="card card-md category__container">
                 <div class="card-body">
-                    <div class="actions">
+                    <div class="actions" style="background: #fff" >
                         <div class="filter-sort-wrapper">
                             <div class="custom-filter-container">
                                 <div class="custom-dropdown">
@@ -72,7 +72,7 @@
                     </div>
                     @else
                     <div class="tab-pane active" id="block-1">
-                        <div class="product-list" id="product-list">
+                        <div class="product-list" id="product-list" style="background: #fff">
                                 @foreach ($products as $product)
                                     <div class="product" data-product-id="{{ $product->id }}">
                                         <div class="product__img">
@@ -99,7 +99,7 @@
 
                                             <div class="product__memory js-select">
                                                 @foreach ($product->variants as $index => $variant)
-                                                    <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}" 
+                                                    <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
                                                          data-variant-id="{{ $variant->id }}">
                                                         <strong>{{ $variant->storage->GB }}</strong>
                                                     </div>
@@ -187,6 +187,11 @@
                 }
             });
         }
+        var gb = $('.product__memory__item.item.active').find('strong').text();
+            if (gb.replace('GB', '') == 0) {
+                $('.product__memory__item.item.active').hide();
+            }
+
         function setLoading(isLoading) {
             if (isLoading) {
                 $('#product-list').addClass('loading');

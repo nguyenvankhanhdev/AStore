@@ -69,7 +69,7 @@ class UserOrderDataTable extends DataTable
             ->setTableId('order-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(1)
+            ->orderBy(0, 'desc')
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),

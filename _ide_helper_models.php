@@ -660,6 +660,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $otp
+ * @property string|null $otp_expires_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
@@ -683,6 +685,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereOtp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereOtpExpiresAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePoint($value)
@@ -735,7 +739,6 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property int $coupon_id
- * @property int $quantity
  * @property string $unique_code
  * @property-read \App\Models\Coupon|null $coupons
  * @property-read \App\Models\User|null $user
@@ -744,7 +747,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons query()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereUniqueCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoupons whereUserId($value)
  */
@@ -810,6 +812,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $import_date
+ * @property float $total_price
  * @property int|null $total_quantity
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -821,6 +824,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Warehouse whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Warehouse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Warehouse whereImportDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Warehouse whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Warehouse whereTotalQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Warehouse whereUpdatedAt($value)
  */
@@ -836,6 +840,7 @@ namespace App\Models{
  * @property int $variant_color_id
  * @property int $quantity
  * @property float $warehouse_price
+ * @property float $total_price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\VariantColors|null $variantColor
@@ -846,6 +851,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereVariantColorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WarehouseDetails whereWarehouseId($value)
