@@ -10,15 +10,14 @@ class ProductVariant extends Model
     use HasFactory;
     public function product()
     {
-        return $this->belongsTo(Products::class,'pro_id');
+        return $this->belongsTo(Products::class, 'pro_id');
     }
     public function storage()
     {
-        return $this->belongsTo(StorageProduct::class,'storage_id');
+        return $this->belongsTo(StorageProduct::class, 'storage_id');
     }
     public function variantColors()
     {
-        return $this->hasMany(VariantColors::class,'variant_id');
+        return $this->hasMany(VariantColors::class, 'variant_id');
     }
-
 }

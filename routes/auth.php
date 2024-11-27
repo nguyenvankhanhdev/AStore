@@ -6,9 +6,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware('guest')->group(function() {
-    Route::get('admin/login', [DashboardController::class, 'login']) ->name('admin.login');
-
+Route::middleware('guest')->group(function () {
     Route::get('register', [RegisterUserController::class, 'create'])->name('register');
 
     Route::get('login', [AuthenticateSessionController::class, 'index'])->name('login');
@@ -16,16 +14,21 @@ Route::middleware('guest')->group(function() {
     Route::post('login', [AuthenticateSessionController::class, 'store']);
 
     Route::post('register', [RegisterUserController::class, 'store'])->name('register.store');
+    Route::get('auth/google', [AuthenticateSessionController::class, 'redirect'])->name('auth.google');
+    Route::get('auth/google/call-back', [AuthenticateSessionController::class, 'callBackGoogle'])->name('auth.google.call-back');
+
+    Route::get('auth/github', [AuthenticateSessionController::class, 'redirectToGithub'])->name('auth.github');
+    Route::get('auth/github/call-back', [AuthenticateSessionController::class, 'handleGithubCallback'])->name('auth.github.callback');
+    Route::post('/password/verify-otp', [AuthenticateSessionController::class, 'resetPassword'])->name('password.verify-otp');
+    Route::post('/password/forgot', [AuthenticateSessionController::class, 'sendOtp'])->name('password.forgot');
+
 });
 
 
 
 
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticateSessionController::class, 'destroy'])
-                ->name('logout');
-
+        ->name('logout');
 });
-
-

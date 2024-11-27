@@ -3,14 +3,11 @@
 namespace App\DataTables;
 
 use App\Models\Orders;
-use App\Models\UserOrder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,12 +22,17 @@ class UserOrderDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $showBtn = "<a href='" . route('user.order.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
-                return $showBtn;
+                $showBtn = "<a  href='" . route('user.order.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
+
+                $cancelBtn = '';
+                if ($query->status !== 'delivered' && $query->status !== 'completed' && $query->status !== 'canceled') {
+                    $cancelBtn = "<button style='margin-left: 6px;' data-id='" . $query->id . "' class='btn btn-danger ml-3 cancel-order'> Hủy Đơn</button>";
+                }
+                return $showBtn.$cancelBtn;
             })
-            // ->addColumn('name', function ($query) {
-            //     return $query->users->name;
-            // })
+            ->addColumn('name', function ($query) {
+                return $query->user->name;
+            })
             ->editColumn('total_amount', function ($query) {
                 return number_format($query->total_amount, 0, ',', '.');
             })
@@ -38,39 +40,15 @@ class UserOrderDataTable extends DataTable
                 return date('d-m-Y', strtotime($query->created_at));
             })
             ->addColumn('payment_status', function ($query) {
-                return $query->payment_status;
+                return $this->getPaymentStatusBadge($query->payment_status);
             })
             ->addColumn('payment_method', function ($query) {
                 return $query->payment_method;
             })
             ->addColumn('status', function ($query) {
-                switch ($query->status) {
-                    case 'pending':
-                        return "<span class='badge bg-warning'>pending</span>";
-                        break;
-                    case 'processed_and_ready_to_ship':
-                        return "<span class='badge bg-info'>processed</span>";
-                        break;
-                    case 'dropped_off':
-                        return "<span class='badge bg-info'>dropped off</span>";
-                        break;
-                    case 'shipped':
-                        return "<span class='badge bg-info'>shipped</span>";
-                        break;
-                    case 'out_for_delivery':
-                        return "<span class='badge bg-primary'>out for delivery</span>";
-                        break;
-                    case 'delivered':
-                        return "<span class='badge bg-success'>delivered</span>";
-                        break;
-                    case 'canceled':
-                        return "<span class='badge bg-danger'>canceled</span>";
-                        break;
-                    default:
-                        break;
-                }
+                return $this->getStatusBadge($query->status);
             })
-            ->rawColumns(['status', 'action', 'payment_method'])
+            ->rawColumns(['status', 'action', 'payment_status'])
             ->setRowId('id');
     }
 
@@ -80,7 +58,6 @@ class UserOrderDataTable extends DataTable
     public function query(Orders $model): QueryBuilder
     {
         return $model->where('user_id', Auth::id())->newQuery();
-
     }
 
     /**
@@ -92,8 +69,7 @@ class UserOrderDataTable extends DataTable
             ->setTableId('order-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            //->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(0, 'desc')
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -111,11 +87,11 @@ class UserOrderDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
+            Column::make('name')->title('Tên khách hàng'),
             Column::make('total_amount')->title('Tổng tiền'),
             Column::make('status')->title('Trạng thái'),
             Column::make('order_date')->title('Ngày đặt hàng'),
-            Column::make('payment_status')->title('Phương thức thanh toán'),
+            Column::make('payment_status')->title('Trạng thái thanh toán'),
             Column::make('payment_method')->title('Phương thức thanh toán'),
             Column::computed('action')->title('Xem chi tiết')
                 ->exportable(false)
@@ -131,5 +107,47 @@ class UserOrderDataTable extends DataTable
     protected function filename(): string
     {
         return 'UserOrder_' . date('YmdHis');
+    }
+
+    /**
+     * Get the badge for payment status.
+     */
+    private function getPaymentStatusBadge(string $status): string
+    {
+        switch ($status) {
+            case 'pending':
+                return "<span class='badge bg-warning'>pending</span>";
+            case 'delivered':
+                return "<span class='badge bg-info'>delivered</span>";
+            case 'processed':
+                return "<span class='badge bg-info'>processed</span>";
+            case 'completed':
+                return "<span class='badge bg-success'>completed</span>";
+            case 'canceled':
+                return "<span class='badge bg-danger'>canceled</span>";
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * Get the badge for order status.
+     */
+    private function getStatusBadge(string $status): string
+    {
+        switch ($status) {
+            case 'pending':
+                return "<span class='badge bg-warning'>pending</span>";
+            case 'delivered':
+                return "<span class='badge bg-info'>delivered</span>";
+            case 'processed':
+                return "<span class='badge bg-info'>processed</span>";
+            case 'completed':
+                return "<span class='badge bg-success'>completed</span>";
+            case 'canceled':
+                return "<span class='badge bg-danger'>canceled</span>";
+            default:
+                return '';
+        }
     }
 }

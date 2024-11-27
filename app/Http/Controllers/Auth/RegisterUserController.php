@@ -10,6 +10,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 
@@ -27,24 +29,25 @@ class RegisterUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        if ($validator->fails()) {
+            Log::error('Validation failed'. $validator->errors());
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $user = User::create([
-            'username' => $request->username,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user',
         ]);
-
         event(new Registered($user));
-
-        Auth::login($user);
-
         return redirect()->route('auth.admin')->withSuccess('Đăng kí thành công!');
     }
 }

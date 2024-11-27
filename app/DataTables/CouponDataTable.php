@@ -25,6 +25,13 @@ class CouponDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 return '<button class="btn btn-primary redeem-coupon" data-id="' . $query->id . '">Đổi</button>';
             })
+            ->editColumn('discount', function ($query) {
+                if ($query->discount_type == 'percent') {
+                    return $query->discount . '%';
+                } else {
+                    return number_format($query->discount *1000, 0,',','.') . 'đ';
+                }
+            })
             ->editColumn('start_date', function ($query) {
                 return date('d-m-Y', strtotime($query->start_date));
             })
@@ -64,18 +71,15 @@ class CouponDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('code'),
-            Column::make('discount'),
-            Column::make('start_date'),
-            Column::make('end_date'),
+            Column::make('discount')->title('Giá trị voucher cho đơn hàng')->width(300),
+            Column::make('required_points')->title('Điểm cần đổi')->width(200),
+            Column::make('start_date')->title('Ngày bắt đầu')->width(200)->addClass('text-center'),
+            Column::make('end_date')->title('Ngày kết thúc')->width(200)->addClass('text-center'),
             Column::computed('action')
             ->exportable(false)
             ->printable(false)
-            ->width(60)
-            ->addClass('text-center'),
+            ->width(150)
+            ->addClass('text-center')->title('Nút'),
         ];
     }
 

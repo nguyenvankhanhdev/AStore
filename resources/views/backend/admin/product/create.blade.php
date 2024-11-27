@@ -62,6 +62,7 @@
                                 <option value="featured_product">Featured</option>
                                 <option value="top_product">Top Product</option>
                                 <option value="best_product">Best Product</option>
+                                <option value="accessory">Accessory</option>
                             </select>
                         </div>
                         <div class="form-group">

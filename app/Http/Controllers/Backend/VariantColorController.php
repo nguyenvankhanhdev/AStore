@@ -17,9 +17,40 @@ class VariantColorController extends Controller
     public function index(Request $request, VariantColorsDataTable $dataTable)
     {
         $variants = ProductVariant::findOrFail($request->variants);
-        $products= $variants->product;
+        $products = $variants->product;
         return $dataTable->render('backend.admin.product.variant_colors.index', compact('products', 'variants'));
     }
+
+    public function getColorsByVariant($variantId)
+    {
+        $colors = VariantColors::where('variant_id', $variantId)
+            ->with('color')
+            ->get();
+
+        if ($colors->isEmpty()) {
+            return response()->json(['error' => 'No colors found'], 404);
+        }
+
+        return response()->json($colors);
+    }
+
+    public function getVariantColor($variant_id, $color_id)
+    {
+        $variantColor = VariantColors::where('variant_id', $variant_id)
+            ->where('color_id', $color_id)
+            ->first();
+
+        if ($variantColor) {
+            return response()->json([
+                'variant_color_id' => $variantColor->id,
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Không tìm thấy Variant Color ID phù hợp.',
+        ], 404);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -38,9 +69,9 @@ class VariantColorController extends Controller
     {
         $request->validate([
             'colors' => ['required'],
-            'price'=> ['required'],
-            'offer_price'=> ['required'],
-            'quantity'=> ['required'],
+            'price' => ['required'],
+            'offer_price' => ['required'],
+            'quantity' => ['required'],
         ]);
         $color = new VariantColors();
         $color->color_id = $request->colors;
@@ -77,9 +108,9 @@ class VariantColorController extends Controller
     {
         $request->validate([
             'colors' => ['required'],
-            'price'=> ['required'],
-            'offer_price'=> ['required'],
-            'quantity'=> ['required'],
+            'price' => ['required'],
+            'offer_price' => ['required'],
+            'quantity' => ['required'],
         ]);
         $color = VariantColors::findOrFail($id);
         $color->color_id = $request->colors;
@@ -88,7 +119,6 @@ class VariantColorController extends Controller
         $color->quantity = $request->quantity;
         $color->save();
         return redirect()->route('admin.variant-colors.index', ['variants' => $color->variant_id])->withSuccess('Cập nhật thành công');
-
     }
 
     /**

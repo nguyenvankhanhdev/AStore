@@ -9,44 +9,57 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
     use HasFactory;
+    protected $table = 'products';
+    protected $fillable = [
+        'name',
+        'slug',
+        'image',
+        'short_description',
+        'long_description',
+        'status',
+        'sub_cate_id',
+        'cate_id',
+        'product_type'
+
+    ];
     public function category()
     {
-        return $this->belongsTo(Categories::class,'cate_id');
+        return $this->belongsTo(Categories::class, 'cate_id');
     }
 
     public function subCategory()
     {
-        return $this->belongsTo(SubCategories::class,'sub_cate_id');
+        return $this->belongsTo(SubCategories::class, 'sub_cate_id');
     }
 
     public function productImages()
     {
-        return $this->hasMany(ProductImages::class,'pro_id');
+        return $this->hasMany(ProductImages::class, 'pro_id');
     }
 
     public function ratings()
     {
-        return $this->hasMany(Ratings::class,'pro_id');
+        return $this->hasMany(Ratings::class, 'pro_id');
     }
 
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class,'pro_id');
+        return $this->hasMany(ProductVariant::class, 'pro_id');
     }
     public function carts()
     {
-        return $this->hasMany(Carts::class.'pro_id');
+        return $this->hasMany(Carts::class . 'pro_id');
     }
 
     public function comments()
     {
-        return $this->hasMany(Comments::class,'pro_id');
+        return $this->hasMany(Comments::class, 'pro_id');
     }
 
-    public function orderDetails(){
-        return $this->hasMany(OrderDetails::class,'pro_id');
+    public function accessories()
+    {
+        return $this->hasMany(Accessories::class,'pro_id');
     }
-
 
 
     public static function hasUserPurchasedProduct($userId, $productId)
@@ -60,8 +73,4 @@ class Products extends Model
         // Kiểm tra productId có trong danh sách productIds không
         return $productIds->contains($productId);
     }
-
-
-
-
 }

@@ -1357,6 +1357,8 @@ p {
 .review-container h3 {
     margin-bottom: 8px;
     text-align: left;
+    /* margin-top: -74px;
+    height: 100px; */
 }
 
 .review-container h5 {
@@ -1374,7 +1376,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 200px;
+    width: 300px;
 }
 
 .custom-ratingstar
@@ -1437,7 +1439,7 @@ p {
     font-weight: bold;
     color: #555;
     text-align: left;
-    width: 200px;
+    width: 300px;
 }
 
 .rating-count p {
@@ -1448,8 +1450,8 @@ p {
 
 .star {
     font-size: 30px;
-    display: inline-block;
-    position: relative;
+    /* display: inline-block; */
+    /* position: relative; */
     color: #ddd; /* Màu xám cho ngôi sao chưa sáng */
 }
 
@@ -1460,7 +1462,7 @@ p {
 .star.half {
     display: inline-block;
     font-size: 30px;
-    position: relative;
+    /* position: relative; */
     background: linear-gradient(to right, gold 50%, #ddd 50%); /* Đổ màu vàng nửa sao */
     -webkit-background-clip: text;
     background-clip: text;
@@ -1476,7 +1478,170 @@ p {
     display: inline-block;
 }
 
+/* Style cho button */
+.btn.view-reviews-btn {
+    background-color: #007bff;  /* Màu nền xanh */
+    color: white;  /* Màu chữ trắng */
+    padding: 10px 20px;  /* Khoảng cách trong button (điều chỉnh tùy ý) */
+    border: none;  /* Xóa đường viền */
+    border-radius: 5px;  /* Bo góc button */
+    font-size: 16px;  /* Kích thước chữ */
+    cursor: pointer;  /* Con trỏ chuột khi hover vào button */
+    transition: background-color 0.3s ease, color 0.3s ease;  /* Hiệu ứng chuyển màu khi hover */
+    text-align: center;  /* Canh giữa chữ */
+    margin-left: 70px;
+    position: relative;
+    top: -3px;
+}
 
+/* Style khi hover vào button */
+.btn.view-reviews-btn:hover {
+    background-color: #ccc;  /* Nền bạc khi hover */
+    color: white;  /* Chữ trắng khi hover */
+}
+
+
+/* Modal Đánh Giá */
+.modal-review {
+    display: none;  /* Modal sẽ ẩn khi chưa kích hoạt */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Phần nội dung modal */
+.modal-content-review {
+    background-color: white;
+    width: 80%;
+    max-width: 800px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* Thêm vị trí để cho phép di chuyển */
+    cursor: move; /* Thêm dấu hiệu con trỏ khi kéo */
+
+    /* Điều chỉnh chiều cao và cho phép cuộn nội dung */
+    max-height: 80vh; /* Chiều cao tối đa của modal */
+    overflow-y: auto;  /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
+}
+
+/* Các phần còn lại giữ nguyên */
+.modal-header-review h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-line-review {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.rating-user {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.rating-thoughts {
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.rating-stars .star {
+    font-size: 20px;
+    color: #ffd700;
+    margin-right: 5px;
+}
+
+.star.empty {
+    color: #ccc;
+}
+
+/* .star.half {
+    color: #ffa500;
+} */
+ .info-user
+ {
+    display: flex;
+ }
+
+ .user-image{
+    width: 30%;
+ }
+
+ .user-rating{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
+ }
+
+ .rating-stars
+ {
+
+ }
+
+ .review{
+    margin-left: -11px;
+ }
+
+ .rating-user strong{
+    font-weight: bold;
+    font-size: 20px;
+ }
+
+ .user-image img{
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+ }
+
+.rating-score-review {
+    font-size: 14px;
+    color: #333;
+}
+
+.image-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.image-gallery img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.modal-footer-review {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.close-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background-color: #0056b3;
+}
 
 
 /* end css rating */
@@ -12930,6 +13095,7 @@ a.checkbox.active:after {
 }
 
 main {
+    margin-top: -10px;
     background: #f8f9fa
 }
 

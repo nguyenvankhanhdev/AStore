@@ -17,8 +17,10 @@
                     class="fas fa-list-ul"></i> Orders</a></li>
         <li><a class="{{ setActive(['user.user-coupons.*']) }}" href="{{ route('user.user-coupons.index') }}"><i
                         class="fas fa-coins"></i>Coupons</a></li>
-        <li><a class="" href=""><i
+        <li><a class="{{ setActive(['user.reviews']) }}" href="{{ route('user.reviews') }}"><i
                     class="far fa-star"></i> Reviews</a></li>
+                    <li><a class="" href="{{ route('user.wishlist.index') }}"><i
+                        class="far fa-star"></i> Wishlist</a></li>
 
         <li><a class="{{ setActive(['user.dashboard.profile']) }}" href="{{ route('user.dashboard.profile') }}"><i
                     class="far fa-user"></i> My Profile</a></li>

@@ -8026,7 +8026,7 @@ main {
 .category .actions {
     padding: 24px 24px 8px;
     background-color: #212529;
-    padding-bottom: 20px;
+    padding-bottom: 5px;
 }
 
 .category .actions .tab {
@@ -8186,6 +8186,7 @@ main {
     align-items: center;
     justify-content: center;
 }
+
 .category .product__price .text {
     font-size: 16px;
     line-height: 24px;
@@ -8210,7 +8211,6 @@ main {
     width: 176px;
     border: solid 2px;
     border-radius: 6px
-
 }
 
 .category .product__detail .btn:hover {
@@ -8328,4 +8328,243 @@ main {
 .category .sw-button:focus {
     background: #0664f9;
     color: #fff
+}
+
+
+
+
+
+
+
+
+
+
+/* Flex container for filter and sort sections */
+.filter-sort-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+/* Adjust filter container styles */
+.custom-filter-container {
+    position: relative;
+    display: inline-block;
+    min-width: 200px;
+}
+
+/* Dropdown toggle button for filter */
+.custom-dropdown-toggle {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    min-width: 120px;
+}
+
+/* Sort container on the right */
+.custom-sort-container {
+    position: relative;
+    /* Định vị cho nút cha của dropdown */
+}
+
+/* Text next to sort dropdown */
+.custom-sort-text {
+    font-size: 14px;
+    color: #ddd;
+}
+
+/* Dropdown button for sort */
+.custom-sort-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Dropdown content styling (same as filter dropdown) */
+.custom-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 416px;
+    margin-top: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.custom-sort-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 200px;
+    margin-top: 8px;
+    display: none;
+}
+
+
+.custom-filter-container.active .custom-dropdown-content,
+.custom-sort-container.active .custom-sort-menu {
+    display: block;
+}
+
+/* Label for checkbox in filter dropdown */
+.custom-dropdown-content label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Checkbox */
+.custom-price-range {
+    margin-right: 8px;
+}
+
+/* Horizontal separator line */
+.custom-dropdown-content hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* Custom price range input group */
+.custom-price-input label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.custom-input-group input[type="number"] {
+    width: 45%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Separator between price input fields */
+.custom-input-group span {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Filter button */
+#custom-filter-price-range {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#custom-filter-price-range:hover {
+    background-color: #0056b3;
+}
+
+/* Sort menu items */
+.custom-sort-menu-wrapper a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.custom-sort-menu-wrapper a:hover {
+    background-color: #f5f5f5;
+    color: #000;
+    cursor: pointer;
+}
+
+.custom-sort-menu-wrapper a:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.custom-sort-menu-wrapper a.custom-price-min.active,
+.custom-sort-menu-wrapper a.custom-price-max.active {
+    background-color: #f0f8ff;
+    font-weight: bold;
+    color: #007bff;
+}
+
+
+#price-slider {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.custom-input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-input-group input {
+    width: 45%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.noUi-connect {
+    background: #4a5568 !important;
+    /* Màu thanh kết nối */
+    border-radius: 5px !important;
+}
+
+.noUi-target {
+    background: #2d3748 !important;
+    /* Màu nền thanh trượt */
+    border-radius: 5px !important;
+    /* Góc bo tròn */
+    height: 8px !important;
+    /* Độ cao của thanh trượt */
+    position: relative !important;
+}
+
+.noUi-handle {
+    background: #fff !important;
+    /* Màu nền tay cầm */
+    border: 2px solid #4a5568 !important;
+    /* Màu viền tay cầm */
+    border-radius: 50% !important;
+    /* Tay cầm tròn */
+    height: 20px !important;
+    /* Chiều cao tay cầm */
+    width: 20px !important;
+    /* Chiều rộng tay cầm */
+    cursor: pointer !important;
 }

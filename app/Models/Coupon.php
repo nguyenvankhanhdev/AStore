@@ -10,6 +10,10 @@ class Coupon extends Model
     use HasFactory;
     public function usercoupons()
     {
-        return $this->hasMany(UserCoupons::class, 'coupon_id', 'id');
+        return $this->hasMany(UserCoupons::class, 'coupon_id');
+    }
+    public function orders()
+    {
+        return $this->hasMany(Orders::class, 'coupon_id');
     }
 }

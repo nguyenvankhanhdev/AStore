@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\DataTables\CanceledOrderDataTable;
+use App\DataTables\CompletedOrderDataTable;
 use App\DataTables\DeliveredOrderDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -38,6 +39,10 @@ class OrderController extends Controller
     {
         return $dataTable->render('backend.admin.orders.canceled-order');
     }
+    public function completedOrders(CompletedOrderDataTable $dataTable)
+    {
+        return $dataTable->render('backend.admin.orders.completed-order');
+    }
 
 
     /**
@@ -45,15 +50,30 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        // Tải sẵn các quan hệ liên quan đến sản phẩm, màu sắc, và dung lượng (storage)
         $order = Orders::with([
             'orderDetails.variantColors.variant.product',
             'orderDetails.variantColors.color',
-            'orderDetails.variantColors.variant.storage'
+            'orderDetails.variantColors.variant.storage',
+            'coupon'
         ])->findOrFail($id);
-        // Truyền dữ liệu $order cho view
-        return view('backend.admin.orders.show', compact('order'));
+
+        $subTotal = $order->orderDetails->sum('total_price');
+
+        $totalDiscount = 0;
+        if ($order->coupon) {
+            if ($order->coupon->discount_type === 'percent') {
+                $totalDiscount = $subTotal * ($order->coupon->discount / 100);
+            } elseif ($order->coupon->discount_type === 'amount') {
+                $totalDiscount = $order->coupon->discount * 1000;
+            }
+        }
+
+        // Tổng tiền sau giảm giá
+        $totalAfterDiscount = max($subTotal - $totalDiscount, 0); // Đảm bảo không âm
+
+        return view('backend.admin.orders.show', compact('order', 'subTotal', 'totalDiscount', 'totalAfterDiscount'));
     }
+
 
 
 
@@ -81,9 +101,7 @@ class OrderController extends Controller
     {
         $order = Orders::findOrFail($id);
 
-        // delete order products
         $order->orderProducts()->delete();
-        // delete transaction
         $order->transaction()->delete();
 
         $order->delete();

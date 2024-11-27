@@ -12,6 +12,8 @@ class UserCoupons extends Model
     protected $fillable = [
         'user_id',
         'coupon_id',
+        'unique_code',
+
     ];
     public $timestamps = false;
     public function coupons()

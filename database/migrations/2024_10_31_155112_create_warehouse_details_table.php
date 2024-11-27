@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('warehouse_details', function (Blueprint $table) {
             $table->id();
+            $table->integer('warehouse_id');
+            $table->integer('variant_color_id');
+            $table->integer('quantity');
+            $table->double('warehouse_price',15,2);
             $table->timestamps();
         });
     }

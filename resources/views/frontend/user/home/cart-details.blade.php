@@ -15,6 +15,12 @@
 
                 </ol>
 
+                @php
+                    $countcarts = App\Models\Carts::getCountCart(Auth::user()->id);
+                    echo '<script>
+                        var countCarts = "' . json_encode($countcarts) . '";
+                    </script>';
+                @endphp
                 <div class="card">
                     <div class="card-title">Có {{ count($carts) }} sản phẩm trong giỏ hàng<span
                             class="c-modal--close js-modal__close"></span>
@@ -32,7 +38,8 @@
                                                 <label
                                                     class="ant-checkbox-wrapper ant-checkbox-wrapper-checked css-bvvl68 css-10ed4xt">
                                                     <span class="ant-checkbox css-10ed4xt ant-checkbox-checked">
-                                                        <input type="checkbox" class="ant-checkbox-input" data-price="{{ ($cart->variant_color->price - $cart->variant_color->offer_price) }}">
+                                                        <input type="checkbox" class="ant-checkbox-input"
+                                                            data-price="{{ $cart->variant_color->price - $cart->variant_color->offer_price }}">
                                                         <span class="ant-checkbox-inner"></span>
                                                     </span>
                                                 </label>
@@ -43,8 +50,14 @@
                                             <div class="product-cart__inside">
                                                 <a class="product-cart__line" href=""></a>
                                                 <h3 class="product-cart__name product-cart__name--lg name-product-split">
-                                                    {{ $cart->product->name }} -
-                                                    {{ $cart->variant_color->variant->storage->GB }}
+                                                    {{ $cart->product->name }}
+                                                    @php
+                                                        if ($cart->variant_color->variant->storage->GB === '0GB') {
+                                                            echo '';
+                                                        } else {
+                                                            echo ' - ' . $cart->variant_color->variant->storage->GB;
+                                                        }
+                                                    @endphp
                                                 </h3>
                                                 <div class="product-cart__line" style="display: flex"></div>
                                                 <p style="margin-left: 2px">Màu sắc:
@@ -106,14 +119,33 @@
                                         </div>
                                     </div>
 
-                                    <div class="c-cart-badge m-t-8" id="coupon-badge"><a
-                                            class="badge badge-grayscale badge-xxxs badge-xxs badge-close m-r-8 m-b-8"
-                                            href="{{ route('remove-coupon') }}"><i class="ic-tag m-r-4"></i><span
-                                                id="getcoupon_code"> </span><span
-                                                class="btn btn-icon-single btn-square btn-grayscale btn-xs"><i
-                                                    class="ic-close f-s-ui-16"></i></span></a>
+                                    <div class="c-cart-badge m-t-8" id="coupon-badge">
+                                        <a class="badge badge-grayscale badge-xxxs badge-xxs badge-close m-r-8 m-b-8"
+                                            href="{{ route('remove-coupon') }}">
+                                            <i class="ic-tag m-r-4"></i>
+                                            <span id="getcoupon_code"
+                                                data-coupon="{{ Session::has('coupon') ? Session::get('coupon')['coupon_code'] : '' }}">
+                                                @if (Session::has('coupon'))
+                                                    {{ Session::get('coupon')['coupon_code'] }}
+                                                @endif
 
+                                                @if (Session::has('coupon'))
+                                                    <script>
+                                                        var cp = @json(Session::get('coupon'));
+                                                        var user_coupon = @json(Session::get('coupon')['coupon_code']);
+                                                    </script>
+                                                @else
+                                                    <script>
+                                                        var user_coupon = null;
+                                                    </script>
+                                                @endif
+                                            </span>
+                                            <span class="btn btn-icon-single btn-square btn-grayscale btn-xs">
+                                                <i class="ic-close f-s-ui-16"></i>
+                                            </span>
+                                        </a>
                                     </div>
+
                                 </div>
                                 <div class="c-cart__total">
                                     <p class="text-normal"><span>Tổng tiền:</span><span
@@ -406,18 +438,15 @@
                                                 <div class="c-cart__select m-t-8" id="list-bank-item">
                                                     <div class="c-cart__select__item" id="VNPay" data-payment-id="2"
                                                         data-name="vnpay" value="VNPay"><img
-                                                            src="{{ asset('uploads/vnpay.jpg') }}"
-                                                            alt="vnpay">
+                                                            src="{{ asset('uploads/vnpay.jpg') }}" alt="vnpay">
                                                     </div>
                                                     <div class="c-cart__select__item" id="Momo" data-payment-id="3"
                                                         data-name="momo" value="Momo"><img
-                                                            src="{{ asset('uploads/momo.png') }}"
-                                                            alt="Momo">
+                                                            src="{{ asset('uploads/momo.png') }}" alt="Momo">
                                                     </div>
                                                     <div class="c-cart__select__item" id="zalopay" data-payment-id="8"
                                                         data-name="momo" value="Momo"><img
-                                                            src="{{ asset('uploads/zalopay.png') }}"
-                                                            alt="zalopay">
+                                                            src="{{ asset('uploads/zalopay.png') }}" alt="zalopay">
                                                     </div>
 
                                                 </div>
@@ -514,14 +543,26 @@
         filterDropdown('#search-district', '#district-list');
         filterDropdown('#search-ward', '#ward-list');
 
-
-
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+
+
+            if (countCarts === '0') {
+                $('.card-title').hide();
+                $('.card-body').hide();
+                $('.breadcrumb').hide();
+                $('.containerr').show();
+            } else {
+                $('.card-title').show();
+                $('.card-body').show();
+                $('.breadcrumb').show();
+                $('.containerr').hide();
+            }
 
             $('.shoping').on('click', function() {
                 window.location.href = "{{ route('home') }}";
@@ -580,6 +621,20 @@
                 wrapperItem.removeClass('open');
             });
 
+            var displayCoupon = $('#coupon-badge');
+            var getcoupon_code = $('#getcoupon_code').data('coupon'); // Lấy giá trị từ `data-coupon`
+
+            if (!getcoupon_code) { // Kiểm tra nếu giá trị trống
+                displayCoupon.hide();
+            } else {
+                displayCoupon.show();
+            }
+
+            var cb1 = '';
+            if (typeof cp !== 'undefined' && cp) {
+                cb1 = cp;
+
+            }
 
             var checkboxes = $('.ant-checkbox-input');
             var totalPriceElement = $('.re-price');
@@ -606,10 +661,24 @@
 
                     }
                 });
-                point = totalPrice / 100000;
-                $('#point').text("+ "+Math.floor(point) +" " +"điểm");
-                totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + ' ₫');
                 totalAmountElement.text(totalPrice.toLocaleString('vi-VN') + ' ₫');
+
+                if (cb1.discount_type === 'percent') {
+                    totalDiscount = totalPrice * (cb1.discount / 100);
+                    totalPrice -= (totalPrice * cb1.discount / 100);
+                    totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + ' ₫');
+
+                } else if (cb1.discount_type === 'amount') {
+                    totalDiscount = cb1.discount * 1000;
+                    totalPrice = totalPrice - (cb1.discount * 1000);
+                    totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + ' ₫');
+                } else {
+                    totalPrice = totalPrice;
+                    totalPriceElement.text(totalPrice.toLocaleString('vi-VN') + ' ₫');
+                }
+
+                point = totalPrice / 100000;
+                $('#point').text("+ " + Math.floor(point) + " " + "điểm");
                 discountElement.text('-' + totalDiscount.toLocaleString('vi-VN') + '₫');
 
             }
@@ -696,11 +765,7 @@
                     }
                 });
             });
-            var displayCoupon = $('#coupon-badge');
-            var getcoupon_code = $('#getcoupon_code');
-            if (!$('#coupon-badge').val()) {
-                displayCoupon.hide();
-            }
+
 
             $('#coupon_form').on('click', function(e) {
                 e.preventDefault();
@@ -714,20 +779,25 @@
                     success: function(data) {
                         if (data.status === 'success') {
                             toastr.success(data.message);
-                            displayCoupon.show();
-                            getcoupon_code.text(data.coupon_code);
 
+                            $('#getcoupon_code').text(data.coupon_code);
+                            $('#coupon-badge').show();
 
+                            user_coupon = data.coupon_code;
+                            cb1 = data.coupon;
+                            updateTotal();
                         } else {
                             toastr.error(data.message);
+                            $('#coupon-badge').hide();
                         }
                     },
                     error: function(data) {
+                        toastr.error('Có lỗi xảy ra, vui lòng thử lại!');
                         console.log(data);
                     }
                 });
-                console.log(couponCode);
             });
+
 
             $('.badge-close').on('click', function(e) {
                 e.preventDefault();
@@ -738,6 +808,8 @@
                     success: function(data) {
                         if (data.status === 'success') {
                             display.hide();
+                            cb1 = '';
+                            user_coupon = '';
                             toastr.success(data.message);
                             updateTotal();
 
@@ -843,12 +915,17 @@
                         location: location,
                         point: point,
                         create_address: create_address,
-                        productIds: selectedProductIds
+                        productIds: selectedProductIds,
+                        coupon_id: user_coupon,
                     },
                     success: function(response) {
                         if (response.status === 'success') {
+                            cb1 = '';
                             window.location.href = response.redirect;
                             toastr.success(response.message);
+
+
+
                         } else {
                             toastr.error(response.message);
                         }
