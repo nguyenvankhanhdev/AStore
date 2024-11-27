@@ -237,17 +237,24 @@
             }
         });
 
-        $('#forgotPasswordForm').on('submit', function(e) {
+        $('#forgotPasswordForm').on('click', function(e) {
             e.preventDefault();
 
             let email = $('#recipient-name').val();
+            if (!validateEmail(email)) {
+                toastr.error('Email không hợp lệ.');
+                return;
+            }
 
             $.ajax({
-                type: 'POST',
                 url: '{{ route('password.forgot') }}',
+                method: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
                     email: email
+                },
+                beforeSend: function() {
+                    console.log('Sending OTP to:', email);
                 },
                 success: function(response) {
                     if (response.status === 'success') {
@@ -260,7 +267,6 @@
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
-                        // Xử lý lỗi validate
                         let errors = xhr.responseJSON.errors;
                         if (errors && errors.email) {
                             toastr.error(errors.email[0]);
@@ -272,8 +278,13 @@
             });
         });
 
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
 
-        $('#resetPasswordForm').on('submit', function (e) {
+
+        $('#resetPasswordForm').on('submit', function(e) {
             e.preventDefault();
 
             let otp = $('#otp-code').val();
@@ -294,7 +305,7 @@
                     new_password: newPassword,
                     confirm_password: confirmPassword
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response.status === 'success') {
                         toastr.success(response.message);
                         $('#resetPasswordModal').modal('hide');
@@ -302,7 +313,7 @@
                         toastr.error(response.message);
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         if (errors && errors.otp) {

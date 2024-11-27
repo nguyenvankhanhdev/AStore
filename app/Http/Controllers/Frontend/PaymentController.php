@@ -130,13 +130,13 @@ class PaymentController extends Controller
             $updatePoint = User::find(auth()->id());
             $updatePoint->point += session('order_point');
             $updatePoint->save();
-            $this->storeOrder('Paypal', 'pending', 'completed', session('user_address'));
+            $order = $this->storeOrder('Paypal', 'pending', 'completed', session('user_address'));
 
             session()->forget('user_address');
             $this->clearSession();
 
 
-            return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
+            return redirect()->route('booking.success', ['orderId' => $order])->withSuccess('Thanh toán thành công');
         }
 
         return redirect()->route('user.paypal.cancel')->with('error', 'Payment was not successful.');
@@ -202,15 +202,14 @@ class PaymentController extends Controller
 
         session(['user_address' => $userAddress->toJson()]);
 
-        $this->storeOrder('COD', 'pending', 'pending', session('user_address'));
-
+        $orderId = $this->storeOrder('COD', 'pending', 'pending', session('user_address'));
 
         $this->clearSession();
 
         $returnData = [
             'status' => 'success',
             'message' => 'Đặt hàng thành công',
-            'redirect' => route('booking.success')
+            'redirect' => route('booking.success', ['orderId' => $orderId])
         ];
         return response()->json($returnData);
     }
@@ -224,7 +223,7 @@ class PaymentController extends Controller
         $order->address = $addressJson;
         $order->payment_status = $payment_status;
         $order->payment_method = $payment_method;
-        $user_coupon_id = UserCoupons::where('unique_code',session('coupon_id'))->first();
+        $user_coupon_id = UserCoupons::where('unique_code', session('coupon_id'))->first();
 
         if ($user_coupon_id) {
             $coupon = Coupon::find($user_coupon_id->coupon_id);
@@ -233,8 +232,7 @@ class PaymentController extends Controller
             $order->coupon_id = $coupon->id;
             $coupon->save();
             $user_coupon_id->delete();
-        }
-        else{
+        } else {
             $order->coupon_id = null;
         }
         $order->save();
@@ -244,7 +242,9 @@ class PaymentController extends Controller
             $cartItem = Carts::where('user_id', auth()->id())
                 ->where('variant_color_id', $productId)
                 ->first();
+            Log::info($cartItem);
             $quantity = $cartItem->quantity;
+            Log::info('quantity '.$quantity);
             $variant = VariantColors::find($productId);
             if ($variant) {
                 $orderDetail = new OrderDetails();
@@ -273,6 +273,7 @@ class PaymentController extends Controller
         ], function ($message) use ($address) {
             $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
         });
+        return $order->id;
     }
     public function payWithVNPAY(Request $request)
     {
@@ -366,7 +367,7 @@ class PaymentController extends Controller
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
                 session(['user_address' => $userAddress->toJson()]);
 
-                $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
+                $orderId = $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
                 $this->clearSession();
@@ -374,7 +375,7 @@ class PaymentController extends Controller
 
                 session()->forget('checkbox-' . $request->productIds);
 
-                return redirect()->route('booking.success')->withSuccess('Đặt hàng thành công');
+                return redirect()->route('booking.success', ['orderId' => $orderId])->withSuccess('Đặt hàng thành công');
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error('Order processing failed: ' . $e->getMessage());
@@ -492,6 +493,7 @@ class PaymentController extends Controller
         $resultCode = $request->resultCode;
         $signature = $request->signature;
 
+        Log::info('MoMo response: ' . json_encode($request->all()));
         $rawHash = "amount=" . $request->amount . "&extraData=" . $request->extraData . "&message=" . $request->message . "&orderId=" . $request->orderId . "&orderInfo=" . $request->orderInfo . "&orderType=" . $request->orderType . "&partnerCode=" . $request->partnerCode . "&payType=" . $request->payType . "&requestId=" . $request->requestId . "&responseTime=" . $request->responseTime . "&resultCode=" . $resultCode . "&transId=" . $request->transId;
         $generatedSignature = hash_hmac("sha256", $rawHash, $secretKey);
 
@@ -506,13 +508,13 @@ class PaymentController extends Controller
                 $updatePoint->save();
 
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
-
+                Log::info('userAddress: ' . $userAddress);
                 session(['user_address' => $userAddress->toJson()]);
-                $this->storeOrder('MoMo', 'pending', 'completed', session('user_address'));
+                $orderId =  $this->storeOrder('MoMo', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
                 $this->clearSession();
-                return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
+                return redirect()->route('booking.success', ['orderId' => $orderId])->withSuccess('Thanh toán thành công');
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error('MoMo payment handling failed: ' . $e->getMessage());
@@ -580,8 +582,6 @@ class PaymentController extends Controller
         }
     }
 
-
-
     public function payWithZALOPAY(Request $request)
     {
         session([
@@ -617,7 +617,6 @@ class PaymentController extends Controller
             "bank_code" => ""
         ];
 
-        // Generate MAC
         $data = implode("|", [
             $order["app_id"],
             $order["app_trans_id"],
@@ -666,28 +665,18 @@ class PaymentController extends Controller
         $userAddress = $this->getOrCreateUserAddress($info, $address);
 
         session(['user_address' => $userAddress->toJson()]);
-        $this->storeOrder('ZALOPAY', 'pending', 'completed', session('user_address'));
+        $orderId = $this->storeOrder('ZALOPAY', 'pending', 'completed', session('user_address'));
         DB::commit();
         $this->clearSession();
-        return redirect()->route('booking.success')->withSuccess('Thanh toán thành công');
+        return redirect()->route('booking.success',['orderId'=>$orderId])->withSuccess('Thanh toán thành công');
     }
 
-    public function booking_success()
+    public function booking_success(Request $request)
     {
-        return view('frontend.user.home.booking_success');
+        $order = Orders::find($request->orderId);
+        $subTotal = $order->orderDetails->sum('total_price');
+
+        return view('frontend.user.home.booking_success', compact('order', 'subTotal'));
     }
 
-    public function sendMail(Request $request)
-    {
-
-        $orders = Orders::find(81);
-        $data = [
-            'name' => 'Nguyễn Văn Khánh',
-            'orders' => $orders
-        ];
-        Mail::send('frontend.mail.test', $data, function ($message) {
-            $message->to('nguyenkhanh13082003@gmail.com') // Địa chỉ email người nhận
-                ->subject('Thông báo đơn hàng mới');
-        });
-    }
 }

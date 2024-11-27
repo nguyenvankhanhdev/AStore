@@ -123,7 +123,8 @@
                                         <a class="badge badge-grayscale badge-xxxs badge-xxs badge-close m-r-8 m-b-8"
                                             href="{{ route('remove-coupon') }}">
                                             <i class="ic-tag m-r-4"></i>
-                                            <span id="getcoupon_code" data-coupon="{{ Session::has('coupon') ? Session::get('coupon')['coupon_code'] : '' }}">
+                                            <span id="getcoupon_code"
+                                                data-coupon="{{ Session::has('coupon') ? Session::get('coupon')['coupon_code'] : '' }}">
                                                 @if (Session::has('coupon'))
                                                     {{ Session::get('coupon')['coupon_code'] }}
                                                 @endif
