@@ -186,8 +186,7 @@
                                         endPrice.toLocaleString(
                                             'vi-VN') + ' ₫');
                                     productElement.find('.product__price .text-promo').text(
-                                        price
-                                        .toLocaleString('vi-VN') + ' ₫');
+                                        price.toLocaleString('vi-VN') + ' ₫');
 
                                     productElement.attr('data-price', price);
                                     productElement.attr('data-discounted-price', endPrice);

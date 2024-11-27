@@ -180,6 +180,39 @@
                                                     </div>
                                                 @break
 
+                                                @case('Xanh dương đậm')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#106294"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Xám không gian')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#6c93ab"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Hồng')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#ffbfe4"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+                                                @case('Tím')
+                                                <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                    <span style="background-color:#bb2bf8"></span>
+                                                    <div>{{ $name->name }}</div>
+                                                </div>
+                                            @break
+                                            @case('Ánh sao')
+                                            <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                <span style="background-color:#d6d6d6"></span>
+                                                <div>{{ $name->name }}</div>
+                                            </div>
+                                        @break
+
                                                 @default
                                                     <div class="item" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FFFFFF"></span> <!-- Màu mặc định -->
