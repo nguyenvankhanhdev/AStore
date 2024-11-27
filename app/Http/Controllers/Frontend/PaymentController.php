@@ -243,8 +243,8 @@ class PaymentController extends Controller
                 ->where('variant_color_id', $productId)
                 ->first();
             Log::info($cartItem);
-            // $quantity = $cartItem->quantity;
-            // Log::info('quantity '.$quantity);
+             $quantity = $cartItem->quantity;
+             Log::info('quantity '.$quantity);
             $variant = VariantColors::find($productId);
             if ($variant) {
                 $orderDetail = new OrderDetails();
