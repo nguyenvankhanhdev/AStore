@@ -29,13 +29,8 @@ class WishlistController extends Controller
     {
         \Log::info('Request data:', $request->all());
 
-        if (!auth()->check()) {
-            return response()->json([
-                'message' => 'Vui lòng đăng nhập để thêm sản phẩm vào danh sách yêu thích!',
-                'status' => 'error',
-            ], 401);
-        }
         $validated = $request->validate([
+            'pro_id' => 'required|exists:products,id',
             'variant_color_id' => 'required|exists:variant_colors,id',
         ]);
 
@@ -43,6 +38,7 @@ class WishlistController extends Controller
 
         $exists = Wishlist::where([
             ['user_id', auth()->id()],
+            ['pro_id', $validated['pro_id']],
             ['variant_color_id', $validated['variant_color_id']],
         ])->exists();
 
@@ -55,6 +51,7 @@ class WishlistController extends Controller
 
         Wishlist::create([
             'user_id' => auth()->id(),
+            'pro_id' => $validated['pro_id'],
             'variant_color_id' => $validated['variant_color_id'],
         ]);
 
@@ -63,6 +60,7 @@ class WishlistController extends Controller
             'status' => 'success'
         ]);
     }
+
 
     public function remove($id)
     {
