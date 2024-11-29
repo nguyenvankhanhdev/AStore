@@ -521,6 +521,10 @@
 
     <script>
         $(document).ready(function() {
+
+            function formatNumberToVND(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ₫';
+            }
             function getPriceByVariantId(productElement) {
                 const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
@@ -542,10 +546,8 @@
                             const discount = response.variantColors.offer_price;
                             const endPrice = price - discount;
 
-                            productElement.find('.product__price .price').text(endPrice.toLocaleString(
-                                'vi-VN') + ' ₫');
-                            productElement.find('.product__price .text-promo').text(price
-                                .toLocaleString('vi-VN') + ' ₫');
+                            productElement.find('.product__price .price').text(formatNumberToVND(endPrice));
+                                    productElement.find('.product__price .text-promo').text(formatNumberToVND(price));
 
 
 
