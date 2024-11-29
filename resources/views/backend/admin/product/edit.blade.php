@@ -7,27 +7,27 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Edit Product</h4>
+                            <h4>Chỉnh sửa sản phẩm</h4>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.product.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label>Image</label>
+                                    <label>Hình ảnh</label>
                                     <input type="file" class="form-control" name="image">
                                     <img src="{{ asset($product->image) }}" width="100" alt="Current Image">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Name</label>
+                                    <label>Tên</label>
                                     <input type="text" class="form-control" name="name" value="{{ old('name', $product->name) }}">
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="inputState">Category</label>
+                                            <label for="inputState">Danh mục</label>
                                             <select id="inputState" class="form-control main-category" name="category">
                                                 <option value="">Select</option>
                                                 @foreach ($categories as $category)
@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="inputState">Sub Category</label>
+                                            <label for="inputState">Danh mục phụ</label>
                                             <select id="inputState" class="form-control sub-category" name="sub_category">
                                                 <option value="">Select</option>
                                                 @foreach ($subCategories as $subCategory)
@@ -53,34 +53,34 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Short Description</label>
+                                    <label>Mô tả ngắn</label>
                                     <textarea name="short_description" class="form-control">{{ old('short_description', $product->short_description) }}</textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Long Description</label>
+                                    <label>Mô tả dài</label>
                                     <textarea name="long_description" class="form-control summernote">{{ old('long_description', $product->long_description) }}</textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputState">Product Type</label>
+                                    <label for="inputState">Loại sản phẩm</label>
                                     <select id="inputState" class="form-control" name="product_type">
-                                        <option value="">Select</option>
-                                        <option value="new_arrival" {{ $product->product_type == 'new_arrival' ? 'selected' : '' }}>New Arrival</option>
-                                        <option value="featured_product" {{ $product->product_type == 'featured_product' ? 'selected' : '' }}>Featured</option>
-                                        <option value="top_product" {{ $product->product_type == 'top_product' ? 'selected' : '' }}>Top Product</option>
-                                        <option value="best_product" {{ $product->product_type == 'best_product' ? 'selected' : '' }}>Best Product</option>
+                                        <option value="">Chọn</option>
+                                        <option value="new_arrival" {{ $product->product_type == 'new_arrival' ? 'selected' : '' }}>Mới</option>
+                                        <option value="featured_product" {{ $product->product_type == 'featured_product' ? 'selected' : '' }}>Nổi bật</option>
+                                        <option value="top_product" {{ $product->product_type == 'top_product' ? 'selected' : '' }}>Hàng đầu</option>
+                                        <option value="best_product" {{ $product->product_type == 'best_product' ? 'selected' : '' }}>Tốt nhất</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputState">Status</label>
+                                    <label for="inputState">Trạng thái</label>
                                     <select id="inputState" class="form-control" name="status">
                                         <option value="1" {{ $product->status == 1 ? 'selected' : '' }}>Active</option>
                                         <option value="0" {{ $product->status == 0 ? 'selected' : '' }}>Inactive</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </form>
                         </div>
                     </div>

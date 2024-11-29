@@ -28,6 +28,7 @@ class UserOrderDataTable extends DataTable
                 if ($query->status !== 'delivered' && $query->status !== 'completed' && $query->status !== 'canceled') {
                     $cancelBtn = "<button style='margin-left: 6px;' data-id='" . $query->id . "' class='btn btn-danger ml-3 cancel-order'> Hủy Đơn</button>";
                 }
+
                 return $showBtn.$cancelBtn;
             })
             ->addColumn('name', function ($query) {
@@ -43,7 +44,7 @@ class UserOrderDataTable extends DataTable
                 return $this->getPaymentStatusBadge($query->payment_status);
             })
             ->addColumn('payment_method', function ($query) {
-                return $query->payment_method;
+                return $this->payment($query->payment_method);
             })
             ->addColumn('status', function ($query) {
                 return $this->getStatusBadge($query->status);
@@ -57,7 +58,7 @@ class UserOrderDataTable extends DataTable
      */
     public function query(Orders $model): QueryBuilder
     {
-        return $model->where('user_id', Auth::id())->newQuery();
+        return $model->where('user_id', Auth::id())->orderBy('order_date','desc')->newQuery();
     }
 
     /**
@@ -69,7 +70,7 @@ class UserOrderDataTable extends DataTable
             ->setTableId('order-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(0, 'desc')
+            ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -116,15 +117,9 @@ class UserOrderDataTable extends DataTable
     {
         switch ($status) {
             case 'pending':
-                return "<span class='badge bg-warning'>pending</span>";
-            case 'delivered':
-                return "<span class='badge bg-info'>delivered</span>";
-            case 'processed':
-                return "<span class='badge bg-info'>processed</span>";
+                return "<span class='badge bg-warning'>Đang chờ</span>";
             case 'completed':
-                return "<span class='badge bg-success'>completed</span>";
-            case 'canceled':
-                return "<span class='badge bg-danger'>canceled</span>";
+                return "<span class='badge bg-success'>Hoàn thành</span>";
             default:
                 return '';
         }
@@ -137,17 +132,24 @@ class UserOrderDataTable extends DataTable
     {
         switch ($status) {
             case 'pending':
-                return "<span class='badge bg-warning'>pending</span>";
+                return "<span class='badge bg-warning'>Đang chờ</span>";
             case 'delivered':
-                return "<span class='badge bg-info'>delivered</span>";
+                return "<span class='badge bg-info'>Đang giao hàng</span>";
             case 'processed':
-                return "<span class='badge bg-info'>processed</span>";
+                return "<span class='badge bg-info'>Đang xử lý</span>";
             case 'completed':
-                return "<span class='badge bg-success'>completed</span>";
+                return "<span class='badge bg-success'>Hoàn thành</span>";
             case 'canceled':
-                return "<span class='badge bg-danger'>canceled</span>";
+                return "<span class='badge bg-danger'>Đã hủy</span>";
             default:
                 return '';
+        }
+    }
+    private function payment(string $payment){
+        if($payment == 'COD'){
+            return 'Thanh toán khi nhận hàng';
+        }else{
+            return 'Thanh toán ' . $payment;
         }
     }
 }

@@ -83,7 +83,7 @@ class FlashSaleController extends Controller
         }
 
         if ($flashSale->status == 0) {
-            $this->updateFlashSaleItems($flashSale->id, 'best_product', false);
+            $this->updateFlashSaleItems($flashSale->id, 'hot_product', false);
             $flashSale->save();
             return response()->json(['status' => 'success', 'message' => 'Status has been updated!']);
         }

@@ -29,4 +29,8 @@ class Orders extends Model
     {
         return $this->belongsTo(Coupon::class, 'coupon_id', 'id');
     }
+    public function orderCancel()
+    {
+        return $this->hasMany(OrderCancel::class, 'order_id');
+    }
 }

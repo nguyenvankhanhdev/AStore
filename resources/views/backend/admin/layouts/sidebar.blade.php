@@ -64,9 +64,6 @@
 
                 </ul>
             </li>
-
-
-
             <li
                 class="dropdown {{ setActive([
                     'admin.orders',
@@ -100,7 +97,7 @@
             <li
                 class="dropdown {{ setActive([
                     'admin.vendor-profile.*',
-                    'admin.coupons.*',
+                    'admin.coupon.*',
                     'admin.shipping-rule.*',
                     'admin.payment-settings.*',
                 ]) }}">
@@ -109,8 +106,8 @@
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.flash-sale.*']) }}"><a class="nav-link"
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
-                    <li class="{{ setActive(['admin.coupons.*']) }}"><a class="nav-link"
-                            href="">Phiếu giảm giá</a></li>
+                    <li class="{{ setActive(['admin.coupon.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.coupon.index') }}">Phiếu giảm giá</a></li>
                     <li class="{{ setActive(['admin.payment-settings.*']) }}"><a class="nav-link"
                             href="{{ route('admin.payment-settings.index') }}">Payment Settings</a></li>
 

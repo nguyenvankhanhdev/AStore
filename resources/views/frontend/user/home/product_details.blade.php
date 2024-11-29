@@ -32,6 +32,8 @@
                                                             alt="MacBook Pro 16” 2021 M1 Pro"></picture>
                                                 </div>
                                             @endforeach
+                                            <div class="view-gallery js-open-gallery" data-count="+12"><img
+                                                    src="https://via.placeholder.com/96x96" alt=""></div>
                                         </div><!-- Add Arrows-->
                                         <div class="swiper-button-next ic-angle-right swiper-button"></div>
                                         <div class="swiper-button-prev ic-angle-left swiper-button"></div>
@@ -200,18 +202,20 @@
                                                         <div>{{ $name->name }}</div>
                                                     </div>
                                                 @break
+
                                                 @case('Tím')
-                                                <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
-                                                    <span style="background-color:#bb2bf8"></span>
-                                                    <div>{{ $name->name }}</div>
-                                                </div>
-                                            @break
-                                            @case('Ánh sao')
-                                            <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
-                                                <span style="background-color:#d6d6d6"></span>
-                                                <div>{{ $name->name }}</div>
-                                            </div>
-                                        @break
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#bb2bf8"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Ánh sao')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#d6d6d6"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
 
                                                 @default
                                                     <div class="item" data-color-id="{{ $name->id }}">
@@ -1442,6 +1446,10 @@
             <script>
                 var selectedColorId = @json($selectedColorId);
                 $(document).ready(function() {
+
+                    function formatNumberToVND(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ₫';
+                    }
                     $('#variant-selector').on('click', '.item', function(event) {
                         event.preventDefault();
                         const variantId = $(this).data('id');
@@ -1472,8 +1480,8 @@
                                     const productName = $('.product_name').data('initial-name');
                                     if (storage === "0GB") {
                                         $('.product_name').text(`${productName}`);
-                                        $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
-                                        $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                                        $('.text-promo').text(formatNumberToVND(originalPrice));
+                                        $('.price-sale').text(formatNumberToVND(discount));
                                         $('.txtpricemarketPhanTram').text(
                                             `Giảm -${Math.round(discountPercentage)}%`);
                                         return;
@@ -1482,8 +1490,8 @@
                                         .toLocaleString('vi-VN') + ' ₫');
                                     // Display with storage included
                                     $('.product_name').text(`${productName} - ${storage}`);
-                                    $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
-                                    $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                                    $('.text-promo').text(formatNumberToVND(originalPrice));
+                                    $('.price-sale').text(formatNumberToVND(discount));
                                     $('.txtpricemarketPhanTram').text(
                                         `Giảm -${Math.round(discountPercentage)}%`);
                                 }
@@ -1649,8 +1657,11 @@
                                             'content') // CSRF Token
                                     },
                                     success: function(response) {
-                                        console.log("Response:", response);
-                                        toastr.success(response.message);
+                                        if (response.status == 'success') {
+                                            toastr.success(response.message);
+                                        } else {
+                                            toastr.error('vui lòng đăng nhập lại!');
+                                        }
                                     },
                                     error: function(error) {
                                         console.error("Error:", error);

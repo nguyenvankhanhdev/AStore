@@ -200,10 +200,12 @@ class PaymentController extends Controller
         $updatePoint->point += $request->point;
         $updatePoint->save();
 
+
         session(['user_address' => $userAddress->toJson()]);
 
         $orderId = $this->storeOrder('COD', 'pending', 'pending', session('user_address'));
 
+        log::info('order id: ' . $orderId);
         $this->clearSession();
 
         $returnData = [
@@ -265,6 +267,7 @@ class PaymentController extends Controller
 
         $address = json_decode($order->address);
         $user = auth()->user();
+        Log::info('address: ' . $address->email);
         Mail::send('frontend.emails.order_confirmation', [
             'user' => $user,
             'orders' => $order,
@@ -293,13 +296,13 @@ class PaymentController extends Controller
         ]);
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('vnpay.return');
-        $vnp_TmnCode = env('VNPAY_TMN_CODE');
-        $vnp_HashSecret = env('VNPAY_HASH_SECRET');
+        $vnp_TmnCode = '2GFOARF6';
+        $vnp_HashSecret = '01EKYM991EWOIUI4F1AL2V52R7KJE5TK';
         $vnp_TxnRef = rand(1, 1000000);
         $vnp_OrderInfo = 'Thanh toán hóa đơn';
         $vnp_OrderType = 'AStore';
         $vnp_Amount = $request->total_amount * 100;
-        $vnp_Locale = 'VM';
+        $vnp_Locale = 'vn';
         $vnp_BankCode = 'VNPAY';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $inputData = array(
@@ -341,6 +344,7 @@ class PaymentController extends Controller
             $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
+        Log::info('chuyển trang '.$vnp_Url);
         return response()->json([
             'status' => 'success',
             'message' => 'Xin chờ 1 chút !!!.',
@@ -370,6 +374,7 @@ class PaymentController extends Controller
                 $orderId = $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
+                
                 $this->clearSession();
                 session()->forget('user_address');
 

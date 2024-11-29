@@ -31,7 +31,6 @@
     <link rel="stylesheet" href="/frontend/asset/css/main-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/fCare.css">
     <style>
-
         .toast-container {
             background: rgb(50, 130, 11);
         }
@@ -178,12 +177,12 @@
     <script src="/frontend/asset/js/swiper-bundle.min.js"></script>
     {{-- <script src="/frontend/asset/js/home.1.js"></script> --}}
     <script src="/frontend/asset/js/modal.js"></script>
-    {{-- <script src="/frontend/asset/js/detail.1.js"></script> --}}
+    <script src="/frontend/asset/js/detail.1.js"></script>
     {{-- <script src="/frontend/asset/js/category.1.js"></script>
     <script src="/frontend/asset/js/category.2.js"></script> --}}
     <script src="/frontend/asset/js/cart.2.js"></script>
     <script src="/frontend/asset/js/cart.3.js"></script>
-    {{-- <script src="/frontend/asset/js/detail.3.js"></script> --}}
+    <script src="/frontend/asset/js/detail.3.js"></script>
     <script src="/frontend/asset/js/util.js"></script>
     <script src="/frontend/asset/js/dropdown.js"></script>
     <script src="/frontend/asset/js/jquery-3.6.0.min.js"></script>
@@ -252,4 +251,3 @@
 </body>
 
 </html>
-
