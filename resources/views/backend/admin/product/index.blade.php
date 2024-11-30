@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>All Product</h1>
+            <h1>Tất cả sản phẩm</h1>
         </div>
         <div class="section-body">
             <div class="row">
@@ -12,7 +12,7 @@
                         <div class="card-header">
                             <h4></h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.product.create') }}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
+                                <a href="{{ route('admin.product.create') }}" class="btn btn-dark"><i class="fas fa-plus"></i> Tạo mới</a>
                             </div>
                         </div>
                         <div class="card-body">

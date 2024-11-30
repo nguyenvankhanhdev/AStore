@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Update Variant Colors</h4>
+                            <h4>Chỉnh sửa màu sắc</h4>
                         </div>
                         <div class="card-body">
                             <form id="variantColorsForm" action="{{ route('admin.variant-colors.update',$variantColor->id) }}" method="POST">
@@ -17,7 +17,7 @@
                                 <div class="form-group">
                                     <label for="inputState">Colors</label>
                                     <select id="inputState" class="form-control main-category" name="colors">
-                                        <option value="">Select</option>
+                                        <option value="">Chọn</option>
                                         @foreach ($colors as $color)
                                             <option value="{{ $color->id }}" {{ $variantColor->color_id == $color->id ? 'selected' : '' }}>{{ $color->name }}</option>
                                         @endforeach
@@ -25,24 +25,24 @@
                                     <span class="text-danger" id="colorError"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label>Quantity</label>
+                                    <label>Số lượng</label>
                                     <input type="number" min="0" class="form-control" name="quantity" value="{{ $variantColor->quantity }}">
                                     <span class="text-danger" id="quantityError"></span>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Price</label>
+                                    <label>Giá</label>
                                     <input type="number" min="0" class="form-control" name="price" value="{{ $variantColor->price }}">
                                     <span class="text-danger" id="priceError"></span>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Offer Price</label>
+                                    <label>Giá giảm</label>
                                     <input type="number" min="0" class="form-control" name="offer_price" value="{{ $variantColor->offer_price }}">
                                     <span class="text-danger" id="offerPriceError"></span>
                                 </div>
                                 <input type="hidden" name="variants" value="{{ $variantColor->quantity }}">
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </form>
                         </div>
 

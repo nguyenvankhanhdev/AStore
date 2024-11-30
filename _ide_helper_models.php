@@ -39,7 +39,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property int $quantity
+ * @property int|null $quantity
  * @property int $variant_color_id
  * @property int $pro_id
  * @property int|null $user_id
@@ -322,7 +322,31 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property int $quantity
+ * @property int $order_id
+ * @property string $reason
+ * @property string $order_cancel_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Orders|null $order
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel whereOrderCancelDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel whereReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderCancel whereUpdatedAt($value)
+ */
+	class OrderCancel extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int|null $quantity
  * @property float $total_price
  * @property int $variant_color_id
  * @property int $order_id
@@ -360,6 +384,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Coupon|null $coupon
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderCancel> $orderCancel
+ * @property-read int|null $order_cancel_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderDetails> $orderDetails
  * @property-read int|null $order_details_count
  * @property-read \App\Models\User|null $user
@@ -865,7 +891,6 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property int $pro_id
  * @property int|null $variant_color_id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -878,7 +903,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist query()
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereProId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereVariantColorId($value)
