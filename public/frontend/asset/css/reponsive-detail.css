@@ -1,0 +1,58 @@
+@media only screen and (max-width: 768px) {
+    .card-body .row{
+        flex-direction: row;
+    }
+    .row {
+        flex-direction: column;
+    }
+
+    .row .col-6 {
+        max-width: 100%;
+    }
+
+    .slider-gallery__thumb {
+        display: flex;
+        padding: 17px 20px;
+    }
+
+    .detail__header .wrapper>* {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .npi-special {
+        margin: 0 0px 12px;
+    }
+
+    .detail .price .text-promo {
+        font-size: 16px;
+    }
+
+    .txtpricemarketPhanTram {
+        font-size: 11px;
+    }
+
+    .pre-order .btn-link {
+        padding: 0px;
+    }
+
+    /* .no-gutters .col-sm-6{
+        max-width: 50%;
+
+    } */
+
+}
+
+@media only screen and (max-width: 480px) {
+    .pre-order .btn-link div {
+        font-size: 12px;
+    }
+
+
+    .card-body .row{
+        flex-direction: column;
+    }
+    .card-body .row .col-sm-6 {
+        max-width: 100%;
+    }
+}

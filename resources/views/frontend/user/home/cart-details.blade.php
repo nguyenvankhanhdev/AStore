@@ -246,7 +246,7 @@
                                                 <div class="c-cart__payment__inner">
                                                     <div class="c-dropdown c-dropdown--col">
                                                         <div class="c-dropdown js-dropdown-open">
-                                                            <div class="group-dropdown">
+                                                            <div class="group-dropdown" style="margin-bottom: 6px">
                                                                 <div class="c-dropdown-button c-dropdown-button--lg"
                                                                     data-name="" id="province-dropdown"> Chọn Tỉnh thành
                                                                 </div><span class="ic-arrow-select ic-dropdown"></span>

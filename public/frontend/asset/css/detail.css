@@ -1438,7 +1438,6 @@ p {
     font-size: 16px;
     font-weight: bold;
     color: #555;
-    text-align: left;
     width: 300px;
 }
 
@@ -12777,11 +12776,13 @@ a.checkbox.active:after {
     padding-right: 177px
 }
 
-.fpt-comment .user-form .form-group .btn {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%)
+@media only screen and (min-width: 900px){
+    .fpt-comment .user-form .form-group .btn {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%)
+    }
 }
 
 .fpt-comment .user-form .alert {
@@ -14960,4 +14961,10 @@ input[type=text]:focus-visible {
 .product-cart__remove.delete-item:hover{
     color: #484b4d;
     font-size: 14px;
+}
+@media only screen and (max-width: 900px) {
+    .fpt-comment .user-form .form-group .btn {
+        position: unset;
+        margin-top: 25px;
+    }
 }
