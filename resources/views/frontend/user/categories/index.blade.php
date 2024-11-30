@@ -152,6 +152,7 @@
 
             function getPriceByVariantId(productElement) {
                 const variantId = productElement.find('.product__memory__item.active').data('variant-id');
+
                 if (!variantId) {
                     console.error("Variant ID không hợp lệ.");
                     return;
@@ -190,6 +191,7 @@
                                     productElement.find('.product__price .price').text(formatNumberToVND(endPrice));
                                     productElement.find('.product__price .text-promo').text(formatNumberToVND(price));
 
+
                                     productElement.attr('data-price', price);
                                     productElement.attr('data-discounted-price', endPrice);
 
@@ -202,6 +204,7 @@
                                     console.error(
                                         "Error: API không trả về trạng thái thành công."
                                     );
+
                                 }
                             },
                             error: function(error) {
@@ -212,7 +215,7 @@
                     }
 
                 });
-            }
+            
             $('.product').each(function() {
                 var activeItem = $(this).find('.product__memory__item.item.active');
                 var gbText = activeItem.find('strong').text().trim();
@@ -222,7 +225,6 @@
                     activeItem.hide();
                 }
             });
-
 
             function setLoading(isLoading) {
                 if (isLoading) {
