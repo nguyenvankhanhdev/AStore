@@ -215,7 +215,7 @@
                     }
 
                 });
-            
+            }
             $('.product').each(function() {
                 var activeItem = $(this).find('.product__memory__item.item.active');
                 var gbText = activeItem.find('strong').text().trim();
