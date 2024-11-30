@@ -64,9 +64,6 @@
 
                 </ul>
             </li>
-
-
-
             <li
                 class="dropdown {{ setActive([
                     'admin.orders',
@@ -100,7 +97,7 @@
             <li
                 class="dropdown {{ setActive([
                     'admin.vendor-profile.*',
-                    'admin.coupons.*',
+                    'admin.coupon.*',
                     'admin.shipping-rule.*',
                     'admin.payment-settings.*',
                 ]) }}">
@@ -109,8 +106,8 @@
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.flash-sale.*']) }}"><a class="nav-link"
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
-                    <li class="{{ setActive(['admin.coupons.*']) }}"><a class="nav-link"
-                            href="">Phiếu giảm giá</a></li>
+                    <li class="{{ setActive(['admin.coupon.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.coupon.index') }}">Phiếu giảm giá</a></li>
                     <li class="{{ setActive(['admin.payment-settings.*']) }}"><a class="nav-link"
                             href="{{ route('admin.payment-settings.index') }}">Payment Settings</a></li>
 
@@ -138,68 +135,22 @@
                     </li>
                 </ul>
             </li>
-
-
-
-
             <li><a class="nav-link {{ setActive(['admin.messages.index']) }}"
                     href="{{ route('admin.message.index') }}"><i class="fas fa-user"></i>
                     <span>Messages</span></a></li>
-
-
-
             <li class="menu-header">Settings & More</li>
-
-
             <li
                 class="dropdown {{ setActive([
-                    'admin.footer-info.index',
-                    'admin.footer-socials.*',
-                    'admin.footer-grid-two.*',
-                    'admin.footer-grid-three.*',
-                ]) }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                        class="fas fa-th-large"></i><span>Footer</span></a>
-                <ul class="dropdown-menu">
-                    <li class="{{ setActive(['admin.footer-info.index']) }}"><a class="nav-link"
-                            href="">Footer Info</a></li>
-
-                    <li class="{{ setActive(['admin.footer-socials.*']) }}"><a class="nav-link"
-                            href="">Footer Socials</a></li>
-
-                    <li class="{{ setActive(['admin.footer-grid-two.*']) }}"><a class="nav-link"
-                            href="">Footer Grid Two</a></li>
-
-                    <li class="{{ setActive(['admin.footer-grid-three.*']) }}"><a class="nav-link"
-                            href="">Footer Grid Three</a></li>
-
-                </ul>
-            </li>
-            <li
-                class="dropdown {{ setActive([
-                    'admin.vendor-requests.index',
-                    'admin.customer.index',
-                    'admin.vendor-list.index',
-                    'admin.manage-user.index',
-                    'admin-list.index',
+                    'admin.user-list',
+                    'admin.admin-list',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i>
                     <span>Users</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ setActive(['admin.customer.index']) }}"><a class="nav-link"
-                            href="">Customer list</a></li>
-                    <li class=""><a class="nav-link"
-                            href="">Vendor list</a></li>
-
-                    <li class="{{ setActive(['admin.vendor-requests.index']) }}"><a class="nav-link"
-                            href="">Pending vendors</a></li>
-
-                    <li class="{{ setActive(['admin.admin-list.index']) }}"><a class="nav-link"
-                            href="">Admin Lists</a></li>
-
-                    <li class="{{ setActive(['admin.manage-user.index']) }}"><a class="nav-link"
-                            href="">Manage user</a></li>
-
+                    <li class="{{ setActive(['admin.user-list']) }}"><a class="nav-link"
+                            href="{{ route('admin.user-list') }}">Danh sách Khách Hàng</a></li>
+                    <li class="{{ setActive(['admin.admin-list']) }}"><a class="nav-link"
+                            href="{{ route('admin.admin-list') }}">Admin Lists</a></li>
                 </ul>
             </li>
 

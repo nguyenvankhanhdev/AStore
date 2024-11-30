@@ -189,39 +189,38 @@
                 })
             });
 
-            $('body').on('click', '.cancel-order', function() {
-                let id = $(this).data('id');
-
-                Swal.fire({
-                    title: 'Bạn có chắc chắn không?',
-                    text: "Bạn có muốn hủy đơn hàng này không?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes !!!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ route('user.order.cancel') }}", // Update route here
-                            method: 'PUT',
-                            data: {
-                                _token: '{{ csrf_token() }}', // Include CSRF token for security
-                                id: id
-                            },
-                            success: function(data) {
-                                window.location.reload();
-                                toastr.success(data.message);
-                                // Optional: Refresh DataTable or update UI here if needed
-                            },
-                            error: function(xhr, status, error) {
-                                toastr.error('Đã xảy ra lỗi. Vui lòng thử lại.');
-                                console.log(error);
-                            }
-                        });
-                    }
-                });
-            });
+            // $('body').on('click', '.cancel-order', function() {
+            //     let id = $(this).data('id');
+            //     Swal.fire({
+            //         title: 'Bạn có chắc chắn không?',
+            //         text: "Bạn có muốn hủy đơn hàng này không?",
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         cancelButtonText: 'Không',
+            //         confirmButtonText: 'Có!!!'
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             $.ajax({
+            //                 url: "{{ route('user.order.cancel') }}",
+            //                 method: 'PUT',
+            //                 data: {
+            //                     _token: '{{ csrf_token() }}',
+            //                     id: id
+            //                 },
+            //                 success: function(data) {
+            //                     window.location.reload();
+            //                     toastr.success(data.message);
+            //                 },
+            //                 error: function(xhr, status, error) {
+            //                     toastr.error('Đã xảy ra lỗi. Vui lòng thử lại.');
+            //                     console.log(error);
+            //                 }
+            //             });
+            //         }
+            //     });
+            // });
 
 
 

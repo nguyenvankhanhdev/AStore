@@ -31,38 +31,6 @@
     <link rel="stylesheet" href="/frontend/asset/css/main-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/fCare.css">
     <style>
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #ccc;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         .toast-container {
             background: rgb(50, 130, 11);
         }
@@ -167,9 +135,6 @@
 </head>
 
 <body id="page-top">
-    <div id="loading" style="display: none;">
-        <div class="spinner"></div>
-    </div>
     @include('frontend.user.layouts.header')
     <div class="over-suggestion"></div>
     <main class="main">
@@ -205,16 +170,16 @@
     {{-- <script src="/frontend/asset/js/header-footer-mb.js" media="only screen and (max-width: 768px)"></script>
     <script src="/frontend/asset/js/home-mb.js" media="only screen and (max-width: 768px)"></script>
     <script src="/frontend/asset/js/detail-mb.js" media="only screen and (max-width: 768px)"></script>
-    <script src="/frontend/asset/js/category-mb.js" media="only screen and (max-width: 768px)"></script>
-    <script src="/frontend/asset/js/main-mb.js" media="only screen and (max-width: 768px)"></script> --}}
+    <script src="/frontend/asset/js/category-mb.js" media="only screen and (max-width: 768px)"></script> --}}
+    {{-- <script src="/frontend/asset/js/main-mb.js" media="only screen and (max-width: 768px)"></script> --}}
 
     <script src="/frontend/asset/js/header-footer.js"></script>
     <script src="/frontend/asset/js/swiper-bundle.min.js"></script>
     {{-- <script src="/frontend/asset/js/home.1.js"></script> --}}
     <script src="/frontend/asset/js/modal.js"></script>
     <script src="/frontend/asset/js/detail.1.js"></script>
-    <script src="/frontend/asset/js/category.1.js"></script>
-    <script src="/frontend/asset/js/category.2.js"></script>
+    {{-- <script src="/frontend/asset/js/category.1.js"></script>
+    <script src="/frontend/asset/js/category.2.js"></script> --}}
     <script src="/frontend/asset/js/cart.2.js"></script>
     <script src="/frontend/asset/js/cart.3.js"></script>
     <script src="/frontend/asset/js/detail.3.js"></script>
@@ -232,19 +197,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            let isPageLoading = false; // Trạng thái kiểm soát
 
-            // window.addEventListener("beforeunload", function () {
-            //     if (!isPageLoading) {
-            //         isPageLoading = true; // Đánh dấu trạng thái
-            //         document.getElementById("loading").style.display = "flex";
-            //     }
-            // });
-
-            // // Ẩn loading sau khi trang đã tải xong
-            // window.addEventListener("load", function() {
-            //     document.getElementById("loading").style.display = "none";
-            // });
 
             $('body').on('click', '.delete-item a', function(event) {
                 event.preventDefault();
@@ -298,4 +251,3 @@
 </body>
 
 </html>
-

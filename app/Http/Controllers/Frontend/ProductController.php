@@ -31,7 +31,7 @@ class ProductController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
-        $productsFeatured = Products::where('status', 1)
+        $productsFeatured = Products::where('status', operator: 1)
             ->where('product_type', 'featured_product')
             ->orderBy('id', 'DESC')
             ->paginate(6);

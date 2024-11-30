@@ -84,9 +84,7 @@ class TopProductDataTable extends DataTable
         return $model->newQuery()
             ->with(['variants.variantColors.orderDetails'])
             ->whereHas('variants.variantColors.orderDetails', function ($query) {
-                $query->selectRaw('SUM(quantity) as total_quantity')
-
-                    ->havingRaw('SUM(quantity) > ?', [1]);
+                $query->selectRaw('SUM(quantity) as total_quantity');
 
             });
     }
@@ -102,7 +100,7 @@ class TopProductDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy( 1)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),

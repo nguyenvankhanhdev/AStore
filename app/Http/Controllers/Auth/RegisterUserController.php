@@ -47,12 +47,7 @@ class RegisterUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
-
-
         event(new Registered($user));
-
-        Auth::login($user);
-
         return redirect()->route('auth.admin')->withSuccess('Đăng kí thành công!');
     }
 }

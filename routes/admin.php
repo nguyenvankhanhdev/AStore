@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\FlashSaleItemController;
 use App\Http\Controllers\Backend\CommentController;
+use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\DashboardController;
 
 use App\Http\Controllers\Backend\ReportController;
@@ -121,3 +122,7 @@ Route::get('flash-sale-item', [FlashSaleItemController::class, 'index'])->name('
 Route::delete('flash-sale-item/{id}', [FlashSaleItemController::class, 'destroy'])->name('flash-sale-item.destroy');
 Route::put('flash-sale-item-status', [FlashSaleItemController::class, 'changeStatus'])->name('flash-sale-item-status');
 Route::put('flash-sale/show-at-home/status-change', [FlashSaleItemController::class, 'chageShowAtHomeStatus'])->name('flash-sale-item.show-at-home.change-status');
+
+Route::get('user-list', [UserController::class, 'index'])->name('user-list');
+Route::get('admin-list', [UserController::class, 'admin'])->name('admin-list');
+Route::resource('coupon', CouponController::class);

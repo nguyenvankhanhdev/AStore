@@ -134,17 +134,14 @@ class AuthenticateSessionController extends Controller
 
     public function sendOtp(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
-
+        \Log::info($request->email);
         try {
             $otp = rand(100000, 999999);
             $user = User::where('email', $request->email)->first();
             $user->otp = $otp;
             $user->otp_expires_at = now()->addMinutes(10);
             $user->save();
-
+            \Log::info($user);
             Mail::send('frontend.emails.send_otp', ['otp' => $otp], function ($message) use ($request) {
                 $message->to($request->email)
                     ->subject('Mã OTP của bạn');

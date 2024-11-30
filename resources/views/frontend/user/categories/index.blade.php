@@ -8,7 +8,7 @@
                 <li class="breadcrumb-item"><a class="link" href="{{ route('products.index') }}">Trang chủ</a></li>
                 <li class="breadcrumb-item">{{ $categories->name }}</li>
             </ol>
-            <h1 class="h1">{{ $categories->name }}</h1>
+            <h1 class="h1" style="color: #000">{{ $categories->name }}</h1>
             <div class="card card-md category__container">
                 <div class="card-body">
                     <div class="actions" style="background: #fff">
@@ -99,8 +99,9 @@
                                                 <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
                                             @elseif ($product->product_type == 'best_product')
                                                 <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
+                                            @elseif ($product->product_type == 'accessory')
+                                                <span class="badge badge-xs badge-secondary badge-link">Phụ kiện</span>
                                             @elseif ($product->product_type == 'sale_product')
-
                                                 <span class="badge badge-xs badge-primary badge-link">Giảm giá</span>
                                             @endif
                                         </h3>
@@ -144,8 +145,12 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            function getPriceByVariantId(productElement) {
 
+            function formatNumberToVND(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ₫';
+            }
+
+            function getPriceByVariantId(productElement) {
                 const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
                 if (!variantId) {
@@ -183,12 +188,9 @@
                                     const discount = response.variantColors.offer_price;
                                     const endPrice = price - discount;
 
-                                    productElement.find('.product__price .price').text(
-                                        endPrice.toLocaleString(
-                                            'vi-VN') + ' ₫');
-                                    productElement.find('.product__price .text-promo').text(
-                                        price
-                                        .toLocaleString('vi-VN') + ' ₫');
+                                    productElement.find('.product__price .price').text(formatNumberToVND(endPrice));
+                                    productElement.find('.product__price .text-promo').text(formatNumberToVND(price));
+
 
                                     productElement.attr('data-price', price);
                                     productElement.attr('data-discounted-price', endPrice);
@@ -201,7 +203,8 @@
                                 } else {
                                     console.error(
                                         "Error: API không trả về trạng thái thành công."
-                                        );
+                                    );
+
                                 }
                             },
                             error: function(error) {
@@ -212,11 +215,16 @@
                     }
 
                 });
-            }
-            var gb = $('.product__memory__item.item.active').find('strong').text();
-            if (gb.replace('GB', '') == 0) {
-                $('.product__memory__item.item.active').hide();
-            }
+            
+            $('.product').each(function() {
+                var activeItem = $(this).find('.product__memory__item.item.active');
+                var gbText = activeItem.find('strong').text().trim();
+                var gbValue = parseInt(gbText.replace('GB', ''), 10);
+
+                if (gbValue === 0) {
+                    activeItem.hide();
+                }
+            });
 
             function setLoading(isLoading) {
                 if (isLoading) {
@@ -304,8 +312,8 @@
                 const minPrice = parseCurrency(values[0]);
                 const maxPrice = parseCurrency(values[1]);
 
-                $('#slider-min-price').val(minPrice.toLocaleString('vi-VN') + ' ₫');
-                $('#slider-max-price').val(maxPrice.toLocaleString('vi-VN') + ' ₫');
+                $('#slider-min-price').val(formatNumberToVND(minPrice));
+                $('#slider-max-price').val(formatNumberToVND(maxPrice));
             });
 
 
@@ -410,6 +418,10 @@
                     nextIndex = 0;
                 }
                 setActiveSlide(nextIndex);
+                const nextSlideHref = $('.swiper-slide').eq(nextIndex).attr('href');
+                if (nextSlideHref) {
+                    window.location.href = nextSlideHref;
+                }
             });
 
             $('.swiper-button-prev').click(function() {
@@ -419,6 +431,10 @@
                     prevIndex = $('.swiper-slide').length - 1;
                 }
                 setActiveSlide(prevIndex);
+                const prevSlideHref = $('.swiper-slide').eq(prevIndex).attr('href');
+                if (prevSlideHref) {
+                    window.location.href = prevSlideHref;
+                }
             });
 
             const storedIndex = localStorage.getItem('activeSlideIndex');

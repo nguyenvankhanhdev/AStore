@@ -37,27 +37,25 @@ class CommentController extends Controller
             $request->validate([
                 'content' => ['required', 'string', 'max:255']
             ]);
-
             $comment = new Comments();
             $comment->content = $request->content;
             $comment->status = 0;
-            $comment->cmt_id=$request->cmt_id;
+            $comment->cmt_id = $request->cmt_id;
             $comment->pro_id = $request->pro_id;
             $comment->cmt_likes = 0;
             $comment->user_id = Auth::id(); // Assuming you have authentication
 
-           $comment->save();
-
-                // Lưu thành công
-            return redirect()->back()->withSuccess('Bình luận thành công');
-
+            $comment->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Bình luận thành công!!'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Vui lòng đăng nhập để bình luận'
+            ]);
         }
-
-        else
-        {
-            return redirect()->route('auth.admin')->withErrors('Vui lòng đăng nhập');
-        }
-
     }
 
     /**
@@ -75,7 +73,7 @@ class CommentController extends Controller
     {
 
 
-        $comment = Comments::where('id',$request->cm_id)->firstOrFail();
+        $comment = Comments::where('id', $request->cm_id)->firstOrFail();
         $comment->status = 1;
         $comment->save();
         // $page = $request->page;
@@ -98,21 +96,17 @@ class CommentController extends Controller
                 'content' => ['required', 'string', 'max:255']
             ]);
 
-            $comment = Comments::where('id',$request->cm_id)->firstOrFail();
+            $comment = Comments::where('id', $request->cm_id)->firstOrFail();
             $comment->content = $request->content;
 
 
 
-           $comment->save();
+            $comment->save();
 
-                // Lưu thành công
+            // Lưu thành công
             return redirect()->back()->with('success', 'Sửa bình luận thành công');
-
-        }
-
-        else
-        {
-            return redirect()->route('auth.admin')->with('error','Vui lòng đăng nhập');
+        } else {
+            return redirect()->route('auth.admin')->with('error', 'Vui lòng đăng nhập');
         }
     }
 
@@ -121,28 +115,31 @@ class CommentController extends Controller
      */
     public function destroy(Request $request)
     {
-        $comment = Comments::where('id',$request->cm_id)->firstOrFail();
-        CommentLike::where('cmt_id',$request->cm_id)->delete();
+        $comment = Comments::where('id', $request->cm_id)->firstOrFail();
+        CommentLike::where('cmt_id', $request->cm_id)->delete();
         $comment->delete();
 
         // return redirect()->back()->with('success', 'Xóa bình luận thành công');
-         // Lưu trang hiện tại vào session
+        // Lưu trang hiện tại vào session
         session()->flash('page', $request->page);
 
-        return redirect()->back()->with('success', 'Xóa bình luận thành công');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Xóa bình luận thành công'
+        ]);
     }
 
     public function changeStatus(Request $request)
     {
-        $comment = Comments::where('id',$request->cm_id)->firstOrFail();
+        $comment = Comments::where('id', $request->cm_id)->firstOrFail();
         $comment->status = 1;
         $comment->save();
-        return redirect()->back()->with('success', 'Báo cáo bình luận thành công');
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Báo cáo bình luận thành công',
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Báo cáo bình luận thành công',
 
-        // ]);
+        ]);
+        
         //return response(['message' => 'Status has been updated!']);
     }
 
@@ -155,8 +152,8 @@ class CommentController extends Controller
 
             // Kiểm tra xem comment like đã tồn tại hay chưa
             $existingLike = CommentLike::where('cmt_id', $commentId)
-                                        ->where('user_id', $userId)
-                                        ->first();
+                ->where('user_id', $userId)
+                ->first();
 
             $comment = Comments::find($commentId);
 
@@ -171,7 +168,6 @@ class CommentController extends Controller
                     'likesCount' => $comment->cmt_likes,
                     'message' => 'Bỏ thích bình luận thành công'
                 ]);
-
             } else {
                 // Nếu không tồn tại, tăng số lượng likes và thêm dòng mới vào comment_likes
                 $comment->cmt_likes = $comment->cmt_likes + 1;
@@ -188,13 +184,8 @@ class CommentController extends Controller
                     'likesCount' => $comment->cmt_likes,
                     'message' => 'Đã thích bình luận thành công'
                 ]);
-
             }
-
-        }
-
-        else
-        {
+        } else {
             return response()->json([
                 'message' => 'Vui lòng đăng nhập để thích bình luận'
             ]);

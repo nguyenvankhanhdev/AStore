@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Wishlist;
 use Auth;
 use Illuminate\Http\Request;
+use Log;
 
 class WishlistController extends Controller
 {
