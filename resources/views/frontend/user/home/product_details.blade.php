@@ -233,11 +233,11 @@
                                     </div>
                                     <div class="pre-order">
                                         <div class="btn btn-link btn-xl" id="add-to-cart-form">
-                                            <div>MUA NGAY</div>
+                                            <div><i class="ic-cart"></i> THÊM GIỎ HÀNG</div>
                                         </div>
                                         <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
                                             data-product-id="{{ $product->id }}" data-variant-id="" data-color-id="">
-                                            <div>YÊU THÍCH</div>
+                                            <div> <i class="fa fa-heart"></i> YÊU THÍCH</div>
                                         </div>
                                     </div>
 

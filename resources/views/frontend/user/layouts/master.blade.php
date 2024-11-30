@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/detail.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/frontend/asset/css/category.css">
+    <link rel="stylesheet" href="/frontend/asset/css/category.css" media="only screen and (min-width: 1111px)">
     <link rel="stylesheet" href="/frontend/asset/css/detail.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="/backend/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="/frontend/asset/css/header-footer-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/home-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/detail-mb.css" media="only screen and (max-width: 768px)">
-    <link rel="stylesheet" href="/frontend/asset/css/category-mb.css" media="only screen and (max-width: 768px)">
+    <link rel="stylesheet" href="/frontend/asset/css/category-mb.css" media="only screen and (max-width: 1111px)">
     <link rel="stylesheet" href="/frontend/asset/css/main-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/fCare.css">
     <style>
@@ -130,6 +130,9 @@
         }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css" rel="stylesheet">
+    @stack('link')
+    <link rel="stylesheet" href="/frontend/asset/css/reponsive-cart.css">
+    <link rel="stylesheet" href="/frontend/asset/css/reponsive-detail.css">
 
 
 </head>
