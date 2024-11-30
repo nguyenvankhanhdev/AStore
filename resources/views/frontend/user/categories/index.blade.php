@@ -142,29 +142,16 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            function getPriceByVariantId(productElement) {
 
-<script>
-    $(document).ready(function () {
-        function getPriceByVariantId(productElement) {
+                const variantId = productElement.find('.product__memory__item.active').data('variant-id');
 
-        
-            const variantId = productElement.find('.product__memory__item.active').data('variant-id');
-
-            if (!variantId) {
-                console.error("Variant ID không hợp lệ.");
-                return;
-            }
-
-            $.ajax({
-                url: '{{ route('getByVariant') }}',
-                method: 'GET',
-                data: { variantId },
-                beforeSend: function () {
-                    setLoading(true);
-                },
-                success: function (response) {
-                    setLoading(false);
-
+                if (!variantId) {
+                    console.error("Variant ID không hợp lệ.");
+                    return;
+                }
 
                 $.ajax({
                     url: '{{ route('getByVariant') }}',
@@ -178,38 +165,58 @@
                     success: function(response) {
                         setLoading(false);
 
-                        if (response.status === 'success') {
-                            const price = response.variantColors.price;
-                            const discount = response.variantColors.offer_price;
-                            const endPrice = price - discount;
 
-                            productElement.find('.product__price .price').text(endPrice.toLocaleString(
-                                'vi-VN') + ' ₫');
-                            productElement.find('.product__price .text-promo').text(price
-                                .toLocaleString('vi-VN') + ' ₫');
+                        $.ajax({
+                            url: '{{ route('getByVariant') }}',
+                            method: 'GET',
+                            data: {
+                                variantId
+                            },
+                            beforeSend: function() {
+                                setLoading(true);
+                            },
+                            success: function(response) {
+                                setLoading(false);
 
-                            productElement.attr('data-price', price);
-                            productElement.attr('data-discounted-price', endPrice);
+                                if (response.status === 'success') {
+                                    const price = response.variantColors.price;
+                                    const discount = response.variantColors.offer_price;
+                                    const endPrice = price - discount;
 
-                            if (!productElement.attr('data-initial-discounted-price')) {
-                                productElement.attr('data-initial-discounted-price', endPrice);
+                                    productElement.find('.product__price .price').text(
+                                        endPrice.toLocaleString(
+                                            'vi-VN') + ' ₫');
+                                    productElement.find('.product__price .text-promo').text(
+                                        price
+                                        .toLocaleString('vi-VN') + ' ₫');
+
+                                    productElement.attr('data-price', price);
+                                    productElement.attr('data-discounted-price', endPrice);
+
+                                    if (!productElement.attr(
+                                            'data-initial-discounted-price')) {
+                                        productElement.attr('data-initial-discounted-price',
+                                            endPrice);
+                                    }
+                                } else {
+                                    console.error(
+                                        "Error: API không trả về trạng thái thành công."
+                                        );
+                                }
+                            },
+                            error: function(error) {
+                                setLoading(false);
+                                console.error("Error fetching price:", error);
                             }
-                        } else {
-                            console.error("Error: API không trả về trạng thái thành công.");
-                        }
-                    },
-                    error: function(error) {
-                        setLoading(false);
-                        console.error("Error fetching price:", error);
+                        });
                     }
+
                 });
             }
-
             var gb = $('.product__memory__item.item.active').find('strong').text();
             if (gb.replace('GB', '') == 0) {
                 $('.product__memory__item.item.active').hide();
             }
-
 
             function setLoading(isLoading) {
                 if (isLoading) {
@@ -217,22 +224,8 @@
                 } else {
                     $('#product-list').removeClass('loading');
                 }
+            }
 
-            }
-            });
-        }
-            var gb = $('.product__memory__item.item.active').find('strong').text();
-            if (gb.replace('GB', '') == 0) {
-                $('.product__memory__item.item.active').hide();
-            }
-        function setLoading(isLoading) {
-            if (isLoading) {
-                $('#product-list').addClass('loading');
-            } else {
-                $('#product-list').removeClass('loading');
-            }
-        }
-        
 
             function sortProducts(order) {
                 const products = $('.product');

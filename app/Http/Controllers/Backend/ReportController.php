@@ -180,17 +180,20 @@ class ReportController extends Controller
             $toDate = Carbon::parse($toDate)->format('Y-m-d');
         }
 
-        $categoriesSold = OrderDetails::with(['variantColors'])
-            ->whereDate('order_details.created_at', '>=', $fromDate)
-            ->whereDate('order_details.created_at', '<=', $toDate)
-            ->selectRaw('products.cate_id as category_id, SUM(order_details.quantity) as total_sold, SUM(order_details.quantity * order_details.total_price) as total_revenue')
-            ->join('variant_colors', 'order_details.variant_color_id', '=', 'variant_colors.id')
+        $categoriesSold = OrderDetails::join('variant_colors', 'order_details.variant_color_id', '=', 'variant_colors.id')
             ->join('product_variants', 'variant_colors.variant_id', '=', 'product_variants.id')
             ->join('products', 'product_variants.pro_id', '=', 'products.id')
+            ->selectRaw('products.cate_id as category_id, SUM(order_details.quantity) as total_sold, SUM(order_details.total_price) as total_revenue')
+            ->whereBetween('order_details.created_at', [$fromDate, $toDate])
             ->groupBy('products.cate_id')
             ->get();
 
-        $report = $categoriesSold->map(function ($categoryData) use ($fromDate, $toDate) {
+        $warehouseDetails = WarehouseDetails::join('warehouses', 'warehouse_details.warehouse_id', '=', 'warehouses.id')
+            ->select('warehouse_details.*', 'warehouses.import_date')
+            ->get()
+            ->groupBy('variant_color_id');
+
+        $report = $categoriesSold->map(function ($categoryData) use ($warehouseDetails, $fromDate, $toDate) {
             $category = Categories::find($categoryData->category_id);
 
             if (!$category) {
@@ -203,83 +206,55 @@ class ReportController extends Controller
                 ];
             }
 
-            $totalCost = OrderDetails::whereHas('variantColors.variant.product', function ($query) use ($categoryData) {
-                $query->where('products.cate_id', $categoryData->category_id);
-            })
-                ->whereDate('order_details.created_at', '>=', $fromDate)
-                ->whereDate('order_details.created_at', '<=', $toDate)
-                ->with('variantColors')
-                ->get()
-                ->sum(function ($orderDetail) use ($fromDate, $toDate) {
-                    $totalCostForOrder = 0;
-                    $remainingQuantityToSell = $orderDetail->quantity;
+            $categoryCost = 0;
+            $categoryImports = 0;
 
-                    // Bước 1: Kiểm tra lô hàng tồn kho cuối cùng từ tháng trước
-                    // Bước 1: Kiểm tra lô hàng tồn kho cuối cùng từ tháng trước
-                    $lastStockEntry = WarehouseDetails::where('variant_color_id', $orderDetail->variant_color_id)
-                        ->join('warehouses', 'warehouse_details.warehouse_id', '=', 'warehouses.id')
-                        ->whereDate('warehouses.import_date', '<', $fromDate)
-                        ->orderBy('warehouses.import_date', 'desc')
-                        ->orderBy('warehouse_details.id', 'desc') // Sắp xếp thêm theo ID để lấy lô nhập cuối cùng
-                        ->select('warehouse_details.*', 'warehouses.import_date')
-                        ->first();
+            $productsInCategory = Products::where('cate_id', $categoryData->category_id)
+                ->with('variants.variantColors')
+                ->get();
 
+            foreach ($productsInCategory as $product) {
+                foreach ($product->variants as $variant) {
+                    foreach ($variant->variantColors as $variantColor) {
+                        $variantColorId = $variantColor->id;
 
+                        $fifoEntries = $warehouseDetails->get($variantColorId, collect())->sortBy('import_date');
 
-                    // Bước 2: Lấy danh sách FIFO của lô hàng nhập từ đầu đến cuối tháng hiện tại
-                    $fifoEntries = WarehouseDetails::where('variant_color_id', $orderDetail->variant_color_id)
-                        ->join('warehouses', 'warehouse_details.warehouse_id', '=', 'warehouses.id')
-                        ->whereDate('warehouses.import_date', '<=', $toDate)
-                        ->orderBy('warehouses.import_date', 'asc')
-                        ->select('warehouse_details.*', 'warehouses.import_date')
-                        ->get();
+                        $remainingQuantityToSell = OrderDetails::where('variant_color_id', $variantColorId)
+                            ->whereBetween('created_at', [$fromDate, $toDate])
+                            ->sum('quantity');
 
+                        foreach ($fifoEntries as $entry) {
+                            if ($remainingQuantityToSell <= 0) break;
 
-                    // Nếu không có lô hàng trong tháng hiện tại, sử dụng lô hàng cuối từ tháng trước
-                    if ($fifoEntries->isEmpty() && $lastStockEntry) {
-                        $fifoEntries = collect([$lastStockEntry]);
-                    } elseif ($lastStockEntry) {
-                        // Nếu có lô hàng trong tháng, thêm lô cuối của tháng trước vào đầu danh sách
-                        $fifoEntries->prepend($lastStockEntry);
-                    }
-
-                    foreach ($fifoEntries as $entry) {
-                        if ($remainingQuantityToSell <= 0) {
-                            break;
+                            if ($entry->quantity <= $remainingQuantityToSell) {
+                                $categoryCost += $entry->quantity * $entry->warehouse_price;
+                                $remainingQuantityToSell -= $entry->quantity;
+                            } else {
+                                $categoryCost += $remainingQuantityToSell * $entry->warehouse_price;
+                                $remainingQuantityToSell = 0;
+                            }
                         }
 
-                        if ($entry->quantity <= $remainingQuantityToSell) {
-                            $costForThisEntry = $entry->quantity * $entry->warehouse_price;
-                            $totalCostForOrder += $costForThisEntry;
-                            $remainingQuantityToSell -= $entry->quantity;
-                        } else {
-                            $costForThisEntry = $remainingQuantityToSell * $entry->warehouse_price;
-                            $totalCostForOrder += $costForThisEntry;
-                            $remainingQuantityToSell = 0;
-                        }
+                        $categoryImports += WarehouseDetails::where('variant_color_id', $variantColorId)
+                            ->whereBetween('created_at', [$fromDate, $toDate])
+                            ->sum('quantity');
                     }
+                }
+            }
 
-                    return $totalCostForOrder;
-                });
-
-            $totalQuantityImported = WarehouseDetails::whereHas('variantColor.variant.product', function ($query) use ($category) {
-                $query->where('products.cate_id', $category->id);
-            })
-                ->whereDate('created_at', '>=', $fromDate)
-                ->whereDate('created_at', '<=', $toDate)
-                ->sum('quantity');
-
-            $profit = $categoryData->total_revenue - $totalCost;
+            $profit = $categoryData->total_revenue - $categoryCost;
 
             return [
                 'category_name' => $category->name,
                 'total_sold' => $categoryData->total_sold,
                 'revenue' => $categoryData->total_revenue,
                 'profit' => $profit,
-                'quantity_imported' => $totalQuantityImported,
+                'quantity_imported' => $categoryImports,
             ];
         });
 
+        // Tổng hợp số liệu
         $totalQuantityImported = $report->sum('quantity_imported');
         $totalSold = $report->sum('total_sold');
         $totalRevenue = $report->sum('revenue');

@@ -60,6 +60,7 @@ class WishlistController extends Controller
         ]);
     }
 
+
     public function remove($id)
     {
         $wishlist = Wishlist::where('id', $id)->where('user_id', Auth::id())->first();

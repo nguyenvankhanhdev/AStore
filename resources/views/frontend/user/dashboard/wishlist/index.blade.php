@@ -55,8 +55,8 @@
                                             </td>
                                             <td>
                                                 <p class="text-muted mb-1"><del>{{ number_format($originalPrice, 0, ',', '.') }} đ</del></p>
-                                                <p class="text-danger fw-bold mb-1">{{ number_format($offerPrice, 0, ',', '.') }} đ</p>
-                                                <p class="text-success mb-0">Bạn tiết kiệm: {{ number_format($discount, 0, ',', '.') }} đ</p>
+                                                <p class="text-danger fw-bold mb-1"> {{ number_format($discount, 0, ',', '.') }} đ</p>
+                                                <p class="text-success mb-0">Bạn tiết kiệm: {{ number_format($offerPrice, 0, ',', '.') }}   đ</p>
                                             </td>
                                             <td>
                                                 <button 
