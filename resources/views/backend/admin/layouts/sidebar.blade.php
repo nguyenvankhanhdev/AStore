@@ -107,7 +107,7 @@
                     <li class="{{ setActive(['admin.flash-sale.*']) }}"><a class="nav-link"
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
                     <li class="{{ setActive(['admin.coupon.*']) }}"><a class="nav-link"
-                            href="{{ route('admin.coupon.index') }}">Phiếu giảm giá</a></li>
+                            href="{{ route('admin.admincoupon.index') }}">Phiếu giảm giá</a></li>
                     <li class="{{ setActive(['admin.payment-settings.*']) }}"><a class="nav-link"
                             href="{{ route('admin.payment-settings.index') }}">Payment Settings</a></li>
 

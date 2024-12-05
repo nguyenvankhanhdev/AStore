@@ -29,6 +29,9 @@ class RatingsDataTable extends DataTable
             ->addColumn('user',function($query){
                 return $query->user->name;
             } )
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
+            })
             ->rawColumns(['action', 'product', 'user'])
             ->setRowId('id');
     }
@@ -60,7 +63,11 @@ class RatingsDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
-                    ]);
+                    ])
+                    ->parameters([
+                        'scrollX' => true, // Bật chế độ cuộn ngang
+                        'responsive' => true, // Hỗ trợ giao diện responsiv
+                        ]);
     }
 
     /**
@@ -69,10 +76,15 @@ class RatingsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('product'),
-            Column::make('user'),
-            Column::make('point'),
-            Column::make('content'),
+            Column::make('product')->width('25%'),
+            Column::make('user')->width('25%'),
+            Column::make('point')->width('25%'),
+            Column::make('content')->width('25%'),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cầnf
 
         ];
     }

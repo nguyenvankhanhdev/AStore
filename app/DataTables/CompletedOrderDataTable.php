@@ -15,6 +15,7 @@ class CompletedOrderDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+        ->addIndexColumn()
             ->addColumn('action', function ($query) {
                 $showBtn = "<a href='" . route('admin.orders.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
                 return $showBtn;
@@ -82,14 +83,23 @@ class CompletedOrderDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true, // Bật chế độ cuộn ngang
+                'responsive' => true, // Hỗ trợ giao diện responsive
             ]);
     }
 
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title('ID'),
-            Column::make('customer_name')->title('Tên khách hàng'),
+            Column::computed('DT_RowIndex')
+            ->exportable(false)
+            ->printable(false)
+            ->width(60)
+            ->addClass('text-center')
+            ->title('STT'),
+        Column::make('customer_name')->title('Tên khách hàng')->width('17%'),
             Column::make('date')->title('Ngày đặt hàng'),
             Column::make('amount')->title('Tổng tiền'),
             Column::make('order_status')->title('Trạng thái đơn hàng'),

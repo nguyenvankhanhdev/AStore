@@ -1438,7 +1438,6 @@ p {
     font-size: 16px;
     font-weight: bold;
     color: #555;
-    
     width: 300px;
 }
 
@@ -1500,12 +1499,6 @@ p {
     color: white;  /* Chữ trắng khi hover */
 }
 
-@media only screen and (max-width: 900px) {
-    .fpt-comment .user-form .form-group .btn {
-        position: none;
-        margin-top: 10px;
-    }
-}
 
 /* Modal Đánh Giá */
 .modal-review {
@@ -12782,6 +12775,7 @@ a.checkbox.active:after {
     border-radius: 6px;
     padding-right: 177px
 }
+
 @media only screen and (min-width: 900px){
     .fpt-comment .user-form .form-group .btn {
         position: absolute;
@@ -12790,8 +12784,6 @@ a.checkbox.active:after {
         transform: translateY(-50%)
     }
 }
-
-
 
 .fpt-comment .user-form .alert {
     margin-top: 8px
@@ -14969,4 +14961,10 @@ input[type=text]:focus-visible {
 .product-cart__remove.delete-item:hover{
     color: #484b4d;
     font-size: 14px;
+}
+@media only screen and (max-width: 900px) {
+    .fpt-comment .user-form .form-group .btn {
+        position: unset;
+        margin-top: 25px;
+    }
 }

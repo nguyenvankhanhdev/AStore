@@ -38,6 +38,9 @@ class ProductVariantDataTable extends DataTable
             ->editColumn('storage_id', function ($query) {
                 return $query->storage->GB;
             })
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
+            })
             ->rawColumns(['action'])
             ->setRowId('id');
     }
@@ -72,6 +75,10 @@ class ProductVariantDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
+                    ])
+                    ->parameters([
+                        'scrollX' => true, // Bật chế độ cuộn ngang
+                        'responsive' => true, // Hỗ trợ giao diện responsive
                     ]);
     }
 
@@ -81,9 +88,15 @@ class ProductVariantDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->width(150),
-            Column::make('storage_id')->title('Storage')->width(150),
-            Column::computed('action')->width(150)
+            Column::make('empty_column') // Cột trống
+            ->title('')  // Không hiển thị tiêu đề
+            ->orderable(false) // Không thể sắp xếp
+            ->searchable(false) // Không thể tìm kiếm
+            ->className('empty-column'), // CSS class nếu cầnf
+            Column::make('id')->width('33%'),
+            Column::make('storage_id')->title('Storage')->width('33%'),
+
+            Column::computed('action')->width('33%')
                 ->exportable(false)
                 ->printable(false)
                 ->width(200)

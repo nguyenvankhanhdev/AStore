@@ -69,6 +69,10 @@ class WarehouseDetailDataTable extends DataTable
             ->parameters([
                 'dom' => 'Bfrtip',
                 'buttons' => ['excel', 'csv', 'print', 'reload'],
+            ])
+            ->parameters([
+                'scrollX' => true, // Bật chế độ cuộn ngang
+                'responsive' => true, // Hỗ trợ giao diện responsive
             ]);
     }
 

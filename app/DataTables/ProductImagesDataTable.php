@@ -28,6 +28,9 @@ class ProductImagesDataTable extends DataTable
         ->addColumn('image', function($query){
             return "<img width='200px' src='".asset($query->image)."' ></img>";
         })
+        ->addColumn('empty_column', function ($query) {
+            return ''; // Không có nội dung trong cột
+        })
         ->rawColumns(['image', 'action'])
         ->setRowId('id');
     }
@@ -59,6 +62,10 @@ class ProductImagesDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
+                    ])
+                    ->parameters([
+                        'scrollX' => true, // Bật chế độ cuộn ngang
+                        'responsive' => true, // Hỗ trợ giao diện responsive
                     ]);
     }
 
@@ -69,12 +76,17 @@ class ProductImagesDataTable extends DataTable
     {
         return [
 
-            Column::make('id')->width(100),
-            Column::make('image')->width(200),
+            Column::make('id')->width('40%'),
+            Column::make('image')->width('40%'),
+            Column::make('empty_column') // Cột trống
+            ->title('')  // Không hiển thị tiêu đề
+            ->orderable(false) // Không thể sắp xếp
+            ->searchable(false) // Không thể tìm kiếm
+            ->className('empty-column'), // CSS class nếu cầnf
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(400)
+                  ->width('20%')
                   ->addClass('text-center'),
         ];
     }
