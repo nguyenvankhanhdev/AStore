@@ -155,6 +155,7 @@
 
             function getPriceByVariantId(productElement) {
                 const variantId = productElement.find('.product__memory__item.active').data('variant-id');
+
                 if (!variantId) {
                     console.error("Variant ID không hợp lệ.");
                     return;
@@ -193,6 +194,7 @@
                                     productElement.find('.product__price .price').text(formatNumberToVND(endPrice));
                                     productElement.find('.product__price .text-promo').text(formatNumberToVND(price));
 
+
                                     productElement.attr('data-price', price);
                                     productElement.attr('data-discounted-price', endPrice);
 
@@ -205,6 +207,7 @@
                                     console.error(
                                         "Error: API không trả về trạng thái thành công."
                                     );
+
                                 }
                             },
                             error: function(error) {
@@ -225,7 +228,6 @@
                     activeItem.hide();
                 }
             });
-
 
             function setLoading(isLoading) {
                 if (isLoading) {
