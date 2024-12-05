@@ -102,22 +102,22 @@
     if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?')) {
         return;
     }
-    
 
-    // $.ajax({
-    //     url: "{{ route('user.wishlist.remove', ':id') }}".replace(':id', wishlistId),
-    //     method: 'DELETE',
-    //     data: {
-    //         _token: $('meta[name="csrf-token"]').attr('content')
-    //     },
-    //     success: function (response) {
-    //         toastr.success(response.message);
-    //         $(`button[data-id="${wishlistId}"]`).closest('tr').remove();
-    //     },
-    //     error: function (xhr) {
-    //         toastr.error(xhr.responseJSON.message || "Có lỗi xảy ra khi xóa sản phẩm!");
-    //     }
-    // });
+
+    $.ajax({
+        url: "{{ route('user.wishlist.remove', ':id') }}".replace(':id', wishlistId),
+        method: 'DELETE',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            toastr.success(response.message);
+            $(`button[data-id="${wishlistId}"]`).closest('tr').remove();
+        },
+        error: function (xhr) {
+            toastr.error(xhr.responseJSON.message || "Có lỗi xảy ra khi xóa sản phẩm!");
+        }
+    });
 });
 
 

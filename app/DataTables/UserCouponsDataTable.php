@@ -41,6 +41,9 @@ class UserCouponsDataTable extends DataTable
             ->addColumn('end_date', function ($query) {
                 return date('d-m-Y', strtotime($query->coupons->end_date));
             })
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
+            })
             ->setRowId('id');
     }
 
@@ -82,6 +85,10 @@ class UserCouponsDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true, // Bật chế độ cuộn ngang
+                'responsive' => true, // Hỗ trợ giao diện responsive
             ]);
     }
 
@@ -91,15 +98,15 @@ class UserCouponsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('unique_code')->title('Tên mã giảm giá'),
-            Column::make('discount')->title('Giá trị voucher cho đơn hàng')->width(300),
-            Column::make('start_date')->title('Ngày bắt đầu'),
-            Column::make('end_date')->title('Ngày kết thúc'),
-            // Column::computed('action')
-            // ->exportable(false)
-            // ->printable(false)
-            // ->width(60)
-            // ->addClass('text-center'),
+            Column::make('unique_code')->title('Tên mã giảm giá')->width('25%'),
+            Column::make('discount')->title('Giá trị voucher cho đơn hàng')->width(300)->width('25%'),
+            Column::make('start_date')->title('Ngày bắt đầu')->width('25%'),
+            Column::make('end_date')->title('Ngày kết thúc')->width('25%'),
+            Column::make('empty_column') // Cột trống
+            ->title('')  // Không hiển thị tiêu đề
+            ->orderable(false) // Không thể sắp xếp
+            ->searchable(false) // Không thể tìm kiếm
+            ->className('empty-column'), // CSS class nếu cầnf
         ];
     }
 

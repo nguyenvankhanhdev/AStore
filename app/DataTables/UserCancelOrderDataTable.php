@@ -93,27 +93,32 @@ class UserCancelOrderDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true, // Bật chế độ cuộn ngang
+                'responsive' => true, // Hỗ trợ giao diện responsive
+                'autoWidth' => false,
             ]);
     }
 
     /**
      * Get the dataTable columns definition.
-     */
-    public function getColumns(): array
-    {
-        return [
-            Column::make('name')->title('Tên khách hàng'),
-            Column::make('total_amount')->title('Tổng tiền'),
-            Column::make('status')->title('Trạng thái'),
-            Column::make('order_cancel_date')->title('Ngày hủy'),
-            Column::make('reason')->title('Lý do hủy'),
-            Column::computed('action')->title('Xem chi tiết')
-                ->exportable(false)
-                ->printable(false)
-                ->width(200)
-                ->addClass('text-center'),
-        ];
-    }
+     */public function getColumns(): array
+{
+    return [
+        Column::make('name')->title('Tên khách hàng')->width(200),
+        Column::make('total_amount')->title('Tổng tiền')->width(150),
+        Column::make('status')->title('Trạng thái')->width(120),
+        Column::make('order_cancel_date')->title('Ngày hủy')->width(180),
+        Column::make('payment_status')->title('Trạng thái thanh toán')->width(150),
+        Column::make('reason')->title('Lý do hủy')->width(200),
+        Column::computed('action')->title('Xem chi tiết')
+            ->exportable(false)
+            ->printable(false)
+            ->width(200)
+            ->addClass('text-center'),
+    ];
+}
 
     /**
      * Get the filename for export.

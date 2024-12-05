@@ -71,7 +71,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:products,name,' . $id],
-            'long_description' => ['max:600'],
+            'long_description' => ['required'],
             'short_description' => ['string'],
             'category' => ['required'],
             'image' => ['image', 'max:3000'],
@@ -95,7 +95,7 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->save();
 
-        return redirect()->route('admin.product.index')->with('success', 'Product updated successfully');
+        return redirect()->route('admin.product.index')->with('success', 'Cập nhật thành công');
     }
 
 
@@ -104,7 +104,7 @@ class ProductController extends Controller
     {
         $product = Products::findOrFail($id);
         $product->delete();
-        return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
+        return response(['status' => 'success', 'message' => 'Xóa thành công!']);
     }
 
     public function changeStatus(Request $request)
@@ -112,7 +112,7 @@ class ProductController extends Controller
         $product = Products::findOrFail($request->id);
         $product->status = $request->status == 'true' ? 1 : 0;
         $product->save();
-        return response(['message' => 'Status has been updated!']);
+        return response(['message' => 'Cập nhật trạng thái thành công!']);
     }
     public function getSubCategories(Request $request)
     {

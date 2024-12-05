@@ -22,6 +22,7 @@ class VariantColorsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+        ->addIndexColumn()
         ->addColumn('action', function($query){
             $editBtn = "<a href='" . route('admin.variant-colors.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
             $deleteBtn = "<a href='".route('admin.variant-colors.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
@@ -72,6 +73,10 @@ class VariantColorsDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
+                    ])
+                    ->parameters([
+                        'scrollX' => true, // Bật chế độ cuộn ngang
+                        'responsive' => true, // Hỗ trợ giao diện responsive
                     ]);
     }
 
@@ -81,7 +86,7 @@ class VariantColorsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            Column::computed('DT_RowIndex')->title('STT'),
             Column::make('color_id')->title('Color'),
             Column::make('quantity'),
             Column::make('price')->title('Price (VND'),

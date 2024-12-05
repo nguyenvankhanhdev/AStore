@@ -864,8 +864,11 @@
                 }
             });
 
+            // tôi chỉ muốn người dùng nhấn 1 lần thôi thì phải làm sao
+
             $("#checkout").on('click', function(e) {
                 e.preventDefault();
+                $(this).prop('disabled', true);
                 var firstname = $('input[name="firstname"]').val();
                 var phonenumber = $('input[name="phonenumber"]').val();
                 var email = $('input[name="email"]').val();
