@@ -403,11 +403,11 @@
                                                             <strong>{{ $user->name }}</strong>
                                                         </div>
                                                     @else
-                                                        {
+
                                                         <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                             <strong>Khách</strong>
                                                         </div>
-                                                        }
+
                                                     @endif
                                                 </div>
                                                 <div class="form-group">
