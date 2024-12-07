@@ -142,7 +142,7 @@
     <div class="over-suggestion"></div>
     <main class="main">
         @yield('content')
-        {{-- <div class="wrap-section-chat"><a class="wrap-ic-chat" href="" aria-controls="chat-modal"><i
+        <div class="wrap-section-chat"><a class="wrap-ic-chat" href="" aria-controls="chat-modal"><i
                     class="ic-chat"></i></a>
             <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="chat-modal">
                 <div class="modal-wrapper" tabindex="-1">
@@ -185,7 +185,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
     </main>
 
