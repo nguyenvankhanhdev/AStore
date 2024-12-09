@@ -13,17 +13,21 @@ class WarehouseDataTable extends DataTable
     public function dataTable($query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->addColumn('action', function ($query) {
                 return "<a href='" . route('admin.warehouse.show', $query->id) . "' class='btn btn-primary'>View</a>";
             })
             ->addColumn('import_date', function ($query) {
-                return date('d-M-Y', strtotime($query->import_date));
+                return $query->import_date;
             })
             ->addColumn('total_quantity', function ($query) {
                 return number_format($query->total_quantity);
             })
             ->addColumn('total_price', function ($query) {
                 return number_format($query->total_price, 0, '.', ',') . ' đ';
+            })
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
             })
             ->rawColumns(['action']);
     }
@@ -53,15 +57,16 @@ class WarehouseDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::make('id')->title('ID'),
-            Column::make('import_date')->title('Ngày nhập'),
-            Column::make('total_quantity')->title('Tổng mặt hàng'),
-            Column::make('total_price')->title('Tổng tiền')->width('20%'),
+            Column::computed('DT_RowIndex')->title('STT')->width(100),
+            Column::make('import_date')->title('Ngày nhập')->width(320),
+            Column::make('total_quantity')->title('Tổng mặt hàng')->width(320),
+            Column::make('total_price')->title('Tổng tiền')->width(320),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(200)
-                ->addClass('text-center')
+                ->width(100)
+                ->addClass('text-center'),
+
         ];
     }
 

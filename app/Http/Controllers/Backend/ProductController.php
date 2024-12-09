@@ -32,7 +32,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:products,name'],
-            'long_description' => ['max:600'],
+            'long_description' => ['required'],
             'short_description' => ['string'],
             'category' => ['required'],
             'image' => ['required', 'image', 'max:3000'],

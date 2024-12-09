@@ -22,7 +22,7 @@ class FlashSaleItemDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-
+            ->addIndexColumn()
             ->addColumn('action', function($query){
                 $deleteBtn = "<a href='".route('admin.flash-sale-item.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
                 return $deleteBtn;
@@ -48,7 +48,9 @@ class FlashSaleItemDataTable extends DataTable
                 }
                 return $button;
             })
-
+            ->addColumn('empty_column', function($query){
+                return ''; // Không có nội dung trong cột
+            })
             ->rawColumns(['status', 'show_at_home', 'action', 'name'])
             ->setRowId('id');
     }
@@ -95,15 +97,24 @@ class FlashSaleItemDataTable extends DataTable
     {
         return [
 
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('offer_price'),
-            Column::make('status'),
+           Column::computed('DT_RowIndex')->exportable(false)
+            ->printable(false)
+            ->width('5%')
+            ->title('STT'),
+            Column::make('name')->title('Tên danh mục')->width('25%'),
+            Column::make('offer_price')->title('Giá khuyến mãi')->width('25%'),
+            Column::make('status')->title('Trạng thái')->width('25%'),
             Column::computed('action')
             ->exportable(false)
             ->printable(false)
-            ->width(60)
-            ->addClass('text-center')
+            ->width('20%')
+            ->addClass('text-center'),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // Cột trống
+
         ];
     }
 

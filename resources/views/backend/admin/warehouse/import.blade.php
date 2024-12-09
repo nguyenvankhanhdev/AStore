@@ -58,7 +58,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <button type="button" id="add-row" class="btn btn-secondary">Thêm sản phẩm</button>
+                            <button type="button" id="add-row" class="btn btn-primary">Thêm sản phẩm</button>
                             <button type="submit" class="btn btn-primary">Lưu phiếu nhập</button>
                         </form>
                 </div>

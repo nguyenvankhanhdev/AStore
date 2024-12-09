@@ -2,7 +2,7 @@
 @section('content')
         <section class="section">
           <div class="section-header">
-            <h1>warehouse</h1>
+            <h1>Nhập kho</h1>
           </div>
 
           <div class="section-body">

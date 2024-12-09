@@ -22,6 +22,7 @@ class ProductVariantDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->addColumn('action', function($query){
                 $editBtn = "<a href='" . route('admin.products-variant.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='".route('admin.products-variant.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
@@ -86,23 +87,27 @@ class ProductVariantDataTable extends DataTable
      * Get the dataTable columns definition.
      */
     public function getColumns(): array
-    {
-        return [
-            Column::make('empty_column') // Cột trống
-            ->title('')  // Không hiển thị tiêu đề
-            ->orderable(false) // Không thể sắp xếp
-            ->searchable(false) // Không thể tìm kiếm
-            ->className('empty-column'), // CSS class nếu cầnf
-            Column::make('id')->width('33%'),
-            Column::make('storage_id')->title('Storage')->width('33%'),
+{
+    return [
+        Column::computed('DT_RowIndex')->exportable(false)
+        ->printable(false)
+        ->width('33%')->title('STT')
+        ->addClass('text-center'),
+        Column::make('storage_id')->title('Storage')->width('33%'),
+        Column::computed('action')
+            ->exportable(false)
+            ->printable(false)
+            ->addClass('text-center')
+            ->width('33%'),
+        Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cầnf
 
-            Column::computed('action')->width('33%')
-                ->exportable(false)
-                ->printable(false)
-                ->width(200)
-                ->addClass('text-center'),
-        ];
-    }
+    ];
+}
+
 
     /**
      * Get the filename for export.
