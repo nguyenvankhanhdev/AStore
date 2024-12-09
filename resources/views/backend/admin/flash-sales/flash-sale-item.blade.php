@@ -4,23 +4,23 @@
     <!-- Main Content -->
     <section class="section">
         <div class="section-header">
-            <h1>Flash Sale</h1>
+            <h1>Giảm giá</h1>
         </div>
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Add Flash Sale Sub-Category</h4>
+                            <h4>Thêm danh mục vào giảm giá</h4>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.flash-sale-item.add-categories') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="flash_sale_id" value="{{ $flashSaleDate->id }}">
                                 <div class="form-group">
-                                    <label>Add Product</label>
+                                    <label>Thêm sản phẩm</label>
                                     <select name="categories" id="" class="form-control select2">
-                                        <option value="">Select</option>
+                                        <option value="">Chọn</option>
                                         @foreach ($categories as $cate)
                                             <option value="{{ $cate->id }}">{{ $cate->name }}</option>
                                         @endforeach
@@ -37,14 +37,14 @@
                                         <div class="form-group">
                                             <label>Trạng thái</label>
                                             <select name="status" id="" class="form-control">
-                                                <option value="">Select</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
+                                                <option value="">Chọn</option>
+                                                <option value="1">Cho phép</option>
+                                                <option value="0">Không cho phép</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary">Thêm</button>
                             </form>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>All Flash Sale Products</h4>
+                            <h4>Tất cả danh mục giảm giá</h4>
                         </div>
                         <div class="card-body">
                             {{ $dataTable->table() }}

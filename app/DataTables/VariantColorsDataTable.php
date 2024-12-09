@@ -37,6 +37,9 @@ class VariantColorsDataTable extends DataTable
         ->editColumn('price', function ($query) {
             return number_format($query->price, 0, ',', '.');
         })
+        ->addColumn('empty_column', function ($query) {
+            return ''; // Không có nội dung trong cột
+        })
         ->rawColumns(['action'])
         ->setRowId('id');
 
@@ -86,16 +89,21 @@ class VariantColorsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('DT_RowIndex')->title('STT'),
-            Column::make('color_id')->title('Color'),
-            Column::make('quantity'),
-            Column::make('price')->title('Price (VND'),
-            Column::make('offer_price')->title('Offer Price (VND'),
+            Column::computed('DT_RowIndex')->title('STT')->width('5%'),
+            Column::make('color_id')->title('Màu sắc')->width('16%'),
+            Column::make('quantity')->width('20%')->title("Số lượng"),
+            Column::make('price')->title('Gia1 (VND')->width('20%'),
+            Column::make('offer_price')->title('Giá giảm (VND')->width('20%'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(200)
+                  ->width('20%')
                   ->addClass('text-center'),
+                  Column::make('empty_column') // Cột trống
+                  ->title('')  // Không hiển thị tiêu đề
+                  ->orderable(false) // Không thể sắp xếp
+                  ->searchable(false) // Không thể tìm kiếm
+                  ->className('empty-column'), // CSS class nếu cầnf
         ];
     }
 

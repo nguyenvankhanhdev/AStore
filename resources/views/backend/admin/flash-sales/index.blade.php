@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>All Flash Sale</h1>
+            <h1>Tất cả các đợt giảm giá</h1>
         </div>
         <div class="section-body">
             <div class="row">

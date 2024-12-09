@@ -58,7 +58,7 @@ class ReportController extends Controller
                     'remaining_cost' => 0
                 ];
             }
-
+            
             $productName = $variantColor->variant->product->name;
             $variantName = $variantColor->variant->storage->GB;
             $colorName = $variantColor->color->name;
