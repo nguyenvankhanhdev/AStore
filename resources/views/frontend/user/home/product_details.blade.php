@@ -800,10 +800,6 @@
                     const variantId = $('#variant-selector .item.active').data('id'); // Lấy ID biến thể
                     const colorId = $('.colors .item.active').data('color-id'); // Lấy ID màu sắc
 
-                    console.log("Product ID:", productId);
-                    console.log("Variant ID:", variantId || "Chưa chọn");
-                    console.log("Color ID:", colorId || "Chưa chọn");
-
                     // Kiểm tra nếu chưa chọn biến thể hoặc màu sắc
                     if (!variantId || !colorId) {
                         toastr.error("Vui lòng chọn màu sắc và biến thể sản phẩm!");
@@ -814,12 +810,12 @@
 
 
                     $.ajax({
-                        url: "{{ route('user.get.variantColorId') }}", // Route tới backend
+                        url: "{{ route('get.variantColorId') }}", // Route tới backend
                         method: 'GET',
                         data: {
                             variant_id: variantId,
                             color_id: colorId,
-                            _token: $('meta[name="csrf-token"]').attr('content')
+                            _token: '{{ csrf_token() }}',
                         },
 
                         success: function(response) {
@@ -830,25 +826,24 @@
                                 console.log("CSRF Token:", $('meta[name="csrf-token"]').attr('content'));
                                 // Gửi thêm AJAX để thêm vào wishlist
                                 $.ajax({
-                                    url: "{{ route('user.wishlist.add') }}", // Route thêm vào wishlist
+                                    url: "{{ route('wishlist.add') }}", // Route thêm vào wishlist
                                     method: 'POST',
                                     data: {
                                         pro_id: productId,
                                         variant_color_id: variantColorId,
-                                        _token: $('meta[name="csrf-token"]').attr(
-                                            'content') // CSRF Token
+                                        _token: '{{ csrf_token() }}',
                                     },
                                     success: function(response) {
                                         if (response.status == 'success') {
                                             toastr.success(response.message);
                                         } else {
-                                            toastr.error('vui lòng đăng nhập lại!');
+                                            toastr.error(response.message);
                                         }
                                     },
                                     error: function(error) {
-                                        console.error("Error:", error);
+
                                         toastr.error(error.responseJSON.message ||
-                                            "Có lỗi xảy ra!");
+                                            "Đã xảy ra lỗi khi thêm vào yêu thích! Vui lòng thử lại.");
                                     }
                                 });
 
