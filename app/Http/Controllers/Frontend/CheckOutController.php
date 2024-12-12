@@ -18,7 +18,6 @@ class CheckOutController extends Controller
     {
         $paymentMethod = $request->paymentMethod;
         Log::info('Data check out: ' . json_encode($request->all()));
-        // dd(json_encode($request->all()));
         switch ($paymentMethod) {
             case 1:
                 return $this->paymentController->payWithCOD($request);

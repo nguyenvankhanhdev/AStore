@@ -38,9 +38,7 @@ class FlashSaleController extends Controller
         $flashSale->end_date = $request->end_date;
         $flashSale->status = 0;
         $flashSale->save();
-
         return redirect()->route('admin.flash-sale.index')->withSuccess('Tạo mới thành công!');
-
 
     }
     public function show($id) {}
@@ -84,9 +82,8 @@ class FlashSaleController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Status has been updated!']);
         }
 
-
         if ($flashSale->status == 0) {
-            $this->updateFlashSaleItems($flashSale->id, 'best_product', false);
+            $this->updateFlashSaleItems($flashSale->id, 'hot_product', false);
             $flashSale->save();
             return response()->json(['status' => 'success', 'message' => 'Status has been updated!']);
         }
@@ -98,7 +95,6 @@ class FlashSaleController extends Controller
 
         foreach ($flashSaleItems as $item) {
             $offerPrice = $item->offer_price;
-
             if ($item->subcategories && $item->subcategories->products) {
                 foreach ($item->subcategories->products as $product) {
                     $product->update(['product_type' => $productType]);

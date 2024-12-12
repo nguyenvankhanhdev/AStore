@@ -72,7 +72,7 @@ class TopProductDataTable extends DataTable
                         break;
                 }
             })
-            ->rawColumns(['action', 'image','soluongmua','type'])
+            ->rawColumns(['action', 'image', 'soluongmua', 'type'])
             ->setRowId('id');
     }
 
@@ -84,10 +84,11 @@ class TopProductDataTable extends DataTable
         return $model->newQuery()
             ->with(['variants.variantColors.orderDetails'])
             ->whereHas('variants.variantColors.orderDetails', function ($query) {
-                $query->selectRaw('SUM(quantity) as total_quantity')
-                    ->havingRaw('SUM(quantity) > ?', [1]);
+                $query->selectRaw('SUM(quantity) as total_quantity');
+
             });
     }
+
 
     /**
      * Optional method if you want to use the html builder.
@@ -99,7 +100,7 @@ class TopProductDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy( 1)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),

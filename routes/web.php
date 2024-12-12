@@ -37,6 +37,7 @@ Route::get('frontend/category', function () {
 Route::get('/', [ProductController::class, 'productsIndex'])->name('home');
 Route::get('index', [ProductController::class, 'productsIndex'])->name('products.index');
 Route::get('category', [ProductController::class, 'productCategories'])->name('products.category');
+Route::get('search', [ProductController::class, 'searchProducts'])->name('products.search');
 //details
 Route::get('product/{slug}', [ProductController::class, 'showProduct'])->name('product.details');
 Route::get('getPrice', [ProductController::class, 'getPrice'])->name('getPrice');
@@ -66,7 +67,7 @@ Route::get('reloadCodeCoupon', [CartController::class, 'reloadCodeCoupon'])->nam
 // thanh toán
 Route::get('checkout/return', [PaymentController::class, 'vnpay_return'])->name('vnpay.return');
 Route::post('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::get('bookingSuccess', [PaymentController::class, 'booking_success'])->name('booking.success');
+Route::get('bookingSuccess/{orderId}', [PaymentController::class, 'booking_success'])->name('booking.success');
 // thanh toán momo
 Route::post('momo-payment-atm', [PaymentController::class, 'payWithMOMO_ATM'])->name('payment.momoatm');
 Route::post('momo-payment-qr-', [PaymentController::class, 'payWithMOMO_QR'])->name('payment.momoqr');
@@ -93,22 +94,21 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
     Route::put('cancelOrder', [UserOrderController::class, 'cancelOrder'])->name('order.cancel');
     Route::get('reviews', [UserDashboardController::class, 'reviews'])->name('reviews');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::get('/get-variant-color-id', [VariantColorsController::class, 'getVariantColorId'])->name('get.variantColorId');
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::get('cancel-all-Order', [UserOrderController::class, 'allCancelOrder'])->name('all.cancelorder');
+    Route::get('complete-all-Order', [UserOrderController::class, 'allCompleteOrder'])->name('all.completeorder');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-        Route::get('/get-variant-color-id', [VariantColorsController::class, 'getVariantColorId'])->name('get.variantColorId');
-
-        Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
-        Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-    });
 });
 
 
-Route::get('get-price-by-variant',[ProductController::class,'getPriceByVariant'])->name('getByVariant');
-Route::get('getByColor',[ProductController::class,'getPriceByVariantAndColor'])->name('getByColor');
+
+Route::get('get-price-by-variant', [ProductController::class, 'getPriceByVariant'])->name('getByVariant');
+Route::get('getByColor', [ProductController::class, 'getPriceByVariantAndColor'])->name('getByColor');
 
 
 Route::post('user/coupons/redeem', [UserCouponsController::class, 'redeem'])->name('coupons.redeem');
 Route::post('zalo-pay', [PaymentController::class, 'payWithZALOPAY'])->name('payment.zalopay');
 Route::get('callbackzalopay', [PaymentController::class, 'callbackZALOPAY'])->name('zalopay.callback');
-Route::get('send-email', [PaymentController::class, 'sendMail'])->name('send-email');

@@ -126,41 +126,32 @@ class CartController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Vui lòng nhập mã giảm giá!']);
         }
 
-        $coupon = Coupon::where(['code' => $request->coupon_code, 'status' => 1])->first();
+        $coupon = UserCoupons::where(['unique_code' => $request->coupon_code])->first();
 
         if ($coupon === null) {
             return response()->json(['status' => 'error', 'message' => 'Mã giảm giá không tồn tại!']);
         }
 
-        if ($coupon->start_date > date('Y-m-d') || $coupon->end_date < date('Y-m-d')) {
+        if ($coupon->coupons->start_date > date('Y-m-d') || $coupon->coupons->end_date < date('Y-m-d')) {
             return response()->json(['status' => 'error', 'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!']);
         }
 
-        if ($coupon->total_used >= $coupon->quantity) {
+        if ($coupon->coupons->total_used >= $coupon->coupons->quantity) {
             return response()->json(['status' => 'error', 'message' => 'Bạn không thể áp dụng phiếu giảm giá này']);
-        }
-
-
-        $user_coupon = UserCoupons::with(['coupons', 'user'])
-            ->where(['user_id' => Auth::id(), 'coupon_id' => $coupon->id])
-            ->first();
-
-        if ($user_coupon === null || $user_coupon->quantity <= 0) {
-            return response()->json(['status' => 'error', 'message' => 'Bạn đã sử dụng hết mã giảm giá này hoặc không có mã!']);
         }
 
         Session::put('coupon', [
             'id' => $coupon->id,
-            'coupon_name' => $coupon->name,
-            'coupon_code' => $coupon->code,
-            'discount_type' => $coupon->discount_type,
-            'discount' => $coupon->discount,
+            'coupon_name' => $coupon->coupons->name,
+            'coupon_code' => $coupon->unique_code,
+            'discount_type' => $coupon->coupons->discount_type,
+            'discount' => $coupon->coupons->discount,
         ]);
 
         return response()->json([
             'status' => 'success',
-            'coupon_code' => $coupon->code,
-            'coupon' => $coupon,
+            'coupon_code' => $coupon->unique_code,
+            'coupon' => $coupon->coupons,
             'message' => 'Áp dụng mã giảm giá thành công!'
         ]);
     }

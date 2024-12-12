@@ -123,7 +123,8 @@
                                         <a class="badge badge-grayscale badge-xxxs badge-xxs badge-close m-r-8 m-b-8"
                                             href="{{ route('remove-coupon') }}">
                                             <i class="ic-tag m-r-4"></i>
-                                            <span id="getcoupon_code">
+                                            <span id="getcoupon_code"
+                                                data-coupon="{{ Session::has('coupon') ? Session::get('coupon')['coupon_code'] : '' }}">
                                                 @if (Session::has('coupon'))
                                                     {{ Session::get('coupon')['coupon_code'] }}
                                                 @endif
@@ -131,7 +132,11 @@
                                                 @if (Session::has('coupon'))
                                                     <script>
                                                         var cp = @json(Session::get('coupon'));
-                                                        console.log(cp);
+                                                        var user_coupon = @json(Session::get('coupon')['coupon_code']);
+                                                    </script>
+                                                @else
+                                                    <script>
+                                                        var user_coupon = null;
                                                     </script>
                                                 @endif
                                             </span>
@@ -617,10 +622,9 @@
             });
 
             var displayCoupon = $('#coupon-badge');
-            var getcoupon_code = $('#getcoupon_code');
+            var getcoupon_code = $('#getcoupon_code').data('coupon'); // Lấy giá trị từ `data-coupon`
 
-
-            if (getcoupon_code.text().trim() === '') {
+            if (!getcoupon_code) { // Kiểm tra nếu giá trị trống
                 displayCoupon.hide();
             } else {
                 displayCoupon.show();
@@ -629,7 +633,6 @@
             var cb1 = '';
             if (typeof cp !== 'undefined' && cp) {
                 cb1 = cp;
-                console.log(cp);
 
             }
 
@@ -776,15 +779,20 @@
                     success: function(data) {
                         if (data.status === 'success') {
                             toastr.success(data.message);
-                            displayCoupon.show();
-                            getcoupon_code.text(data.coupon_code);
+
+                            $('#getcoupon_code').text(data.coupon_code);
+                            $('#coupon-badge').show();
+
+                            user_coupon = data.coupon_code;
                             cb1 = data.coupon;
                             updateTotal();
                         } else {
                             toastr.error(data.message);
+                            $('#coupon-badge').hide();
                         }
                     },
                     error: function(data) {
+                        toastr.error('Có lỗi xảy ra, vui lòng thử lại!');
                         console.log(data);
                     }
                 });
@@ -801,6 +809,7 @@
                         if (data.status === 'success') {
                             display.hide();
                             cb1 = '';
+                            user_coupon = '';
                             toastr.success(data.message);
                             updateTotal();
 
@@ -907,7 +916,7 @@
                         point: point,
                         create_address: create_address,
                         productIds: selectedProductIds,
-                        coupon_id: cb1.id,
+                        coupon_id: user_coupon,
                     },
                     success: function(response) {
                         if (response.status === 'success') {

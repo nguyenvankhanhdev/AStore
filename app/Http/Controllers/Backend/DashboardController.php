@@ -34,17 +34,19 @@ class DashboardController extends Controller
 
 
         $dailyProfit = $todaysOrdersData
-            ->where('status', 'delivered')
+            ->where('status', 'completed')
             ->sum(function ($order) {
                 return $order->total_amount - $order->cost_price;
             });
 
+        // dd($dailyProfit);
         $todaysTotalQuantity = $todaysOrdersData->sum('quantity');
 
 
         $monthlyOrdersData = Orders::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
-            ->where('status', 'delivered')
+            ->where(['status' => 'completed'])
+
             ->get();
 
         $monthlyProfit = $monthlyOrdersData->sum(function ($order) {
@@ -52,7 +54,8 @@ class DashboardController extends Controller
         });
 
         $yearlyOrdersData = Orders::whereYear('created_at', Carbon::now()->year)
-            ->where('status', 'delivered')
+
+            ->where(['status' => 'completed'])
             ->get();
 
         $yearlyProfit = $yearlyOrdersData->sum(function ($order) {

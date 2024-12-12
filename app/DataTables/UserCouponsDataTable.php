@@ -22,8 +22,12 @@ class UserCouponsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('name', function ($query) {
-                return $query->coupons->name;
+            ->addColumn('discount', function ($query) {
+                if ($query->coupons->discount_type == 'percent') {
+                    return $query->coupons->discount . '%';
+                } else {
+                    return number_format($query->coupons->discount * 1000, 0, ',', '.') . 'đ';
+                }
             })
             ->addColumn('code', function ($query) {
                 return $query->coupons->code;
@@ -36,6 +40,9 @@ class UserCouponsDataTable extends DataTable
             })
             ->addColumn('end_date', function ($query) {
                 return date('d-m-Y', strtotime($query->coupons->end_date));
+            })
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
             })
             ->setRowId('id');
     }
@@ -78,6 +85,12 @@ class UserCouponsDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true,
+                'responsive' => true, // Hỗ trợ responsive đầy đủ
+
+
             ]);
     }
 
@@ -87,16 +100,15 @@ class UserCouponsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('code')->title('Tên mã giảm giá'),
-            Column::make('name')->title('Giá trị'),
-            Column::make('quantity')->title('Số lượng'),
-            Column::make('start_date')->title('Ngày bắt đầu'),
-            Column::make('end_date')->title('Ngày kết thúc'),
-            // Column::computed('action')
-            // ->exportable(false)
-            // ->printable(false)
-            // ->width(60)
-            // ->addClass('text-center'),
+            Column::make('unique_code')->title('Tên mã giảm giá')->width('25%'),
+            Column::make('discount')->title('Giá trị voucher cho đơn hàng')->width('25%'),
+            Column::make('start_date')->title('Ngày bắt đầu')->width('25%'),
+            Column::make('end_date')->title('Ngày kết thúc')->width('25%'),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cầnf
         ];
     }
 

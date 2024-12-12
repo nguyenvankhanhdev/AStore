@@ -28,21 +28,24 @@ class OrderDataTable extends DataTable
             ->addColumn('amount', function ($query) {
                 return number_format($query->total_amount, 0,',','.') . 'đ';
             })
+            ->editColumn('payment_method', function($query){
+                return $query->payment_method == 'COD' ? 'Thanh toán tiền mặt' : 'Thanh toán qua '. $query->payment_method;
+            })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->order_date));
             })
             ->addColumn('order_status', function ($query) {
                 switch ($query->status) {
                     case 'pending':
-                        return "<span class='badge bg-warning'>Pending</span>";
+                        return "<span class='badge bg-warning'>Đang chờ</span>";
                     case 'delivered':
-                        return "<span class='badge bg-success'>Delivered</span>";
+                        return "<span class='badge bg-success'>Đang giao hàng</span>";
                     case 'processed':
-                        return "<span class='badge bg-info'>Processed</span>";
+                        return "<span class='badge bg-info'>Đã xử lý</span>";
                     case 'canceled':
-                        return "<span class='badge bg-danger'>Canceled</span>";
+                        return "<span class='badge bg-danger'>Đã hủy</span>";
                     case 'completed':
-                        return "<span class='badge' style='background-color: #28a745; color: white;'>Completed</span>";
+                        return "<span class='badge' style='background-color: #28a745; color: white;'>Hoàn thành</span>";
                     default:
                         return "<span class='badge bg-secondary'>Unknown</span>";
                 }
@@ -50,9 +53,9 @@ class OrderDataTable extends DataTable
             ->addColumn('payment_status', function ($query) {
                 switch ($query->payment_status) {
                     case 'pending':
-                        return "<span class='badge bg-warning'>Pending</span>";
+                        return "<span class='badge bg-warning'>Đang chờ</span>";
                     case 'completed':
-                        return "<span class='badge bg-success'>Completed</span>";
+                        return "<span class='badge bg-success'>Hoàn thành</span>";
                     default:
                         return "<span class='badge bg-secondary'>Unknown</span>";
                 }
@@ -83,6 +86,10 @@ class OrderDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true, // Bật chế độ cuộn ngang
+                'responsive' => true, // Hỗ trợ giao diện responsive
             ]);
     }
 

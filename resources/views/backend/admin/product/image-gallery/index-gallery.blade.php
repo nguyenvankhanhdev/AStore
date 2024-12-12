@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Product Image Gallery</h1>
+            <h1>Hình ảnh sản phẩm</h1>
         </div>
         <div class="mb-3">
             <a href="{{ route('admin.product.index') }}" class="btn btn-primary">Back</a>

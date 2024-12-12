@@ -2,10 +2,10 @@
     <div class="header-body">
         <div class="container flex-center">
             <div class="header-logo"><a href="{{ route('products.index') }}"><img
-                        src="/frontend/asset/img/logo-fstu-aar.png" alt="logo"></a>
+                        src="/frontend/asset/img/logoAstore.jpg" alt="logo"></a>
             </div>
             <div class="header-search">
-                <form method="GET" action="{{ route('products.index') }}">
+                <form method="GET" action="{{ route('products.search') }}">
                     <div class="form-group">
                         <div class="form-search form-search-sm">
                             <span class="form-search-icon m-r-4"><i class="ic-search ic-sm"></i></span>
@@ -54,14 +54,12 @@
         <div class="container">
             <div class="header-item">
                 <ul class="flex text-center">
-                    <li><a href="{{ route('products.category', ['categories' => 'iphone']) }}">iPhone</a></li>
-                    <li><a href="{{ route('products.category', ['categories' => 'ipad']) }}">iPad</a></li>
-                    <li><a href="{{ route('products.category', ['categories' => 'macbook']) }}">Mac</a></li>
-                    <li><a>Apple Watch</a></li>
-                    {{-- <li><a>Phụ kiện</a></li>
-                    <li><a>Tin tức - Thủ thuật</a></li> --}}
-                    <li><a>Linh Kiện</a></li>
-                    <li><a>Khuyến mãi</a></li>
+                    <li class="b-b-600"><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li class="b-b-600"><a href="{{ route('products.category', ['categories' => 'iphone']) }}">iPhone</a></li>
+                    <li class="b-b-600"><a href="{{ route('products.category', ['categories' => 'ipad']) }}">iPad</a></li>
+                    <li class="b-b-600"><a href="{{ route('products.category', ['categories' => 'macbook']) }}">Macbook</a></li>
+                    <li class="b-b-600"><a href="{{ route('products.category', ['categories' => 'apple-watch']) }}">Apple Watch</a></li>
+                    <li class="b-b-600"><a href="{{ route('products.category', ['categories' => 'phu-kien-linh-kien']) }}">Phụ Kiện - Linh Kiện</a></li>
                 </ul>
             </div>
         </div>

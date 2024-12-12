@@ -21,64 +21,90 @@ class ProductController extends Controller
 {
     public function productsIndex(Request $request)
     {
-        $search = $request->input('search');
-
         $productsSale = Products::where('status', 1)
-        ->where('product_type', 'sale_product')
-        ->when($search, function ($query, $search) {
-            return $query->where('name', 'LIKE', "%{$search}%")
-                ->orWhereHas('category', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%");
-                });
-        })
-        ->orderBy('id', 'DESC')
-        ->paginate(6);
-
-        $productsNewArrival = Products::where('status', 1)
-            ->where('product_type', 'new_arrival')
-            ->when($search, function ($query, $search) {
-                return $query->where('name', 'LIKE', "%{$search}%")
-                    ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', "%{$search}%");
-                    });
-            })
+            ->where('product_type', 'sale_product')
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
-        $productsFeatured = Products::where('status', 1)
+        $productsNewArrival = Products::where('status', 1)
+            ->where('product_type', 'new_arrival')
+            ->orderBy('id', 'DESC')
+            ->paginate(6);
+
+        $productsFeatured = Products::where('status', operator: 1)
             ->where('product_type', 'featured_product')
-            ->when($search, function ($query, $search) {
-                return $query->where('name', 'LIKE', "%{$search}%")
-                    ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', "%{$search}%");
-                    });
-            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
         $productsTop = Products::where('status', 1)
             ->where('product_type', 'top_product')
-            ->when($search, function ($query, $search) {
-                return $query->where('name', 'LIKE', "%{$search}%")
-                    ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', "%{$search}%");
-                    });
-            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
         $productsBest = Products::where('status', 1)
             ->where('product_type', 'best_product')
-            ->when($search, function ($query, $search) {
-                return $query->where('name', 'LIKE', "%{$search}%")
-                    ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', "%{$search}%");
-                    });
-            })
             ->orderBy('id', 'DESC')
             ->paginate(6);
 
-        return view('frontend.user.layouts.section_cate', compact('productsSale','productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest', 'search'));
+        return view('frontend.user.layouts.section_cate', compact('productsSale', 'productsNewArrival', 'productsFeatured', 'productsTop', 'productsBest'));
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $search = $request->input('search');
+
+        $accessoryCategoryId = Categories::where('slug', 'phu-kien-linh-kien')->value('id');
+
+        $accessorySubCategoryIds = SubCategories::where('cate_id', $accessoryCategoryId)->pluck('id')->toArray();
+
+        $isAccessorySearch = false;
+
+        if (!empty($search)) {
+            $isAccessorySearch = Categories::where('id', $accessoryCategoryId)
+                ->where('name', 'LIKE', "%{$search}%")
+                ->exists() ||
+                SubCategories::whereIn('id', $accessorySubCategoryIds)
+                ->where('name', 'LIKE', "%{$search}%")
+                ->exists();
+        }
+
+        $products = Products::with(['category', 'subCategory'])
+            ->where('status', 1)
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%")
+                        ->orWhereHas('category', function ($q) use ($search) {
+                            $q->where('name', 'LIKE', "%{$search}%");
+                        })
+                        ->orWhereHas('subCategory', function ($q) use ($search) {
+                            $q->where('name', 'LIKE', "%{$search}%");
+                        });
+                });
+            })
+            ->when(!$isAccessorySearch, function ($query) use ($accessorySubCategoryIds) {
+                $query->whereDoesntHave('subCategory', function ($q) use ($accessorySubCategoryIds) {
+                    $q->whereIn('id', $accessorySubCategoryIds);
+                });
+            })
+            ->when($isAccessorySearch, function ($query) use ($accessorySubCategoryIds) {
+                $query->whereHas('subCategory', function ($q) use ($accessorySubCategoryIds) {
+                    $q->whereIn('id', $accessorySubCategoryIds);
+                });
+            })
+            ->orderByRaw(
+                "CASE
+                    WHEN name LIKE ? THEN 1
+                    WHEN name LIKE ? THEN 2
+                    ELSE 3
+                END",
+                ["{$search}%", "%{$search}%"]
+            )
+            ->orderBy('id', 'DESC')
+            ->paginate(6);
+
+        $productCount = $products->total();
+
+        return view('frontend.user.home.search_results', compact('products', 'search', 'productCount'));
     }
 
     public function productCategories(Request $request)
@@ -105,18 +131,18 @@ class ProductController extends Controller
         $selectedVariantId = $request->query('variant', $product->variants->first()->id);
         $colors = VariantColors::where('variant_id', $selectedVariantId)->get();
         $accessories = Accessories::with(['product', 'subCategory'])
-            ->where('pro_id', $product->id)
+            ->where('sub_cate_id', $product->sub_cate_id)
             ->get();
 
         if ($accessories->isNotEmpty()) {
-            $subCateIds = $accessories->pluck('sub_cate_id')->unique(); // Lấy danh sách sub_cate_id không trùng lặp
+            $proIds = $accessories->pluck('pro_id')->unique(); // Lấy danh sách sub_cate_id không trùng lặp
 
             $sameProducts = collect();
 
             // Lấy 1 sản phẩm từ mỗi sub_cate_id
-            foreach ($subCateIds as $subCateId) {
+            foreach ($proIds as $subCateId) {
                 $products = Products::with(['variants.variantColors'])
-                    ->where('sub_cate_id', $subCateId)
+                    ->where('id', $subCateId)
                     ->limit(1) // Lấy 1 sản phẩm từ mỗi sub_cate_id
                     ->get();
                 $sameProducts = $sameProducts->merge($products); // Gộp các sản phẩm vào collection

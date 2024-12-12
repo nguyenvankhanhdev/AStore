@@ -8,8 +8,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class CouponDataTable extends DataTable
@@ -49,40 +47,34 @@ class CouponDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('coupon-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('coupon-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(0)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
         return [
-
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('code'),
-            Column::make('discount'),
-            Column::make('start_date'),
-            Column::make('end_date'),
+            Column::make('discount')->title('Giá trị voucher cho đơn hàng')->width(300),
+            Column::make('required_points')->title('Điểm cần đổi')->width(200),
+            Column::make('start_date')->title('Ngày bắt đầu')->width(200)->addClass('text-center'),
+            Column::make('end_date')->title('Ngày kết thúc')->width(200)->addClass('text-center'),
             Column::computed('action')
             ->exportable(false)
             ->printable(false)
-            ->width(60)
-            ->addClass('text-center'),
+            ->width(150)
+            ->addClass('text-center')->title('Nút'),
         ];
     }
 

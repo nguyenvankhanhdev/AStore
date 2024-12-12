@@ -24,11 +24,14 @@ class RatingsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('product', function ($query) {
-                return "<a href='".route('product.details', ['slug'=>$query->product->slug])."' > ".$query->product->name."</a>";
+                return "<a href='" . route('product.details', ['slug' => $query->product->slug]) . "' > " . $query->product->name . "</a>";
             })
-            ->addColumn('user',function($query){
+            ->addColumn('user', function ($query) {
                 return $query->user->name;
-            } )
+            })
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
+            })
             ->rawColumns(['action', 'product', 'user'])
             ->setRowId('id');
     }
@@ -38,7 +41,7 @@ class RatingsDataTable extends DataTable
      */
     public function query(Ratings $model): QueryBuilder
     {
-        return $model->newQuery()->with('user','product');
+        return $model->newQuery()->with('user', 'product');
     }
 
     /**
@@ -47,20 +50,26 @@ class RatingsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('ratings-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('ratings-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true,
+                'responsive' => true, // Hỗ trợ responsive đầy đủ
+
+
+            ]);
     }
 
     /**
@@ -69,11 +78,15 @@ class RatingsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('product'),
-            Column::make('user'),
-            Column::make('point'),
-            Column::make('content'),
-
+            Column::make('product')->width('25%'),
+            Column::make('user')->width('25%'),
+            Column::make('point')->width('25%'),
+            Column::make('content')->width('25%'),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cần
         ];
     }
 

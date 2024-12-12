@@ -58,7 +58,8 @@ class FlashSaleItemDataTable extends DataTable
      */
     public function query(FlashSaleItem $model): QueryBuilder
     {
-        return $model->with(['subcategories','flashsales'])->newQuery();
+        $flashSaleId = request()->flashsale;
+        return $model->where('flash_sale_id', $flashSaleId)->newQuery();
     }
 
     /**
