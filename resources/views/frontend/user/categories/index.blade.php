@@ -1,7 +1,7 @@
 @extends('frontend.user.layouts.master')
 
 @push('adc')
-    
+
 @endpush
 
 @section('content')

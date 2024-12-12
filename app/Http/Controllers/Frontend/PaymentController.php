@@ -268,14 +268,14 @@ class PaymentController extends Controller
         $address = json_decode($order->address);
         $user = auth()->user();
         Log::info('address: ' . $address->email);
-        Mail::send('frontend.emails.order_confirmation', [
-            'user' => $user,
-            'orders' => $order,
-            'address' => $address,
-            'orderDetails' => $orderDetails
-        ], function ($message) use ($address) {
-            $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
-        });
+        // Mail::send('frontend.emails.order_confirmation', [
+        //     'user' => $user,
+        //     'orders' => $order,
+        //     'address' => $address,
+        //     'orderDetails' => $orderDetails
+        // ], function ($message) use ($address) {
+        //     $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
+        // });
         return $order->id;
     }
     public function payWithVNPAY(Request $request)
@@ -374,7 +374,7 @@ class PaymentController extends Controller
                 $orderId = $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
-                
+
                 $this->clearSession();
                 session()->forget('user_address');
 

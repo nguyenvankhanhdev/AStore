@@ -96,14 +96,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            {{-- <div class="col-xl-12 text-center">
-                                <div class="mt-5" style="display:flex; justify-content:center">
-                                    @if ($products->hasPages())
-                                        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-                                    @endif
 
-                                </div>
-                            </div> --}}
                         </div>
 
                     </div>
@@ -131,81 +124,69 @@
                         <div class="tab-pane active" id="block-1">
                             <div class="product-list">
                                 @foreach ($productsFeatured as $product)
-                                    <div class="product" data-product-id="{{ $product->id }}">
-                                        <div class="product__img">
-                                            <a href="{{ route('product.details', $product->slug) }}"><img
-                                                    src="{{ $product->image }}" alt=""></a>
+                                <div class="product" data-product-id="{{ $product->id }}">
+                                    <div class="product__img">
+                                        <a href="{{ route('product.details', $product->slug) }}"><img
+                                                src="{{ $product->image }}" alt=""></a>
+                                    </div>
+                                    <div class="product__info">
+                                        <div class="product__color">
                                         </div>
-                                        <div class="product__info">
-                                            <div class="product__color">
-                                            </div>
 
-                                            <h3 class="product__name">
-                                                <div class="text">{{ $product->name }}</div>
-                                                @if ($product->product_type == 'new_arrival')
-                                                    <span class="badge badge-xs badge-success badge-link">Mới</span>
-                                                @elseif ($product->product_type == 'featured_product')
-                                                    <span class="badge badge-xs badge-warning badge-link">Nổi bật</span>
-                                                @elseif ($product->product_type == 'top_product')
-                                                    <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
-                                                @elseif ($product->product_type == 'best_product')
-                                                    <span class="badge badge-xs badge-danger badge-link">Tốt nhất</span>
-                                                @elseif ($product->product_type == 'sale_product')
-                                                    <span class="badge badge-xs badge-primary badge-link">Giảm
-                                                        giá</span>
-                                                @endif
-                                            </h3>
-                                            <div class="product__memory js-select">
-                                                @foreach ($product->variants as $index => $variant)
-                                                @if ($variant->storage->GB == '0GB')
-                                                <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
-                                                    style="display: none" data-variant-id="{{ $variant->id }}">
-                                                    <strong>{{ $variant->storage->GB ?? 0 }}</strong>
-                                                </div>
-                                            @else
-                                                <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
-                                                    data-variant-id="{{ $variant->id }}">
-                                                    <strong>{{ $variant->storage->GB ?? 0 }}</strong>
-                                                </div>
+                                        <h3 class="product__name">
+                                            <div class="text">{{ $product->name }}</div>
+                                            @if ($product->product_type == 'new_arrival')
+                                                <span class="badge badge-xs badge-success badge-link">Mới</span>
+                                            @elseif ($product->product_type == 'featured_product')
+                                                <span class="badge badge-xs badge-warning badge-link">Nổi
+                                                    bật</span>
+                                            @elseif ($product->product_type == 'top_product')
+                                                <span class="badge badge-xs badge-info badge-link">Hàng đầu</span>
+                                            @elseif ($product->product_type == 'best_product')
+                                                <span class="badge badge-xs badge-danger badge-link">Tốt
+                                                    nhất</span>
+                                            @elseif ($product->product_type == 'sale_product')
+                                                <span class="badge badge-xs badge-primary badge-link">Giảm
+                                                    giá</span>
                                             @endif
-                                                @endforeach
+                                        </h3>
+                                        <div class="product__memory js-select">
+                                            @foreach ($product->variants as $index => $variant)
+                                            @if ($variant->storage->GB == '0GB')
+                                            <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
+                                                style="display: none" data-variant-id="{{ $variant->id }}">
+                                                <strong>{{ $variant->storage->GB ?? 0 }}</strong>
                                             </div>
-                                            <div class="product__price">
-                                                <div class="text">Giá chỉ</div>
-                                                @php
-                                                    $firstVariant = $product->variants->first();
-                                                @endphp
-
-                                                <div class="price"> </div>
-                                                <strike class="text-promo p-l-6 f-s-p-16 f-w-400"> </strike>
-
+                                        @else
+                                            <div class="product__memory__item item {{ $index === 0 ? 'active' : '' }}"
+                                                data-variant-id="{{ $variant->id }}">
+                                                <strong>{{ $variant->storage->GB ?? 0 }}</strong>
                                             </div>
+                                        @endif
+                                            @endforeach
                                         </div>
-                                        <div class="product__detail">
-                                            @if ($firstVariant)
-                                                <a class="btn btn-outline-grayscale btn-md"
-                                                    href="{{ route('product.details', ['slug' => $product->slug, 'variant' => $firstVariant->id]) }}">XEM
-                                                    CHI TIẾT</a>
-                                            @endif
-                                            </h3>
+                                        <div class="product__price">
+                                            <div class="text">Giá chỉ</div>
+                                            @php
+                                                $firstVariant = $product->variants->first();
+                                            @endphp
 
-                                            <div class="product__price">
-                                                <div class="text">Giá chỉ</div>
-                                                <div class="price">{{ $product->price }}đ</div><strike
-                                                    class="text-promo p-l-6 f-s-p-16 f-w-400">39.990.000đ</strike>
+                                            <div class="price"> </div>
+                                            <strike class="text-promo p-l-6 f-s-p-16 f-w-400"> </strike>
 
-                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="product__detail">
+                                        @if ($firstVariant)
+                                            <a class="btn btn-outline-grayscale btn-md"
+                                                href="{{ route('product.details', ['slug' => $product->slug, 'variant' => $firstVariant->id]) }}">XEM
+                                                CHI TIẾT</a>
+                                        @endif
+                                    </div>
+                                </div>
                                 @endforeach
                             </div>
-                            {{-- <div class="col-xl-12 text-center">
-                                <div class="mt-5" style="display:flex; justify-content:center">
-                                    @if ($products->hasPages())
-                                        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-                                    @endif
 
-                                </div>
-                            </div> --}}
                         </div>
 
                     </div>
@@ -296,14 +277,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            {{-- <div class="col-xl-12 text-center">
-                                <div class="mt-5" style="display:flex; justify-content:center">
-                                    @if ($products->hasPages())
-                                        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-                                    @endif
 
-                                </div>
-                            </div> --}}
                         </div>
 
                     </div>
@@ -394,14 +368,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            {{-- <div class="col-xl-12 text-center">
-                                <div class="mt-5" style="display:flex; justify-content:center">
-                                    @if ($products->hasPages())
-                                        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-                                    @endif
 
-                                </div>
-                            </div> --}}
                         </div>
 
                     </div>
@@ -488,14 +455,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            {{-- <div class="col-xl-12 text-center">
-                                <div class="mt-5" style="display:flex; justify-content:center">
-                                    @if ($products->hasPages())
-                                        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-                                    @endif
 
-                                </div>
-                            </div> --}}
                         </div>
 
                     </div>

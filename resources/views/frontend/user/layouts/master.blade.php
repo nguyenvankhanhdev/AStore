@@ -142,52 +142,54 @@
     <div class="over-suggestion"></div>
     <main class="main">
         @yield('content')
-        <div class="wrap-section-chat"><a class="wrap-ic-chat" href="" aria-controls="chat-modal"><i
-                    class="ic-chat"></i></a>
-            <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="chat-modal">
-                <div class="modal-wrapper" tabindex="-1">
-                    <div class="modal-box">
-                        <div class="modal-header modal-title">
-                            <div class="label label-xl"> <span class="label-text">Hỗ trợ trực tuyến</span></div><span
-                                class="modal-close js-modal-close"><i class="ic-close-thin ic-md"></i></span>
-                        </div>
-                        <div class="modal-body">
-                            <div class="list-ic-chat"><a class="item m-b-8" href="tel:18006616"><span class="img">
-                                        <img src="{{ asset('frontend/asset/img/ic-call.png') }}"
-                                            alt=""></span><span class="cont"><span class="num">1800
-                                            6616</span><span class="text">(8h00 - 22h00)</span></span></a><a
-                                    class="item" href="{{ route('user.message.index') }}"><span class="img"> <img
-                                            src={{ asset('uploads/mess.png') }} alt=""></span><span
-                                        class="cont"><span class="num">Chat với Admin</span><span
-                                            class="text">(8h00 - 22h00)</span></span></a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="user-page"><a class="wrap-ic-chat" href="" aria-controls="user-modal"><i class="ic-user"></i></a>
-            <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="user-modal">
-                <div class="modal-wrapper" tabindex="-1">
-                    <div class="modal-box">
-                        <div class="modal-header modal-title">
-                            <div class="label label-xl"> <span class="label-text"> </span></div><span
-                                class="modal-close js-modal-close"><i class="ic-close-thin ic-md"></i></span>
-                        </div>
-                        <div class="modal-body">
-                            <div class="list-ic-chat">
-                                <a class="item" href="{{ route('user.dashboard') }}"><span class="img">
-                                    <i class="ic-user"></i></span><span
-                                        class="cont"><span class="num">Vào trang quản lý của bạn</span><span
-                                            class="text"></span></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
     </main>
+    <div class="wrap-section-chat"><a class="wrap-ic-chat" href="" aria-controls="chat-modal"><i
+                class="ic-chat"></i></a>
+        <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="chat-modal">
+            <div class="modal-wrapper" tabindex="-1">
+                <div class="modal-box">
+                    <div class="modal-header modal-title">
+                        <div class="label label-xl"> <span class="label-text">Hỗ trợ trực tuyến</span></div><span
+                            class="modal-close js-modal-close"><i class="ic-close-thin ic-md"></i></span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-ic-chat"><a class="item m-b-8" href="tel:18006616"><span class="img">
+                                    <img src="{{ asset('frontend/asset/img/ic-call.png') }}" alt=""></span><span
+                                    class="cont"><span class="num">1800
+                                        6616</span><span class="text">(8h00 - 22h00)</span></span></a><a
+                                class="item" href="{{ route('user.message.index') }}"><span class="img"> <img
+                                        src={{ asset('uploads/mess.png') }} alt=""></span><span
+                                    class="cont"><span class="num">Chat với Admin</span><span
+                                        class="text">(8h00 - 22h00)</span></span></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="user-page"><a class="wrap-ic-chat" href="" aria-controls="user-modal"><i
+                class="ic-user"></i></a>
+        <div class="modal modal-sm js-modal chat-modal js-modal-chat" data-animation="on" id="user-modal">
+            <div class="modal-wrapper" tabindex="-1">
+                <div class="modal-box">
+                    <div class="modal-header modal-title">
+                        <div class="label label-xl"> <span class="label-text"> </span></div><span
+                            class="modal-close js-modal-close"><i class="ic-close-thin ic-md"></i></span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-ic-chat">
+                            <a class="item" href="{{ route('user.dashboard') }}"><span class="img">
+                                    <i class="ic-user"></i></span><span class="cont"><span class="num">Vào trang
+                                        quản lý của bạn</span><span class="text"></span></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     @include('frontend.user.layouts.footer')
 
