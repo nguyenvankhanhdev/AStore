@@ -60,11 +60,14 @@ class AuthenticateSessionController extends Controller
             $google_user = Socialite::driver('google')->user();
             $user = User::where('google_id', $google_user->getId())->first();
             if (!$user) {
-                $newUser = new User();
-                $newUser->name = $google_user->getName();
-                $newUser->email = $google_user->getEmail();
-                $newUser->google_id = $google_user->getId();
-                $newUser->role = 'user';
+                $newUser = User::updateOrCreate(
+                    ['email' => $google_user->getEmail()],
+                    [
+                        'name' => $google_user->getName(),
+                        'google_id' => $google_user->getId(),
+                        'role' => 'user',
+                    ]
+                );
                 $newUser->save();
                 Auth::login($newUser);
                 return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');

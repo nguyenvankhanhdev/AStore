@@ -265,9 +265,9 @@ class PaymentController extends Controller
         }
         Session::forget('coupon');
 
-        $address = json_decode($order->address);
-        $user = auth()->user();
-        Log::info('address: ' . $address->email);
+        //$address = json_decode($order->address);
+        //$user = auth()->user();
+        //Log::info('address: ' . $address->email);
         // Mail::send('frontend.emails.order_confirmation', [
         //     'user' => $user,
         //     'orders' => $order,
@@ -496,28 +496,28 @@ class PaymentController extends Controller
     {
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $resultCode = $request->resultCode;
-        $signature = $request->signature;
-
-        Log::info('MoMo response: ' . json_encode($request->all()));
         $rawHash = "amount=" . $request->amount . "&extraData=" . $request->extraData . "&message=" . $request->message . "&orderId=" . $request->orderId . "&orderInfo=" . $request->orderInfo . "&orderType=" . $request->orderType . "&partnerCode=" . $request->partnerCode . "&payType=" . $request->payType . "&requestId=" . $request->requestId . "&responseTime=" . $request->responseTime . "&resultCode=" . $resultCode . "&transId=" . $request->transId;
         $generatedSignature = hash_hmac("sha256", $rawHash, $secretKey);
-
-        if ($generatedSignature === $signature && $resultCode == '0') {
+        if ($resultCode == '0') {
             DB::beginTransaction();
             try {
+                Log::info('MoMo payment handling');
                 $info = Session::get('order_info');
                 $address = Session::get('address');
 
                 $updatePoint = User::find(auth()->id());
                 $updatePoint->point += session('order_point');
                 $updatePoint->save();
+                Log::info('MoMo payment đang chờ');
 
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
+
                 Log::info('userAddress: ' . $userAddress);
                 session(['user_address' => $userAddress->toJson()]);
                 $orderId =  $this->storeOrder('MoMo', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
+                Log::info('MoMo payment thành công');
                 $this->clearSession();
                 return redirect()->route('booking.success', ['orderId' => $orderId])->withSuccess('Thanh toán thành công');
             } catch (\Exception $e) {

@@ -33,7 +33,7 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => 'https://astore.webnew.info.vn/auth/google/call-back',
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
     'github' => [

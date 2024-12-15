@@ -15,10 +15,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisterUserController::class, 'store'])->name('register.store');
     Route::get('auth/google', [AuthenticateSessionController::class, 'redirect'])->name('auth.google');
-    Route::get('auth/google/call-back', [AuthenticateSessionController::class, 'callBackGoogle'])->name('auth.google.call-back');
+    Route::get('auth/google/callback', [AuthenticateSessionController::class, 'callBackGoogle'])->name('auth.google.callback');
 
     Route::get('auth/github', [AuthenticateSessionController::class, 'redirectToGithub'])->name('auth.github');
-    Route::get('auth/github/call-back', [AuthenticateSessionController::class, 'handleGithubCallback'])->name('auth.github.callback');
+    Route::get('auth/github/callback', [AuthenticateSessionController::class, 'handleGithubCallback'])->name('auth.github.callback');
     Route::post('/password/verify-otp', [AuthenticateSessionController::class, 'resetPassword'])->name('password.verify-otp');
     Route::post('/password/forgot', [AuthenticateSessionController::class, 'sendOtp'])->name('password.forgot');
 
