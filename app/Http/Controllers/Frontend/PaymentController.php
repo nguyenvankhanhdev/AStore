@@ -495,6 +495,7 @@ class PaymentController extends Controller
     public function momo_return(Request $request)
     {
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+        
         $resultCode = $request->resultCode;
         $rawHash = "amount=" . $request->amount . "&extraData=" . $request->extraData . "&message=" . $request->message . "&orderId=" . $request->orderId . "&orderInfo=" . $request->orderInfo . "&orderType=" . $request->orderType . "&partnerCode=" . $request->partnerCode . "&payType=" . $request->payType . "&requestId=" . $request->requestId . "&responseTime=" . $request->responseTime . "&resultCode=" . $resultCode . "&transId=" . $request->transId;
         $generatedSignature = hash_hmac("sha256", $rawHash, $secretKey);
