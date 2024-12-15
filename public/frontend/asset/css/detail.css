@@ -1438,7 +1438,7 @@ p {
     font-size: 16px;
     font-weight: bold;
     color: #555;
-    text-align: left;
+
     width: 300px;
 }
 
@@ -1500,6 +1500,12 @@ p {
     color: white;  /* Chữ trắng khi hover */
 }
 
+@media only screen and (max-width: 900px) {
+    .fpt-comment .user-form .form-group .btn {
+        position: none;
+        margin-top: 10px;
+    }
+}
 
 /* Modal Đánh Giá */
 .modal-review {
@@ -10856,7 +10862,7 @@ a.checkbox.active:after {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
+    width: 75%;
     height: 100%;
     background: #e1e4e6
 }
@@ -12776,13 +12782,16 @@ a.checkbox.active:after {
     border-radius: 6px;
     padding-right: 177px
 }
-
-.fpt-comment .user-form .form-group .btn {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%)
+@media only screen and (min-width: 900px){
+    .fpt-comment .user-form .form-group .btn {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%)
+    }
 }
+
+
 
 .fpt-comment .user-form .alert {
     margin-top: 8px

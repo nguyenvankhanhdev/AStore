@@ -246,7 +246,7 @@
                                                 <div class="c-cart__payment__inner">
                                                     <div class="c-dropdown c-dropdown--col">
                                                         <div class="c-dropdown js-dropdown-open">
-                                                            <div class="group-dropdown">
+                                                            <div class="group-dropdown" style="margin-bottom: 6px">
                                                                 <div class="c-dropdown-button c-dropdown-button--lg"
                                                                     data-name="" id="province-dropdown"> Chọn Tỉnh thành
                                                                 </div><span class="ic-arrow-select ic-dropdown"></span>
@@ -864,8 +864,20 @@
                 }
             });
 
+            let isProcessing = false; // Biến trạng thái
+
             $("#checkout").on('click', function(e) {
                 e.preventDefault();
+
+                // Nếu đang xử lý, không cho phép nhấn thêm
+                if (isProcessing) {
+                    return;
+                }
+
+                isProcessing = true; // Đặt trạng thái đang xử lý
+                var $this = $(this);
+                $this.prop('disabled', true); // Vô hiệu hóa nút ngay lập tức
+
                 var firstname = $('input[name="firstname"]').val();
                 var phonenumber = $('input[name="phonenumber"]').val();
                 var email = $('input[name="email"]').val();
@@ -898,8 +910,11 @@
                 if (!selectedProductIds.length || !paymentMethod || !firstname || !phonenumber || !email ||
                     !endMoney || (address.length === 0 && !location)) {
                     toastr.error("Vui lòng điền đầy đủ thông tin.");
+                    $this.prop('disabled', false); // Kích hoạt lại nút nếu thông tin chưa đầy đủ
+                    isProcessing = false; // Cho phép nhấn lại
                     return;
                 }
+
                 $.ajax({
                     method: 'POST',
                     url: "{{ route('checkout') }}",
@@ -923,18 +938,24 @@
                             cb1 = '';
                             window.location.href = response.redirect;
                             toastr.success(response.message);
-
-
-
                         } else {
                             toastr.error(response.message);
+                            $this.prop('disabled', false); // Kích hoạt lại nút nếu có lỗi
+                            isProcessing = false; // Cho phép nhấn lại
                         }
                     },
                     error: function(response) {
                         console.log(response);
+                        $this.prop('disabled', false); // Kích hoạt lại nút nếu lỗi xảy ra
+                        isProcessing = false; // Cho phép nhấn lại
+                    },
+                    complete: function() {
+                        // Kích hoạt lại trạng thái nếu cần
+                        isProcessing = false;
                     }
                 });
             });
+
 
 
         });

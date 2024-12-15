@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -34,19 +36,20 @@ class DashboardController extends Controller
 
 
         $dailyProfit = $todaysOrdersData
-            ->where('status', 'delivered')
+            ->where('status', 'completed')
             ->sum(function ($order) {
                 return $order->total_amount - $order->cost_price;
             });
 
+        // dd($dailyProfit);
         $todaysTotalQuantity = $todaysOrdersData->sum('quantity');
 
 
         $monthlyOrdersData = Orders::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
+
             ->where(['status'=> 'completed'])
 
-          
             ->get();
 
         $monthlyProfit = $monthlyOrdersData->sum(function ($order) {
@@ -55,7 +58,7 @@ class DashboardController extends Controller
 
         $yearlyOrdersData = Orders::whereYear('created_at', Carbon::now()->year)
 
-            ->where(['status'=> 'completed'])
+            ->where(['status' => 'completed'])
             ->get();
 
         $yearlyProfit = $yearlyOrdersData->sum(function ($order) {
@@ -76,6 +79,55 @@ class DashboardController extends Controller
             'yearlyProfit',
             'todayPendingOrderCount'
         ));
+    }
+
+    public function profile()
+    {
+        return view('backend.admin.profile.index');
+    }
+    public function update(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'max:100'],
+            'email' => ['required', 'email', 'unique:users,email,'.Auth::user()->id],
+            'image' => ['image', 'max:2048']
+           ]);
+
+
+           $user = Auth::user();
+
+           if($request->hasFile('image')){
+                if(File::exists(public_path($user->image))){
+                    File::delete(public_path($user->image));
+                }
+                $image = $request->image;
+                $imageName = rand().'_'.$image->getClientOriginalName();
+                $image->move(public_path('uploads'), $imageName);
+
+                $path = "/uploads/".$imageName;
+
+                $user->image = $path;
+           }
+
+           $user->name = $request->name;
+           $user->email = $request->email;
+           $user->save();
+
+           toastr()->success('Profile Updated Successfully!');
+           return redirect()->back();
+    }
+    public function updatePass(Request $request, string $id){
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required','confirmed', 'min:8']
+        ]);
+
+        $request->user()->update([
+            'password' => bcrypt($request->password)
+        ]);
+
+        toastr()->success('Profile Password Updated Successfully!');
+        return redirect()->back();
     }
 
 
@@ -115,10 +167,6 @@ class DashboardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

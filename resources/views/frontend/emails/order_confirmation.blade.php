@@ -103,11 +103,8 @@
         </tbody>
     </table>
     <p style="font-weight:600">Tổng cộng: {{ number_format($orders->total_amount, 0, '.', ',') }} đ</p>
-    <p style="font-weight:600">Tổng cộng: {{ number_format($orders->total_amount, 0, '.', ',') }} đ</p>
     <p style="font-weight:600">Phương thức thanh toán: {{ $orders->payment_method }}</p>
     <p style="font-weight:600">Trạng thái: {{ $orders->status }}</p>
-
-
     <p style="font-weight:600">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi! ❤️❤️❤️❤️</p>
 </body>
 

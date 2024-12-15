@@ -15,7 +15,6 @@
             <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
                 <div class="dashboard_content mt-2 mt-md-0">
                     <h3><i class="far fa-heart"></i> Danh sách yêu thích</h3>
-
                     @if($wishlist->isEmpty())
                         <div class="alert alert-info text-center mt-4">
                             Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.
@@ -55,15 +54,16 @@
                                             </td>
                                             <td>
                                                 <p class="text-muted mb-1"><del>{{ number_format($originalPrice, 0, ',', '.') }} đ</del></p>
-                                                <p class="text-danger fw-bold mb-1">{{ number_format($offerPrice, 0, ',', '.') }} đ</p>
-                                                <p class="text-success mb-0">Bạn tiết kiệm: {{ number_format($discount, 0, ',', '.') }} đ</p>
+                                                <p class="text-danger fw-bold mb-1">{{ number_format($discount, 0, ',', '.') }} đ</p>
+                                                <p class="text-success mb-0">Bạn tiết kiệm: {{ number_format($offerPrice, 0, ',', '.') }} đ</p>
+
                                             </td>
                                             <td>
-                                                <button 
-                                                    class="btn btn-link add-to-cart" 
-                                                    data-variant-id="{{ $variant->id }}" 
-                                                    data-color-id="{{ $variantColor->color_id }}" 
-                                                    style="color: #d3b87a; font-weight: bold; text-decoration: none;">
+                                                <button
+                                                    class="btn btn-link add-to-cart"
+                                                    data-variant-id="{{ $variant->id }}"
+                                                    data-color-id="{{ $variantColor->color_id }}"
+                                                    style="color: #d42626; font-weight: bold; text-decoration: none;">
                                                     Thêm vào giỏ
                                                 </button>
                                             </td>
@@ -103,6 +103,7 @@
     if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?')) {
         return;
     }
+
 
     $.ajax({
         url: "{{ route('user.wishlist.remove', ':id') }}".replace(':id', wishlistId),

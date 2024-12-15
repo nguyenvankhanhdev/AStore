@@ -32,6 +32,8 @@
                                                             alt="MacBook Pro 16” 2021 M1 Pro"></picture>
                                                 </div>
                                             @endforeach
+                                            <div class="view-gallery js-open-gallery" data-count="+12"><img
+                                                    src="https://via.placeholder.com/96x96" alt=""></div>
                                         </div><!-- Add Arrows-->
                                         <div class="swiper-button-next ic-angle-right swiper-button"></div>
                                         <div class="swiper-button-prev ic-angle-left swiper-button"></div>
@@ -180,6 +182,41 @@
                                                     </div>
                                                 @break
 
+                                                @case('Xanh dương đậm')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#106294"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Xám không gian')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#6c93ab"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Hồng')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#ffbfe4"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Tím')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#bb2bf8"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
+                                                @case('Ánh sao')
+                                                    <div class="item {{ $isActive }}" data-color-id="{{ $name->id }}">
+                                                        <span style="background-color:#d6d6d6"></span>
+                                                        <div>{{ $name->name }}</div>
+                                                    </div>
+                                                @break
+
                                                 @default
                                                     <div class="item" data-color-id="{{ $name->id }}">
                                                         <span style="background-color:#FFFFFF"></span> <!-- Màu mặc định -->
@@ -196,11 +233,11 @@
                                     </div>
                                     <div class="pre-order">
                                         <div class="btn btn-link btn-xl" id="add-to-cart-form">
-                                            <div>MUA NGAY</div>
+                                            <div><i class="ic-cart"></i> THÊM GIỎ HÀNG</div>
                                         </div>
                                         <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
                                             data-product-id="{{ $product->id }}" data-variant-id="" data-color-id="">
-                                            <div>YÊU THÍCH</div>
+                                            <div> <i class="fa fa-heart"></i> YÊU THÍCH</div>
                                         </div>
                                     </div>
 
@@ -209,824 +246,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="detail__body">
-                    <div class="product-related m-t-48">
-                        <div class="container">
-                            <div class="card card-md">
-                                <div class="card-body">
-                                    <div class="row no-gutters">
-                                        <div class="col-12">
-                                            <div class="product-related__heading">
-                                                <div class="h4">Phụ kiện tương thích</div>
-                                            </div>
-                                        </div>
-                                        @if ($sameProducts->isNotEmpty())
-                                            @foreach ($sameProducts as $sameProduct)
-                                                <div class="col-3 col-sm-6">
-                                                    <div class="item">
-                                                        <a class="item__img"
-                                                            href="{{ route('product.details', $sameProduct->slug) }}">
-                                                            <img src="{{ asset($sameProduct->image) }}" alt="">
-                                                        </a>
-                                                        <div class="item__info">
-                                                            <a href="{{ route('product.details', $sameProduct->slug) }}">
-                                                                <div class="item__name">{{ $sameProduct->name }}</div>
-                                                            </a>
-                                                            <div class="item__price">
-                                                                <div class="text text-primary" style="color: #ae172b">
-                                                                    @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
-                                                                        Giá
-                                                                        {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }}
-                                                                        ₫
-                                                                    @else
-                                                                        Giá không có sẵn
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <p>Không có sản phẩm tương tự.</p>
-                                        @endif
-
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="detail__properties">
-                        <div class="container">
-                            <div class="properties__detail">
-                                <div class="properties">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-6 col-md-12">
-                                                <div class="properties__detail">
-                                                    <div class="h4 heading">Thông số kỹ thuật</div>
-                                                    <div class="card card-md">
-                                                        <div class="card-body">
-                                                            <table class="table">
-                                                                <tbody></tbody>
-                                                                <tr>
-                                                                    <td>CPU</td>
-                                                                    <td>Intel Core i3-7200U</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>RAM</td>
-                                                                    <td>4 GB DDR4 2600 MHz</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Ổ Cứng</td>
-                                                                    <td>HDD 1000 GB & SSD 128 GB</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Màn hình</td>
-                                                                    <td> Acer ComfyView™ IPS LED LCD</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Đồ họa</td>
-                                                                    <td>Card rời: NDIVIA GeForce 1050 Ti; Tích
-                                                                        hợp: Intel HD Graphics 620</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Cổng giao tiếp</td>
-                                                                    <td>2 x Type-C, 1 x USB 3.0, 1 x USB 2.0, 1 x
-                                                                        HDMI, 1 x VGA</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>PIN</td>
-                                                                    <td>4 Cell, Li-ion, Liền, 42 W AC Adapter W</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Hệ điều hành</td>
-                                                                    <td>Windows 10 Pro</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Trọng lượng (Kg)</td>
-                                                                    <td>1.2</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Kích thước (mm)</td>
-                                                                    <td>Kích thước (mm) 360 x 265 x 12</td>
-                                                                </tr>
-                                                            </table>
-                                                            <div class="trigger"><a class="link"
-                                                                    aria-controls="properties-modal">Xem cấu hình chi
-                                                                    tiết<span class="ic-angle-right"></span></a></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal modal-lg js-modal properties js-modal-properties" data-animation="on"
-                                id="properties-modal">
-                                <div class="modal-wrapper" tabindex="-1">
-                                    <div class="modal-box">
-                                        <div class="modal-header modal-title">
-                                            <div class="label label-xl"> <span class="label-text">Chi tiết thông số kỹ
-                                                    thuật</span></div><span class="modal-close js-modal-close"><i
-                                                    class="ic-close ic-md"></i></span>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="properties__gallery">
-                                                <div class="swiper properties-gallery-main">
-                                                    <div class="swiper-wrapper">
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide2/600/300"
-                                                                alt="Slide 2">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide3/600/300"
-                                                                alt="Slide 3">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide4/600/300"
-                                                                alt="Slide 4">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide5/600/300"
-                                                                alt="Slide 5">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide6/600/300"
-                                                                alt="Slide 6">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide7/600/300"
-                                                                alt="Slide 7">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide8/600/300"
-                                                                alt="Slide 8">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide9/600/300"
-                                                                alt="Slide 9">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide10/600/300"
-                                                                alt="Slide 10">
-                                                        </div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide11/600/300"
-                                                                alt="Slide 11">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="swiper properties-gallery-thumb">
-                                                    <div class="swiper-wrapper">
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide2/115/100"
-                                                                alt="Slide thumb 2"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide3/115/100"
-                                                                alt="Slide thumb 3"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide4/115/100"
-                                                                alt="Slide thumb 4"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide5/115/100"
-                                                                alt="Slide thumb 5"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide6/115/100"
-                                                                alt="Slide thumb 6"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide7/115/100"
-                                                                alt="Slide thumb 7"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide8/115/100"
-                                                                alt="Slide thumb 8"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide9/115/100"
-                                                                alt="Slide thumb 9"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide10/115/100"
-                                                                alt="Slide thumb 10"></div>
-                                                        <div class="swiper-slide"> <img
-                                                                src="https://picsum.photos/seed/slide11/115/100"
-                                                                alt="Slide thumb 11"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="properties__menu">
-                                                <div class="swiper">
-                                                    <div class="swiper-wrapper"> <a class="item swiper-slide active"
-                                                            data-ref="#block-1">Thông tin
-                                                            hàng hóa</a><a class="item swiper-slide"
-                                                            data-ref="#block-2">Màn
-                                                            hình</a><a class="item swiper-slide" data-ref="#block-3">Cấu
-                                                            hình</a><a class="item swiper-slide" data-ref="#block-4">Lưu
-                                                            trữ</a><a class="item swiper-slide" data-ref="#block-5">Giao
-                                                            tiếp
-                                                            &amp; kết nối</a><a class="item swiper-slide"
-                                                            data-ref="#block-6">Hệ
-                                                            Điều hành</a><a class="item swiper-slide"
-                                                            data-ref="#block-7">Thông
-                                                            tin khác</a><a class="item swiper-slide"
-                                                            data-ref="#block-8">phụ kiện
-                                                            trong hộp</a></div>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-1">
-                                                <div class="title">Thông tin hàng hóa</div>
-                                                <div class="content">
-                                                    <ul class="list-group list-bullet list-sm">
-                                                        <li>
-                                                            <div class="text-grayscale">Thương hiệu:</div><a
-                                                                class="link">Apple</a>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale">Series:</div><a
-                                                                class="link">iPhone
-                                                                11</a>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale">Thời gian ra mắt:</div>
-                                                            <div>13/09/2019</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale">State:</div>
-                                                            <div>On Sale </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-2">
-                                                <div class="title">Màn hình</div>
-                                                <div class="content">
-                                                    <table class="table table-md table-default">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale">Phiên bản</div>
-                                                                </td>
-                                                                <td>
-                                                                    <ul class="list">
-                                                                        <li>15.6"</li>
-                                                                        <li>60 Hz</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phân giải</div>
-                                                                </td>
-                                                                <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tần số quét</div>
-                                                                </td>
-                                                                <td>LED</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ sáng</div>
-                                                                </td>
-                                                                <td>220 nits</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tấm nền</div>
-                                                                </td>
-                                                                <td>TN</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phủ màu</div>
-                                                                </td>
-                                                                <td>45% NTSC</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ tương phản</div>
-                                                                </td>
-                                                                <td>400:1</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-3">
-                                                <div class="title">Cấu hình</div>
-                                                <div class="content">
-                                                    <table class="table table-md table-default">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale">Phiên bản</div>
-                                                                </td>
-                                                                <td>
-                                                                    <ul class="list">
-                                                                        <li>15.6"</li>
-                                                                        <li>60 Hz</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phân giải</div>
-                                                                </td>
-                                                                <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tần số quét</div>
-                                                                </td>
-                                                                <td>LED</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ sáng</div>
-                                                                </td>
-                                                                <td>220 nits</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tấm nền</div>
-                                                                </td>
-                                                                <td>TN</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phủ màu</div>
-                                                                </td>
-                                                                <td>45% NTSC</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ tương phản</div>
-                                                                </td>
-                                                                <td>400:1</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-4">
-                                                <div class="title">Lưu trữ</div>
-                                                <div class="content">
-                                                    <table class="table table-md table-default">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale">Phiên bản</div>
-                                                                </td>
-                                                                <td>
-                                                                    <ul class="list">
-                                                                        <li>15.6"</li>
-                                                                        <li>60 Hz</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phân giải</div>
-                                                                </td>
-                                                                <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tần số quét</div>
-                                                                </td>
-                                                                <td>LED</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ sáng</div>
-                                                                </td>
-                                                                <td>220 nits</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tấm nền</div>
-                                                                </td>
-                                                                <td>TN</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phủ màu</div>
-                                                                </td>
-                                                                <td>45% NTSC</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ tương phản</div>
-                                                                </td>
-                                                                <td>400:1</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-5">
-                                                <div class="title">Giao tiếp & kết nối</div>
-                                                <div class="content">
-                                                    <div class="badge-list"><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span><span
-                                                            class="badge badge-grayscale badge-xs">badge</span></div>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-6">
-                                                <div class="title">Hệ điều hành</div>
-                                                <div class="content">
-                                                    <table class="table table-md table-default">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale">Phiên bản</div>
-                                                                </td>
-                                                                <td>
-                                                                    <ul class="list">
-                                                                        <li>15.6"</li>
-                                                                        <li>60 Hz</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phân giải</div>
-                                                                </td>
-                                                                <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tần số quét</div>
-                                                                </td>
-                                                                <td>LED</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ sáng</div>
-                                                                </td>
-                                                                <td>220 nits</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tấm nền</div>
-                                                                </td>
-                                                                <td>TN</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phủ màu</div>
-                                                                </td>
-                                                                <td>45% NTSC</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ tương phản</div>
-                                                                </td>
-                                                                <td>400:1</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-7">
-                                                <div class="title">Thông tin khác</div>
-                                                <div class="content">
-                                                    <table class="table table-md table-default">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale">Phiên bản</div>
-                                                                </td>
-                                                                <td>
-                                                                    <ul class="list">
-                                                                        <li>15.6"</li>
-                                                                        <li>60 Hz</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phân giải</div>
-                                                                </td>
-                                                                <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tần số quét</div>
-                                                                </td>
-                                                                <td>LED</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ sáng</div>
-                                                                </td>
-                                                                <td>220 nits</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Tấm nền</div>
-                                                                </td>
-                                                                <td>TN</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ phủ màu</div>
-                                                                </td>
-                                                                <td>45% NTSC</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale"> Độ tương phản</div>
-                                                                </td>
-                                                                <td>400:1</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-8">
-                                                <div class="title">Phụ kiện trong hộp</div>
-                                                <div class="content">
-                                                    <ul class="list-pk">
-                                                        <li>
-                                                            <div class="ic"> <span class="ic-doc"></span></div>
-                                                            <div class="text">Sách huớng dẫn sử dụng </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="ic"> <span class="ic-cable"></span></div>
-                                                            <div class="text">Cáp sạc</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="ic"> <span class="ic-wireless-mouse"></span>
-                                                            </div>
-                                                            <div class="text">Chuột không dây</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="ic"> <span
-                                                                    class="ic-wireless-keyboard"></span></div>
-                                                            <div class="text">Bàn phím không dây</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="ic"> <span class="ic-power"></span></div>
-                                                            <div class="text">Bộ sạc điện</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="ic"><span class="ic-shockproof-bag"></span>
-                                                            </div>
-                                                            <div class="text">Túi chống sốc</div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-9">
-                                                <div class="title">Camera sau</div>
-                                                <div class="subtitle">Triple rear camera</div>
-                                                <div class="table-wrapper">
-                                                    <div class="table-col">
-                                                        <div class="table-title">Standard</div>
-                                                        <table class="table table-md table-default">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale">Phiên bản</div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <ul class="list">
-                                                                            <li>15.6"</li>
-                                                                            <li>60 Hz</li>
-                                                                        </ul>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ phân giải</div>
-                                                                    </td>
-                                                                    <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Tần số quét</div>
-                                                                    </td>
-                                                                    <td>LED</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ sáng</div>
-                                                                    </td>
-                                                                    <td>220 nits</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Tấm nền</div>
-                                                                    </td>
-                                                                    <td>TN</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ phủ màu</div>
-                                                                    </td>
-                                                                    <td>45% NTSC</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ tương phản</div>
-                                                                    </td>
-                                                                    <td>400:1</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="table-col">
-                                                        <div class="table-title">Ultra Wide</div>
-                                                        <table class="table table-md table-default">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale">Phiên bản</div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <ul class="list">
-                                                                            <li>15.6"</li>
-                                                                            <li>60 Hz</li>
-                                                                        </ul>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ phân giải</div>
-                                                                    </td>
-                                                                    <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Tần số quét</div>
-                                                                    </td>
-                                                                    <td>LED</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ sáng</div>
-                                                                    </td>
-                                                                    <td>220 nits</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Tấm nền</div>
-                                                                    </td>
-                                                                    <td>TN</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ phủ màu</div>
-                                                                    </td>
-                                                                    <td>45% NTSC</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ tương phản</div>
-                                                                    </td>
-                                                                    <td>400:1</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="table-col">
-                                                        <div class="table-title">Telephoto</div>
-                                                        <table class="table table-md table-default">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale">Phiên bản</div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <ul class="list">
-                                                                            <li>15.6"</li>
-                                                                            <li>60 Hz</li>
-                                                                        </ul>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ phân giải</div>
-                                                                    </td>
-                                                                    <td> <a class="link">1920 x 1080 Pixel</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Tần số quét</div>
-                                                                    </td>
-                                                                    <td>LED</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ sáng</div>
-                                                                    </td>
-                                                                    <td>220 nits</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Tấm nền</div>
-                                                                    </td>
-                                                                    <td>TN</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ phủ màu</div>
-                                                                    </td>
-                                                                    <td>45% NTSC</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="text-grayscale"> Độ tương phản</div>
-                                                                    </td>
-                                                                    <td>400:1</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="content">
-                                                    <table class="table table-md table-default">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="text-grayscale">Phiên bản</div>
-                                                                </td>
-                                                                <td>
-                                                                    <ul class="list-group list-bullet list-sm">
-                                                                        <li>
-                                                                            <div class="text-grayscale-700">4K 4320p@24fps
-                                                                            </div>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div class="text-grayscale-700">FullHD
-                                                                                1080p@30fps
-                                                                            </div>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div class="text-grayscale-700">HD 720p@30fps
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-10">
-                                                <div class="title">Cảm biến</div>
-                                                <div class="content">
-                                                    <ul class="list-group list-bullet list-sm">
-                                                        <li>
-                                                            <div class="text-grayscale-700">Cảm biến tiệm cận</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale-700">Cảm biến la bàn</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale-700">Cảm biến ánh sáng</div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="block" id="block-11">
-                                                <div class="title">Bảo mật</div>
-                                                <div class="content">
-                                                    <ul class="list-group list-bullet list-sm">
-                                                        <li>
-                                                            <div class="text-grayscale-700">Cảm biến tiệm cận</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale-700">Cảm biến la bàn</div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="text-grayscale-700">Cảm biến ánh sáng</div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
 
                 <div class="detail__bottom">
                     <div class="detail__comments">
@@ -1099,7 +318,7 @@
                                                                                 @if ($rating->point >= $i)
                                                                                     <span class="star full">★</span>
                                                                                     <!-- Sao sáng đầy đủ -->
-                                                                                @elseif($product->point >= $i - 0.5)
+                                                                                @elseif($rating->point >= $i - 0.5)
                                                                                     <span class="star half">★</span>
                                                                                     <!-- Sao sáng nửa -->
                                                                                 @else
@@ -1181,14 +400,14 @@
                                                 <div class="flex flex-center-ver m-b-8">
                                                     @if (Auth::check())
                                                         <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
-                                                            <strong>{{ $user->username }}</strong>
+                                                            <strong>{{ $user->name }}</strong>
                                                         </div>
                                                     @else
-                                                        {
+
                                                         <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                             <strong>Khách</strong>
                                                         </div>
-                                                        }
+
                                                     @endif
                                                 </div>
                                                 <div class="form-group">
@@ -1226,7 +445,7 @@
                                                                 <div class="avatar-info">
                                                                     <div class="avatar-name">
                                                                         <div class="text">
-                                                                            {{ $cm->user->username }}</div>
+                                                                            {{ $cm->user->name }}</div>
                                                                     </div>
                                                                     <div class="avatar-para">
                                                                         <div class="text">{{ $cm->content }}</div>
@@ -1310,7 +529,7 @@
                                                                         <div class="avatar-info">
                                                                             <div class="avatar-name">
                                                                                 <div class="text">
-                                                                                    {{ $reply->user->username }}
+                                                                                    {{ $reply->user->name }}
                                                                                 </div>
                                                                             </div>
                                                                             <div class="avatar-para">
@@ -1409,6 +628,10 @@
             <script>
                 var selectedColorId = @json($selectedColorId);
                 $(document).ready(function() {
+
+                    function formatNumberToVND(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ₫';
+                    }
                     $('#variant-selector').on('click', '.item', function(event) {
                         event.preventDefault();
                         const variantId = $(this).data('id');
@@ -1439,8 +662,8 @@
                                     const productName = $('.product_name').data('initial-name');
                                     if (storage === "0GB") {
                                         $('.product_name').text(`${productName}`);
-                                        $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
-                                        $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                                        $('.text-promo').text(formatNumberToVND(originalPrice));
+                                        $('.price-sale').text(formatNumberToVND(discount));
                                         $('.txtpricemarketPhanTram').text(
                                             `Giảm -${Math.round(discountPercentage)}%`);
                                         return;
@@ -1449,8 +672,8 @@
                                         .toLocaleString('vi-VN') + ' ₫');
                                     // Display with storage included
                                     $('.product_name').text(`${productName} - ${storage}`);
-                                    $('.text-promo').text(originalPrice.toLocaleString('vi-VN') + ' ₫');
-                                    $('.price-sale').text(discount.toLocaleString('vi-VN') + ' ₫');
+                                    $('.text-promo').text(formatNumberToVND(originalPrice));
+                                    $('.price-sale').text(formatNumberToVND(discount));
                                     $('.txtpricemarketPhanTram').text(
                                         `Giảm -${Math.round(discountPercentage)}%`);
                                 }
@@ -1577,10 +800,6 @@
                     const variantId = $('#variant-selector .item.active').data('id'); // Lấy ID biến thể
                     const colorId = $('.colors .item.active').data('color-id'); // Lấy ID màu sắc
 
-                    console.log("Product ID:", productId);
-                    console.log("Variant ID:", variantId || "Chưa chọn");
-                    console.log("Color ID:", colorId || "Chưa chọn");
-
                     // Kiểm tra nếu chưa chọn biến thể hoặc màu sắc
                     if (!variantId || !colorId) {
                         toastr.error("Vui lòng chọn màu sắc và biến thể sản phẩm!");
@@ -1591,12 +810,12 @@
 
 
                     $.ajax({
-                        url: "{{ route('user.get.variantColorId') }}", // Route tới backend
+                        url: "{{ route('get.variantColorId') }}", // Route tới backend
                         method: 'GET',
                         data: {
                             variant_id: variantId,
                             color_id: colorId,
-                            _token: $('meta[name="csrf-token"]').attr('content')
+                            _token: '{{ csrf_token() }}',
                         },
 
                         success: function(response) {
@@ -1607,22 +826,24 @@
                                 console.log("CSRF Token:", $('meta[name="csrf-token"]').attr('content'));
                                 // Gửi thêm AJAX để thêm vào wishlist
                                 $.ajax({
-                                    url: "{{ route('user.wishlist.add') }}", // Route thêm vào wishlist
+                                    url: "{{ route('wishlist.add') }}", // Route thêm vào wishlist
                                     method: 'POST',
                                     data: {
                                         pro_id: productId,
                                         variant_color_id: variantColorId,
-                                        _token: $('meta[name="csrf-token"]').attr(
-                                            'content') // CSRF Token
+                                        _token: '{{ csrf_token() }}',
                                     },
                                     success: function(response) {
-                                        console.log("Response:", response);
-                                        toastr.success(response.message);
+                                        if (response.status == 'success') {
+                                            toastr.success(response.message);
+                                        } else {
+                                            toastr.error(response.message);
+                                        }
                                     },
                                     error: function(error) {
-                                        console.error("Error:", error);
+
                                         toastr.error(error.responseJSON.message ||
-                                            "Có lỗi xảy ra!");
+                                            "Đã xảy ra lỗi khi thêm vào yêu thích! Vui lòng thử lại.");
                                     }
                                 });
 

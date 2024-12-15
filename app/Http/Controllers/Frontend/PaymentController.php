@@ -200,10 +200,12 @@ class PaymentController extends Controller
         $updatePoint->point += $request->point;
         $updatePoint->save();
 
+
         session(['user_address' => $userAddress->toJson()]);
 
         $orderId = $this->storeOrder('COD', 'pending', 'pending', session('user_address'));
 
+        log::info('order id: ' . $orderId);
         $this->clearSession();
 
         $returnData = [
@@ -243,18 +245,18 @@ class PaymentController extends Controller
                 ->where('variant_color_id', $productId)
                 ->first();
             Log::info($cartItem);
-            $quantity = $cartItem->quantity;
-            Log::info('quantity '.$quantity);
+             $quantity = $cartItem->quantity;
+             Log::info('quantity '.$quantity);
             $variant = VariantColors::find($productId);
             if ($variant) {
                 $orderDetail = new OrderDetails();
-                $variant->quantity -= $quantity;
+                $variant->quantity -= $cartItem->quantity;
                 $variant->save();
 
                 $orderDetail->order_id = $order->id;
                 $orderDetail->variant_color_id = $productId;
-                $orderDetail->quantity = $quantity;
-                $orderDetail->total_price = ($variant->price - $variant->offer_price) * $quantity;
+                $orderDetail->quantity = $cartItem->quantity;
+                $orderDetail->total_price = ($variant->price - $variant->offer_price) * $cartItem->quantity;
                 $orderDetail->save();
                 $orderDetails[] = $orderDetail;
             }
@@ -263,16 +265,17 @@ class PaymentController extends Controller
         }
         Session::forget('coupon');
 
-        $address = json_decode($order->address);
-        $user = auth()->user();
-        Mail::send('frontend.emails.order_confirmation', [
-            'user' => $user,
-            'orders' => $order,
-            'address' => $address,
-            'orderDetails' => $orderDetails
-        ], function ($message) use ($address) {
-            $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
-        });
+        //$address = json_decode($order->address);
+        //$user = auth()->user();
+        //Log::info('address: ' . $address->email);
+        // Mail::send('frontend.emails.order_confirmation', [
+        //     'user' => $user,
+        //     'orders' => $order,
+        //     'address' => $address,
+        //     'orderDetails' => $orderDetails
+        // ], function ($message) use ($address) {
+        //     $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
+        // });
         return $order->id;
     }
     public function payWithVNPAY(Request $request)
@@ -293,13 +296,13 @@ class PaymentController extends Controller
         ]);
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('vnpay.return');
-        $vnp_TmnCode = env('VNPAY_TMN_CODE');
-        $vnp_HashSecret = env('VNPAY_HASH_SECRET');
+        $vnp_TmnCode = '2GFOARF6';
+        $vnp_HashSecret = '01EKYM991EWOIUI4F1AL2V52R7KJE5TK';
         $vnp_TxnRef = rand(1, 1000000);
         $vnp_OrderInfo = 'Thanh toán hóa đơn';
         $vnp_OrderType = 'AStore';
         $vnp_Amount = $request->total_amount * 100;
-        $vnp_Locale = 'VM';
+        $vnp_Locale = 'vn';
         $vnp_BankCode = 'VNPAY';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $inputData = array(
@@ -341,6 +344,7 @@ class PaymentController extends Controller
             $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
+        Log::info('chuyển trang '.$vnp_Url);
         return response()->json([
             'status' => 'success',
             'message' => 'Xin chờ 1 chút !!!.',
@@ -370,6 +374,7 @@ class PaymentController extends Controller
                 $orderId = $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
+
                 $this->clearSession();
                 session()->forget('user_address');
 
@@ -491,28 +496,28 @@ class PaymentController extends Controller
     {
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $resultCode = $request->resultCode;
-        $signature = $request->signature;
-
-        Log::info('MoMo response: ' . json_encode($request->all()));
         $rawHash = "amount=" . $request->amount . "&extraData=" . $request->extraData . "&message=" . $request->message . "&orderId=" . $request->orderId . "&orderInfo=" . $request->orderInfo . "&orderType=" . $request->orderType . "&partnerCode=" . $request->partnerCode . "&payType=" . $request->payType . "&requestId=" . $request->requestId . "&responseTime=" . $request->responseTime . "&resultCode=" . $resultCode . "&transId=" . $request->transId;
         $generatedSignature = hash_hmac("sha256", $rawHash, $secretKey);
-
-        if ($generatedSignature === $signature && $resultCode == '0') {
+        if ($resultCode == '0') {
             DB::beginTransaction();
             try {
+                Log::info('MoMo payment handling');
                 $info = Session::get('order_info');
                 $address = Session::get('address');
 
                 $updatePoint = User::find(auth()->id());
                 $updatePoint->point += session('order_point');
                 $updatePoint->save();
+                Log::info('MoMo payment đang chờ');
 
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
+
                 Log::info('userAddress: ' . $userAddress);
                 session(['user_address' => $userAddress->toJson()]);
                 $orderId =  $this->storeOrder('MoMo', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
+                Log::info('MoMo payment thành công');
                 $this->clearSession();
                 return redirect()->route('booking.success', ['orderId' => $orderId])->withSuccess('Thanh toán thành công');
             } catch (\Exception $e) {

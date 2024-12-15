@@ -94,16 +94,16 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('showcoupons', [UserCouponsController::class, 'showcoupons'])->name('user-coupons.showcoupons');
     Route::put('cancelOrder', [UserOrderController::class, 'cancelOrder'])->name('order.cancel');
     Route::get('reviews', [UserDashboardController::class, 'reviews'])->name('reviews');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-        Route::get('/get-variant-color-id', [VariantColorsController::class, 'getVariantColorId'])->name('get.variantColorId');
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 
-        Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
-        Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-    });
+    Route::get('cancel-all-Order', [UserOrderController::class, 'allCancelOrder'])->name('all.cancelorder');
+    Route::get('complete-all-Order', [UserOrderController::class, 'allCompleteOrder'])->name('all.completeorder');
 
 });
+Route::get('/get-variant-color-id', [VariantColorsController::class, 'getVariantColorId'])->name('get.variantColorId');
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
 
 
 Route::get('get-price-by-variant', [ProductController::class, 'getPriceByVariant'])->name('getByVariant');

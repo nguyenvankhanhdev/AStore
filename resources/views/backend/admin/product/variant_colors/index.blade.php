@@ -2,7 +2,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Color Variant</h1>
+            <h1>Màu sắc sản phẩm</h1>
         </div>
         <div class="mb-3">
             <a href="{{ route('admin.products-variant.index', ['product' => $products->id]) }}"
@@ -14,11 +14,11 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-header">
-                                <h4>Product: {{ $products->name . ' - ' . $variants->storage->GB }}</h4>
+                                <h4>Sản phẩm: {{ $products->name . ' - ' . $variants->storage->GB }}</h4>
                             </div>
                             <div class="card-header-action">
                                 <a href="{{ route('admin.variant-colors.create', ['variants' => $variants->id]) }}"
-                                    class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>
+                                    class="btn btn-dark"><i class="fas fa-plus"></i> Tạo mới</a>
                             </div>
                         </div>
                         <div class="card-body">

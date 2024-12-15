@@ -2,7 +2,7 @@
 @section('content')
         <section class="section">
             <div class="section-header">
-                <h1>Product Variant</h1>
+                <h1>Biến thể</h1>
             </div>
             <div class="mb-3">
                 <a href="{{ route('admin.product.index') }}" class="btn btn-primary">Back</a>
@@ -13,7 +13,7 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="card-header">
-                        <h4>Product: {{ $product->name }}</h4>
+                        <h4>Sản phẩm: {{ $product->name }}</h4>
                     </div>
                     <div class="card-header-action">
                         <a href="{{ route('admin.products-variant.create', ['product' => $product->id]) }}" class="btn btn-dark"><i class="fas fa-plus"></i> Create New</a>

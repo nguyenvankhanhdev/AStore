@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AdminCouponController;
 use App\Http\Controllers\Backend\CategoriesController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\VariantColorController;
 use App\Http\Controllers\Backend\FlashSaleItemController;
 use App\Http\Controllers\Backend\CommentController;
+use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\DashboardController;
 
 use App\Http\Controllers\Backend\ReportController;
@@ -124,3 +126,9 @@ Route::put('flash-sale/show-at-home/status-change', [FlashSaleItemController::cl
 
 Route::get('user-list', [UserController::class, 'index'])->name('user-list');
 Route::get('admin-list', [UserController::class, 'admin'])->name('admin-list');
+Route::resource('coupon', CouponController::class);
+Route::resource('admincoupon', AdminCouponController::class);
+Route::put('change-status-coupon', [AdminCouponController::class, 'changeStatus'])->name('change-status-coupon');
+Route::get('profile-admin', [DashboardController::class, 'profile'])->name('profile-admin');
+Route::post('update-admin', [DashboardController::class, 'update'])->name('update-admin');
+Route::put('password-update', [DashboardController::class, 'updatePass'])->name('password.update');

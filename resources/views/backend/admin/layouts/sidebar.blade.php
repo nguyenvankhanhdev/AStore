@@ -64,9 +64,6 @@
 
                 </ul>
             </li>
-
-
-
             <li
                 class="dropdown {{ setActive([
                     'admin.orders',
@@ -100,36 +97,40 @@
             <li
                 class="dropdown {{ setActive([
                     'admin.vendor-profile.*',
-                    'admin.coupons.*',
+                    'admin.coupon.*',
                     'admin.shipping-rule.*',
                     'admin.payment-settings.*',
+                    'admin.flash-sale.*',
+                    'admin.admincoupon.*',
+
+
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
                     <span>Ecommerce</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.flash-sale.*']) }}"><a class="nav-link"
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
-                    <li class="{{ setActive(['admin.coupons.*']) }}"><a class="nav-link"
-                            href="">Phiếu giảm giá</a></li>
+                    <li class="{{ setActive(['admin.coupon.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.admincoupon.index') }}">Phiếu giảm giá</a></li>
                     <li class="{{ setActive(['admin.payment-settings.*']) }}"><a class="nav-link"
                             href="{{ route('admin.payment-settings.index') }}">Payment Settings</a></li>
 
                 </ul>
             </li>
 
-            <li class="dropdown {{ setActive(['admin.warehouse.index*']) }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+            <li class="dropdown {{ setActive(['admin.warehouse','admin.warehouse','admin.warehouse.create']) }}">
+                <a href="#" class="nav-link has-dropdown {{ setActive(['admin.warehouse','admin.warehouse.create']) }}" data-toggle="dropdown">
                     <i class="fas fa-warehouse"></i>
-                    <span>Warehouse</span>
+                    <span>Kho</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="{{ setActive(['admin.warehouse']) }}">
-                        <a class="nav-link" href="{{ route('admin.warehouse') }}">Import Warehouse</a>
+                    <li class="{{ setActive(['admin.warehouse','admin.warehouse.create']) }}">
+                        <a class="nav-link" href="{{ route('admin.warehouse') }}">Nhập kho</a>
                     </li>
                 </ul>
             </li>
 
-            <li class="dropdown {{ setActive(['admin.reports.index*']) }}">
+            <li class="dropdown {{ setActive(['admin.reports','admin.reports.byCategory']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
                     <span>Thống kê</span></a>
                 <ul class="dropdown-menu">
