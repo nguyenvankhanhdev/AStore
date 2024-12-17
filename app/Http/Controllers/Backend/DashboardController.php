@@ -12,9 +12,6 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $userCount = User::count();
@@ -36,7 +33,7 @@ class DashboardController extends Controller
         $dailyProfit = $todaysOrdersData
             ->where('status', 'completed')
             ->sum(function ($order) {
-                return $order->total_amount - $order->cost_price;
+                return $order->total_amount;
             });
 
         // dd($dailyProfit);
@@ -50,7 +47,7 @@ class DashboardController extends Controller
             ->get();
 
         $monthlyProfit = $monthlyOrdersData->sum(function ($order) {
-            return $order->total_amount - $order->cost_price;
+            return $order->total_amount;
         });
 
         $yearlyOrdersData = Orders::whereYear('created_at', Carbon::now()->year)

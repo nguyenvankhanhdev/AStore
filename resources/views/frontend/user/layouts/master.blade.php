@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="64x64" href="/frontend/asset/img/favicon.png">
     <link rel="stylesheet" href="/frontend/asset/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/lightgallery-bundle.css">
-    <link rel="stylesheet" href="/frontend/asset/css/header-footer.css">
+    <link rel="stylesheet" href="/frontend/asset/css/header-footer.css"media="only screen and (min-width: 900px)">
     <link rel="stylesheet" href="/frontend/asset/css/home.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/detail.css">
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="/frontend/asset/css/main.css">
-    <link rel="stylesheet" href="/frontend/asset/css/header-footer-mb.css" media="only screen and (max-width: 768px)">
+    <link rel="stylesheet" href="/frontend/asset/css/header-footer-mb.css" media="only screen and (max-width: 900px)">
     <link rel="stylesheet" href="/frontend/asset/css/home-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/detail-mb.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="/frontend/asset/css/category-mb.css" media="only screen and (max-width: 768px)">

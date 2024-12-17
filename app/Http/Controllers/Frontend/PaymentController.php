@@ -244,9 +244,6 @@ class PaymentController extends Controller
             $cartItem = Carts::where('user_id', auth()->id())
                 ->where('variant_color_id', $productId)
                 ->first();
-            Log::info($cartItem);
-             $quantity = $cartItem->quantity;
-             Log::info('quantity '.$quantity);
             $variant = VariantColors::find($productId);
             if ($variant) {
                 $orderDetail = new OrderDetails();
@@ -344,7 +341,7 @@ class PaymentController extends Controller
             $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
-        Log::info('chuyển trang '.$vnp_Url);
+        Log::info('chuyển trang ' . $vnp_Url);
         return response()->json([
             'status' => 'success',
             'message' => 'Xin chờ 1 chút !!!.',
@@ -374,7 +371,7 @@ class PaymentController extends Controller
                 $orderId = $this->storeOrder('VNPAY', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
-                
+
                 $this->clearSession();
                 session()->forget('user_address');
 
@@ -673,7 +670,7 @@ class PaymentController extends Controller
         $orderId = $this->storeOrder('ZALOPAY', 'pending', 'completed', session('user_address'));
         DB::commit();
         $this->clearSession();
-        return redirect()->route('booking.success',['orderId'=>$orderId])->withSuccess('Thanh toán thành công');
+        return redirect()->route('booking.success', ['orderId' => $orderId])->withSuccess('Thanh toán thành công');
     }
 
     public function booking_success(Request $request)
@@ -683,5 +680,4 @@ class PaymentController extends Controller
 
         return view('frontend.user.home.booking_success', compact('order', 'subTotal'));
     }
-
 }
