@@ -16,6 +16,7 @@ use App\Models\VariantColors;
 use App\Models\Comments;
 use App\Models\Ratings;
 use function App\Helper\getTotal;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
@@ -147,8 +148,6 @@ class ProductController extends Controller
                     ->get();
                 $sameProducts = $sameProducts->merge($products); // Gộp các sản phẩm vào collection
             }
-
-            // Giới hạn tổng cộng chỉ 4 sản phẩm
             $sameProducts = $sameProducts->take(4);
         } else {
             $sameProducts = collect();
@@ -164,15 +163,13 @@ class ProductController extends Controller
                     'cmt_id' => 0
                 ])
                 ->orderBy('created_at', 'desc')
-                ->paginate(6); // Phân trang với 6 bình luận mỗi trang
-            //->get();
+                ->paginate(6);
 
             $averageRating = Ratings::getAverageRating($product->id);
 
-            // Cập nhật lại điểm trung bình của sản phẩm
             $product = Products::find($product->id);
             if ($product) {
-                $product->point = $averageRating; // Cập nhật lại thuộc tính point
+                $product->point = $averageRating;
                 $product->save();
             }
             $ratingOfProduct = Ratings::where('pro_id', $product->id)->get();
@@ -314,6 +311,7 @@ class ProductController extends Controller
         return response()->json([
             'status' => 'success',
             'price' => $variantColors,
+            'quantity'=> $variantColors->quantity,
             'storage' => $variantColors->variant->storage,
         ]);
     }

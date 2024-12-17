@@ -24,11 +24,15 @@ class RatingsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('product', function ($query) {
-                return "<a href='".route('product.details', ['slug'=>$query->product->slug])."' > ".$query->product->name."</a>";
+                return "<a href='".route('product.details', ['slug'=> $query->product->slug])."' > ".$query->product->name."</a>";
+
             })
             ->addColumn('user',function($query){
                 return $query->user->name;
             } )
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
+            })
             ->rawColumns(['action', 'product', 'user'])
             ->setRowId('id');
     }
@@ -60,7 +64,11 @@ class RatingsDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
-                    ]);
+                    ])
+                    ->parameters([
+                        'scrollX' => true, // Bật chế độ cuộn ngang
+                        'responsive' => true, // Hỗ trợ giao diện responsiv
+                        ]);
     }
 
     /**
@@ -69,10 +77,15 @@ class RatingsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('product'),
-            Column::make('user'),
-            Column::make('point'),
-            Column::make('content'),
+            Column::make('product')->width('25%')->title("Tên sản phẩm"),
+            Column::make('user')->width('25%')->title("Người đánh giá"),
+            Column::make('point')->width('25%')->title("Điểm đánh giá"),
+            Column::make('content')->width('25%')->title("Nội dung đánh giá"),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cầnf
 
         ];
     }

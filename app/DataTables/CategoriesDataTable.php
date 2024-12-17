@@ -21,10 +21,14 @@ class CategoriesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+        ->addIndexColumn()
         ->addColumn('action', function ($query) {
             $editBtn = "<a href='" . route('admin.categories.edit', $query->id) . "' class='btn btn-dark'><i class='far fa-edit'></i></a>";
             $deleteBtn = "<a href='" . route('admin.categories.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
             return $editBtn . $deleteBtn;
+        })
+        ->addColumn('empty_column', function ($query) {
+            return ''; // Không có nội dung trong cột
         })
         ->rawColumns(['action'])
         ->setRowId('id');
@@ -59,6 +63,10 @@ class CategoriesDataTable extends DataTable
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
+                    ])
+                    ->parameters([
+                        'scrollX' => true, // Bật chế độ cuộn ngang
+                        'responsive' => true, // Hỗ trợ giao diện responsive
                     ]);
     }
 
@@ -68,13 +76,26 @@ class CategoriesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->width(150),
-            Column::make('name')->width(300),
+            Column::computed('DT_RowIndex')
+                ->title('STT')
+                ->width("33%")
+                ->searchable(false)
+                ->orderable(false),
+            Column::make('name')->width("33%")
+                ->title('Tên danh mục')
+                ->searchable(true)
+                ->orderable(true),
+
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(200)
+                ->width("33%")
                 ->addClass('text-center'),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cầnf
         ];
 
     }

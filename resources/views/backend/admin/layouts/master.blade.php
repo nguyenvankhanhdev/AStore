@@ -41,6 +41,11 @@
 
     @vite(['resources/js/app.js', 'resources/js/admin.js']) --}}
 
+    <style>
+        #product_table{
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>

@@ -29,36 +29,46 @@ class WishlistController extends Controller
     {
         \Log::info('Request data:', $request->all());
 
-        $validated = $request->validate([
-            'pro_id' => 'required|exists:products,id',
-            'variant_color_id' => 'required|exists:variant_colors,id',
-        ]);
 
-        \Log::info('Validated data:', $validated);
+        if(Auth::check()){
+            $validated = $request->validate([
+                'pro_id' => 'required|exists:products,id',
+                'variant_color_id' => 'required|exists:variant_colors,id',
+            ]);
 
-        $exists = Wishlist::where([
-            ['user_id', auth()->id()],
-            ['pro_id', $validated['pro_id']],
-            ['variant_color_id', $validated['variant_color_id']],
-        ])->exists();
+            \Log::info('Validated data:', $validated);
 
-        if ($exists) {
+            $exists = Wishlist::where([
+                ['user_id', auth()->id()],
+                ['pro_id', $validated['pro_id']],
+                ['variant_color_id', $validated['variant_color_id']],
+            ])->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'message' => 'Sản phẩm đã có trong danh sách yêu thích!',
+                    'status' => 'error',
+                ]);
+            }
+
+            Wishlist::create([
+                'user_id' => auth()->id(),
+                'pro_id' => $validated['pro_id'],
+                'variant_color_id' => $validated['variant_color_id'],
+            ]);
+
             return response()->json([
-                'message' => 'Sản phẩm đã có trong danh sách yêu thích!',
-                'status' => 'error',
-            ], 409);
+                'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích!',
+                'status' => 'success'
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => 'Vui lòng đăng nhập!',
+                'status' => 'error'
+            ]);
         }
 
-        Wishlist::create([
-            'user_id' => auth()->id(),
-            'pro_id' => $validated['pro_id'],
-            'variant_color_id' => $validated['variant_color_id'],
-        ]);
-
-        return response()->json([
-            'message' => 'Sản phẩm đã được thêm vào danh sách yêu thích!',
-            'status' => 'success'
-        ]);
     }
 
 

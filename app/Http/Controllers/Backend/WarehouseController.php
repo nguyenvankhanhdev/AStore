@@ -62,7 +62,6 @@ class WarehouseController extends Controller
 
             $productTotalPrice = ($product['quantity'] * $product['warehouse_price']);
             $totalPrice += $productTotalPrice; // Cộng tổng tiền của sản phẩm vào biến tổng
-
             //logger("Calculated Total Price: $productTotalPrice for Variant Color ID: {$product['variant_color_id']}");
 
             WarehouseDetails::create([
@@ -84,6 +83,6 @@ class WarehouseController extends Controller
             $variantColor->quantity += $product['quantity'];
             $variantColor->save();
         }
-        return redirect()->route('admin.warehouse.create')->with('success', 'Phiếu nhập kho đã được lưu thành công!');
+        return redirect()->route('admin.warehouse')->with('success', 'Phiếu nhập kho đã được lưu thành công!');
     }
 }

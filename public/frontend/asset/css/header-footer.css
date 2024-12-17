@@ -6435,7 +6435,7 @@ hr {
     position: relative;
     z-index: 1000;
     background: #000;
-
+    padding: 8px 0
 }
 
 .header-body .header-logo {
@@ -8961,6 +8961,15 @@ a.checkbox.active:after {
     line-height: 14px;
     font-weight: 400;
     color: #e1e4e6
+}
+
+.header-right {
+    display: flex;
+    align-items: center
+}
+
+.container.flex-center {
+    padding: 15px 0px;
 }
 
 .header-right {

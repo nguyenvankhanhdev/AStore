@@ -4948,7 +4948,7 @@ code {
 }
 
 .b-b-600 {
-    /* box-shadow: 0px -1px 0px #444b52 inset */
+    box-shadow: 0px -1px 0px #444b52 inset
 }
 
 .b-b-700 {
@@ -8368,7 +8368,7 @@ body {
 }
 
 .header-body {
-    padding: 20px 0;
+    padding: 12px 0;
     background: #000
 }
 
@@ -9308,167 +9308,4 @@ body {
 
 .footer-middle .category .accordion-tab .label-text {
     color: #edeeef
-}
-
-@media (max-width: 900px) {
-
-    .header-search {
-        display: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .hd-mb {
-        display: block !important;
-    }
-
-    .header-bot {
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background-color: #000;
-        z-index: 5;
-        display: none;
-    }
-
-
-    .header-bot ul {
-        display: flex;
-        flex-direction: column;
-        padding: 10px 0;
-        margin: 0;
-        list-style: none;
-        align-items: flex-start;
-    }
-
-    .header-bot.show {
-        display: block;
-    }
-
-
-    .header-menu-toggle {
-        z-index: 10;
-        display: block !important;
-        cursor: pointer;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
-        flex-grow: 0;
-    }
-
-    .header-menu-toggle i {
-        font-size: 28px;
-    }
-
-    .header-bot.show ul {
-        display: flex;
-    }
-
-    .header-item {
-        margin-top: 10px !important;
-    }
-
-
-    .header-body .header-logo img {
-        max-width: 200px;
-        height: auto;
-        margin: 0 auto;
-        position: relative;
-        z-index: 10;
-    }
-
-
-    .container.flex-center {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: nowrap;
-    }
-
-    .header-right {
-        display: flex;
-        justify-content: center;
-        position: relative;
-        z-index: 10;
-    }
-
-
-    .header-body .header-user .user-info {
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        padding: 10px 0 10px 24px
-    }
-
-    .header-body .header-user i {
-        font-size: 24px;
-        display: none;
-    }
-
-    .header-cart {
-        margin-left: 0;
-        margin-top: 25px !important;
-    }
-
-    .header-body .header-cart .c-cart {
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        color: #e1e4e6;
-
-    }
-
-    .header-body .header-cart .c-cart i {
-        font-size: 32px
-    }
-
-    .header-body .header-cart .c-cart .form-cart-icon {
-        position: relative
-    }
-
-    .header-body .header-cart .count {
-        position: absolute;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        top: 0;
-        right: -7px;
-        padding: 0 5px;
-        height: 16px;
-        background: #4391fb;
-        border: .875px solid #4391fb;
-        border-radius: 875px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 12px;
-        line-height: 16px;
-        font-weight: 500
-    }
-
-    .f-s-ui-14 {
-        display: none;
-    }
-
-    .hd-mb {
-        flex: 1;
-        padding: 8px;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px 0;
-        width: auto;
-        z-index: 1;
-        position: relative;
-    }
-
-    .form-search-input {
-        width: 100%;
-        font-size: 14px;
-        padding: 8px;
-    }
-
 }

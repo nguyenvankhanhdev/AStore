@@ -891,6 +891,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $pro_id
  * @property int|null $variant_color_id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -903,6 +904,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist query()
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereProId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wishlist whereVariantColorId($value)

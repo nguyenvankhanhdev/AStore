@@ -233,11 +233,17 @@
                                     </div>
                                     <div class="pre-order">
                                         <div class="btn btn-link btn-xl" id="add-to-cart-form">
-                                            <div>MUA NGAY</div>
+                                            <div><i class="ic-cart"></i> THÊM GIỎ HÀNG</div>
                                         </div>
+                                        <div class="btn btn-link btn-xl" id="hethang" style="display:none; background:#d6d6d6; pointer-events: none; cursor: not-allowed;">
+                                            <div><i class="ic-cart"></i>TẠM HẾT HÀNG</div>
+                                        </div>
+
+
+
                                         <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
                                             data-product-id="{{ $product->id }}" data-variant-id="" data-color-id="">
-                                            <div>YÊU THÍCH</div>
+                                            <div> <i class="fa fa-heart"></i> YÊU THÍCH</div>
                                         </div>
                                     </div>
 
@@ -248,55 +254,53 @@
                 </div>
                 <div class="detail__body">
                     <div class="product-related m-t-48">
-                    <div class="container">
-                    <div class="card card-md">
-                    <div class="card-body">
-                    <div class="row no-gutters">
-                    <div class="col-12">
-                    <div class="product-related__heading">
-                    <div class="h4">Phụ kiện tương thích</div>
+                        <div class="container">
+                            <div class="card card-md">
+                                <div class="card-body">
+                                    <div class="row no-gutters">
+                                        <div class="col-12">
+                                            <div class="product-related__heading">
+                                                <div class="h4">Phụ kiện tương thích</div>
+                                            </div>
+                                        </div>
+                                        @if ($sameProducts->isNotEmpty())
+                                            @foreach ($sameProducts as $sameProduct)
+                                                <div class="col-3 col-sm-6">
+                                                    <div class="item">
+                                                        <a class="item__img"
+                                                            href="{{ route('product.details', $sameProduct->slug) }}">
+                                                            <img src="{{ asset($sameProduct->image) }}" alt="">
+                                                        </a>
+                                                        <div class="item__info">
+                                                            <a href="{{ route('product.details', $sameProduct->slug) }}">
+                                                                <div class="item__name">{{ $sameProduct->name }}</div>
+                                                            </a>
+                                                            <div class="item__price">
+                                                                <div class="text text-primary" style="color: #ae172b">
+                                                                    @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
+                                                                        Giá
+                                                                        {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }}
+                                                                        ₫
+                                                                    @else
+                                                                        Giá không có sẵn
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="col-12">
+                                                <h2>Không có sản phẩm phụ kiện tương thích</h2>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                    @if ($sameProducts->isNotEmpty())
-                    @foreach ($sameProducts as $sameProduct)
-                    <div class="col-3 col-sm-6">
-                    <div class="item">
-                    <a class="item__img"
-                    href="{{ route('product.details', $sameProduct->slug) }}">
-                    <img src="{{ asset($sameProduct->image) }}" alt="">
-                    </a>
-                    <div class="item__info">
-                    <a href="{{ route('product.details', $sameProduct->slug) }}">
-                    <div class="item__name">{{ $sameProduct->name }}</div>
-                    </a>
-                    <div class="item__price">
-                    <div class="text text-primary" style="color: #ae172b">
-                    @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
-                                                                                            Giá
-                    {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }}
-                                                                                            ₫
-                    @else
-                                                                                            Giá không có sẵn
-                    @endif
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    @endforeach
-                    @else
-                    <p>Không có sản phẩm tương tự.</p>
-                    @endif
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-
-
-
-
+                </div>
 
                 <div class="detail__bottom">
                     <div class="detail__comments">
@@ -369,7 +373,7 @@
                                                                                 @if ($rating->point >= $i)
                                                                                     <span class="star full">★</span>
                                                                                     <!-- Sao sáng đầy đủ -->
-                                                                                @elseif($product->point >= $i - 0.5)
+                                                                                @elseif($rating->point >= $i - 0.5)
                                                                                     <span class="star half">★</span>
                                                                                     <!-- Sao sáng nửa -->
                                                                                 @else
@@ -451,14 +455,14 @@
                                                 <div class="flex flex-center-ver m-b-8">
                                                     @if (Auth::check())
                                                         <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
-                                                            <strong>{{ $user->username }}</strong>
+                                                            <strong>{{ $user->name }}</strong>
                                                         </div>
                                                     @else
-                                                        {
+
                                                         <div class="text-grayscale-800 f-s-p-16 m-r-8">Người bình luận:
                                                             <strong>Khách</strong>
                                                         </div>
-                                                        }
+
                                                     @endif
                                                 </div>
                                                 <div class="form-group">
@@ -496,7 +500,7 @@
                                                                 <div class="avatar-info">
                                                                     <div class="avatar-name">
                                                                         <div class="text">
-                                                                            {{ $cm->user->username }}</div>
+                                                                            {{ $cm->user->name }}</div>
                                                                     </div>
                                                                     <div class="avatar-para">
                                                                         <div class="text">{{ $cm->content }}</div>
@@ -580,7 +584,7 @@
                                                                         <div class="avatar-info">
                                                                             <div class="avatar-name">
                                                                                 <div class="text">
-                                                                                    {{ $reply->user->username }}
+                                                                                    {{ $reply->user->name }}
                                                                                 </div>
                                                                             </div>
                                                                             <div class="avatar-para">
@@ -707,6 +711,14 @@
                                 if (response.status === 'success') {
                                     const originalPrice = response.price.price;
                                     const storage = response.storage.GB;
+                                    const quantity = response.quantity;
+                                    if (quantity === 0) {
+                                        $('#hethang').show(); // Hiển thị nút "Tạm Hết Hàng"
+                                        $('#add-to-cart-form').hide(); // Ẩn nút "Thêm Giỏ Hàng"
+                                    } else {
+                                        $('#hethang').hide(); // Ẩn nút "Tạm Hết Hàng"
+                                        $('#add-to-cart-form').show(); // Hiển thị nút "Thêm Giỏ Hàng"
+                                    }
                                     const offerPrice = response.price.offer_price;
                                     const discount = originalPrice - offerPrice;
                                     const discountPercentage = (offerPrice / originalPrice) * 100;
@@ -851,10 +863,6 @@
                     const variantId = $('#variant-selector .item.active').data('id'); // Lấy ID biến thể
                     const colorId = $('.colors .item.active').data('color-id'); // Lấy ID màu sắc
 
-                    console.log("Product ID:", productId);
-                    console.log("Variant ID:", variantId || "Chưa chọn");
-                    console.log("Color ID:", colorId || "Chưa chọn");
-
                     // Kiểm tra nếu chưa chọn biến thể hoặc màu sắc
                     if (!variantId || !colorId) {
                         toastr.error("Vui lòng chọn màu sắc và biến thể sản phẩm!");
@@ -865,12 +873,12 @@
 
 
                     $.ajax({
-                        url: "{{ route('user.get.variantColorId') }}", // Route tới backend
+                        url: "{{ route('get.variantColorId') }}", // Route tới backend
                         method: 'GET',
                         data: {
                             variant_id: variantId,
                             color_id: colorId,
-                            _token: $('meta[name="csrf-token"]').attr('content')
+                            _token: '{{ csrf_token() }}',
                         },
 
                         success: function(response) {
@@ -881,25 +889,24 @@
                                 console.log("CSRF Token:", $('meta[name="csrf-token"]').attr('content'));
                                 // Gửi thêm AJAX để thêm vào wishlist
                                 $.ajax({
-                                    url: "{{ route('user.wishlist.add') }}", // Route thêm vào wishlist
+                                    url: "{{ route('wishlist.add') }}", // Route thêm vào wishlist
                                     method: 'POST',
                                     data: {
                                         pro_id: productId,
                                         variant_color_id: variantColorId,
-                                        _token: $('meta[name="csrf-token"]').attr(
-                                            'content') // CSRF Token
+                                        _token: '{{ csrf_token() }}',
                                     },
                                     success: function(response) {
                                         if (response.status == 'success') {
                                             toastr.success(response.message);
                                         } else {
-                                            toastr.error('vui lòng đăng nhập lại!');
+                                            toastr.error(response.message);
                                         }
                                     },
                                     error: function(error) {
-                                        console.error("Error:", error);
+
                                         toastr.error(error.responseJSON.message ||
-                                            "Có lỗi xảy ra!");
+                                            "Đã xảy ra lỗi khi thêm vào yêu thích! Vui lòng thử lại.");
                                     }
                                 });
 

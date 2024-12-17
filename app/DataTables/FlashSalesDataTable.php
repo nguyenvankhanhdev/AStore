@@ -23,6 +23,7 @@ class FlashSalesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->addColumn('action', function ($query) {
                 $editBtn = "<a href='" . route('admin.flash-sale.edit', $query->id) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='" . route('admin.flash-sale.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
@@ -56,6 +57,9 @@ class FlashSalesDataTable extends DataTable
             ->editColumn('end_date', function ($query) {
                 return date('d-m-Y', strtotime($query->end_date));
             })
+            ->addColumn('empty_column', function ($query) {
+                return ''; // Không có nội dung trong cột
+            })
             ->rawColumns(['action', 'status'])
             ->setRowId('id');
     }
@@ -87,6 +91,10 @@ class FlashSalesDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])
+            ->parameters([
+                'scrollX' => true, // Bật chế độ cuộn ngang
+                'responsive' => true, // Hỗ trợ giao diện responsive
             ]);
     }
 
@@ -97,15 +105,26 @@ class FlashSalesDataTable extends DataTable
     {
         return [
 
-            Column::make('id'),
-            Column::make('start_date'),
-            Column::make('end_date'),
-            Column::make('status'),
+            Column::computed('DT_RowIndex')
+                ->title('STT')
+                ->width('5%')
+                ->searchable(false)
+                ->orderable(false)
+                ->printable(false)
+                ->exportable(false),
+            Column::make('start_date')->title('Ngày bắt đầu')->width('25%'),
+            Column::make('end_date')->title('Ngày kết thúc')->width('25%'),
+            Column::make('status')->title('Trạng thái')->width('25%'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(200)
+                ->width('30%')
                 ->addClass('text-center'),
+                Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // Cột trống
         ];
     }
 

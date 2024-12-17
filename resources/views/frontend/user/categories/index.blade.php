@@ -1,5 +1,8 @@
 @extends('frontend.user.layouts.master')
 
+@push('adc')
+
+@endpush
 
 @section('content')
     <div class="category" style="background: #fff">

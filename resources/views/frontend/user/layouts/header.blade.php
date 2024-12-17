@@ -24,7 +24,7 @@
 
             <div class="header-right">
                 <div class="header-user">
-                    <a href="{{ auth()->check() ? route('admin.dashboard.index') : route('login') }}">
+                    <a href="{{ auth()->check() ? (auth()->user()->role === 'admin' ? route('admin.dashboard.index') : url('user/dashboard')) : route('login') }}">
                         <div class="user-info flex text-grayscale-300">
                             <span class="form-cart-icon m-r-8"><i class="ic-user-2"></i></span>
                             <div class="f-s-ui-14">
@@ -98,6 +98,6 @@
             menu.classList.remove('show');
         }
     });
-  
+
 
 </script>

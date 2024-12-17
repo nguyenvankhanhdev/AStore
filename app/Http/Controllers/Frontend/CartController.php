@@ -107,17 +107,24 @@ class CartController extends Controller
     public function update(Request $request)
     {
         $cart = Carts::findOrFail($request->cart_id);
+
         if (!$cart) {
             return response(['status' => 'error', 'message' => 'Không tìm thấy sản phẩm trong giỏ hàng!']);
-        } else if ($request->quantity >= $cart->variant_color->quantity) {
-            return response(['status' => 'error', 'message' => 'Số lượng sản phẩm trong kho không đủ!']);
-        } else if ($request->quantity == $cart->quantity) {
-        } else {
-            $cart->quantity = $request->quantity;
-            $cart->save();
-            return response(['status' => 'success', 'quantity' => $cart->quantity, 'message' => 'Cập nhật giỏ hàng thành công!']);
         }
+
+        $availableQuantity = $cart->variant_color->quantity;
+        $requestedQuantity = $request->quantity;
+        if ($requestedQuantity > $availableQuantity) {
+            return response(['status' => 'error', 'message' => 'Số lượng sản phẩm trong kho không đủ!']);
+        }
+        if ($requestedQuantity == $cart->quantity) {
+            return response(['status' => 'error', 'message' => 'Số lượng trong giỏ hàng đã được cập nhật!']);
+        }
+        $cart->quantity = $requestedQuantity;
+        $cart->save();
+        return response(['status' => 'success', 'quantity' => $cart->quantity, 'message' => 'Cập nhật giỏ hàng thành công!']);
     }
+
 
     public function applyCoupon(Request $request)
     {
