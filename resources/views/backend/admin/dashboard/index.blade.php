@@ -17,7 +17,7 @@
                                 <a href="{{ route('admin.orders') }}"><h4>Todays Orders</h4></a>
                             </div>
                             <div class="card-body">
-                             {{$todaysOrders}}
+                                {{$todaysOrders}}
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 <h4>Todays Peding Orders</h4>
                             </div>
                             <div class="card-body">
-{{$todayPendingOrderCount}}
+                                {{$todayPendingOrderCount}}
                             </div>
                         </div>
                     </div>
@@ -182,7 +182,7 @@
                                 <h4>Total Reviews</h4>
                             </div>
                             <div class="card-body">
-
+                                {{ $totalReview }}
                             </div>
                         </div>
                     </div>

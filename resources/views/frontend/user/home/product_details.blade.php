@@ -235,12 +235,67 @@
                                         <div class="btn btn-link btn-xl" id="add-to-cart-form">
                                             <div><i class="ic-cart"></i> THÊM GIỎ HÀNG</div>
                                         </div>
+                                        <div class="btn btn-link btn-xl" id="hethang" style="display:none; background:#d6d6d6; pointer-events: none; cursor: not-allowed;">
+                                            <div><i class="ic-cart"></i>TẠM HẾT HÀNG</div>
+                                        </div>
+
+
+
                                         <div class="btn btn-link btn-danger btn-xl" id="add-to-wishlist"
                                             data-product-id="{{ $product->id }}" data-variant-id="" data-color-id="">
                                             <div> <i class="fa fa-heart"></i> YÊU THÍCH</div>
                                         </div>
                                     </div>
 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail__body">
+                    <div class="product-related m-t-48">
+                        <div class="container">
+                            <div class="card card-md">
+                                <div class="card-body">
+                                    <div class="row no-gutters">
+                                        <div class="col-12">
+                                            <div class="product-related__heading">
+                                                <div class="h4">Phụ kiện tương thích</div>
+                                            </div>
+                                        </div>
+                                        @if ($sameProducts->isNotEmpty())
+                                            @foreach ($sameProducts as $sameProduct)
+                                                <div class="col-3 col-sm-6">
+                                                    <div class="item">
+                                                        <a class="item__img"
+                                                            href="{{ route('product.details', $sameProduct->slug) }}">
+                                                            <img src="{{ asset($sameProduct->image) }}" alt="">
+                                                        </a>
+                                                        <div class="item__info">
+                                                            <a href="{{ route('product.details', $sameProduct->slug) }}">
+                                                                <div class="item__name">{{ $sameProduct->name }}</div>
+                                                            </a>
+                                                            <div class="item__price">
+                                                                <div class="text text-primary" style="color: #ae172b">
+                                                                    @if ($sameProduct->variants->isNotEmpty() && $sameProduct->variants->first()->variantColors->isNotEmpty())
+                                                                        Giá
+                                                                        {{ number_format($sameProduct->variants->first()->variantColors->first()->price - $sameProduct->variants->first()->variantColors->first()->offer_price, 0, ',', '.') }}
+                                                                        ₫
+                                                                    @else
+                                                                        Giá không có sẵn
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="col-12">
+                                                <h2>Không có sản phẩm phụ kiện tương thích</h2>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -656,6 +711,14 @@
                                 if (response.status === 'success') {
                                     const originalPrice = response.price.price;
                                     const storage = response.storage.GB;
+                                    const quantity = response.quantity;
+                                    if (quantity === 0) {
+                                        $('#hethang').show(); // Hiển thị nút "Tạm Hết Hàng"
+                                        $('#add-to-cart-form').hide(); // Ẩn nút "Thêm Giỏ Hàng"
+                                    } else {
+                                        $('#hethang').hide(); // Ẩn nút "Tạm Hết Hàng"
+                                        $('#add-to-cart-form').show(); // Hiển thị nút "Thêm Giỏ Hàng"
+                                    }
                                     const offerPrice = response.price.offer_price;
                                     const discount = originalPrice - offerPrice;
                                     const discountPercentage = (offerPrice / originalPrice) * 100;

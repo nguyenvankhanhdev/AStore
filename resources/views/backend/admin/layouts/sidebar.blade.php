@@ -58,10 +58,6 @@
                     <li class="{{ setActive(['admin.seller-pending-products.*','admin.top-products',]) }}"><a class="nav-link"
                             href="{{ route('admin.top-products') }}">Potential Top Products</a></li>
 
-
-                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link"
-                            href="">Sản phẩm đánh giá</a></li>
-
                 </ul>
             </li>
             <li
@@ -103,10 +99,9 @@
                     'admin.flash-sale.*',
                     'admin.admincoupon.*',
 
-
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-                    <span>Ecommerce</span></a>
+                    <span>Giảm giá</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.flash-sale.*']) }}"><a class="nav-link"
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
@@ -157,14 +152,6 @@
                             href="{{ route('admin.admin-list') }}">Admin Lists</a></li>
                 </ul>
             </li>
-
-
-            <li><a class="nav-link {{ setActive(['admin.subscribers.*']) }}"
-                    href=""><i class="fas fa-user"></i>
-                    <span>Subscribers</span></a></li>
-
-            <li><a class="nav-link" href=""><i class="fas fa-wrench"></i>
-                    <span>Settings</span></a></li>
 
         </ul>
 
