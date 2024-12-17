@@ -218,7 +218,7 @@ class PaymentController extends Controller
     public function storeOrder($payment_method, $status, $payment_status, $addressJson)
     {
         $order = new Orders();
-        $order->total_amount = session('order_total_amount');
+        $order->total_amount = session('order_total_amount')??0;
         $order->user_id = auth()->id();
         $order->status = $status;
         $order->order_date = Carbon::now()->format('Y-m-d H:i:s');
@@ -244,9 +244,6 @@ class PaymentController extends Controller
             $cartItem = Carts::where('user_id', auth()->id())
                 ->where('variant_color_id', $productId)
                 ->first();
-            Log::info($cartItem);
-             $quantity = $cartItem->quantity;
-             Log::info('quantity '.$quantity);
             $variant = VariantColors::find($productId);
             if ($variant) {
                 $orderDetail = new OrderDetails();
@@ -265,9 +262,8 @@ class PaymentController extends Controller
         }
         Session::forget('coupon');
 
-        //$address = json_decode($order->address);
-        //$user = auth()->user();
-        //Log::info('address: ' . $address->email);
+        $address = json_decode($order->address);
+        $user = auth()->user();
         // Mail::send('frontend.emails.order_confirmation', [
         //     'user' => $user,
         //     'orders' => $order,
@@ -280,12 +276,7 @@ class PaymentController extends Controller
     }
     public function payWithVNPAY(Request $request)
     {
-        $request->validate([
-            'info' => 'required|array',
-            'address' => 'required|array',
-            'total_amount' => 'required|numeric',
-            'productIds' => 'required|array|min:1',
-        ]);
+
         session([
             'coupon_id' => $request->coupon_id,
             'order_point' => $request->point,
@@ -344,7 +335,7 @@ class PaymentController extends Controller
             $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
-        Log::info('chuyển trang '.$vnp_Url);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Xin chờ 1 chút !!!.',
@@ -495,30 +486,26 @@ class PaymentController extends Controller
     public function momo_return(Request $request)
     {
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-        
+
         $resultCode = $request->resultCode;
         $rawHash = "amount=" . $request->amount . "&extraData=" . $request->extraData . "&message=" . $request->message . "&orderId=" . $request->orderId . "&orderInfo=" . $request->orderInfo . "&orderType=" . $request->orderType . "&partnerCode=" . $request->partnerCode . "&payType=" . $request->payType . "&requestId=" . $request->requestId . "&responseTime=" . $request->responseTime . "&resultCode=" . $resultCode . "&transId=" . $request->transId;
         $generatedSignature = hash_hmac("sha256", $rawHash, $secretKey);
         if ($resultCode == '0') {
             DB::beginTransaction();
             try {
-                Log::info('MoMo payment handling');
                 $info = Session::get('order_info');
                 $address = Session::get('address');
 
                 $updatePoint = User::find(auth()->id());
                 $updatePoint->point += session('order_point');
                 $updatePoint->save();
-                Log::info('MoMo payment đang chờ');
 
                 $userAddress = $this->getOrCreateUserAddress($info, $address);
 
-                Log::info('userAddress: ' . $userAddress);
                 session(['user_address' => $userAddress->toJson()]);
                 $orderId =  $this->storeOrder('MoMo', 'pending', 'completed', session('user_address'));
 
                 DB::commit();
-                Log::info('MoMo payment thành công');
                 $this->clearSession();
                 return redirect()->route('booking.success', ['orderId' => $orderId])->withSuccess('Thanh toán thành công');
             } catch (\Exception $e) {
@@ -595,9 +582,9 @@ class PaymentController extends Controller
             'order_point' => $request->point,
             'order_info' => $request->info,
             'address' => $request->address,
-            'order_product_ids' => $request->productIds,
-            'order_total_amount' => $request->total_amount
         ]);
+        Session::put('order_product_ids', $request->productIds);
+        Session::put('order_total_amount', $request->total_amount);
         $config = [
             "app_id" => 553,
             "key1" => "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",

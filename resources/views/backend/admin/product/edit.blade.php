@@ -70,6 +70,8 @@
                                         <option value="featured_product" {{ $product->product_type == 'featured_product' ? 'selected' : '' }}>Nổi bật</option>
                                         <option value="top_product" {{ $product->product_type == 'top_product' ? 'selected' : '' }}>Hàng đầu</option>
                                         <option value="best_product" {{ $product->product_type == 'best_product' ? 'selected' : '' }}>Tốt nhất</option>
+                                        <option value="sale_product" {{ $product->product_type == 'sale_product' ? 'selected' : '' }}>Giảm giá</option>
+                                        <option value="accessory" {{ $product->product_type == 'accessory' ? 'selected' : '' }}>Phụ kiện - Linh kiện</option>
                                     </select>
                                 </div>
 

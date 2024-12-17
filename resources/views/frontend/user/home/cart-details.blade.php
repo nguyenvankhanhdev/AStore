@@ -739,8 +739,6 @@
                 var cartId = $(this).data('cart-id');
                 var quantityInput = $('#quantity-' + cartId);
                 var currentQuantity = parseInt(quantityInput.val()) || 1;
-                currentQuantity++;
-                quantityInput.val(currentQuantity);
 
                 $.ajax({
                     url: "{{ route('cart.updateQuantity') }}",
@@ -748,20 +746,20 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         cart_id: cartId,
-                        quantity: currentQuantity
+                        quantity: currentQuantity + 1
                     },
                     success: function(data) {
                         if (data.status === 'success') {
                             toastr.success(data.message);
+                            quantityInput.val(currentQuantity + 1);
                             updateTotal();
-
                         } else {
                             $('.js--btn-plus').prop('disabled', true);
                             toastr.error(data.message);
                         }
                     },
                     error: function(data) {
-                        console.log(data);
+                        console.error('Error:', data);
                     }
                 });
             });

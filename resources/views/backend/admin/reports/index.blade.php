@@ -53,7 +53,7 @@
                                     <th class="fw-bold">SL Tồn</th>
                                     <th class="fw-bold">Giá nhập</th>
                                     <th class="fw-bold">Giá bán</th>
-                                    <th class="fw-bold">Tiền nhập</th>
+                                    <th class="fw-bold">Tổng Tiền nhập</th>
                                     <th class="fw-bold">Tổng doanh thu</th>
                                     <th class="fw-bold">Lợi nhuận</th>
                                 </tr>
@@ -99,7 +99,7 @@
                             <tr>
                                 <th class="fw-bold">Tổng SL nhập</th>
                                 <th class="fw-bold">Tổng SL bán</th>
-                                <th class="fw-bold">Tổng tiền nhập (FIFO)</th>
+                                <th class="fw-bold">Tổng tiền nhập</th>
                                 <th class="fw-bold">Tổng doanh thu</th>
                                 <th class="fw-bold">Tổng lợi nhuận</th>
                             </tr>

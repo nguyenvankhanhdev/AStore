@@ -77,12 +77,12 @@
                                                                 @endif
                                                             </h6>
                                                             <h6 style = "font-size: 16px;">Phương thức thanh toán:
-                                                                @if ($order->payment_method == 'cod')
+                                                                @if ($order->payment_method == 'COD')
                                                                     <span class="badge bg-warning text-dark">Thanh toán khi
                                                                         nhận hàng</span>
                                                                 @else
                                                                     <span class="badge bg-warning text-dark">Thanh toán qua
-                                                                        thẻ</span>
+                                                                        thẻ </span>
                                                                 @endif
                                                                     </h6>
                                                             </p>
@@ -122,15 +122,18 @@
                                                             <tr>
                                                                 <td class="name">
                                                                     <p>{{ $orderDetail->variantColors->variant->product->name }}
-                                                                        -
-                                                                        {{ $orderDetail->variantColors->variant->storage->GB }}
+                                                                        @if($orderDetail->variantColors->variant->storage->GB === "0GB")
+
+                                                                        @else
+                                                                            -  {{ $orderDetail->variantColors->variant->storage->GB }}
+                                                                        @endif
                                                                         -
                                                                         {{ $orderDetail->variantColors->color->name }}
                                                                     </p>
 
                                                                 </td>
                                                                 <td class="amount">
-                                                                    {{ number_format($order->total_amount / $orderDetail->quantity, '0', '.') }}
+                                                                    {{ number_format($orderDetail->total_price / $orderDetail->quantity, '0', '.') }}
                                                                     đ
                                                                 </td>
 
@@ -139,7 +142,7 @@
                                                                 </td>
 
                                                                 <td class="total" style="    margin-left: 35px;">
-                                                                    {{ number_format($order->total_amount, '0', '.') }} đ
+                                                                    {{ number_format($orderDetail->total_price, '0', '.') }} đ
 
                                                                 </td>
                                                                 @if ($order->status == 'completed')
@@ -228,8 +231,18 @@
                                             {{-- <p><span>Sub Total:</span>{{@$order->sub_total}}</p> --}}
                                             {{-- <p><span>Shipping Fee(+):</span>{{ @$settings->currency_icon }} {{@$shipping->cost}} </p> --}}
                                             </span></p>
+                                            @if($order->coupon_id !=null)
+                                                <p><span>Số tiền giảm
+                                                    :</span> - {{ number_format($coupon->discount * 1000, '0', '.') }}đ</p>
+
+                                                    <p><span>Tổng tiền cẩn thanh toán
+                                                        :</span>{{ number_format($order->total_amount, '0', '.') }}đ</p>
+                                            @else
                                             <p><span>Tổng tiền cẩn thanh toán
                                                     :</span>{{ number_format($order->total_amount, '0', '.') }}đ</p>
+
+
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

@@ -92,8 +92,8 @@ class VariantColorsDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('STT')->width('5%'),
             Column::make('color_id')->title('Màu sắc')->width('16%'),
             Column::make('quantity')->width('20%')->title("Số lượng"),
-            Column::make('price')->title('Gia1 (VND')->width('20%'),
-            Column::make('offer_price')->title('Giá giảm (VND')->width('20%'),
+            Column::make('price')->title('Gía (VNĐ)')->width('20%'),
+            Column::make('offer_price')->title('Giá giảm (VNĐ)')->width('20%'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

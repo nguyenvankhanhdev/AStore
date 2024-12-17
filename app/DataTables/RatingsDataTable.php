@@ -24,7 +24,8 @@ class RatingsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('product', function ($query) {
-                return "<a href='".route('product.details', ['slug'=>$query->product->slug])."' > ".$query->product->name."</a>";
+                return "<a href='".route('product.details', ['slug'=> $query->product->slug])."' > ".$query->product->name."</a>";
+
             })
             ->addColumn('user',function($query){
                 return $query->user->name;
@@ -76,10 +77,10 @@ class RatingsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('product')->width('25%'),
-            Column::make('user')->width('25%'),
-            Column::make('point')->width('25%'),
-            Column::make('content')->width('25%'),
+            Column::make('product')->width('25%')->title("Tên sản phẩm"),
+            Column::make('user')->width('25%')->title("Người đánh giá"),
+            Column::make('point')->width('25%')->title("Điểm đánh giá"),
+            Column::make('content')->width('25%')->title("Nội dung đánh giá"),
             Column::make('empty_column') // Cột trống
                 ->title('')  // Không hiển thị tiêu đề
                 ->orderable(false) // Không thể sắp xếp
