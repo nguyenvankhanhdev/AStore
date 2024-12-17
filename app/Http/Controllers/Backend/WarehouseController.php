@@ -83,6 +83,6 @@ class WarehouseController extends Controller
             $variantColor->quantity += $product['quantity'];
             $variantColor->save();
         }
-        return redirect()->route('admin.warehouse.index')->with('success', 'Phiếu nhập kho đã được lưu thành công!');
+        return redirect()->route('admin.warehouse')->with('success', 'Phiếu nhập kho đã được lưu thành công!');
     }
 }

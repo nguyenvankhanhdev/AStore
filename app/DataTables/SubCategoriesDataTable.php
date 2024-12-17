@@ -23,6 +23,7 @@ class SubCategoriesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+        ->addIndexColumn()
         ->addColumn('action', function($query){
             $editBtn = "<a href='".route('admin.sub-categories.edit', $query->id)."' class='btn btn-primary'><i class='far fa-edit'></i></a>";
             $deleteBtn = "<a href='".route('admin.sub-categories.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
@@ -34,6 +35,9 @@ class SubCategoriesDataTable extends DataTable
         })
         ->addColumn('name', function ($query) {
             return $query->name;
+        })
+        ->addColumn('empty_column', function ($query) {
+            return ''; // Không có nội dung trong cột
         })
         ->rawColumns(['action','name'])
         ->setRowId('id');
@@ -80,14 +84,30 @@ class SubCategoriesDataTable extends DataTable
     {
         return [
 
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('category'),
+            Column::computed('DT_RowIndex')
+                ->title('STT')
+                ->width("25%")
+                ->searchable(false)
+                ->orderable(false),
+            Column::make('name')->title("Tên danh mục")
+                ->width("25%")
+                ->searchable(true)
+                ->orderable(true),
+            Column::make('category')->title("Danh mục cha")
+                ->width("25%")
+                ->searchable(true)
+                ->orderable(true),
             Column::computed('action')
-            ->exportable(false)
-            ->printable(false)
-            ->width(200)
-            ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width("25%")
+                ->addClass('text-center'),
+            Column::make('empty_column') // Cột trống
+                ->title('')  // Không hiển thị tiêu đề
+                ->orderable(false) // Không thể sắp xếp
+                ->searchable(false) // Không thể tìm kiếm
+                ->className('empty-column'), // CSS class nếu cầnf
+
         ];
     }
 
