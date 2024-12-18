@@ -68,8 +68,13 @@
                                     <div class="product-cart__info">
                                         <div class="product-cart__inside">
                                             <h3 class="product-cart__name product-cart__name--lg name-product-split">
-                                                {{ $orderDetail->variantColors->variant->product->name }} -
-                                                {{ $orderDetail->variantColors->variant->storage->GB }} -
+                                                {{ $orderDetail->variantColors->variant->product->name }}
+                                                @if( $orderDetail->variantColors->variant->storage->GB === '0GB')
+
+                                                @else
+                                                   - {{ $orderDetail->variantColors->variant->storage->GB }}
+                                                @endif
+                                                -
                                                 {{ $orderDetail->variantColors->color->name }}</h3>
                                             <div class="product-cart__line"></div>
                                         </div>
