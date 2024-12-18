@@ -71,14 +71,13 @@ class VariantColorController extends Controller
             'colors' => ['required'],
             'price' => ['required'],
             'offer_price' => ['required'],
-            'quantity' => ['required'],
         ]);
         $color = new VariantColors();
         $color->color_id = $request->colors;
         $color->variant_id = $request->variants;
         $color->price = $request->price;
         $color->offer_price = $request->offer_price;
-        $color->quantity = $request->quantity;
+        $color->quantity = $request->quantity??0;
         $color->save();
         return redirect()->route('admin.variant-colors.index', ['variants' => $request->variants])->withSuccess('Thêm thành công');
     }

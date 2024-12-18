@@ -2,10 +2,10 @@
 
 return [
     'order_status_admin' => [
-        'pending' => ['status' => 'Pending'],
-        'processed' => ['status' => 'Processed'],
-        'canceled' => ['status' => 'Canceled'],
-        'delivered' => ['status' => 'Delivered'],
-        'completed' => ['status' => 'Completed'],
+        'pending' => ['status' => 'Đang chờ'],
+        'processed' => ['status' => 'Đang xử lý'],
+        'canceled' => ['status' => 'Đã hủy'],
+        'delivered' => ['status' => 'Đang giao hàng'],
+        'completed' => ['status' => 'Hoàn thành'],
     ],
 ];

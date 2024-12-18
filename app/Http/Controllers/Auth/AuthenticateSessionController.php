@@ -70,10 +70,10 @@ class AuthenticateSessionController extends Controller
                 );
                 $newUser->save();
                 Auth::login($newUser);
-                return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');
+                return redirect()->route('home')->withSuccess('Đăng nhập thành công');
             } else {
                 Auth::login($user);
-                return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');
+                return redirect()->route('home')->withSuccess('Đăng nhập thành công');
             }
         } catch (\Exception $e) {
             dd("Something wrong! " . $e->getMessage());
@@ -97,10 +97,10 @@ class AuthenticateSessionController extends Controller
                 $newUser->role = 'user';
                 $newUser->save();
                 Auth::login($newUser);
-                return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');
+                return redirect()->route('home')->withSuccess('Đăng nhập thành công');
             } else {
                 Auth::login($user);
-                return redirect()->intended(RouteServiceProvider::HOME)->withSuccess('Đăng nhập thành công');
+                return redirect()->route('home')->withSuccess('Đăng nhập thành công');
             }
         } catch (\Exception $e) {
             dd('Something wrong' . $e->getMessage());

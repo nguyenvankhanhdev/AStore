@@ -358,26 +358,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="c-cart__full m-t-8"><input
-                                                            class="cs-input form-input-sm is-invalid" type="text"
+                                                            class="cs-input form-input-sm" type="text"
                                                             name="address" placeholder="Nhập địa chỉ*">
-                                                        <div class="feedback error-general m-t-8">
-                                                            <div class="stack"><span
-                                                                    class="ic-minus-circled"></span>Thông tin bắt buộc
-                                                            </div>
-                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="c-cart__payment__tab-item js--cart__tabs-item" id="c-cart__moreinfo">
-                                            <div class="c-cart__payment-block">
-                                                <div class="c-cart__payment__line m-t-16">
-                                                    <div class="form-group m-b-8">
-                                                        <textarea class="form-input form-input-md" rows="3" placeholder="Ghi chú yêu cầu"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
                                     <div class="store-delivery js-store-delivery">
 
@@ -464,16 +452,6 @@
                                                     <div class="c-cart__select__item" data-name="Paypal"
                                                         data-payment-id ="4" value="Visa">
                                                         <img src="https://banner2.cleanpng.com/20190313/wce/kisspng-logo-paypal-x-com-image-brand-1713901610285.webp"
-                                                            alt="">
-                                                    </div>
-                                                    <div class="c-cart__select__item" data-name="stripe"
-                                                        data-payment-id="5" value="Mastercard"><img
-                                                            src="https://duyalex.com/wp-content/uploads/2018/10/social.png"
-                                                            alt="">
-                                                    </div>
-                                                    <div class="c-cart__select__item" data-name="razorpay"
-                                                        data-payment-id ="6" value="">
-                                                        <img src="https://marketplace.cs-cart.com/images/detailed/4/logo_black.png"
                                                             alt="">
                                                     </div>
                                                 </div>
@@ -739,8 +717,6 @@
                 var cartId = $(this).data('cart-id');
                 var quantityInput = $('#quantity-' + cartId);
                 var currentQuantity = parseInt(quantityInput.val()) || 1;
-                currentQuantity++;
-                quantityInput.val(currentQuantity);
 
                 $.ajax({
                     url: "{{ route('cart.updateQuantity') }}",
@@ -748,20 +724,20 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         cart_id: cartId,
-                        quantity: currentQuantity
+                        quantity: currentQuantity + 1
                     },
                     success: function(data) {
                         if (data.status === 'success') {
                             toastr.success(data.message);
+                            quantityInput.val(currentQuantity + 1);
                             updateTotal();
-
                         } else {
                             $('.js--btn-plus').prop('disabled', true);
                             toastr.error(data.message);
                         }
                     },
                     error: function(data) {
-                        console.log(data);
+                        console.error('Error:', data);
                     }
                 });
             });

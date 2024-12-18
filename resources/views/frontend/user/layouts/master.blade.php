@@ -134,16 +134,12 @@
     <link rel="stylesheet" href="/frontend/asset/css/reponsive-cart.css">
     <link rel="stylesheet" href="/frontend/asset/css/reponsive-detail.css">
 
-
 </head>
-
 <body id="page-top">
     @include('frontend.user.layouts.header')
     <div class="over-suggestion"></div>
     <main class="main">
         @yield('content')
-
-
     </main>
     <div class="wrap-section-chat"><a class="wrap-ic-chat" href="" aria-controls="chat-modal"><i
                 class="ic-chat"></i></a>
@@ -157,8 +153,7 @@
                     <div class="modal-body">
                         <div class="list-ic-chat"><a class="item m-b-8" href="tel:18006616"><span class="img">
                                     <img src="{{ asset('frontend/asset/img/ic-call.png') }}" alt=""></span><span
-                                    class="cont"><span class="num">1800
-                                        6616</span><span class="text">(8h00 - 22h00)</span></span></a><a
+                                    class="cont"><span class="num">0703 101 449</span><span class="text">(8h00 - 22h00)</span></span></a><a
                                 class="item" href="{{ route('user.message.index') }}"><span class="img"> <img
                                         src={{ asset('uploads/mess.png') }} alt=""></span><span
                                     class="cont"><span class="num">Chat với Admin</span><span

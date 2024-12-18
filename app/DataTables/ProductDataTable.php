@@ -29,10 +29,10 @@ class ProductDataTable extends DataTable
                 <i class="fas fa-cog"></i>
                 </button>
                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-                   <a class="dropdown-item has-icon" href="' . route('admin.products-image-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
-                   <a class="dropdown-item has-icon" href="' . route('admin.products-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variants</a>
+                   <a class="dropdown-item has-icon" href="' . route('admin.products-image-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Hình ảnh</a>
+                   <a class="dropdown-item has-icon" href="' . route('admin.products-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Biến thể</a>
                     ' . ($query->product_type === 'accessory' ? '
-                        <a class="dropdown-item has-icon" href="' . route('admin.product-support.index', ['product' => $query->id]) . '"><i class="fas fa-link"></i> Supports</a>
+                        <a class="dropdown-item has-icon" href="' . route('admin.product-support.index', ['product' => $query->id]) . '"><i class="fas fa-link"></i> Tương thích</a>
                     ' : '') . '
                 </div>
               </div>';
@@ -86,6 +86,12 @@ class ProductDataTable extends DataTable
             ->addColumn('name', function ($query) {
                 return $query->name;
             })
+            ->filterColumn('name', function ($query, $keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->filterColumn('type', function ($query, $keyword) {
+                $query->where('product_type', 'LIKE', "%{$keyword}%");
+            })
             ->rawColumns(['image', 'name', 'sub_cate_id', 'type', 'status', 'action'])
             ->setRowId('id');
     }
@@ -134,7 +140,7 @@ class ProductDataTable extends DataTable
         ->width('5%')->title('STT')
         ->addClass('text-center'),
     Column::make('image')->width('15%')->title('Hình ảnh')->addClass('text-center'),
-    Column::make('name')->width('25%')->title('Tên sản phẩm'),
+    Column::make('name')->width('25%')->title('Tên sản phẩm')->searchable(true),
     Column::make('type')->width('15%')->title('Loại sản phẩm'),
     Column::make('status')->title('Trạng thái')->addClass('text-center')->width('20%'),
     Column::computed('action')

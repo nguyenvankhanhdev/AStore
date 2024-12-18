@@ -17,7 +17,7 @@ $address = json_decode($order->address, true);
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="invoice-title">
-                                <h2>Order Invoice</h2>
+                                <h2>Hóa đơn đặt hàng</h2>
                                 <div class="invoice-number">Order #{{ $order->id }}</div>
                             </div>
                             <hr>
@@ -112,19 +112,19 @@ $address = json_decode($order->address, true);
                             <div class="row mt-4">
                                 <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label>Payment Status</label>
+                                        <label>Trạng thái thanh toán</label>
                                         <select name="payment_status" id="payment_status" class="form-control"
                                             data-id="{{ $order->id }}">
                                             <option {{ $order->payment_status === 'pending' ? 'selected' : '' }}
-                                                value="pending">Pending</option>
+                                                value="pending">Đang chờ</option>
                                             <option {{ $order->payment_status === 'completed' ? 'selected' : '' }}
-                                                value="completed">Completed</option>
+                                                value="completed">Hoàn thành</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <form method="POST" action="{{ route('admin.orders.status') }}">
                                             @csrf
-                                            <label for="order_status">Order Status</label>
+                                            <label for="order_status">Trạng thái đơn hàng</label>
                                             <select name="order_status" id="order_status" data-id="{{ $order->id }}"
                                                 class="form-control">
                                                 @foreach (config('order_status.order_status_admin') as $key => $orderStatus)

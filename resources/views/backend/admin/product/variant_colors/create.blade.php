@@ -23,11 +23,6 @@
                                     </select>
                                     <span class="text-danger" id="colorError"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label>Số lượng</label>
-                                    <input type="number" min="0" class="form-control" name="quantity" value="{{ old('quantity') }}">
-                                    <span class="text-danger" id="quantityError"></span>
-                                </div>
 
                                 <div class="form-group">
                                     <label>Giá</label>
@@ -61,10 +56,6 @@
             $('.text-danger').text('');
             if ($('#inputState').val() === '') {
                 $('#colorError').text('Please select a color.');
-                isValid = false;
-            }
-            if ($('input[name="quantity"]').val() === '') {
-                $('#quantityError').text('Please enter a quantity.');
                 isValid = false;
             }
             if ($('input[name="price"]').val() === '') {

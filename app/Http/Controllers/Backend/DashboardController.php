@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\Order;
 use App\Models\Orders;
+use App\Models\Ratings;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +65,7 @@ class DashboardController extends Controller
         $yearlyProfit = $yearlyOrdersData->sum(function ($order) {
             return $order->total_amount - $order->cost_price;
         });
-
+        $totalReview = Ratings::count();
         return view('backend.admin.dashboard.index', compact(
             'userCount',
             'categoryCount',
@@ -77,7 +78,8 @@ class DashboardController extends Controller
             'completedOrderCount',
             'monthlyProfit',
             'yearlyProfit',
-            'todayPendingOrderCount'
+            'todayPendingOrderCount',
+            'totalReview'
         ));
     }
 
