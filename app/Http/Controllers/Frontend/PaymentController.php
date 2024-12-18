@@ -264,14 +264,14 @@ class PaymentController extends Controller
 
         $address = json_decode($order->address);
         $user = auth()->user();
-        // Mail::send('frontend.emails.order_confirmation', [
-        //     'user' => $user,
-        //     'orders' => $order,
-        //     'address' => $address,
-        //     'orderDetails' => $orderDetails
-        // ], function ($message) use ($address) {
-        //     $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
-        // });
+        Mail::send('frontend.emails.order_confirmation', [
+            'user' => $user,
+            'orders' => $order,
+            'address' => $address,
+            'orderDetails' => $orderDetails
+        ], function ($message) use ($address) {
+            $message->to($address->email)->subject('Xác nhận đơn hàng của bạn');
+        });
         return $order->id;
     }
     public function payWithVNPAY(Request $request)
