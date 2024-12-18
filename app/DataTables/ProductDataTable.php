@@ -86,6 +86,12 @@ class ProductDataTable extends DataTable
             ->addColumn('name', function ($query) {
                 return $query->name;
             })
+            ->filterColumn('name', function ($query, $keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->filterColumn('type', function ($query, $keyword) {
+                $query->where('product_type', 'LIKE', "%{$keyword}%");
+            })
             ->rawColumns(['image', 'name', 'sub_cate_id', 'type', 'status', 'action'])
             ->setRowId('id');
     }
